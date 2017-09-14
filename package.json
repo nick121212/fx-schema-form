@@ -10,9 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "lerna": "^2.1.2"
-  },
-  "dependencies": {
-
+    "lerna": "^2.0.0-rc.5"
   }
 }
