@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "lerna publish"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,6 @@
     "lerna": "^2.1.2"
   },
   "dependencies": {
-    
+
   }
 }
