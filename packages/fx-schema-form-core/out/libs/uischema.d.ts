@@ -7,7 +7,7 @@ export declare const uiSchemaSchema: {
         } | {
             additionalProperties: boolean;
             type: string;
-            required: string[];
+            required: any[];
             properties: {
                 key: {
                     type: string;

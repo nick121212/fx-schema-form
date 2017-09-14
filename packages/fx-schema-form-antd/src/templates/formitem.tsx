@@ -5,7 +5,6 @@ import { FormItemProps } from "antd/lib/form/FormItem";
 import { SchemaFormItemProps } from "../components/formitem";
 
 export interface AntdFormItemTempProps extends SchemaFormItemProps {
-    arrayItems?: JSX.Element;
     tempKey: string;
 }
 
@@ -23,8 +22,6 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
             props.validateStatus = !isValid ? "error" : "success";
         }
 
-        console.log("antd form item template render");
-
         return (
             <Form.Item
                 required={mergeSchema.isRequired}
@@ -35,6 +32,7 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
                 {...props}
                 {...tempOptions}>
                 {children}
+                {arrayItems}
             </Form.Item>
         );
     }

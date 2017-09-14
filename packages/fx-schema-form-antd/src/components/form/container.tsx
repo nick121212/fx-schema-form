@@ -12,12 +12,5 @@ export const mapStateToProps = (state: any, ownProps: any) => {
 };
 
 export const hoc: ComponentEnhancer<SchemaFormProps, any> = compose<SchemaFormProps, any>(
-    // connect(mapStateToProps),
-    MergeHoc,
-    // withHandlers({}),
-    lifecycle({
-        componentDidMount: function () {
-            console.log("schema form mounted!");
-        }
-    })
+    MergeHoc
 );

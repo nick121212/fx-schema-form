@@ -1,5 +1,5 @@
 
-import { SchemaFormProps } from "../form/props";
+// import { SchemaFormProps } from "../form/props";
 // import { FieldHocProps } from "../../hocs/field";
 
 export interface SchemaFormItemBaseProps {
@@ -12,6 +12,9 @@ export interface SchemaFormItemBaseProps {
     updateItem: (data: { keys: Array<string>, data: any }) => void;
 
     arrayIndex?: number;
+    arrayItems?: Array<JSX.Element>;
+    arrayItemItems?: Array<JSX.Element>;
     formData?: any;
+    formItemData?: any;
     meta?: any;
 }

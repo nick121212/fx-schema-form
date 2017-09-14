@@ -13,8 +13,8 @@ export class AntdSwitchWidget extends React.Component<AntdSwitchProps, any> {
         const { mergeSchema } = this.props;
         const props: SwitchProps = {};
 
-        if (this.props.formData !== undefined) {
-            props.checked = this.props.formData;
+        if (this.props.formItemData !== undefined) {
+            props.checked = this.props.formItemData;
         } else {
             props.defaultChecked = mergeSchema.default;
         }

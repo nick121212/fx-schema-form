@@ -32,11 +32,11 @@ var schema = {
         muti: { type: ["string", "integer", "number"], "title": "测试多类型" }
     }
 };
-var uiSchema = [
-    "array1"
-];
+var uiSchema = [{
+        "key": "array1"
+    }];
 var options = {};
 var aaa = index_1.merge("test", schema, uiSchema, options);
 aaa = index_1.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
-console.log(index_1.merge("test", aaa[2], aaa[2].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[2].keys })));
+console.log(aaa);
 //# sourceMappingURL=demo.js.map

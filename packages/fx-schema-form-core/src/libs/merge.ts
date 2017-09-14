@@ -39,7 +39,7 @@ const mergetUiSchema = (map: BaseFactory<any>, parentKeys: Array<string>, schema
 
     if (idx >= 0) {
         uiSchemas.slice(0, idx).forEach((keyProp: any) => {
-            let key = keyProp.key || keyProp;
+            let key = keyProp.key || keyProp.join("/");
             let uiSchema = null;
 
             if (map.has(key)) {
@@ -49,13 +49,14 @@ const mergetUiSchema = (map: BaseFactory<any>, parentKeys: Array<string>, schema
                 if (uiSchema.uiSchema.items) {
                     uiSchema.uiSchema.items = mergetUiSchema(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
                 }
+                delete uiSchema.$ref;
                 uiSchemasFirst.push(uiSchema);
             }
         });
     }
 
     uiSchemas.slice(idx + 1).forEach((keyProp: any) => {
-        let key = keyProp.key || keyProp;
+        let key = keyProp.key || keyProp.keys.join("/");
         let uiSchema = null;
 
         if (map.has(key)) {
@@ -64,6 +65,7 @@ const mergetUiSchema = (map: BaseFactory<any>, parentKeys: Array<string>, schema
             if (uiSchema.uiSchema.items) {
                 uiSchema.uiSchema.items = mergetUiSchema(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
             }
+            delete uiSchema.$ref;
             uiSchemasLast.push(uiSchema);
         }
     });
@@ -76,7 +78,10 @@ const mergetUiSchema = (map: BaseFactory<any>, parentKeys: Array<string>, schema
             let keyPath = parentKeys.concat([keyProps]);
 
             if (map.has(keyPath.join("/")) && !keys[keyProps]) {
-                uiSchemasFirst.push(Object.assign({ uiSchema: {} }, map.get(keyPath.join("/"))));
+                let uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
+
+                delete uiSchema.$ref;
+                uiSchemasFirst.push(uiSchema);
             }
         });
     }
@@ -100,7 +105,10 @@ const mergetUiSchema = (map: BaseFactory<any>, parentKeys: Array<string>, schema
             let keyPath = parentKeys.concat([keyProps]);
 
             if (map.has(keyPath.join("/")) && !keyPath[keyProps]) {
-                uiSchemasFirst.push(Object.assign({ uiSchema: {} }, map.get(keyPath.join("/"))));
+                let uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
+
+                delete uiSchema.$ref;
+                uiSchemasFirst.push(uiSchema);
             }
         }
     }

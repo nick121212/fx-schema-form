@@ -4,7 +4,13 @@ import { connect, Dispatch } from "react-redux";
 import *  as jpp from "json-pointer";
 import { createSelector } from "reselect";
 
-import { SchemaFormItemBaseProps } from "../props";
+import { SchemaFormItemBaseProps } from "./formitem/props";
+
+export const getAllData = (state: any, props: SchemaFormItemBaseProps) => {
+    let { data = {} } = state[props.schemaKey];
+
+    return data;
+};
 
 /**
  * 获取state中的meta数据
@@ -45,9 +51,9 @@ export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
 };
 
 export const mapMetaStateToProps = createSelector(
-    [getMetaData, getData],
-    (meta: any, formData: any) => {
-        return { meta, formData };
+    [getMetaData, getData, getAllData],
+    (meta: any, formItemData: any, formData: any) => {
+        return { meta, formData, formItemData };
     }
 );
 

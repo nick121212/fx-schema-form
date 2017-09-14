@@ -22,7 +22,7 @@ var mergetUiSchema = function (map, parentKeys, schema, uiSchemas, options) {
     var keys = {};
     if (idx >= 0) {
         uiSchemas.slice(0, idx).forEach(function (keyProp) {
-            var key = keyProp.key || keyProp;
+            var key = keyProp.key || keyProp.join("/");
             var uiSchema = null;
             if (map.has(key)) {
                 keys[key] = true;
@@ -30,12 +30,13 @@ var mergetUiSchema = function (map, parentKeys, schema, uiSchemas, options) {
                 if (uiSchema.uiSchema.items) {
                     uiSchema.uiSchema.items = mergetUiSchema(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
                 }
+                delete uiSchema.$ref;
                 uiSchemasFirst.push(uiSchema);
             }
         });
     }
     uiSchemas.slice(idx + 1).forEach(function (keyProp) {
-        var key = keyProp.key || keyProp;
+        var key = keyProp.key || keyProp.keys.join("/");
         var uiSchema = null;
         if (map.has(key)) {
             keys[key] = true;
@@ -43,6 +44,7 @@ var mergetUiSchema = function (map, parentKeys, schema, uiSchemas, options) {
             if (uiSchema.uiSchema.items) {
                 uiSchema.uiSchema.items = mergetUiSchema(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
             }
+            delete uiSchema.$ref;
             uiSchemasLast.push(uiSchema);
         }
     });
@@ -50,7 +52,9 @@ var mergetUiSchema = function (map, parentKeys, schema, uiSchemas, options) {
         Object.keys(schema.properties).forEach(function (keyProps) {
             var keyPath = parentKeys.concat([keyProps]);
             if (map.has(keyPath.join("/")) && !keys[keyProps]) {
-                uiSchemasFirst.push(Object.assign({ uiSchema: {} }, map.get(keyPath.join("/"))));
+                var uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
+                delete uiSchema.$ref;
+                uiSchemasFirst.push(uiSchema);
             }
         });
     }
@@ -66,7 +70,9 @@ var mergetUiSchema = function (map, parentKeys, schema, uiSchemas, options) {
             var keyProps = "-";
             var keyPath = parentKeys.concat([keyProps]);
             if (map.has(keyPath.join("/")) && !keyPath[keyProps]) {
-                uiSchemasFirst.push(Object.assign({ uiSchema: {} }, map.get(keyPath.join("/"))));
+                var uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
+                delete uiSchema.$ref;
+                uiSchemasFirst.push(uiSchema);
             }
         }
     }

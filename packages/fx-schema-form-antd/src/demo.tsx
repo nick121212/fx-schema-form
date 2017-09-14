@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { Card } from "antd";
-import { Form } from "antd/lib";
+import { Card, Button, Form } from "antd";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 
 import { SchemaForm, createForms } from "./index";
-
 
 const schema = {
     type: "object",
@@ -26,12 +24,12 @@ const schema = {
         },
         array1: {
             type: "array",
-            title: "测试array类型",
+            title: "测试无限极数组类型",
             items: {
                 type: "object",
                 properties: {
-                    test: { type: "string" },
-                    children: { $ref: "#/properties/array1" }
+                    test: { type: "string", title: "无限极测试数据" },
+                    children: { $ref: "test#/properties/array1" }
                 }
             }
         },
@@ -42,11 +40,12 @@ const schema = {
 
 const uiSchema = [{
     "key": "array",
-    "ui:temp": ["formItem"],
     "items": [{
         "key": "array/-",
-        "ui:temp": ["col"]
+        // "ui:temp": []
     }]
+}, {
+    "key": "array1"
 }];
 
 const globalOptions = {
@@ -65,8 +64,11 @@ const globalOptions = {
         "type": "flex"
     },
     "col": {
-        "xs": { "span": 24 },
-        "sm": { "span": 14, offset: 6 },
+        "xs": { "span": 24, "offset": 24 },
+        "sm": { "span": 24, "offset": 0 },
+    },
+    "array": {
+        "ui:temp": ["row", "col", "card"]
     }
 };
 
@@ -77,11 +79,10 @@ let store = createStore(combineReducers(createForms({
 store.subscribe(() => {
     console.log(store.getState());
 });
-
 ReactDom.render(
     <Provider store={store}>
         <SchemaForm schemaKey={"test"} schema={schema} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
-            <button>dfadf</button>
+            <Button>dfadf</Button>
         </SchemaForm>
     </Provider>
     , document.getElementById("root"), console.log);

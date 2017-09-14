@@ -6,7 +6,7 @@ ___scope___.file("demo.jsx", function(exports, require, module, __filename, __di
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const react_dom_1 = require("react-dom");
-const lib_1 = require("antd/lib");
+const antd_1 = require("antd");
 const redux_1 = require("redux");
 const react_redux_1 = require("react-redux");
 const index_1 = require("./index");
@@ -28,12 +28,12 @@ const schema = {
         },
         array1: {
             type: "array",
-            title: "测试array类型",
+            title: "测试无限极数组类型",
             items: {
                 type: "object",
                 properties: {
-                    test: { type: "string" },
-                    children: { $ref: "#/properties/array1" }
+                    test: { type: "string", title: "无限极测试数据" },
+                    children: { $ref: "test#/properties/array1" }
                 }
             }
         },
@@ -43,11 +43,11 @@ const schema = {
 };
 const uiSchema = [{
         "key": "array",
-        "ui:temp": ["formItem"],
         "items": [{
                 "key": "array/-",
-                "ui:temp": ["col"]
             }]
+    }, {
+        "key": "array1"
     }];
 const globalOptions = {
     "ui:temp": ["formItem"],
@@ -65,8 +65,11 @@ const globalOptions = {
         "type": "flex"
     },
     "col": {
-        "xs": { "span": 24 },
-        "sm": { "span": 14, offset: 6 },
+        "xs": { "span": 24, "offset": 24 },
+        "sm": { "span": 24, "offset": 0 },
+    },
+    "array": {
+        "ui:temp": ["row", "col", "card"]
     }
 };
 let store = redux_1.createStore(redux_1.combineReducers(index_1.createForms({
@@ -76,8 +79,8 @@ store.subscribe(() => {
     console.log(store.getState());
 });
 react_dom_1.default.render(react_1.default.createElement(react_redux_1.Provider, { store: store },
-    react_1.default.createElement(index_1.SchemaForm, { schemaKey: "test", schema: schema, RootComponent: lib_1.Form, uiSchema: uiSchema, globalOptions: globalOptions },
-        react_1.default.createElement("button", null, "dfadf"))), document.getElementById("root"), console.log);
+    react_1.default.createElement(index_1.SchemaForm, { schemaKey: "test", schema: schema, RootComponent: antd_1.Form, uiSchema: uiSchema, globalOptions: globalOptions },
+        react_1.default.createElement(antd_1.Button, null, "dfadf"))), document.getElementById("root"), console.log);
 //# sourceMappingURL=demo.js.map
 });
 ___scope___.file("index.jsx", function(exports, require, module, __filename, __dirname){
@@ -152,7 +155,7 @@ class SchemaFormBlock extends react_1.default.Component {
  */
 class SchemaFormComponent extends react_1.default.Component {
     render() {
-        const { children, mergeSchemaList, schemaKey, formData, arrayIndex, globalOptions, RootComponent, schemaFormOptions } = this.props;
+        const { children, mergeSchemaList, schemaKey, formData, arrayItems, arrayIndex, globalOptions, RootComponent, schemaFormOptions } = this.props;
         let RootComponentHock = RootComponent;
         // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
         if (!RootComponentHock) {
@@ -173,7 +176,7 @@ class SchemaFormComponent extends react_1.default.Component {
                         return key;
                     });
                 }
-                return react_1.default.createElement(index_1.SchemaFormItem, { key: `${schemaKey}-${idx.toString()}`, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList, mergeSchema: mergeSchema, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions });
+                return react_1.default.createElement(index_1.SchemaFormItem, { key: `${schemaKey}-${idx.toString()}`, schemaKey: schemaKey, arrayIndex: arrayIndex, arrayItems: arrayItems, mergeSchemaList: mergeSchemaList, mergeSchema: mergeSchema, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions });
             }),
             children));
     }
@@ -192,23 +195,36 @@ exports.mapStateToProps = (state, ownProps) => {
         formData: state[ownProps.schemaKey]
     };
 };
-exports.hoc = recompose_1.compose(
-// connect(mapStateToProps),
-merge_1.MergeHoc, 
-// withHandlers({}),
-recompose_1.lifecycle({
-    componentDidMount: function () {
-        console.log("schema form mounted!");
-    }
-}));
+exports.hoc = recompose_1.compose(merge_1.MergeHoc);
 //# sourceMappingURL=container.js.map
 });
 ___scope___.file("components/form/hocs/merge.jsx", function(exports, require, module, __filename, __dirname){
-
+var __decorate = __fsbx_decorate(arguments)
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const fx_schema_form_core_1 = require("fx-schema-form-core");
+const react_redux_1 = require("react-redux");
+const recompose_1 = require("recompose");
+const meta_1 = require("../../meta");
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const { actions, schemaFormOptions } = ownProps;
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
+            const element = actions[key];
+            if (!element.assigned(dispatch)) {
+                element.assignTo(dispatch);
+            }
+        }
+    }
+    return { actions };
+};
 /**
  * merge参数中的schema和uiSchema，生成新的对象mergeSchemaList，传入组件的props中
  * @param Component 需要包装的组件
@@ -218,12 +234,9 @@ const fx_schema_form_core_1 = require("fx-schema-form-core");
  * mergeSchemaList    合并之后的数据
  */
 exports.MergeHoc = (Component) => {
-    class Hoc extends react_1.default.Component {
-        componentDidMount() {
-            console.log("merge mounted!");
-        }
+    let Hoc = class Hoc extends react_1.default.Component {
         render() {
-            let { schema, uiSchema, globalOptions, parentKeys, schemaFormOptions, schemaKey } = this.props, mergeSchemaList;
+            let { schema, uiSchema, globalOptions, parentKeys, schemaFormOptions, schemaKey, actions } = this.props, mergeSchemaList;
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
             }
@@ -232,10 +245,63 @@ exports.MergeHoc = (Component) => {
             mergeSchemaList = fx_schema_form_core_1.merge(schemaKey, schema, uiSchema, schemaFormOptions);
             return (react_1.default.createElement(Component, Object.assign({ schemaFormOptions: schemaFormOptions || {}, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList }, this.props)));
         }
-    }
+    };
+    Hoc = __decorate([
+        recompose_1.compose(react_redux_1.connect(meta_1.mapActionsStateToProps), react_redux_1.connect(null, mapDispatchToProps))
+    ], Hoc);
     return Hoc;
 };
 //# sourceMappingURL=merge.js.map
+});
+___scope___.file("components/meta.jsx", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jpp = require("json-pointer");
+const reselect_1 = require("reselect");
+exports.getAllData = (state, props) => {
+    let { data = {} } = state[props.schemaKey];
+    return data;
+};
+/**
+ * 获取state中的meta数据
+ * @param state 全局state
+ * @param props 当前component的props
+ */
+exports.getData = (state, props) => {
+    const { schemaKey, mergeSchema } = props;
+    const { keys = [] } = mergeSchema;
+    let { data = {} } = state[props.schemaKey];
+    return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
+};
+/**
+ * 获取state中的meta数据
+ * @param state 全局state
+ * @param props 当前component的props
+ */
+exports.getMetaData = (state, props) => {
+    const { schemaKey, mergeSchema } = props;
+    const { keys = [] } = mergeSchema;
+    let { meta = {} } = state[props.schemaKey];
+    return jpp.has(meta, jpp.compile(keys)) ? jpp.get(meta, jpp.compile(keys)) : { dirty: false };
+};
+/**
+ * 获取state中的meta数据中的actions
+ * @param state 全局state
+ * @param props 当前component的props
+ */
+exports.getActions = (state, props) => {
+    const { schemaKey } = props;
+    const { data = {}, meta = { actions: {} } } = state[schemaKey];
+    return meta.actions;
+};
+exports.mapMetaStateToProps = reselect_1.createSelector([exports.getMetaData, exports.getData, exports.getAllData], (meta, formItemData, formData) => {
+    return { meta, formData, formItemData };
+});
+exports.mapActionsStateToProps = reselect_1.createSelector([exports.getActions], (actions) => {
+    return { actions };
+});
+//# sourceMappingURL=meta.js.map
 });
 ___scope___.file("components/formitem/index.jsx", function(exports, require, module, __filename, __dirname){
 
@@ -271,16 +337,10 @@ const temp_1 = require("./hocs/temp");
 const field_1 = require("./hocs/field");
 const theme_1 = require("./hocs/theme");
 const validate_1 = require("./hocs/validate");
-exports.hoc = recompose_1.compose(recompose_1.onlyUpdateForKeys(["formData", "meta"]), theme_1.ThemeHoc, field_1.FieldHoc, validate_1.ValidateHoc, temp_1.TempHoc, recompose_1.shouldUpdate((prevProps, nextProps) => {
+const array_1 = require("./hocs/array");
+exports.hoc = recompose_1.compose(recompose_1.onlyUpdateForKeys(["formData", "meta"]), theme_1.ThemeHoc, field_1.FieldHoc, validate_1.ValidateHoc, array_1.ArrayHoc, temp_1.TempHoc, recompose_1.shouldUpdate((prevProps, nextProps) => {
     return !recompose_1.shallowEqual(pick_1.default(prevProps, ["formData"]).formData, pick_1.default(nextProps, ["formData"]).formData) ||
         !recompose_1.shallowEqual(pick_1.default(prevProps, ["meta"]).meta, pick_1.default(nextProps, ["meta"]).meta);
-}), recompose_1.lifecycle({
-    shouldComponentUpdate: function (nextProps, nextState) {
-        return !recompose_1.shallowEqual(pick_1.default(this.props, ["formData", "meta"]), pick_1.default(nextProps, ["formData", "meta"]));
-    },
-    componentDidMount: function () {
-        console.log("form item mounted!", this.props);
-    }
 }));
 //# sourceMappingURL=container.js.map
 });
@@ -295,24 +355,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-const react_redux_1 = require("react-redux");
 const recompose_1 = require("recompose");
 const pick_1 = require("recompose/utils/pick");
-const meta_1 = require("./meta");
-const metaConnect = recompose_1.compose(react_redux_1.connect(meta_1.mapMetaStateToProps), recompose_1.lifecycle({
+const metaConnect = recompose_1.compose(recompose_1.lifecycle({
     shouldComponentUpdate: function (nextProps, nextState) {
-        console.group(nextProps.mergeSchema.keys + "---temp中比较formData和Meta的值得变化");
-        console.log("formData", pick_1.default(nextProps, ["formData"]), pick_1.default(this.props, ["formData"]));
+        console.group(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化");
+        console.log("formItemData", pick_1.default(nextProps, ["formItemData"]), pick_1.default(this.props, ["formItemData"]));
         console.log("meta", pick_1.default(nextProps, ["meta"]), pick_1.default(this.props, ["meta"]));
         console.groupEnd();
-        return !recompose_1.shallowEqual(pick_1.default(nextProps, ["formData"]).formData, pick_1.default(this.props, ["formData"]).formData) ||
+        return !recompose_1.shallowEqual(pick_1.default(nextProps, ["formItemData"]).formItemData, pick_1.default(this.props, ["formItemData"]).formItemData) ||
             !recompose_1.shallowEqual(pick_1.default(nextProps, ["meta"]).meta, pick_1.default(this.props, ["meta"]).meta);
-    },
-    componentDidUpdate: function () {
-        console.log(this.props.mergeSchema.keys + "---DidUpdate");
-    },
-    componentDidMount: function () {
-        console.log("form item mounted!", this.props);
     }
 }));
 /**
@@ -325,47 +377,60 @@ exports.TempHoc = (Component) => {
     * 获取模板的components
     * @param uiSchema 合并后的数据
     */
-    const getTemplate = (currentTheme, uiSchema, globalOptions = {}) => {
-        let template = uiSchema["ui:temp"] || globalOptions["ui:temp"] || "default", TempComponent = [];
-        let setMeta = false;
-        // 获取模板的数据，单个模板
-        if (typeof template === "string") {
-            TempComponent.push({
-                key: template,
-                Temp: (currentTheme.tempFactory.get(template))
-            });
-        }
-        else {
-            // 多个模板
-            template.reverse().forEach((tml, idx) => {
-                if (!currentTheme.tempFactory.has(tml || "default")) {
-                    console.error(`不存在${tml}的temp！`);
-                }
-                else {
-                    TempComponent.push({
-                        key: tml,
-                        Temp: setMeta ? currentTheme.tempFactory.get(tml || "default") :
-                            (currentTheme.tempFactory.get(tml || "default"))
-                    });
-                    setMeta = true;
-                }
-            });
-        }
-        return TempComponent;
-    };
     let Hoc = class Hoc extends react_1.default.Component {
+        /**
+        * 获取模板的components
+        * @param uiSchema 合并后的数据
+        */
+        constructor() {
+            super(...arguments);
+            this.tempField = "ui:temp";
+        }
         componentDidMount() {
             console.log("temp mounted!");
         }
         render() {
-            const { mergeSchema, globalOptions, currentTheme } = this.props;
+            const { mergeSchema, globalOptions } = this.props;
             const { uiSchema = { options: {} }, keys } = mergeSchema;
-            const TempComponents = getTemplate(currentTheme, uiSchema, globalOptions);
+            const TempComponents = this.getTemplates();
             const uiSchemaOptions = uiSchema.options || {};
             let index = 0;
             return TempComponents.reduce((prev, { key, Temp }) => {
                 return react_1.default.createElement(Temp, Object.assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, this.props), prev);
             }, react_1.default.createElement(Component, Object.assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
+        }
+        /**
+        * 获取模板的components
+        */
+        getTemplates() {
+            const { mergeSchema, globalOptions, currentTheme } = this.props;
+            const { uiSchema = { options: {} }, keys, type } = mergeSchema;
+            const typeDefaultOptions = globalOptions[type] || {};
+            const template = uiSchema[this.tempField] ||
+                typeDefaultOptions[this.tempField] ||
+                globalOptions[this.tempField] || "default", TempComponent = [];
+            // 获取模板的数据，单个模板
+            if (typeof template === "string") {
+                TempComponent.push({
+                    key: template,
+                    Temp: (currentTheme.tempFactory.get(template))
+                });
+            }
+            else {
+                // 多个模板
+                [].concat(template).reverse().forEach((tml, idx) => {
+                    if (!currentTheme.tempFactory.has(tml || "default")) {
+                        console.error(`不存在${tml}的temp！`);
+                    }
+                    else {
+                        TempComponent.push({
+                            key: tml,
+                            Temp: currentTheme.tempFactory.get(tml || "default")
+                        });
+                    }
+                });
+            }
+            return TempComponent;
         }
     };
     Hoc = __decorate([
@@ -374,52 +439,6 @@ exports.TempHoc = (Component) => {
     return Hoc;
 };
 //# sourceMappingURL=temp.js.map
-});
-___scope___.file("components/formitem/hocs/meta.jsx", function(exports, require, module, __filename, __dirname){
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const jpp = require("json-pointer");
-const reselect_1 = require("reselect");
-/**
- * 获取state中的meta数据
- * @param state 全局state
- * @param props 当前component的props
- */
-exports.getData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    let { data = {} } = state[props.schemaKey];
-    return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
-};
-/**
- * 获取state中的meta数据
- * @param state 全局state
- * @param props 当前component的props
- */
-exports.getMetaData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    let { meta = {} } = state[props.schemaKey];
-    return jpp.has(meta, jpp.compile(keys)) ? jpp.get(meta, jpp.compile(keys)) : { dirty: false };
-};
-/**
- * 获取state中的meta数据中的actions
- * @param state 全局state
- * @param props 当前component的props
- */
-exports.getActions = (state, props) => {
-    const { schemaKey } = props;
-    const { data = {}, meta = { actions: {} } } = state[schemaKey];
-    return meta.actions;
-};
-exports.mapMetaStateToProps = reselect_1.createSelector([exports.getMetaData, exports.getData], (meta, formData) => {
-    return { meta, formData };
-});
-exports.mapActionsStateToProps = reselect_1.createSelector([exports.getActions], (actions) => {
-    return { actions };
-});
-//# sourceMappingURL=meta.js.map
 });
 ___scope___.file("components/formitem/hocs/field.jsx", function(exports, require, module, __filename, __dirname){
 
@@ -434,16 +453,12 @@ const react_1 = require("react");
  */
 exports.FieldHoc = (Component) => {
     class Hoc extends react_1.default.Component {
-        componentDidMount() {
-            console.log("field mounted!");
-        }
         shouldComponentUpdate() {
             return false;
         }
         render() {
             const { mergeSchema, currentTheme } = this.props;
             const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
-            const hocs = uiSchema["ui:fieldHocs"] || ["data"];
             let FieldComponent, WidgetComponent;
             if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
                 FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
@@ -451,11 +466,6 @@ exports.FieldHoc = (Component) => {
             if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
                 WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
             }
-            const hocList = hocs.map((hocStr) => {
-                return currentTheme.hocFactory.get(hocStr);
-            });
-            // const FieldComponentWithHoc = compose.apply(null, hocList)(FieldComponent);
-            console.log("field hoc render!");
             return react_1.default.createElement(Component, Object.assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
         }
     }
@@ -478,14 +488,10 @@ const index_1 = require("../../../index");
  */
 exports.ThemeHoc = (Component) => {
     class Hoc extends react_1.default.Component {
-        componentDidMount() {
-            console.log("theme mounted!");
-        }
         render() {
             const { mergeSchema } = this.props;
             const { uiSchema = { theme: "", field: "" } } = mergeSchema;
             let theme;
-            // console.log("theme hoc render");
             if (index_1.nsFactory.has(uiSchema.theme || "default")) {
                 theme = index_1.nsFactory.get(uiSchema.theme || "default");
             }
@@ -507,7 +513,7 @@ const react_1 = require("react");
 const react_redux_1 = require("react-redux");
 const recompose_1 = require("recompose");
 const validate_1 = require("../../../libs/validate");
-const meta_1 = require("./meta");
+const meta_1 = require("../../meta");
 const mapDispatchToProps = (dispatch, ownProps) => {
     const { mergeSchema, actions, schemaFormOptions } = ownProps;
     const { keys } = mergeSchema;
@@ -524,7 +530,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             if (!actions.updateItem) {
                 console.error("没有更新的action！");
             }
-            // setTimeout
             actions.updateItem({ keys, data, meta: validate_1.default(mergeSchema, schemaFormOptions.ajv, data) });
         }
     };
@@ -538,9 +543,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
  */
 exports.ValidateHoc = (Component) => {
     class Hoc extends react_1.default.Component {
-        componentDidMount() {
-            console.log("validate mounted!");
-        }
         render() {
             const ComponentWithHoc = recompose_1.compose(react_redux_1.connect(meta_1.mapActionsStateToProps), react_redux_1.connect(null, mapDispatchToProps), recompose_1.shouldUpdate((props, nextProps) => {
                 return false;
@@ -592,6 +594,90 @@ exports.default = (mergeSchema, ajv, value) => {
     };
 };
 //# sourceMappingURL=validate.js.map
+});
+___scope___.file("components/formitem/hocs/array.jsx", function(exports, require, module, __filename, __dirname){
+var __decorate = __fsbx_decorate(arguments)
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
+const react_redux_1 = require("react-redux");
+const meta_1 = require("../../meta");
+/**
+ * 包装array的组件HOC
+ * @param Component 需要包装的组件
+ * @param options   参数
+ * 加入属性
+ * arrayItems
+ */
+exports.ArrayHoc = (Component) => {
+    let Hoc = class Hoc extends react_1.default.Component {
+        render() {
+            const { mergeSchema, arrayIndex } = this.props;
+            const { uiSchema, type, keys } = mergeSchema;
+            if (type === "array") {
+                return react_1.default.createElement(Component, Object.assign({}, this.props, { arrayItems: [
+                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 1, onClick: () => {
+                                this.addItem();
+                            } }, "add")
+                    ], arrayItemItems: [
+                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 1, onClick: () => {
+                                this.addItem();
+                            } }, "add"),
+                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 2, onClick: () => {
+                                this.removeItem(arrayIndex);
+                            } }, "remove")
+                    ] }));
+            }
+            // if (arrayIndex !== undefined) {
+            //     return <Component  {...this.props} arrayItems={[
+            //         <button key={keys.join(".") + "arraybutton" + 1} onClick={() => {
+            //             this.addItem();
+            //         }}>add</button>,
+            //         <button key={keys.join(".") + "arraybutton" + 2} onClick={() => {
+            //             this.removeItem(arrayIndex);
+            //         }}>remove</button>
+            //     ]} />;
+            // }
+            return react_1.default.createElement(Component, Object.assign({}, this.props));
+        }
+        /**
+         * 移除一个数据项
+         * @param index 数组索引
+         */
+        removeItem(index) {
+            const { formItemData = [], mergeSchema, validate } = this.props;
+            const { uiSchema, type, keys } = mergeSchema;
+            if (type === "array") {
+                formItemData.splice(index, 1);
+                validate(formItemData);
+            }
+        }
+        /**
+         * 添加一个项目
+         */
+        addItem() {
+            let { formItemData = [], mergeSchema, validate } = this.props;
+            if (mergeSchema.items.type === "object") {
+                formItemData.push({});
+            }
+            else {
+                formItemData.push(undefined);
+            }
+            validate(formItemData);
+        }
+    };
+    Hoc = __decorate([
+        react_redux_1.connect(meta_1.mapMetaStateToProps)
+    ], Hoc);
+    return Hoc;
+};
+//# sourceMappingURL=array.js.map
 });
 ___scope___.file("libs/ns.factory.jsx", function(exports, require, module, __filename, __dirname){
 
@@ -682,12 +768,8 @@ ___scope___.file("fields/string.jsx", function(exports, require, module, __filen
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 class StringField extends react_1.default.Component {
-    componentDidMount() {
-        console.log("string mounted!");
-    }
     render() {
         const { mergeSchema, currentTheme, WidgetComponent } = this.props;
-        console.log("field render", mergeSchema.keys.join("."));
         return (react_1.default.createElement(WidgetComponent, Object.assign({ key: mergeSchema.keys.join(".") }, this.props)));
     }
 }
@@ -715,35 +797,27 @@ ___scope___.file("fields/array.jsx", function(exports, require, module, __filena
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-const antd_1 = require("antd");
 const index_1 = require("../index");
 class ArrayField extends react_1.default.Component {
+    /**
+     * 遍历数据，生成子表单
+     * @param idx 数组的索引
+     */
     renderItem(idx) {
-        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions } = this.props;
+        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, arrayItemItems } = this.props;
         const { uiSchema, keys } = mergeSchema;
-        return (react_1.default.createElement(index_1.SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, arrayIndex: idx, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
+        return (react_1.default.createElement(index_1.SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, arrayIndex: idx, arrayItems: arrayItemItems, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
     }
+    /**
+     * 渲染页面
+     */
     render() {
-        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formData } = this.props;
-        const { uiSchema } = mergeSchema;
-        return react_1.default.createElement(antd_1.Card, { title: react_1.default.createElement(antd_1.Button, { onClick: () => {
-                    this.addItem();
-                } }, formData ? formData.length : 0) }, formData && formData.map((data, idx) => {
+        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData, meta = { dirty: false, isValid: true } } = this.props;
+        const { uiSchema, title } = mergeSchema;
+        let child = formItemData && formItemData.map((data, idx) => {
             return this.renderItem(idx);
-        }));
-    }
-    addItem() {
-        let { formData, mergeSchema, validate } = this.props;
-        if (!formData) {
-            formData = [];
-        }
-        if (mergeSchema.items.type === "object") {
-            formData.push({});
-        }
-        else {
-            formData.push(undefined);
-        }
-        validate(formData);
+        });
+        return react_1.default.createElement("div", null, child || null);
     }
 }
 exports.ArrayField = ArrayField;
@@ -756,10 +830,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const formitem_1 = require("./formitem");
 const col_1 = require("./col");
 const row_1 = require("./row");
+const card_1 = require("./card");
 exports.default = {
     formItem: formitem_1.AntdFormItemTemp,
     col: col_1.AntdColTemp,
-    row: row_1.AntdRowTemp
+    row: row_1.AntdRowTemp,
+    card: card_1.AntdCardTemp
 };
 //# sourceMappingURL=index.js.map
 });
@@ -779,8 +855,9 @@ class AntdFormItemTemp extends react_1.default.Component {
         if (dirty) {
             props.validateStatus = !isValid ? "error" : "success";
         }
-        console.log("antd form item template render");
-        return (react_1.default.createElement(antd_1.Form.Item, Object.assign({ required: mergeSchema.isRequired, label: mergeSchema.title || [].concat(mergeSchema.keys).pop(), extra: mergeSchema.description, help: isValid ? "" : errorText, hasFeedback: dirty && hasFeedback }, props, tempOptions), children));
+        return (react_1.default.createElement(antd_1.Form.Item, Object.assign({ required: mergeSchema.isRequired, label: mergeSchema.title || [].concat(mergeSchema.keys).pop(), extra: mergeSchema.description, help: isValid ? "" : errorText, hasFeedback: dirty && hasFeedback }, props, tempOptions),
+            children,
+            arrayItems));
     }
 }
 exports.AntdFormItemTemp = AntdFormItemTemp;
@@ -818,6 +895,23 @@ class AntdRowTemp extends react_1.default.Component {
 exports.AntdRowTemp = AntdRowTemp;
 //# sourceMappingURL=row.js.map
 });
+___scope___.file("templates/card.jsx", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
+const antd_1 = require("antd");
+class AntdCardTemp extends react_1.default.Component {
+    render() {
+        const { children, globalOptions, tempKey, uiSchemaOptions, mergeSchema, arrayItems } = this.props;
+        const tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
+        const { uiSchema, title } = mergeSchema;
+        return (react_1.default.createElement(antd_1.Card, Object.assign({}, tempOptions, { title: title || uiSchema.title, extra: arrayItems }), children));
+    }
+}
+exports.AntdCardTemp = AntdCardTemp;
+//# sourceMappingURL=card.js.map
+});
 ___scope___.file("widgets/index.jsx", function(exports, require, module, __filename, __dirname){
 
 "use strict";
@@ -847,8 +941,8 @@ class AntdInputWidget extends react_1.default.Component {
     setDefaultProps() {
         const { mergeSchema } = this.props;
         const props = {};
-        if (this.props.formData !== undefined) {
-            props.value = this.props.formData;
+        if (this.props.formItemData !== undefined) {
+            props.value = this.props.formItemData;
         }
         else {
             props.defaultValue = mergeSchema.default;
@@ -881,8 +975,8 @@ class AntdCheckboxWidget extends react_1.default.Component {
     setDefaultProps() {
         const { mergeSchema } = this.props;
         const props = {};
-        if (this.props.formData !== undefined) {
-            props.checked = this.props.formData;
+        if (this.props.formItemData !== undefined) {
+            props.checked = this.props.formItemData;
         }
         else {
             props.defaultChecked = mergeSchema.default;
@@ -913,8 +1007,8 @@ class AntdSwitchWidget extends react_1.default.Component {
     setDefaultProps() {
         const { mergeSchema } = this.props;
         const props = {};
-        if (this.props.formData !== undefined) {
-            props.checked = this.props.formData;
+        if (this.props.formItemData !== undefined) {
+            props.checked = this.props.formItemData;
         }
         else {
             props.defaultChecked = mergeSchema.default;
@@ -969,10 +1063,16 @@ const jpp = require("json-pointer");
 class FormReducer {
     constructor(initialState) {
         this.initialState = initialState;
+        /**
+         * 单个元素的值变化时候调用
+         */
         this.updateItem = redux_act_1.createAction("更新表单值");
+        /**
+         * 验证所有的字段
+         */
+        this.validateAllField = redux_act_1.createAction("验证表单中所有的字段");
     }
     get actions() {
-        // this.updateItem.assignTo
         return {
             updateItem: this.updateItem
         };

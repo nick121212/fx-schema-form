@@ -15,8 +15,8 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
         const { mergeSchema } = this.props;
         const props: InputProps = {};
 
-        if (this.props.formData !== undefined) {
-            props.value = this.props.formData;
+        if (this.props.formItemData !== undefined) {
+            props.value = this.props.formItemData;
         } else {
             props.defaultValue = mergeSchema.default;
             props.value = "";

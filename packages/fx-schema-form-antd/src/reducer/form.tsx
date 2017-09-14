@@ -3,14 +3,20 @@ import { Reducer } from "redux";
 import * as jpp from "json-pointer";
 
 export class FormReducer {
+    /**
+     * 单个元素的值变化时候调用
+     */
     private updateItem: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("更新表单值");
+    /**
+     * 验证所有的字段
+     */
+    private validateAllField: EmptyActionCreator = createAction("验证表单中所有的字段");
 
     constructor(private initialState: any) { }
 
     public get actions(): {
         updateItem: SimpleActionCreator<{ keys: Array<string>, data: any }>
     } {
-        // this.updateItem.assignTo
         return {
             updateItem: this.updateItem
         };

@@ -7,7 +7,7 @@ import *  as jpp from "json-pointer";
 import { SchemaFormItemBaseProps } from "../props";
 import { RC } from "../../../types";
 import validateFunc from "../../../libs/validate";
-import { mapActionsStateToProps } from "./meta";
+import { mapActionsStateToProps } from "../../meta";
 
 
 export interface ValidateHocOutProps {
@@ -33,7 +33,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
             if (!actions.updateItem) {
                 console.error("没有更新的action！");
             }
-            // setTimeout
             actions.updateItem({ keys, data, meta: validateFunc(mergeSchema, schemaFormOptions.ajv, data) });
         }
     };
@@ -48,9 +47,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
  */
 export const ValidateHoc = (Component: any): RC<SchemaFormItemBaseProps, any> => {
     class Hoc extends React.Component<SchemaFormItemBaseProps, any> {
-        public componentDidMount(): void {
-            console.log("validate mounted!");
-        }
         public render(): JSX.Element {
             const ComponentWithHoc = compose(
                 connect(mapActionsStateToProps),

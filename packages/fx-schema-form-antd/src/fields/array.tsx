@@ -10,8 +10,12 @@ export interface ArryFieldProps extends SchemaFormItemProps {
 }
 
 export class ArrayField extends React.Component<ArryFieldProps, any> {
+    /**
+     * 遍历数据，生成子表单
+     * @param idx 数组的索引
+     */
     private renderItem(idx: number): JSX.Element {
-        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions } = this.props;
+        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, arrayItemItems } = this.props;
         const { uiSchema, keys } = mergeSchema;
 
         return (
@@ -19,6 +23,7 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
                 key={keys.join(".") + idx}
                 schema={mergeSchema}
                 arrayIndex={idx}
+                arrayItems={arrayItemItems}
                 parentKeys={mergeSchema.keys}
                 RootComponent={null}
                 schemaKey={schemaKey}
@@ -29,39 +34,39 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
         );
     }
 
-    public render(): JSX.Element {
-        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formData } = this.props;
-        const { uiSchema } = mergeSchema;
+    /**
+     * 渲染页面
+     */
+    public render(): JSX.Element | null {
+        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData,
+            meta = { dirty: false, isValid: true }
+        } = this.props;
+        const { uiSchema, title } = mergeSchema;
 
+        let child = formItemData && formItemData.map((data: any, idx: number) => {
+            return this.renderItem(idx);
+        });
 
-        return <Card title={
-            <Button onClick={() => {
-                this.addItem();
-            }}>
-                {formData ? formData.length : 0}
-            </Button>
-        }>
-            {
-                formData && formData.map((data: any, idx: number) => {
-                    return this.renderItem(idx);
-                })
-            }
-        </Card>;
+        return <div>{child || null}</div>;
     }
 
-    private addItem(): void {
-        let { formData, mergeSchema, validate } = this.props;
+    // private removeItem(index: number): void {
+    //     let { formData = [], mergeSchema, validate } = this.props;
 
-        if (!formData) {
-            formData = [];
-        }
+    //     formData.splice(index, 1);
 
-        if (mergeSchema.items.type === "object") {
-            formData.push({});
-        } else {
-            formData.push(undefined);
-        }
+    //     validate(formData);
+    // }
 
-        validate(formData);
-    }
+    // private addItem(): void {
+    //     let { formData = [], mergeSchema, validate } = this.props;
+
+    //     if (mergeSchema.items.type === "object") {
+    //         formData.push({});
+    //     } else {
+    //         formData.push(undefined);
+    //     }
+
+    //     validate(formData);
+    // }
 }
