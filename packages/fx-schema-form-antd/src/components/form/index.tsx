@@ -1,0 +1,66 @@
+import React from "react";
+import { EventEmitter2 } from "eventemitter2";
+
+import { SchemaFormProps } from "./props";
+import { hoc } from "./container";
+import { SchemaFormItem } from "../../index";
+import { MergeHocOutProps } from "./hocs/merge";
+
+class SchemaFormBlock extends React.Component<any, any> {
+    public render(): JSX.Element {
+        return <div>{this.props.children}</div>;
+    }
+}
+
+/**
+ * SchemaForm组件
+ * 通过schema和uiSchea生成表单元素
+ */
+class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutProps, any> {
+    public render(): JSX.Element {
+        const { children, mergeSchemaList, schemaKey, formData, arrayIndex, globalOptions, RootComponent, schemaFormOptions } = this.props;
+        let RootComponentHock = RootComponent;
+
+        // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
+        if (!RootComponentHock) {
+            RootComponentHock = SchemaFormBlock;
+        }
+
+        schemaFormOptions.ajv.validate(schemaKey, formData);
+
+        return (
+            <RootComponentHock>
+                {
+                    mergeSchemaList.map((mergeSchema: any, idx: number) => {
+                        let find = false;
+
+                        if (typeof arrayIndex === "number") {
+                            mergeSchema.keys = mergeSchema.keys.map((key: string) => {
+                                if (find) {
+                                    return key;
+                                }
+
+                                if (key === "-") {
+                                    return arrayIndex;
+                                }
+
+                                return key;
+                            });
+                        }
+                        return <SchemaFormItem
+                            key={`${schemaKey}-${idx.toString()}`}
+                            schemaKey={schemaKey}
+                            mergeSchemaList={mergeSchemaList}
+                            mergeSchema={mergeSchema}
+                            schemaFormOptions={schemaFormOptions}
+                            globalOptions={globalOptions}>
+                        </SchemaFormItem>;
+                    })
+                }
+                {children}
+            </RootComponentHock>
+        );
+    }
+}
+
+export const SchemaForm = hoc(SchemaFormComponent);

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2015",
+    "lib": ["es5", "dom", "es2017", "es2015"],
+    "jsx": "react",
+    "sourceMap": true,
+    "outDir": "./out",
+    "rootDir": "./src",
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true 
+  }
+}
