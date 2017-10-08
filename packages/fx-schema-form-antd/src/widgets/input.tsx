@@ -18,7 +18,7 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
         if (this.props.formItemData !== undefined) {
             props.value = this.props.formItemData;
         } else {
-            props.defaultValue = mergeSchema.default;
+            // props.defaultValue = mergeSchema.default;
             props.value = "";
         }
 
@@ -31,8 +31,6 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
         const { readonly = false } = uiSchema as any;
-
-        // console.log(this.props.meta);
 
         return (
             <Input onChange={(e: SyntheticEvent<HTMLInputElement>) => {

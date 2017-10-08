@@ -31,6 +31,7 @@ const schema = {
             title: "测试无限极数组类型",
             items: {
                 type: "object",
+                required: ["test"],
                 properties: {
                     test: { type: "string", title: "无限极测试数据" },
                     children: { $ref: "test#/properties/array1" }
@@ -41,17 +42,26 @@ const schema = {
         muti: { type: ["string", "integer", "number"], "title": "测试多类型" }
     }
 };
-const uiSchema = [{
-        "key": "array",
-        "items": [{
-                "key": "array/-",
-            }]
-    }, {
-        "key": "array1"
+const uiSchema = ["name", {
+        "key": "array1",
+        "items": [{ key: "array1/-/test" }]
     }];
 const globalOptions = {
     "ui:temp": ["formItem"],
+    "hoc": {
+        "array": {
+            createItemButtons: (props) => {
+                return (react_1.default.createElement("span", null,
+                    react_1.default.createElement(antd_1.Button, { onClick: () => { props.addItem(); } }, "add")));
+            },
+            createItemChildButtons: (props, idx) => {
+                return (react_1.default.createElement("span", null,
+                    react_1.default.createElement(antd_1.Button, { onClick: () => { props.removeItem(idx); } }, "remove")));
+            }
+        }
+    },
     "formItem": {
+        "hasFeedback": true,
         "labelCol": {
             "xs": { "span": 24 },
             "sm": { "span": 6 },
@@ -66,14 +76,18 @@ const globalOptions = {
     },
     "col": {
         "xs": { "span": 24, "offset": 24 },
-        "sm": { "span": 24, "offset": 0 },
+        "sm": { "span": 15, "offset": 5 },
+    },
+    "card": {
+        "noHovering": true,
+        "bordered": false
     },
     "array": {
         "ui:temp": ["row", "col", "card"]
     }
 };
 let store = redux_1.createStore(redux_1.combineReducers(index_1.createForms({
-    "test": { name: "nick" }
+    "test": { name: "nick", array1: [{ test: "array_test", children: [{ test: "array_item_test" }] }] }
 })));
 store.subscribe(() => {
     console.log(store.getState());
@@ -162,6 +176,7 @@ class SchemaFormComponent extends react_1.default.Component {
             RootComponentHock = SchemaFormBlock;
         }
         schemaFormOptions.ajv.validate(schemaKey, formData);
+        console.log(formData);
         return (react_1.default.createElement(RootComponentHock, null,
             mergeSchemaList.map((mergeSchema, idx) => {
                 let find = false;
@@ -210,6 +225,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const fx_schema_form_core_1 = require("fx-schema-form-core");
+// import { schemaMerge } from "../../../../../fx-schema-form-core/src";
 const react_redux_1 = require("react-redux");
 const recompose_1 = require("recompose");
 const meta_1 = require("../../meta");
@@ -242,7 +258,7 @@ exports.MergeHoc = (Component) => {
             }
             schemaFormOptions = schemaFormOptions || {};
             schemaFormOptions.parentKeys = parentKeys || [];
-            mergeSchemaList = fx_schema_form_core_1.merge(schemaKey, schema, uiSchema, schemaFormOptions);
+            mergeSchemaList = fx_schema_form_core_1.schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
             return (react_1.default.createElement(Component, Object.assign({ schemaFormOptions: schemaFormOptions || {}, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList }, this.props)));
         }
     };
@@ -259,6 +275,11 @@ ___scope___.file("components/meta.jsx", function(exports, require, module, __fil
 Object.defineProperty(exports, "__esModule", { value: true });
 const jpp = require("json-pointer");
 const reselect_1 = require("reselect");
+/**
+ * 获取formData的数据
+ * @param state state
+ * @param props 属性
+ */
 exports.getAllData = (state, props) => {
     let { data = {} } = state[props.schemaKey];
     return data;
@@ -295,9 +316,18 @@ exports.getActions = (state, props) => {
     const { data = {}, meta = { actions: {} } } = state[schemaKey];
     return meta.actions;
 };
+/**
+ * 获取单个字段的信息
+ * meta            额外的信息
+ * formData        当前表单的所有数据
+ * formItemData    当前字段的数据
+ */
 exports.mapMetaStateToProps = reselect_1.createSelector([exports.getMetaData, exports.getData, exports.getAllData], (meta, formItemData, formData) => {
     return { meta, formData, formItemData };
 });
+/**
+ * 返回actions
+ */
 exports.mapActionsStateToProps = reselect_1.createSelector([exports.getActions], (actions) => {
     return { actions };
 });
@@ -332,16 +362,12 @@ ___scope___.file("components/formitem/container.jsx", function(exports, require,
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const recompose_1 = require("recompose");
-const pick_1 = require("recompose/utils/pick");
 const temp_1 = require("./hocs/temp");
 const field_1 = require("./hocs/field");
 const theme_1 = require("./hocs/theme");
 const validate_1 = require("./hocs/validate");
 const array_1 = require("./hocs/array");
-exports.hoc = recompose_1.compose(recompose_1.onlyUpdateForKeys(["formData", "meta"]), theme_1.ThemeHoc, field_1.FieldHoc, validate_1.ValidateHoc, array_1.ArrayHoc, temp_1.TempHoc, recompose_1.shouldUpdate((prevProps, nextProps) => {
-    return !recompose_1.shallowEqual(pick_1.default(prevProps, ["formData"]).formData, pick_1.default(nextProps, ["formData"]).formData) ||
-        !recompose_1.shallowEqual(pick_1.default(prevProps, ["meta"]).meta, pick_1.default(nextProps, ["meta"]).meta);
-}));
+exports.hoc = recompose_1.compose(recompose_1.onlyUpdateForKeys(["formItemData", "meta", "formData"]), theme_1.ThemeHoc, field_1.FieldHoc, validate_1.ValidateHoc, array_1.ArrayHoc, temp_1.TempHoc);
 //# sourceMappingURL=container.js.map
 });
 ___scope___.file("components/formitem/hocs/temp.jsx", function(exports, require, module, __filename, __dirname){
@@ -360,11 +386,13 @@ const pick_1 = require("recompose/utils/pick");
 const metaConnect = recompose_1.compose(recompose_1.lifecycle({
     shouldComponentUpdate: function (nextProps, nextState) {
         console.group(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化");
-        console.log("formItemData", pick_1.default(nextProps, ["formItemData"]), pick_1.default(this.props, ["formItemData"]));
+        console.log("formItemData", pick_1.default(nextProps, ["formItemData"]).formItemData, pick_1.default(this.props, ["formItemData"]).formItemData);
         console.log("meta", pick_1.default(nextProps, ["meta"]), pick_1.default(this.props, ["meta"]));
-        console.groupEnd();
-        return !recompose_1.shallowEqual(pick_1.default(nextProps, ["formItemData"]).formItemData, pick_1.default(this.props, ["formItemData"]).formItemData) ||
+        let rtn = !recompose_1.shallowEqual(pick_1.default(nextProps, ["formItemData"]).formItemData, pick_1.default(this.props, ["formItemData"]).formItemData) ||
             !recompose_1.shallowEqual(pick_1.default(nextProps, ["meta"]).meta, pick_1.default(this.props, ["meta"]).meta);
+        console.log("shouldUpdate", rtn);
+        console.groupEnd();
+        return rtn;
     }
 }));
 /**
@@ -496,7 +524,7 @@ exports.ThemeHoc = (Component) => {
                 theme = index_1.nsFactory.get(uiSchema.theme || "default");
             }
             else {
-                throw new Error(`没有找到￥{uiSchema.theme || "default"}的样式！`);
+                throw new Error(`没有找到${uiSchema.theme || "default"}的样式！`);
             }
             return react_1.default.createElement(Component, Object.assign({ currentTheme: theme }, this.props));
         }
@@ -514,9 +542,15 @@ const react_redux_1 = require("react-redux");
 const recompose_1 = require("recompose");
 const validate_1 = require("../../../libs/validate");
 const meta_1 = require("../../meta");
+/**
+ * 处理actions,这里吧actions添加到dispatch
+ * @param dispatch 方法
+ * @param ownProps 自身属性
+ */
 const mapDispatchToProps = (dispatch, ownProps) => {
     const { mergeSchema, actions, schemaFormOptions } = ownProps;
     const { keys } = mergeSchema;
+    let timeId;
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
             const element = actions[key];
@@ -525,6 +559,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             }
         }
     }
+    // 返回validae方法，这里更新字段的值
     return {
         validate: (data) => {
             if (!actions.updateItem) {
@@ -608,6 +643,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const react_redux_1 = require("react-redux");
 const meta_1 = require("../../meta");
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const { mergeSchema, actions, schemaFormOptions } = ownProps;
+    const { keys } = mergeSchema;
+    // 返回validae方法，这里更新字段的值
+    return {
+        toggleItem: (data) => {
+            if (!actions.toggleItem) {
+                console.error("没有找到的action！");
+            }
+            actions.toggleItem({ keys });
+        },
+        removeItem: (data) => {
+            if (!actions.removeItem) {
+                console.error("没有找到的action！");
+            }
+            actions.removeItem({ keys, index: data });
+        },
+        addItem: (data) => {
+            if (!actions.addItem) {
+                console.error("没有找到的action！");
+            }
+            actions.addItem({ keys, data });
+        }
+    };
+};
 /**
  * 包装array的组件HOC
  * @param Component 需要包装的组件
@@ -618,32 +678,20 @@ const meta_1 = require("../../meta");
 exports.ArrayHoc = (Component) => {
     let Hoc = class Hoc extends react_1.default.Component {
         render() {
-            const { mergeSchema, arrayIndex } = this.props;
+            const { mergeSchema, arrayIndex, globalOptions } = this.props;
             const { uiSchema, type, keys } = mergeSchema;
+            const uiSchemaOptions = uiSchema.options || {};
+            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+            let { array: arrayHocOptions } = hocOptions;
+            let { createItemButtons = (props) => null, createItemChildButtons = (props) => null } = arrayHocOptions || {};
+            let newProps = Object.assign({}, this.props, {
+                removeItem: this.removeItem.bind(this),
+                addItem: this.addItem.bind(this),
+                toggleItem: this.toggleItem.bind(this)
+            });
             if (type === "array") {
-                return react_1.default.createElement(Component, Object.assign({}, this.props, { arrayItems: [
-                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 1, onClick: () => {
-                                this.addItem();
-                            } }, "add")
-                    ], arrayItemItems: [
-                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 1, onClick: () => {
-                                this.addItem();
-                            } }, "add"),
-                        react_1.default.createElement("button", { key: keys.join(".") + "arraybutton" + 2, onClick: () => {
-                                this.removeItem(arrayIndex);
-                            } }, "remove")
-                    ] }));
+                return react_1.default.createElement(Component, Object.assign({}, newProps, { arrayItems: createItemButtons(newProps), createItemChildButtons: createItemChildButtons.bind(this, newProps) }));
             }
-            // if (arrayIndex !== undefined) {
-            //     return <Component  {...this.props} arrayItems={[
-            //         <button key={keys.join(".") + "arraybutton" + 1} onClick={() => {
-            //             this.addItem();
-            //         }}>add</button>,
-            //         <button key={keys.join(".") + "arraybutton" + 2} onClick={() => {
-            //             this.removeItem(arrayIndex);
-            //         }}>remove</button>
-            //     ]} />;
-            // }
             return react_1.default.createElement(Component, Object.assign({}, this.props));
         }
         /**
@@ -651,29 +699,35 @@ exports.ArrayHoc = (Component) => {
          * @param index 数组索引
          */
         removeItem(index) {
-            const { formItemData = [], mergeSchema, validate } = this.props;
+            const { formItemData = [], mergeSchema, removeItem, arrayIndex } = this.props;
             const { uiSchema, type, keys } = mergeSchema;
-            if (type === "array") {
-                formItemData.splice(index, 1);
-                validate(formItemData);
+            if (type === "array" && index !== undefined) {
+                removeItem(index);
             }
+        }
+        /**
+         * 显示隐藏数组中的item元素
+         */
+        toggleItem() {
+            let { toggleItem } = this.props;
+            toggleItem();
         }
         /**
          * 添加一个项目
          */
         addItem() {
-            let { formItemData = [], mergeSchema, validate } = this.props;
+            let { mergeSchema, validate, addItem } = this.props;
             if (mergeSchema.items.type === "object") {
-                formItemData.push({});
+                addItem({});
             }
             else {
-                formItemData.push(undefined);
+                addItem(undefined);
             }
-            validate(formItemData);
+            // validate(formItemData);
         }
     };
     Hoc = __decorate([
-        react_redux_1.connect(meta_1.mapMetaStateToProps)
+        react_redux_1.connect(meta_1.mapMetaStateToProps, mapDispatchToProps)
     ], Hoc);
     return Hoc;
 };
@@ -749,32 +803,32 @@ ___scope___.file("fields/index.jsx", function(exports, require, module, __filena
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const string_1 = require("./string");
+const normal_1 = require("./normal");
 const object_1 = require("./object");
 const array_1 = require("./array");
 exports.default = {
-    string: string_1.StringField,
-    boolean: string_1.StringField,
-    number: string_1.StringField,
-    integer: string_1.StringField,
+    string: normal_1.NormalField,
+    boolean: normal_1.NormalField,
+    number: normal_1.NormalField,
+    integer: normal_1.NormalField,
     object: object_1.ObjectField,
     array: array_1.ArrayField
 };
 //# sourceMappingURL=index.js.map
 });
-___scope___.file("fields/string.jsx", function(exports, require, module, __filename, __dirname){
+___scope___.file("fields/normal.jsx", function(exports, require, module, __filename, __dirname){
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-class StringField extends react_1.default.Component {
+class NormalField extends react_1.default.Component {
     render() {
         const { mergeSchema, currentTheme, WidgetComponent } = this.props;
         return (react_1.default.createElement(WidgetComponent, Object.assign({ key: mergeSchema.keys.join(".") }, this.props)));
     }
 }
-exports.StringField = StringField;
-//# sourceMappingURL=string.js.map
+exports.NormalField = NormalField;
+//# sourceMappingURL=normal.js.map
 });
 ___scope___.file("fields/object.jsx", function(exports, require, module, __filename, __dirname){
 
@@ -798,23 +852,27 @@ ___scope___.file("fields/array.jsx", function(exports, require, module, __filena
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const index_1 = require("../index");
+/**
+ * 数组字段的生成规则
+ */
 class ArrayField extends react_1.default.Component {
     /**
      * 遍历数据，生成子表单
      * @param idx 数组的索引
      */
     renderItem(idx) {
-        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, arrayItemItems } = this.props;
+        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, createItemChildButtons } = this.props;
         const { uiSchema, keys } = mergeSchema;
-        return (react_1.default.createElement(index_1.SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, arrayIndex: idx, arrayItems: arrayItemItems, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
+        return (react_1.default.createElement(index_1.SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, arrayIndex: idx, arrayItems: createItemChildButtons ? createItemChildButtons(idx) : null, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
     }
     /**
      * 渲染页面
      */
     render() {
-        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData, meta = { dirty: false, isValid: true } } = this.props;
+        const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData, meta = { dirty: false, isValid: true, isShow: true } } = this.props;
         const { uiSchema, title } = mergeSchema;
-        let child = formItemData && formItemData.map((data, idx) => {
+        let child;
+        child = formItemData && formItemData.map((data, idx) => {
             return this.renderItem(idx);
         });
         return react_1.default.createElement("div", null, child || null);
@@ -903,10 +961,12 @@ const react_1 = require("react");
 const antd_1 = require("antd");
 class AntdCardTemp extends react_1.default.Component {
     render() {
-        const { children, globalOptions, tempKey, uiSchemaOptions, mergeSchema, arrayItems } = this.props;
+        const { children, globalOptions, tempKey, uiSchemaOptions, mergeSchema, arrayItems, meta } = this.props;
         const tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
         const { uiSchema, title } = mergeSchema;
-        return (react_1.default.createElement(antd_1.Card, Object.assign({}, tempOptions, { title: title || uiSchema.title, extra: arrayItems }), children));
+        return (react_1.default.createElement(antd_1.Card, Object.assign({}, tempOptions, { title: title || uiSchema.title, extra: arrayItems, bodyStyle: {
+                "display": meta.isShow === false ? "none" : "block"
+            } }), children));
     }
 }
 exports.AntdCardTemp = AntdCardTemp;
@@ -945,7 +1005,7 @@ class AntdInputWidget extends react_1.default.Component {
             props.value = this.props.formItemData;
         }
         else {
-            props.defaultValue = mergeSchema.default;
+            // props.defaultValue = mergeSchema.default;
             props.value = "";
         }
         return props;
@@ -956,7 +1016,6 @@ class AntdInputWidget extends react_1.default.Component {
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
         const { readonly = false } = uiSchema;
-        // console.log(this.props.meta);
         return (react_1.default.createElement(antd_1.Input, Object.assign({ onChange: (e) => {
                 validate(e.currentTarget.value);
             }, disabled: readonly, placeholder: mergeSchema.title }, input, inputDefault, this.setDefaultProps())));
@@ -1060,6 +1119,7 @@ ___scope___.file("reducer/form.jsx", function(exports, require, module, __filena
 Object.defineProperty(exports, "__esModule", { value: true });
 const redux_act_1 = require("redux-act");
 const jpp = require("json-pointer");
+const cloneDeep = require("lodash.clonedeep");
 class FormReducer {
     constructor(initialState) {
         this.initialState = initialState;
@@ -1068,22 +1128,66 @@ class FormReducer {
          */
         this.updateItem = redux_act_1.createAction("更新表单值");
         /**
+         * 显示/隐藏元素
+         */
+        this.toggleItem = redux_act_1.createAction("显示/隐藏元素");
+        /**
+         * 删除元素
+         */
+        this.removeItem = redux_act_1.createAction("删除元素");
+        /**
+         * 添加元素
+         */
+        this.addItem = redux_act_1.createAction("添加元素");
+        /**
          * 验证所有的字段
          */
         this.validateAllField = redux_act_1.createAction("验证表单中所有的字段");
     }
     get actions() {
         return {
-            updateItem: this.updateItem
+            updateItem: this.updateItem,
+            toggleItem: this.toggleItem,
+            removeItem: this.removeItem,
+            addItem: this.addItem
         };
     }
     get reducer() {
         return redux_act_1.createReducer({
             [this.updateItem]: (state, { keys, data, meta }) => {
-                let originData = Object.assign({}, state.data);
-                let originMeta = Object.assign({}, state.meta);
+                let originData = cloneDeep(state.data);
+                let originMeta = cloneDeep(state.meta);
+                let curMeta = jpp(originMeta).has(jpp.compile(keys)) ? jpp(originMeta).get(jpp.compile(keys)) : { isShow: true };
                 jpp(originData).set(jpp.compile(keys), data);
-                jpp(originMeta).set(jpp.compile(keys), meta);
+                jpp(originMeta).set(jpp.compile(keys), Object.assign({}, curMeta, meta));
+                return Object.assign({}, state, { data: originData, meta: originMeta });
+            },
+            [this.toggleItem]: (state, { keys }) => {
+                let originMeta = Object.assign({}, state.meta);
+                let meta = jpp(originMeta).has(jpp.compile(keys)) ? jpp(originMeta).get(jpp.compile(keys)) : { isShow: true };
+                jpp(originMeta).set(jpp.compile(keys), { isShow: !!!meta.isShow });
+                return Object.assign({}, state, { meta: originMeta });
+            },
+            [this.addItem]: (state, { keys, data }) => {
+                let originData = cloneDeep(state.data);
+                let curData = jpp(originData).has(jpp.compile(keys)) ? jpp(originData).get(jpp.compile(keys)) : [];
+                curData.push(data);
+                jpp(originData).set(jpp.compile(keys), curData);
+                return Object.assign({}, state, { data: originData });
+            },
+            [this.removeItem]: (state, { keys, index }) => {
+                if (index === undefined || typeof index !== "number") {
+                    return state;
+                }
+                let originData = cloneDeep(state.data);
+                let originMeta = cloneDeep(state.meta);
+                let curKey = jpp.compile([...keys, index.toString()]);
+                if (originData && jpp(originData).has(curKey)) {
+                    jpp(originData).remove(curKey);
+                }
+                if (originMeta && jpp(originMeta).has(curKey)) {
+                    jpp(originMeta).remove(curKey);
+                }
                 return Object.assign({}, state, { data: originData, meta: originMeta });
             }
         }, this.initialState);

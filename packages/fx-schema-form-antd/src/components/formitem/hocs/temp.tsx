@@ -8,18 +8,21 @@ import { RC } from "../../../types";
 import { ThemeHocOutProps } from "./theme";
 import { SchemaFormItemBaseProps } from "../props";
 import { ValidateHoc } from "./validate";
-import { mapMetaStateToProps } from "../../meta";
+import { mapMetaStateToProps } from "../../select";
 
 const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps, any>(
     lifecycle({
         shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps, nextState) {
             console.group(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化");
-            console.log("formItemData", pick(nextProps, ["formItemData"]), pick(this.props, ["formItemData"]));
+            console.log("formItemData", pick(nextProps, ["formItemData"]).formItemData, pick(this.props, ["formItemData"]).formItemData);
             console.log("meta", pick(nextProps, ["meta"]), pick(this.props, ["meta"]));
-            console.groupEnd();
 
-            return !shallowEqual(pick(nextProps, ["formItemData"]).formItemData, pick(this.props, ["formItemData"]).formItemData) ||
-                !shallowEqual(pick(nextProps, ["meta"]).meta, pick(this.props, ["meta"]).meta);
+            let rtn = !shallowEqual(pick(nextProps, ["formItemData"]).formItemData, pick(this.props, ["formItemData"]).formItemData) ||
+                !shallowEqual(pick(nextProps.meta, ["isShow", "isValid", "dirty"]), pick(this.props.meta, ["isShow", "isValid", "dirty"]));
+
+            console.log("shouldUpdate", rtn);
+            console.groupEnd();
+            return rtn;
         }
     })
 );

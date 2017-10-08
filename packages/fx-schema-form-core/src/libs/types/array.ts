@@ -10,7 +10,7 @@ export default (schema: any, parentKey: Array<string>, options: any) => {
             return;
         }
 
-        console.log("array", schema);
+        // console.log("array", schema);
 
         const currentSchema = convert(Object.assign({}, schema.items, {
             isRequired: (!!schema.required && schema.required.indexOf(schema.key) !== -1),

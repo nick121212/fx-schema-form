@@ -26,7 +26,7 @@ export const ThemeHoc = (Component: any): RC<SchemaFormItemBaseProps, any> => {
             if (nsFactory.has(uiSchema.theme || "default")) {
                 theme = nsFactory.get(uiSchema.theme || "default");
             } else {
-                throw new Error(`没有找到￥{uiSchema.theme || "default"}的样式！`);
+                throw new Error(`没有找到${uiSchema.theme || "default"}的样式！`);
             }
 
             return <Component currentTheme={theme} {...this.props} />;

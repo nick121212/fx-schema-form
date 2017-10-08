@@ -35,20 +35,20 @@ module.exports = {
             loader: "expose-loader?Perf"
         }, {
             test: /module\.styl/,
-            loader: 'style-loader!css-loader?modules!postcss-loader!stylus-loader',
+            loader: 'style-loader!css-loader?modules!stylus-loader',
         }, {
             test: /module\.css/,
-            loader: 'style-loader!css-loader?modules!postcss-loader',
+            loader: 'style-loader!css-loader?modules',
         }, {
             test: /\.less$/,
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                use: ['css-loader', 'less-loader']
+                use: ['css-loader', 'style-loader', 'less-loader']
             })
-        },  {
+        }, {
             test: /\.css/,
             exclude: /module\.css/,
-            loader: 'style-loader!css-loader!postcss-loader',
+            loader: 'style-loader!css-loader',
         }, {
             test: /\.ts(x?)$/,
             exclude: /node_modules/,
@@ -107,19 +107,7 @@ module.exports = {
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
-                postcss: [
-                    cssnano({
-                        autoprefixer: {
-                            add: true,
-                            remove: true,
-                            browsers: ['last 2 versions'],
-                        },
-                        discardComments: {
-                            removeAll: true,
-                        },
-                        safe: true,
-                    })
-                ],
+
                 svgo: {
                     plugins: [
                         { removeStyleElement: true },

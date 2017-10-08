@@ -9,12 +9,14 @@ export interface AntdCardTempProps extends SchemaFormItemProps {
 
 export class AntdCardTemp extends React.Component<AntdCardTempProps, any> {
     public render(): JSX.Element {
-        const { children, globalOptions, tempKey, uiSchemaOptions, mergeSchema, arrayItems } = this.props;
+        const { children, globalOptions, tempKey, uiSchemaOptions, mergeSchema, arrayItems, meta } = this.props;
         const tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
         const { uiSchema, title } = mergeSchema;
 
         return (
-            <Card {...tempOptions} title={title || uiSchema.title} extra={arrayItems}>
+            <Card {...tempOptions} title={title || uiSchema.title} extra={arrayItems} bodyStyle={{
+                "display": meta.isShow === false ? "none" : "block"
+            }}>
                 {children}
             </Card>
         );

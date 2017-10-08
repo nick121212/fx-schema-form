@@ -9,14 +9,10 @@ import { ValidateHoc } from "./hocs/validate";
 import { ArrayHoc } from "./hocs/array";
 
 export const hoc: ComponentEnhancer<SchemaFormItemBaseProps, any> = compose<SchemaFormItemBaseProps, any>(
-    onlyUpdateForKeys(["formData", "meta"]),
+    onlyUpdateForKeys(["formItemData", "meta", "formData"]),
     ThemeHoc,
     FieldHoc,
     ValidateHoc,
     ArrayHoc,
-    TempHoc,
-    shouldUpdate<SchemaFormItemBaseProps>((prevProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps): boolean => {
-        return !shallowEqual(pick(prevProps, ["formData"]).formData, pick(nextProps, ["formData"]).formData) ||
-            !shallowEqual(pick(prevProps, ["meta"]).meta, pick(nextProps, ["meta"]).meta);
-    })
+    TempHoc
 );

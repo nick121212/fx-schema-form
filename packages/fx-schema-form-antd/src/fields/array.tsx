@@ -9,13 +9,16 @@ export interface ArryFieldProps extends SchemaFormItemProps {
 
 }
 
+/**
+ * 数组字段的生成规则
+ */
 export class ArrayField extends React.Component<ArryFieldProps, any> {
     /**
      * 遍历数据，生成子表单
      * @param idx 数组的索引
      */
-    private renderItem(idx: number): JSX.Element {
-        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, arrayItemItems } = this.props;
+    private renderItem(idx: number, maxLen: number): JSX.Element {
+        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, createItemChildButtons } = this.props;
         const { uiSchema, keys } = mergeSchema;
 
         return (
@@ -23,7 +26,7 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
                 key={keys.join(".") + idx}
                 schema={mergeSchema}
                 arrayIndex={idx}
-                arrayItems={arrayItemItems}
+                arrayItems={createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null}
                 parentKeys={mergeSchema.keys}
                 RootComponent={null}
                 schemaKey={schemaKey}
@@ -39,34 +42,15 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
      */
     public render(): JSX.Element | null {
         const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData,
-            meta = { dirty: false, isValid: true }
+            meta = { dirty: false, isValid: true, isShow: true }
         } = this.props;
         const { uiSchema, title } = mergeSchema;
+        let child;
 
-        let child = formItemData && formItemData.map((data: any, idx: number) => {
-            return this.renderItem(idx);
+        child = formItemData && formItemData.map((data: any, idx: number) => {
+            return this.renderItem(idx, formItemData.length);
         });
 
         return <div>{child || null}</div>;
     }
-
-    // private removeItem(index: number): void {
-    //     let { formData = [], mergeSchema, validate } = this.props;
-
-    //     formData.splice(index, 1);
-
-    //     validate(formData);
-    // }
-
-    // private addItem(): void {
-    //     let { formData = [], mergeSchema, validate } = this.props;
-
-    //     if (mergeSchema.items.type === "object") {
-    //         formData.push({});
-    //     } else {
-    //         formData.push(undefined);
-    //     }
-
-    //     validate(formData);
-    // }
 }

@@ -2,7 +2,7 @@ import { compose, withHandlers, ComponentEnhancer, lifecycle } from "recompose";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { SchemaFormProps } from "./props";
+import { SchemaFormBaseProps } from "./props";
 import { MergeHoc } from "./hocs/merge";
 
 export const mapStateToProps = (state: any, ownProps: any) => {
@@ -11,6 +11,6 @@ export const mapStateToProps = (state: any, ownProps: any) => {
     };
 };
 
-export const hoc: ComponentEnhancer<SchemaFormProps, any> = compose<SchemaFormProps, any>(
+export const hoc: ComponentEnhancer<SchemaFormBaseProps, any> = compose<SchemaFormBaseProps, any>(
     MergeHoc
 );

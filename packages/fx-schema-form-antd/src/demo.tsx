@@ -27,6 +27,7 @@ const schema = {
             title: "测试无限极数组类型",
             items: {
                 type: "object",
+                required: ["test"],
                 properties: {
                     test: { type: "string", title: "无限极测试数据" },
                     children: { $ref: "test#/properties/array1" }
@@ -38,19 +39,39 @@ const schema = {
     }
 };
 
-const uiSchema = [{
-    "key": "array",
-    "items": [{
-        "key": "array/-",
-        // "ui:temp": []
-    }]
-}, {
-    "key": "array1"
+const uiSchema = ["name", {
+    "key": "array1",
+    "items": [{ key: "array1/-/test" }]
 }];
 
 const globalOptions = {
     "ui:temp": ["formItem"],
+    "hoc": {
+        "array": {
+            createItemButtons: (props: any) => {
+                return (
+                    <div>
+                        <Button type="primary" shape="circle" icon="plus" ghost={true} onClick={() => { props.addItem(); }}></Button>
+                        <Button type="primary" shape="circle" icon="shrink" ghost={true} onClick={() => { props.toggleItem(); }}></Button>
+                    </div>
+                );
+            },
+            createItemChildButtons: (props: any, idx: number, maxLength: number) => {
+                return (
+                    <div>
+                        <Button ghost={true} type="primary" shape="circle" icon="minus"
+                            onClick={() => { props.removeItem(idx); }}></Button>
+                        <Button ghost={true} type="primary" shape="circle" icon="arrow-up"
+                            onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
+                        <Button ghost={true} type="primary" shape="circle" icon="arrow-down"
+                            onClick={() => { props.switchItem(idx, idx + 1); }}></Button>
+                    </div>
+                );
+            }
+        }
+    },
     "formItem": {
+        "hasFeedback": true,
         "labelCol": {
             "xs": { "span": 24 },
             "sm": { "span": 6 },
@@ -65,7 +86,11 @@ const globalOptions = {
     },
     "col": {
         "xs": { "span": 24, "offset": 24 },
-        "sm": { "span": 24, "offset": 0 },
+        "sm": { "span": 15, "offset": 5 },
+    },
+    "card": {
+        "noHovering": true,
+        "bordered": false
     },
     "array": {
         "ui:temp": ["row", "col", "card"]
@@ -73,16 +98,27 @@ const globalOptions = {
 };
 
 let store = createStore(combineReducers(createForms({
-    "test": { name: "nick" }
+    "test": {
+        name: "nick", array1: [{
+            test: "array_test", children: [{ test: "array_item_test" }]
+        }, {
+            test: "array_test1", children: [{ test: "array_item_test1" }]
+        }, {
+            test: "array_test2", children: [{ test: "array_item_test2" }]
+        }]
+    }
 })));
 
 store.subscribe(() => {
     console.log(store.getState());
 });
+
 ReactDom.render(
     <Provider store={store}>
         <SchemaForm schemaKey={"test"} schema={schema} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
-            <Button>dfadf</Button>
+            <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6 }}>
+                <Button>提交</Button>
+            </Form.Item>
         </SchemaForm>
     </Provider>
     , document.getElementById("root"), console.log);

@@ -1,5 +1,6 @@
 
 import { FormReducer } from "../reducer/form";
+import { MetaData } from "./meta";
 
 export default (forms: { [id: string]: any } = {}) => {
     let reducers: any = {};
@@ -7,7 +8,7 @@ export default (forms: { [id: string]: any } = {}) => {
     for (let key in forms) {
         if (forms.hasOwnProperty(key)) {
             let element = forms[key];
-            let meta: any = {};
+            let meta: MetaData = new MetaData();
             let reducer = new FormReducer({
                 data: element,
                 meta: meta

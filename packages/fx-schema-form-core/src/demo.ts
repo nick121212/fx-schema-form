@@ -1,4 +1,4 @@
-import { merge } from "./index";
+import { schemaMerge } from "./index";
 
 const schema = {
     type: "object",
@@ -33,13 +33,17 @@ const schema = {
 };
 
 const uiSchema = [{
-    "key": "array1"
+    "key": "array1",
+    "items": [{ key: "array1/-/test" }]
 }];
 
 let options: any = {};
-let aaa = merge("test", schema, uiSchema, options);
-aaa = merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+let aaa = schemaMerge.merge("test", schema, uiSchema, options);
+let bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
 
-console.log(aaa);
+console.log(bbb);
 // console.log(merge("test", aaa[2], aaa[2].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[2].keys })));
 

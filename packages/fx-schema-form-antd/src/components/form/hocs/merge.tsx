@@ -1,12 +1,13 @@
 
 import React from "react";
-import { merge } from "fx-schema-form-core";
+import { schemaMerge } from "fx-schema-form-core";
+// import { schemaMerge } from "../../../../../fx-schema-form-core/src";
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
 
 import { RC } from "../../../types";
 import { SchemaFormBaseProps } from "../props";
-import { mapActionsStateToProps } from "../../meta";
+import { mapActionsStateToProps } from "../../select";
 
 /**
  * MergeHoc 添加的属性
@@ -57,7 +58,7 @@ export const MergeHoc = (Component: RC<any, any>): RC<SchemaFormBaseProps, any> 
             schemaFormOptions = schemaFormOptions || {};
             schemaFormOptions.parentKeys = parentKeys || [];
 
-            mergeSchemaList = merge(schemaKey, schema, uiSchema, schemaFormOptions);
+            mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
 
             return (
                 <Component

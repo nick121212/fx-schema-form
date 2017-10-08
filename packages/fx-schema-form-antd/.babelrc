@@ -4,7 +4,7 @@
         "transform-react-jsx",
         "transform-runtime", ["import", {
             "libraryName": "antd",
-            "style": "css"
+            "style": "lib"
         }]
     ]
 }

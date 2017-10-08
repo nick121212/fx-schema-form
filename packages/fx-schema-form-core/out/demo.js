@@ -24,7 +24,7 @@ var schema = {
                 properties: {
                     test: { type: "string" },
                     test1: { type: "string" },
-                    children: { $ref: "#/properties/array1" }
+                    children: { $ref: "test#/properties/array1" }
                 }
             }
         },
@@ -33,10 +33,14 @@ var schema = {
     }
 };
 var uiSchema = [{
-        "key": "array1"
+        "key": "array1",
+        "items": [{ key: "array1/-/test" }]
     }];
 var options = {};
-var aaa = index_1.merge("test", schema, uiSchema, options);
-aaa = index_1.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
-console.log(aaa);
+var aaa = index_1.schemaMerge.merge("test", schema, uiSchema, options);
+var bbb = index_1.schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = index_1.schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = index_1.schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+bbb = index_1.schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
+console.log(bbb);
 //# sourceMappingURL=demo.js.map

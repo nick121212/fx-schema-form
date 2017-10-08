@@ -12,7 +12,7 @@ export interface SchemaFormItemBaseProps {
     updateItem: (data: { keys: Array<string>, data: any }) => void;
 
     arrayIndex?: number;
-    arrayItems?: Array<JSX.Element>;
+    arrayItems?: any;
     arrayItemItems?: Array<JSX.Element>;
     formData?: any;
     formItemData?: any;

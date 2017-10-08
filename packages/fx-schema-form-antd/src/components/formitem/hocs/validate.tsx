@@ -7,16 +7,22 @@ import *  as jpp from "json-pointer";
 import { SchemaFormItemBaseProps } from "../props";
 import { RC } from "../../../types";
 import validateFunc from "../../../libs/validate";
-import { mapActionsStateToProps } from "../../meta";
+import { mapActionsStateToProps } from "../../select";
 
 
 export interface ValidateHocOutProps {
     validate?: (data: any) => void;
 }
 
+/**
+ * 处理actions,这里吧actions添加到dispatch
+ * @param dispatch 方法
+ * @param ownProps 自身属性
+ */
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBaseProps & { actions: any }) => {
     const { mergeSchema, actions, schemaFormOptions } = ownProps;
     const { keys } = mergeSchema;
+    let timeId: NodeJS.Timer;
 
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
@@ -28,6 +34,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
         }
     }
 
+    // 返回validae方法，这里更新字段的值
     return {
         validate: (data: any) => {
             if (!actions.updateItem) {

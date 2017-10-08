@@ -8,7 +8,6 @@ exports.default = function (schema, parentKey, options) {
         if (options.depth > options.maxDepth) {
             return;
         }
-        console.log("array", schema);
         var currentSchema = keys_1.default(Object.assign({}, schema.items, {
             isRequired: (!!schema.required && schema.required.indexOf(schema.key) !== -1),
             keys: [].concat(keys),

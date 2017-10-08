@@ -32,7 +32,7 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
                 {...props}
                 {...tempOptions}>
                 {children}
-                {arrayItems}
+                {arrayItems && arrayItems()}
             </Form.Item>
         );
     }

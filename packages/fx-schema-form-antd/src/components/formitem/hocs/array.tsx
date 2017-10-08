@@ -1,15 +1,57 @@
 
 import React from "react";
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 
 import { RC, NsFactory } from "../../../types";
 import { nsFactory } from "../../../index";
 import { SchemaFormItemBaseProps } from "../props";
 import { ValidateHocOutProps } from "./validate";
-import { mapMetaStateToProps } from "../../meta";
+import { mapMetaStateToProps } from "../../select";
 
-export interface ArrayHocOutProps {
+export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps {
+    toggleItem?: () => void;
+    removeItem?: (data: number) => void;
+    addItem?: (data: any) => void;
+    switchItem?: (data: any) => void;
+
+    createItemChildButtons?: (index: number, maxLength: number) => JSX.Element;
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBaseProps & { actions: any }) => {
+    const { mergeSchema, actions, schemaFormOptions } = ownProps;
+    const { keys } = mergeSchema;
+
+    // 返回validae方法，这里更新字段的值
+    return {
+        toggleItem: (data: boolean) => {
+            if (!actions.toggleItem) {
+                console.error("没有找到的action！");
+            }
+            actions.toggleItem({ keys });
+        },
+        removeItem: (data: number) => {
+            if (!actions.removeItem) {
+                console.error("没有找到的action！");
+            }
+            actions.removeItem({ keys, index: data });
+        },
+        addItem: (data: any) => {
+            if (!actions.addItem) {
+                console.error("没有找到的action！");
+            }
+            actions.addItem({ keys, data });
+        },
+        switchItem: (data: {
+            curIndex: number;
+            switchIndex: number;
+        }) => {
+            if (!actions.switchItem) {
+                console.error("没有找到的action！");
+            }
+            actions.switchItem({ keys, ...data });
+        }
+    };
+};
 
 /**
  * 包装array的组件HOC
@@ -18,38 +60,29 @@ export interface ArrayHocOutProps {
  * 加入属性
  * arrayItems
  */
-export const ArrayHoc = (Component: any): RC<SchemaFormItemBaseProps & ValidateHocOutProps, any> => {
-    @(connect(mapMetaStateToProps) as any)
-    class Hoc extends React.Component<SchemaFormItemBaseProps & ValidateHocOutProps, any> {
+export const ArrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
+    @(connect(mapMetaStateToProps, mapDispatchToProps) as any)
+    class Hoc extends React.Component<ArrayHocOutProps, any> {
         public render(): JSX.Element {
-            const { mergeSchema, arrayIndex } = this.props;
+            const { mergeSchema, arrayIndex, globalOptions } = this.props;
             const { uiSchema, type, keys } = mergeSchema;
+            const uiSchemaOptions = uiSchema.options || {};
+            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+            let { array: arrayHocOptions } = hocOptions;
+            let { createItemButtons = (props: any) => null, createItemChildButtons = (props: any) => null } = arrayHocOptions || {};
+
+            let newProps = Object.assign({}, this.props, {
+                removeItem: this.removeItem.bind(this),
+                addItem: this.addItem.bind(this),
+                toggleItem: this.toggleItem.bind(this),
+                switchItem: this.switchItem.bind(this)
+            });
 
             if (type === "array") {
-                return <Component {...this.props} arrayItems={[
-                    <button key={keys.join(".") + "arraybutton" + 1} onClick={() => {
-                        this.addItem();
-                    }}>add</button>
-                ]} arrayItemItems={[
-                    <button key={keys.join(".") + "arraybutton" + 1} onClick={() => {
-                        this.addItem();
-                    }}>add</button>,
-                    <button key={keys.join(".") + "arraybutton" + 2} onClick={() => {
-                        this.removeItem(arrayIndex);
-                    }}>remove</button>
-                ]}/>;
+                return <Component {...newProps}
+                    arrayItems={createItemButtons(newProps)}
+                    createItemChildButtons={createItemChildButtons.bind(this, newProps)} />;
             }
-
-            // if (arrayIndex !== undefined) {
-            //     return <Component  {...this.props} arrayItems={[
-            //         <button key={keys.join(".") + "arraybutton" + 1} onClick={() => {
-            //             this.addItem();
-            //         }}>add</button>,
-            //         <button key={keys.join(".") + "arraybutton" + 2} onClick={() => {
-            //             this.removeItem(arrayIndex);
-            //         }}>remove</button>
-            //     ]} />;
-            // }
 
             return <Component {...this.props} />;
         }
@@ -59,30 +92,56 @@ export const ArrayHoc = (Component: any): RC<SchemaFormItemBaseProps & ValidateH
          * @param index 数组索引
          */
         private removeItem(index: number): void {
-            const { formItemData = [], mergeSchema, validate } = this.props;
+            const { formItemData = [], mergeSchema, removeItem, arrayIndex } = this.props;
             const { uiSchema, type, keys } = mergeSchema;
 
-            if (type === "array") {
-                formItemData.splice(index, 1);
-                validate(formItemData);
+            if (type === "array" && index !== undefined) {
+                removeItem(index);
             }
+        }
 
+        /**
+         * 元素交换位置
+         * @param curIndex     当前的位置
+         * @param switchIndex  移动到的位置
+         */
+        private switchItem(curIndex: number, switchIndex: number) {
+            const { formItemData = [], mergeSchema, switchItem, arrayIndex } = this.props;
+            const { uiSchema, type, keys } = mergeSchema;
 
+            if (type === "array" && curIndex !== undefined && switchIndex !== undefined) {
+                if (switchIndex < 0 || formItemData.length < switchIndex + 1) {
+                    return;
+                }
+
+                switchItem({
+                    curIndex,
+                    switchIndex
+                });
+            }
+        }
+
+        /**
+         * 显示隐藏数组中的item元素
+         */
+        private toggleItem(): void {
+            let { toggleItem } = this.props;
+
+            toggleItem();
         }
 
         /**
          * 添加一个项目
          */
         private addItem(): void {
-            let { formItemData = [], mergeSchema, validate } = this.props;
+            let { mergeSchema, validate, addItem } = this.props;
 
             if (mergeSchema.items.type === "object") {
-                formItemData.push({});
+                addItem({});
             } else {
-                formItemData.push(undefined);
+                addItem(undefined);
             }
-
-            validate(formItemData);
+            // validate(formItemData);
         }
     }
 

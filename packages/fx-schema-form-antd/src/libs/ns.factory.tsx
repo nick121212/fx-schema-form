@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseFactory, merge } from "fx-schema-form-core";
+import { BaseFactory } from "fx-schema-form-core";
 
 import { RC, NsFactory } from "../types";
 
