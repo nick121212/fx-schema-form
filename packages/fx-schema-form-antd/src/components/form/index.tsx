@@ -1,17 +1,14 @@
 import React from "react";
-import { EventEmitter2 } from "eventemitter2";
 
 import { SchemaFormBaseProps } from "./props";
 import { hoc } from "./container";
 import { SchemaFormItem } from "../../index";
 import { MergeHocOutProps } from "./hocs/merge";
+import { SchemaFormBlock } from "../block";
 
-class SchemaFormBlock extends React.Component<any, any> {
-    public render(): JSX.Element {
-        return <div>{this.props.children}</div>;
-    }
-}
-
+/**
+ * form组建的props
+ */
 export interface SchemaFormProps extends SchemaFormBaseProps {
 
 }
