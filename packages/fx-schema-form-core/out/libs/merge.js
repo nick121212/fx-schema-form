@@ -26,7 +26,7 @@ var SchemaMerge = (function () {
         if (uiSchema === void 0) { uiSchema = ["*"]; }
         if (options === void 0) { options = {}; }
         if (!options.ajv) {
-            options.ajv = new Ajv({ $data: true });
+            options.ajv = new Ajv(Object.assign({}, options.avjOptions || {}, { $data: true }));
         }
         if (!options.map) {
             options.map = new factory_1.BaseFactory();

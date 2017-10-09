@@ -44,7 +44,11 @@ export class MetaData {
     public validateAll(data: any) {
         console.log(data, this.curAjv);
 
-        return this.curAjv.validate("test", data);
+        let result = this.curAjv.validate("test", data);
+
+        // this.curAjv.validateSchema()
+
+        console.log(result, this.curAjv.errors);
     }
 
     /**
