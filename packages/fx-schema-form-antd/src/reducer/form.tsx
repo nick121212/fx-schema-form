@@ -3,12 +3,11 @@ import { Reducer } from "redux";
 import jpp from "json-pointer";
 import cloneDeep from "lodash.clonedeep";
 
-import { SchemaFormMeta } from "./meta";
 import { MetaData } from "../libs/meta";
 
 export interface SchemaFormState<T> {
     data: T;
-    meta: { [key: string]: SchemaFormMeta };
+    meta: MetaData;
 }
 
 export interface Actions {
@@ -17,9 +16,10 @@ export interface Actions {
     removeItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     addItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
+    validateAllField: EmptyActionCreator;
 }
 
-export class FormReducer {
+export class FormReducer<T> {
     /**
      * 单个元素的值变化时候调用
      */
@@ -57,7 +57,8 @@ export class FormReducer {
             toggleItem: this.toggleItem,
             removeItem: this.removeItem,
             addItem: this.addItem,
-            switchItem: this.switchItem
+            switchItem: this.switchItem,
+            validateAllField: this.validateAllField
         };
     }
 
@@ -70,7 +71,8 @@ export class FormReducer {
             [this.toggleItem as any]: this.toggleItemHandle.bind(this),
             [this.addItem as any]: this.addItemHandle.bind(this),
             [this.removeItem as any]: this.removeItemHandle.bind(this),
-            [this.switchItem as any]: this.switchItemHandle.bind(this)
+            [this.switchItem as any]: this.switchItemHandle.bind(this),
+            [this.validateAllField as any]: this.validateAllFieldHandle.bind(this)
         }, this.initialState);
     }
 
@@ -85,7 +87,20 @@ export class FormReducer {
         return { originData, originMeta };
     }
 
-    private updateItemHandle(state: any, { keys, data, meta }: { keys: Array<string>, data: any, meta: { isValid: boolean } }) {
+    private validateAllFieldHandle(state: SchemaFormState<T>): SchemaFormState<T> {
+        let { originData, originMeta } = this.getOrigin(state);
+
+        console.log(originMeta.validateAll(originData));
+        return state;
+    }
+
+    /**
+     * 更新数据
+     * @param state  state
+     * @param param1 data
+     */
+    private updateItemHandle(state: any,
+        { keys, data, meta }: { keys: Array<string>, data: any, meta: { isValid: boolean } }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
 
@@ -95,7 +110,7 @@ export class FormReducer {
         return Object.assign({}, state, { data: originData, meta: originMeta });
     }
 
-    private toggleItemHandle(state: any, { keys }: { keys: Array<string> }) {
+    private toggleItemHandle(state: any, { keys }: { keys: Array<string> }): SchemaFormState<T> {
         let { originMeta } = this.getOrigin(state); let { normalKey } = originMeta.getKey(keys);
         let curMeta = originMeta.getMeta(keys, false) || {};
 
@@ -104,7 +119,7 @@ export class FormReducer {
         return Object.assign({}, state, { meta: originMeta });
     }
 
-    private addItemHandle(state: any, { keys, data }: { keys: Array<string>, data: any }) {
+    private addItemHandle(state: any, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
         let curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
@@ -114,7 +129,7 @@ export class FormReducer {
         return Object.assign({}, state, { data: originData });
     }
 
-    private removeItemHandle(state: any, { keys, index }: { index: number, keys: Array<string> }) {
+    private removeItemHandle(state: any, { keys, index }: { index: number, keys: Array<string> }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey([...keys, index.toString()]);
 
@@ -126,7 +141,9 @@ export class FormReducer {
 
         return Object.assign({}, state, { data: originData, meta: originMeta });
     }
-    private switchItemHandle(state: any, { keys, curIndex, switchIndex }: { curIndex: number; switchIndex: number; keys: Array<string>; }) {
+
+    private switchItemHandle(state: any,
+        { keys, curIndex, switchIndex }: { curIndex: number; switchIndex: number; keys: Array<string>; }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
         let curData = jpp(originData).get(normalKey);

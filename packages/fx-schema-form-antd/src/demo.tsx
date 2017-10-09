@@ -96,18 +96,19 @@ const globalOptions = {
         "ui:temp": ["row", "col", "card"]
     }
 };
+let reducer = createForms.createOne("test", {
+    name: "nick", array1: [{
+        test: "array_test", children: [{ test: "array_item_test" }]
+    }, {
+        test: "array_test1", children: [{ test: "array_item_test1" }]
+    }, {
+        test: "array_test2", children: [{ test: "array_item_test2" }]
+    }]
+});
 
-let store = createStore(combineReducers(createForms({
-    "test": {
-        name: "nick", array1: [{
-            test: "array_test", children: [{ test: "array_item_test" }]
-        }, {
-            test: "array_test1", children: [{ test: "array_item_test1" }]
-        }, {
-            test: "array_test2", children: [{ test: "array_item_test2" }]
-        }]
-    }
-})));
+let store = createStore(combineReducers({
+    test: reducer.reducer
+}));
 
 store.subscribe(() => {
     console.log(store.getState());
@@ -117,7 +118,7 @@ ReactDom.render(
     <Provider store={store}>
         <SchemaForm schemaKey={"test"} schema={schema} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
             <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6 }}>
-                <Button>提交</Button>
+                <Button onClick={reducer.actions.validateAllField.bind(reducer)}>提交</Button>
             </Form.Item>
         </SchemaForm>
     </Provider>

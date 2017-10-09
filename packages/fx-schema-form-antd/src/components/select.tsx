@@ -6,6 +6,7 @@ import { createSelector } from "reselect";
 import cloneDeep from "lodash.clonedeep";
 
 import { SchemaFormItemBaseProps } from "./formitem/props";
+import { SchemaFormMeta, MetaData } from "../libs/meta";
 
 /**
  * 获取formData的数据
@@ -36,12 +37,12 @@ export const getData = (state: any, props: SchemaFormItemBaseProps) => {
  * @param state 全局state
  * @param props 当前component的props
  */
-export const getMetaData = (state: any, props: SchemaFormItemBaseProps) => {
+export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
     const { schemaKey, mergeSchema } = props;
     const { keys = [] } = mergeSchema;
     const { meta } = state[props.schemaKey];
 
-    return meta.getMeta(keys, mergeSchema.type !== "array") || {};
+    return meta.getMeta(keys, mergeSchema.type !== "array");
 };
 
 /**
@@ -52,6 +53,10 @@ export const getMetaData = (state: any, props: SchemaFormItemBaseProps) => {
 export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
     const { schemaKey } = props;
     const { data = {}, meta = { actions: {} } } = state[schemaKey];
+
+    if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
+        (meta as MetaData).init(props.schemaFormOptions.ajv);
+    }
 
     return meta.actions;
 };

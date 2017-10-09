@@ -18,7 +18,7 @@ export interface MergeHocOutProps {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormBaseProps) => {
-    const { actions, schemaFormOptions } = ownProps;
+    const { actions } = ownProps;
 
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
@@ -49,15 +49,15 @@ export const MergeHoc = (Component: RC<any, any>): RC<SchemaFormBaseProps, any> 
     ) as any)
     class Hoc extends React.Component<SchemaFormBaseProps, any> {
         public render(): JSX.Element {
-            let { schema, uiSchema, globalOptions, parentKeys, schemaFormOptions, schemaKey, actions } = this.props, mergeSchemaList;
+            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions } = this.props, mergeSchemaList;
 
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
             }
-
+            // 设置默认值
             schemaFormOptions = schemaFormOptions || {};
             schemaFormOptions.parentKeys = parentKeys || [];
-
+            // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
 
             return (
@@ -66,7 +66,8 @@ export const MergeHoc = (Component: RC<any, any>): RC<SchemaFormBaseProps, any> 
                     schemaKey={schemaKey}
                     mergeSchemaList={mergeSchemaList}
                     {...this.props}>
-                </Component>);
+                </Component>
+            );
         }
     }
 

@@ -2,25 +2,41 @@
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
 
-export default (forms: { [id: string]: any } = {}) => {
-    let reducers: any = {};
+export class SchemaFormCreate {
+    public createOne<T>(key, data: T): FormReducer<T> {
+        let meta: MetaData = new MetaData();
+        let reducer = new FormReducer<T>({
+            data: data,
+            meta: meta
+        });
 
-    for (let key in forms) {
-        if (forms.hasOwnProperty(key)) {
-            let element = forms[key];
-            let meta: MetaData = new MetaData();
-            let reducer = new FormReducer({
-                data: element,
-                meta: meta
-            });
+        meta.actions = reducer.actions;
 
-            meta.actions = reducer.actions;
-
-            if (element) {
-                reducers[key] = reducer.reducer;
-            }
-        }
+        return reducer;
     }
 
-    return reducers;
-};
+    public createMuti(forms: { [id: string]: any } = {}): Object {
+        let reducers: any = {};
+
+        for (let key in forms) {
+            if (forms.hasOwnProperty(key)) {
+                let element = forms[key];
+                let meta: MetaData = new MetaData();
+                let reducer = new FormReducer({
+                    data: element,
+                    meta: meta
+                });
+
+                meta.actions = reducer.actions;
+
+                if (element) {
+                    reducers[key] = reducer.reducer;
+                }
+            }
+        }
+
+        return reducers;
+    }
+}
+
+export default new SchemaFormCreate();

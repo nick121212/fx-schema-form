@@ -29,6 +29,7 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
             RootComponentHock = SchemaFormBlock;
         }
 
+        // 验证一次，设置默认值
         schemaFormOptions.ajv.validate(schemaKey, formData);
 
         return (

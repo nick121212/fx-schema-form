@@ -2,7 +2,6 @@
 import React from "react";
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
-import *  as jpp from "json-pointer";
 
 import { SchemaFormItemBaseProps } from "../props";
 import { RC } from "../../../types";
@@ -33,6 +32,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
             }
         }
     }
+    // actions[""] = actions[""].bind(actions, schemaFormOptions.ajv);
 
     // 返回validae方法，这里更新字段的值
     return {

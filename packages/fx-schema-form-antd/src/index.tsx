@@ -10,6 +10,7 @@ import hocs from "./hocs";
 import fields from "./fields";
 import templates from "./templates";
 import widgets from "./widgets";
+import { FormReducer } from "./reducer/form";
 
 const defaultTheme = {
     tempFactory: new BaseFactory<RC<any, any>>(),
@@ -61,5 +62,6 @@ export {
     nsFactory,
     SchemaForm,
     SchemaFormItem,
-    defaultTheme
+    defaultTheme,
+    FormReducer
 };
