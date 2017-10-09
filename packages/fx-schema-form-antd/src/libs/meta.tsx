@@ -42,11 +42,19 @@ export class MetaData {
     }
 
     public validateAll(data: any) {
-        console.log(data, this.curAjv);
-
         let result = this.curAjv.validate("test", data);
 
-        // this.curAjv.validateSchema()
+        if (!result) {
+            this.curAjv.errors.forEach((error: ajv.ErrorObject) => {
+                // console.log(this.curAjv.errorsText([error]));
+                this.setMeta(jpp.parse(error.dataPath), {
+                    dirty: true,
+                    isValid: false,
+                    errors: [],
+                    errorText: error.message
+                });
+            });
+        }
 
         console.log(result, this.curAjv.errors);
     }

@@ -55,7 +55,13 @@ export const MergeHoc = (Component: RC<any, any>): RC<SchemaFormBaseProps, any> 
                 schemaKey = (Date.now() + Math.random()).toString();
             }
             // 设置默认值
-            schemaFormOptions = schemaFormOptions || {};
+            schemaFormOptions = schemaFormOptions || {
+                avjOptions: {
+                    allErrors: true,
+                    jsonPointers: true,
+                    errorDataPath: "property"
+                }
+            };
             schemaFormOptions.parentKeys = parentKeys || [];
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);

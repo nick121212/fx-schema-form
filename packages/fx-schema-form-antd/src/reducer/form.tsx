@@ -91,7 +91,7 @@ export class FormReducer<T> {
         let { originData, originMeta } = this.getOrigin(state);
 
         console.log(originMeta.validateAll(originData));
-        return state;
+        return Object.assign({}, state, { meta: originMeta });
     }
 
     /**

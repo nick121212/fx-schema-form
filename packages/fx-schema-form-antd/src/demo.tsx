@@ -3,13 +3,15 @@ import ReactDom from "react-dom";
 import { Card, Button, Form } from "antd";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
+import Ajv from "ajv";
 
 import { SchemaForm, createForms } from "./index";
 
 const schema = {
     type: "object",
     title: "测试SCHEMA",
-    required: ["array", "name"],
+    required: ["array1", "name"],
+    removeAdditional: true,
     properties: {
         name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
         number: { type: "number", "title": "测试number类型" },
@@ -29,7 +31,7 @@ const schema = {
                 type: "object",
                 required: ["test"],
                 properties: {
-                    test: { type: "string", title: "无限极测试数据" },
+                    test: { type: "string", title: "无限极测试数据", minLength: 3 },
                     children: { $ref: "test#/properties/array1" }
                 }
             }
