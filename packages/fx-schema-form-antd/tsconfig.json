@@ -7,7 +7,7 @@
     "sourceMap": true,
     "outDir": "./out",
     "rootDir": "./src",
-    "isolatedModules": true,
+    "isolatedModules": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,

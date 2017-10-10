@@ -3,7 +3,7 @@ import React from "react";
 import { SchemaFormBaseProps } from "./props";
 import { hoc } from "./container";
 import { SchemaFormItem } from "../../index";
-import { MergeHocOutProps } from "./hocs/merge";
+import { MergeHocOutProps } from "../../hocs/form/merge";
 import { SchemaFormBlock } from "../block";
 
 /**
@@ -18,11 +18,14 @@ export interface SchemaFormProps extends SchemaFormBaseProps {
  * 通过schema和uiSchea生成表单元素
  */
 class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutProps, any> {
+
     public render(): JSX.Element {
         const { children, mergeSchemaList, schemaKey, formData,
             arrayItems, arrayIndex, globalOptions, RootComponent, schemaFormOptions
         } = this.props;
         let RootComponentHock = RootComponent;
+
+        console.log("---------------SchemaForm rendered");
 
         // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
         if (!RootComponentHock) {

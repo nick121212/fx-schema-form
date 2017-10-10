@@ -8,9 +8,6 @@ export interface AntdInputWidgetProps extends SchemaFormItemProps {
 }
 
 export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> {
-    public componentDidMount(): void {
-        console.log("input mounted!");
-    }
     private setDefaultProps(): InputProps {
         const { mergeSchema } = this.props;
         const props: InputProps = {};

@@ -70,14 +70,14 @@ export class SchemaMerge {
         /**
          * 生成map
          */
-        this.compileSchema(options.parentKeys || [], schema, {
+        this.compileSchema(options.parentKeys || [], schema, Object.assign({}, options, {
             map: options.map,
             ajv: options.ajv,
             key,
             depth: 1,
             maxDepth: 3,
-            schemaPathKey: [`${key}#`]
-        });
+            schemaPathKey: schema.schemaPathKey || [key + "#"]
+        }));
 
         if (options.depth) {
             options.depth++;

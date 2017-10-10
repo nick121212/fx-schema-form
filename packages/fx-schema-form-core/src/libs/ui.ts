@@ -38,7 +38,9 @@ export class UiMerge {
 
         if (map.has(key)) {
             keys[key] = true;
-            uiSchema = Object.assign({}, map.get(key), typeof keyProp === "string" ? { uiSchema: {} } : { uiSchema: keyProp });
+
+            uiSchema = Object.assign({}, map.get(key),
+                typeof keyProp === "string" ? { uiSchema: {} } : { uiSchema: keyProp.uiSchema || keyProp });
             if (uiSchema.uiSchema.items) {
                 uiSchema.uiSchema.items = this.merge(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
             }

@@ -3,7 +3,7 @@ import { Reducer } from "redux";
 import jpp from "json-pointer";
 import cloneDeep from "lodash.clonedeep";
 
-import { MetaData } from "../libs/meta";
+import { MetaData, SchemaFormMeta } from "../libs/meta";
 
 export interface SchemaFormState<T> {
     data: T;
@@ -17,6 +17,7 @@ export interface Actions {
     addItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     validateAllField: EmptyActionCreator;
+    initItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
 }
 
 export class FormReducer<T> {
@@ -40,7 +41,10 @@ export class FormReducer<T> {
      * 元素移位
      */
     private switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("元素移位");
-
+    /**
+     * 初始化元素的meta信息
+     */
+    private initItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("初始化元素的meta信息");
     /**
      * 验证所有的字段
      */
@@ -58,7 +62,8 @@ export class FormReducer<T> {
             removeItem: this.removeItem,
             addItem: this.addItem,
             switchItem: this.switchItem,
-            validateAllField: this.validateAllField
+            validateAllField: this.validateAllField,
+            initItemMeta: this.initItemMeta
         };
     }
 
@@ -72,7 +77,8 @@ export class FormReducer<T> {
             [this.addItem as any]: this.addItemHandle.bind(this),
             [this.removeItem as any]: this.removeItemHandle.bind(this),
             [this.switchItem as any]: this.switchItemHandle.bind(this),
-            [this.validateAllField as any]: this.validateAllFieldHandle.bind(this)
+            [this.validateAllField as any]: this.validateAllFieldHandle.bind(this),
+            [this.initItemMeta as any]: this.initMetaHandle.bind(this),
         }, this.initialState);
     }
 
@@ -87,10 +93,15 @@ export class FormReducer<T> {
         return { originData, originMeta };
     }
 
+    /**
+     * 验证所有字段
+     * @param state 当前的state
+     */
     private validateAllFieldHandle(state: SchemaFormState<T>): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
 
-        console.log(originMeta.validateAll(originData));
+        originMeta.validateAll(originData);
+
         return Object.assign({}, state, { meta: originMeta });
     }
 
@@ -99,7 +110,7 @@ export class FormReducer<T> {
      * @param state  state
      * @param param1 data
      */
-    private updateItemHandle(state: any,
+    private updateItemHandle(state: SchemaFormState<T>,
         { keys, data, meta }: { keys: Array<string>, data: any, meta: { isValid: boolean } }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
@@ -110,8 +121,19 @@ export class FormReducer<T> {
         return Object.assign({}, state, { data: originData, meta: originMeta });
     }
 
-    private toggleItemHandle(state: any, { keys }: { keys: Array<string> }): SchemaFormState<T> {
-        let { originMeta } = this.getOrigin(state); let { normalKey } = originMeta.getKey(keys);
+    private initMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
+        let originMeta = state.meta;
+        let { normalKey } = originMeta.getKey(keys);
+        let curMeta = originMeta.getMeta(keys, false) || {};
+
+        originMeta.setMeta(keys, Object.assign({}, curMeta, meta), meta.type !== "array");
+
+        return state;
+    }
+
+    private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
+        let { originMeta } = this.getOrigin(state);
+        let { normalKey } = originMeta.getKey(keys);
         let curMeta = originMeta.getMeta(keys, false) || {};
 
         originMeta.setMeta(keys, Object.assign({}, curMeta, { isShow: !!!curMeta.isShow }), false);
@@ -119,7 +141,7 @@ export class FormReducer<T> {
         return Object.assign({}, state, { meta: originMeta });
     }
 
-    private addItemHandle(state: any, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
+    private addItemHandle(state: SchemaFormState<T>, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
         let curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
@@ -129,7 +151,7 @@ export class FormReducer<T> {
         return Object.assign({}, state, { data: originData });
     }
 
-    private removeItemHandle(state: any, { keys, index }: { index: number, keys: Array<string> }): SchemaFormState<T> {
+    private removeItemHandle(state: SchemaFormState<T>, { keys, index }: { index: number, keys: Array<string> }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey([...keys, index.toString()]);
 
@@ -142,29 +164,13 @@ export class FormReducer<T> {
         return Object.assign({}, state, { data: originData, meta: originMeta });
     }
 
-    private switchItemHandle(state: any,
+    private switchItemHandle(state: SchemaFormState<T>,
         { keys, curIndex, switchIndex }: { curIndex: number; switchIndex: number; keys: Array<string>; }): SchemaFormState<T> {
         let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
         let curData = jpp(originData).get(normalKey);
 
-        // 向上移动
-        if (curIndex > switchIndex) {
-            curData = [
-                ...[].concat(curData).splice(0, switchIndex),
-                curData[curIndex],
-                curData[switchIndex],
-                ...[].concat(curData).splice(curIndex + 1)
-            ];
-        } else {
-            // 向下移动
-            curData = [
-                ...[].concat(curData).splice(0, curIndex),
-                curData[switchIndex],
-                curData[curIndex],
-                ...[].concat(curData).splice(switchIndex + 1)
-            ];
-        }
+        [curData[curIndex], curData[switchIndex]] = [curData[switchIndex], curData[curIndex]];
 
         jpp(originData).set(normalKey, curData);
         originMeta.switchMeta(keys, curIndex, switchIndex);

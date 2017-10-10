@@ -1,18 +1,18 @@
-import { compose, ComponentEnhancer, lifecycle, onlyUpdateForKeys, shouldUpdate, shallowEqual } from "recompose";
-import pick from "recompose/utils/pick";
+import { compose, ComponentEnhancer, onlyUpdateForKeys } from "recompose";
 
 import { SchemaFormItemBaseProps } from "./props";
-import { TempHoc } from "./hocs/temp";
-import { FieldHoc } from "./hocs/field";
-import { ThemeHoc } from "./hocs/theme";
-import { ValidateHoc } from "./hocs/validate";
-import { ArrayHoc } from "./hocs/array";
+import { hocFactory } from "../../hocs";
+// import { MakeHoc } from "../../hocs/item/make";
+// import { ThemeHoc } from "../../hocs/item/theme";
 
 export const hoc: ComponentEnhancer<SchemaFormItemBaseProps, any> = compose<SchemaFormItemBaseProps, any>(
     onlyUpdateForKeys(["formItemData", "meta", "formData"]),
-    ThemeHoc,
-    FieldHoc,
-    ValidateHoc,
-    ArrayHoc,
-    TempHoc
+    hocFactory.get("make")
+    // defaultTheme.get
+    // MakeHoc,
+    // ThemeHoc,
+    // FieldHoc,
+    // ValidateHoc,
+    // ArrayHoc,
+    // TempHoc
 );

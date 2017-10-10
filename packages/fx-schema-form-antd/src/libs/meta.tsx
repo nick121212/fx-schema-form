@@ -12,8 +12,8 @@ export interface SchemaFormMeta {
     isValid?: boolean;
     errors?: ajv.ErrorObject[];
     errorText?: string;
+    type?: string;
 }
-
 
 /**
  * Meta的数据操作类
@@ -22,41 +22,65 @@ export class MetaData {
     /**
      * 数据
      */
-    public data: { map: any, meta: any; } = { map: {}, meta: {} };
+    public data: { map: any, meta: any; isValid?: boolean } = { map: {}, meta: {} };
     /**
      * reducer的actions
      */
     public actions: any = {};
 
     private curAjv: ajv.Ajv;
+    private curKey: string;
 
     /**
      * 是否初始化
      */
     private isInit = false;
 
-    public init(curAjv: ajv.Ajv): void {
+    /**
+     * 初始化一个ajv
+     * @param curAjv ajv的实例
+     * @param key    ajv的schema的key
+     */
+    public init(curAjv: ajv.Ajv, key: string): void {
         this.isInit = true;
 
         this.curAjv = curAjv;
+        this.curKey = key;
     }
 
+    /**
+     * 验证所有的数据
+     * @param data 数据
+     */
     public validateAll(data: any) {
-        let result = this.curAjv.validate("test", data);
+        let result = this.curAjv.validate(this.curKey, data);
 
+        // 设置所有的字段验证都通过
+        for (let key in this.data.map) {
+            if (this.data.map.hasOwnProperty(key)) {
+                let element = this.data.map[key];
+
+                if (element.isValid === false) {
+                    element.isValid = true;
+                }
+            }
+        }
+        // 如果验证有错误，则处理错误
         if (!result) {
             this.curAjv.errors.forEach((error: ajv.ErrorObject) => {
-                // console.log(this.curAjv.errorsText([error]));
-                this.setMeta(jpp.parse(error.dataPath), {
+                let keys = jpp.parse(error.dataPath);
+                let meta = this.getMeta(keys);
+
+                this.setMeta(keys, {
                     dirty: true,
                     isValid: false,
                     errors: [],
                     errorText: error.message
-                });
+                }, meta.type !== "array");
             });
         }
 
-        console.log(result, this.curAjv.errors);
+        this.data.isValid = result as boolean;
     }
 
     /**
@@ -127,23 +151,7 @@ export class MetaData {
 
         let curMeta = jpp(this.data.meta).get(escapeKey);
 
-        // 向上移动
-        if (curIndex > switchIndex) {
-            curMeta = [
-                ...[].concat(curMeta).splice(0, switchIndex),
-                curMeta[curIndex],
-                curMeta[switchIndex],
-                ...[].concat(curMeta).splice(curIndex + 1)
-            ];
-        } else {
-            // 向下移动
-            curMeta = [
-                ...[].concat(curMeta).splice(0, curIndex),
-                curMeta[switchIndex],
-                curMeta[curIndex],
-                ...[].concat(curMeta).splice(switchIndex + 1)
-            ];
-        }
+        [curMeta[curIndex], curMeta[switchIndex]] = [curMeta[switchIndex], curMeta[curIndex]];
 
         jpp(this.data.meta).set(escapeKey, curMeta);
     }
@@ -160,9 +168,13 @@ export class MetaData {
             curUuid = jpp(this.data.meta).get(escapeKey);
         }
 
-        if (!strict || typeof curUuid === "object") {
+        if (jpp(this.data.map).has(escapeKey) || !strict) {
             curUuid = jpp.parse(escapeKey).join("/");
         }
+
+        // if (!strict || typeof curUuid === "object") {
+        //     curUuid = jpp.parse(escapeKey).join("/");
+        // }
 
         return curUuid;
     }
@@ -209,16 +221,21 @@ export class MetaData {
      * @param curUuid uuid
      */
     private setCurMetaUuid(keys: string[], key: string, curUuid: string) {
-        // console.log("-----------------", key, curUuid);
         let parentKeys = [].concat(keys).splice(0, keys.length - 1);
         let metaJpp = jpp(this.data.meta);
 
+        // 判断父亲节点有没有设置值，如果没有设置成{}
         if (parentKeys.length) {
             let { escapeKey: pescapeKey } = this.getKey(parentKeys);
-            let curMeta = metaJpp.has(key) ? metaJpp.get(key) : null;
+            let curMeta = metaJpp.has(pescapeKey) ? metaJpp.get(pescapeKey) : null;
+            let mapData = jpp(this.data.map).has(pescapeKey) ? jpp(this.data.map).get(pescapeKey) : {};
 
-            if (!curMeta) {
-                metaJpp.set(pescapeKey, {});
+            if (!curMeta || typeof curMeta !== "object") {
+                if (mapData && mapData.type === "array") {
+                    metaJpp.set(pescapeKey, []);
+                } else {
+                    metaJpp.set(pescapeKey, {});
+                }
             }
         }
 

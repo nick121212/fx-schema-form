@@ -10,7 +10,7 @@ import { SchemaForm, createForms } from "./index";
 const schema = {
     type: "object",
     title: "测试SCHEMA",
-    required: ["array1", "name"],
+    required: ["array1", "array", "name"],
     removeAdditional: true,
     properties: {
         name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
@@ -41,10 +41,12 @@ const schema = {
     }
 };
 
-const uiSchema = ["name", {
-    "key": "array1",
-    "items": [{ key: "array1/-/test" }]
-}];
+let uiSchema: any = ["array1"];
+
+// uiSchema = ["name", "array", {
+//     "key": "array1",
+//     "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+// }];
 
 const globalOptions = {
     "ui:temp": ["formItem"],
@@ -101,14 +103,10 @@ const globalOptions = {
 let reducer = createForms.createOne("test", {
     name: "nick", array1: [{
         test: "array_test", children: [{ test: "array_item_test" }]
-    }, {
-        test: "array_test1", children: [{ test: "array_item_test1" }]
-    }, {
-        test: "array_test2", children: [{ test: "array_item_test2" }]
     }]
 });
 
-let store = createStore(combineReducers({
+let store = createStore<any>(combineReducers({
     test: reducer.reducer
 }));
 
@@ -120,7 +118,14 @@ ReactDom.render(
     <Provider store={store}>
         <SchemaForm schemaKey={"test"} schema={schema} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
             <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6 }}>
-                <Button onClick={reducer.actions.validateAllField.bind(reducer)}>提交</Button>
+                <Button onClick={() => {
+                    reducer.actions.validateAllField.bind(reducer)();
+
+                    if (store.getState().test.meta.data.isValid) {
+                        alert("提交表单");
+                    }
+
+                }}>提交</Button>
             </Form.Item>
         </SchemaForm>
     </Provider>

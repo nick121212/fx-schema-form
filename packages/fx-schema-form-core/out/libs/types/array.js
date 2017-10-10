@@ -11,7 +11,7 @@ exports.default = function (schema, parentKey, options) {
         var currentSchema = keys_1.default(Object.assign({}, schema.items, {
             isRequired: (!!schema.required && schema.required.indexOf(schema.key) !== -1),
             keys: [].concat(keys),
-            schmeaPathKey: schemaPathKey,
+            schemaPathKey: schemaPathKey,
             resolve: true,
             depth: options.depth
         }), options);

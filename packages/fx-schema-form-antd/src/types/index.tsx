@@ -6,7 +6,7 @@ export interface SchemaFormNs<F, T, W> {
     fieldFactory: BaseFactory<F>;
     tempFactory: BaseFactory<T>;
     widgetFactory: BaseFactory<W>;
-    hocFactory: BaseFactory<ComponentEnhancer<any, any>>;
+    hocFactory?: BaseFactory<ComponentEnhancer<any, any>>;
 }
 
 /**
