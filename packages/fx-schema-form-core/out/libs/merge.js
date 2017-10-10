@@ -40,14 +40,14 @@ var SchemaMerge = (function () {
         if (!options.ajv.getSchema(key)) {
             options.ajv.addSchema(schema, key);
         }
-        this.compileSchema(options.parentKeys || [], schema, {
+        this.compileSchema(options.parentKeys || [], schema, Object.assign({}, options, {
             map: options.map,
             ajv: options.ajv,
             key: key,
             depth: 1,
             maxDepth: 3,
-            schemaPathKey: [key + "#"]
-        });
+            schemaPathKey: schema.schemaPathKey || [key + "#"]
+        }));
         if (options.depth) {
             options.depth++;
         }
