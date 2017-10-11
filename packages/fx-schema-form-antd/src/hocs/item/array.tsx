@@ -7,8 +7,9 @@ import { RC, NsFactory } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { ValidateHocOutProps } from "./validate";
 import { mapMetaStateToProps } from "../select";
+import { MakeHocOutProps } from "./make";
 
-export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps {
+export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps, MakeHocOutProps {
     toggleItem?: () => void;
     removeItem?: (data: number) => void;
     addItem?: (data: any) => void;
@@ -64,12 +65,11 @@ export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Array
     @(connect(mapMetaStateToProps, mapDispatchToProps) as any)
     class Hoc extends React.Component<ArrayHocOutProps, any> {
         public render(): JSX.Element {
-            const { mergeSchema, arrayIndex, globalOptions } = this.props;
-            const { uiSchema, type, keys } = mergeSchema;
-            const uiSchemaOptions = uiSchema.options || {};
-            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
-            let { array: arrayHocOptions } = hocOptions;
-            let { createItemButtons = (props: any) => null, createItemChildButtons = (props: any) => null } = arrayHocOptions || {};
+            const { mergeSchema, getHocOptions } = this.props;
+            const { type } = mergeSchema;
+            const hocOptions = getHocOptions();
+            const { array: arrayHocOptions } = hocOptions;
+            const { createItemButtons = (props: any) => null, createItemChildButtons = (props: any) => null } = arrayHocOptions || {};
 
             let newProps = Object.assign({}, this.props, {
                 removeItem: this.removeItem.bind(this),

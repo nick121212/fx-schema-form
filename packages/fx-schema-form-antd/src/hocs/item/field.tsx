@@ -27,17 +27,23 @@ export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schem
             return false;
         }
 
-        public render(): JSX.Element {
+        public render(): JSX.Element | null {
             const { mergeSchema, currentTheme } = this.props;
             const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
             let FieldComponent, WidgetComponent;
 
             if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
                 FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
+            } else {
+                console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
+
+                return null;
             }
 
             if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
                 WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
+            } else {
+                console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`);
             }
 
             return <Component {...this.props}

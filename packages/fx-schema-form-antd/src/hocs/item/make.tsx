@@ -3,27 +3,25 @@ import React from "react";
 import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
-import { ThemeHocOutProps } from "./theme";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { defaultTheme } from "../../factory";
 
 export interface MakeHocOutProps {
-    FieldComponent: RC<any, any>;
-    WidgetComponent: RC<any, any>;
+    getHocOptions: () => any;
 }
 
 /**
  * 包装Field的组件HOC
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
- * 加入属性FieldComponent   schema对应的fieldcomponent
- * 加入属性WidgetComponent  schema对应的widgetcomponent
- * HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
+ *  1. 加入属性FieldComponent   schema对应的fieldcomponent
+ *  2. 加入属性WidgetComponent  schema对应的widgetcomponent
+ *  3. HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
  */
 export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
     class Hoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
-        private makeField = "ui:item.hoc";
+        private fieldKey = "ui:item.hoc";
 
         public shouldComponentUpdate() {
             return false;
@@ -33,15 +31,25 @@ export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
             const { mergeSchema, globalOptions } = this.props;
             const { uiSchema = { options: {} }, keys, type } = mergeSchema;
             const typeDefaultOptions = globalOptions[type] || {};
-            const hocs = uiSchema[this.makeField] ||
-                typeDefaultOptions[this.makeField] ||
-                globalOptions[this.makeField] || ["theme", "field", "validate", "array", "temp"];
+            const hocs = uiSchema[this.fieldKey] ||
+                typeDefaultOptions[this.fieldKey] ||
+                globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
 
-            let ComponentWithHocs = compose(...hocs.map(hoc => hocFactory.get(hoc)))(Component);
+            let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
+                (...hocs.map(hoc => hocFactory.get(hoc)))(Component);
 
-            console.log("make render");
+            // console.log("make render");
 
-            return <ComponentWithHocs {...this.props} />;
+            return <ComponentWithHocs getHocOptions={this.getHocOptions.bind(this)} {...this.props} />;
+        }
+
+        private getHocOptions(): any {
+            const { mergeSchema, globalOptions } = this.props;
+            const { uiSchema } = mergeSchema;
+            const uiSchemaOptions = uiSchema.options || {};
+            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+
+            return hocOptions;
         }
     }
 

@@ -1,12 +1,10 @@
 import React from "react";
-import { connect } from "react-redux";
-import * as jpp from "json-pointer";
 import { BaseFactory } from "fx-schema-form-core";
 import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle } from "recompose";
 import pick from "recompose/utils/pick";
+import isEqual from "lodash.isequal";
 
 import { ThemeHocOutProps } from "./theme";
-import { ValidateHoc } from "./validate";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 
@@ -14,14 +12,13 @@ const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps, any>(
     lifecycle({
         shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps) {
             let metaKeys = ["isShow", "isValid", "errorText"];
-            let formItemDataEqual = shallowEqual(pick(nextProps, ["formItemData"]).formItemData,
-                pick(this.props, ["formItemData"]).formItemData);
-            let metaEqual = shallowEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+            let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
+            let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
             let rtn = !formItemDataEqual || !metaEqual;
 
             console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
-            console.log("formItemData", pick(nextProps, ["formItemData"]), pick(this.props, ["formItemData"]));
-            console.log("meta", pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+            console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
+            console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
             console.log("shouldUpdate", formItemDataEqual, metaEqual);
             console.groupEnd();
 
@@ -41,7 +38,6 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
     * 获取模板的components
     * @param uiSchema 合并后的数据
     */
-
     @(metaConnect as any)
     class Hoc extends React.Component<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
         private tempField = "ui:temp";

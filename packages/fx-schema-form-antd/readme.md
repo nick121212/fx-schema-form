@@ -1,157 +1,125 @@
-# schema-form-antd
+# react-schema-form-antd
 
-通过json-schema和ui-schema自动生成表单组件。
+通过[json-schema](http://jsonschema.net/),[ui-schema](#custoization-ui-schema),以及[antd](https://ant.design/index-cn)自动生成表单组件。
 
-## 启动测试
+> 组件之间的功能组合使用hoc来实现。
 
-```nodejs
-    node fuse
+## 目录
+
+- [安装](#installation)
+    - [npm](#installation-npm)
+    - [cdn](#installation-cdn)
+- [依赖项](#dependencies)
+- [使用](#usage)
+    - [初始化表单](#usage-form)
+- [表单定制化](#custoization)
+    - [uiSchema配置](#custoization-ui-schema)
+    - [供选择的表单组件](#custoization-widget)
+        - [input](#custoization-widget-input)
+        - [select](#custoization-widget-select)
+        - [number](#custoization-widget-number)
+        - [redio](#custoization-widget-redio)
+    - [模板](#custoization-temps)
+    - [HOCS](#custoization-hocs)
+    - [字段类型](#custoization-fields)
+- [高级配置](#advanced-customization)
+    - [自定义字段](#advanced-customization-field)
+    - [自定义模板](#advanced-customization-temp)
+    - [自定义组件](#advanced-customization-widget)
+- [验证](#validation)
+    - [本地验证](validation-local)
+    - [远程验证](validation-remote)
+- [关于JsonSchema](#about-json-schema)
+- [License](#license)
+
+## <span id="installation">安装</span>
+
+Requires React 15.0.0+.
+> Note: 当前使用tsc -d来编译，代码为es6代码;
+>
+
+### <span id="installation-npm">通过npm来安装</span>
+
+``` 
+$ npm install fx-schema-form-antd --save
 ```
+> Note: 当前组件库默认使用了antd的样式，你也可以使用其他样式来代替。
 
-## 依赖项
+### <span id="installation-cdn">cdn</span>
+
+> Note: 暂时没有cdn。
+
+## <span id="dependencies">依赖项</span>
 
 - JsonSchema
 - antd
 - redux
+- higher order component
 - react-redux
 - recompose
 - react-act
 - avj
 - json-pointer
 
-## 目录
+## <span id="usage">使用</span>
 
-> **components**
-- 1.1 SchemaForm
-- 1.2 SchemaFormItem
+``` jsx
+import React from "react";
+import ReactDom from "react-dom";
+import { Card, Button, Form } from "antd";
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
 
-> **fields**
-- 2.1 array
-- 2.2 object
-- 2.3 normal
+import { SchemaForm, createForms, hocFactory, defaultTheme } from "./index";
 
-> **reducer**
+const schema = {
+    type: "object",
+    title: "测试SCHEMA",
+    required: [ "name"],
+    removeAdditional: true,
+    properties: {
+        name: { 
+            type: "string", 
+            title: "昵称", 
+            default: "nora", 
+            description: "昵称，必填" 
+        }
+    }
+};
 
-3.1 form
+let uiSchema: any = ["name"];
 
-> **templates**
-- 4.1 card
-- 4.2 col
-- 4.3 formItem
-- 4.4 row
+const globalOptions = {
+    "ui:temp": ["formItem"]
+};
+let reducer = createForms.createOne("test", {
+    name: "nick"
+});
 
-> **widgets**
+let store = createStore<any>(combineReducers({
+    test: reducer.reducer
+}));
 
-- 5.1 checkbox
-- 5.2 input
-- 5.3 switch
+store.subscribe(() => {
+    console.log(store.getState());
+});
 
-## 组件层级
+ReactDom.render(
+    <Provider store={store}>
+        <SchemaForm schemaKey={"test"} schema={schema} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
+            <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
+                <Button onClick={() => {
+                    reducer.actions.validateAllField.bind(reducer)();
 
-SchemaForm -> SchemaFormItem
+                    if (store.getState().test.meta.data.isValid) {
+                        alert("提交表单");
+                    }
 
-## 1.1 SchemaForm组件
-
-> 属性列表
-
-| 属性名         | 类型      | 必填   | 说明    |
-| --------      | -----:   | -----:   |  :----: |
-| schemaKey     | string   |   *    |  表单的key值，与redux中key对应       |
-| schema        | JsonSchema      |   *    | jsonschema配置 |
-| uiSchema      | UiSchema      |       |表单的配置|
-| globalOptions | Object |  | 全局参数  |
-| RootComponent | Component | | 根元素 |
-| parentKeys    | String[] | | 父亲的key |
-| arrayIndex    | Number | | 数组索引 |
-| arrayItems    | JSX.Element[] | | 数组的操作按钮（new，delete） |
-
-> higher components
-
-- MergeHoc; 用户包装schema和uiSchema，生成mergeSchemaList属性；
-
-| 属性名             | 类型        | 必填   | 说明    |
-| --------          | -----:     | -----:   |  :----: |
-| mergeSchemaList   | any[]      |       | schema和uiSchema合并的数据       |
-| schemaFormOptions | Object     |       | 合并时产生的额外的数据，用于下次合并 |
-
-## 1.2 SchemaFormItem组件
-
-> 属性列表
-
-同SchemaForm属性，以下为额外的属性；
-
-| 属性名         | 类型      | 必填   | 说明    |
-| --------      | -----:   | -----:   |  :----: |
-| formItemData  | any      |       |  当前表单元素的数据       |
-| meta          | any      |       | 当前表单元素的meta数据 |
-| formData      | any      |       | 当前表单的值 |
-
-> higher components
-
-## HOC顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
-
-- ThemeHoc; 用于选择当前所使用的主题；
-
-添加到组件的属性：
-
-| 属性名             | 类型        | 必填   | 说明    |
-| --------          | -----:     | -----:   |  :----: |
-| currentTheme      | any     |       | schema和uiSchema合并的数据       |
-
-- FieldHoc; 用于计算当前shema所对应的字段组件以及显示组件；
-
-添加到组件的属性：
-
-| 属性名             | 类型        | 必填   | 说明    |
-| --------          | -----:     | -----:   |  :----: |
-| FieldComponent    | Component     |       | 字符类型对应的字段组件  |
-| WidgetComponent   | Component     |       | 字段类型对应的显示组件  |
-
-- ValidateHoc; 用于验证的hoc；
-
-添加到组件的属性：
-
-| 属性名             | 类型        | 必填   | 说明    |
-| --------          | -----:     | -----:   |  :----: |
-| validate          | Function     |       | 用户验证字段合法性的方法，同时也是数据更改时需要触发的方法 |
-
-- ArrayHoc; 用户数组类型字段的hoc；
-
-添加到组件的属性：
-
-| 属性名             | 类型        | 必填   | 说明    |
-| --------          | -----:     | -----:   |  :----: |
-| arrayItemItems    | JSX.Element[]     |       | 作用与数组单个元素的按钮组  |
-| arrayItems        | JSX.Element[]     |       | 作用于数组field的按钮组  |
-
-- TempHoc; 用户包装template的hoc；
-
-添加到组件的属性：无
-
-## 2.1 ArrayField 数组对应的Field组件
-
-显示数组的表单组件。遍历当前元素的数据调用SchemaForm组件。
-
-## 2.2 ObjectField 对象对应的Field组件
-
-显示对象的表单组件。调用SchemaForm组件。
-
-## 2.3 NormaField 普通类型的Field组件
-
-直接生成WidgetComponent。
-
-## 3.1 FormReducer
-
-## 4.1 CatdTemplate；antd中的card组件
-
-## 4.2 ColTemplate；antd中的col组件
-
-## 4.3 RowTemplate；antd中的row组件
-
-## 4.4 FormItemTemplate；antd中的Form.Item组件
-
-## 5.1 CheckboxWidget;antd中的checkbox组件；
-
-## 5.2 InputWidget;antd中的input组件；
-
-## 5.3 SwitchWidget;antd中的switch组件；
+                }}>提交</Button>
+            </Form.Item>
+        </SchemaForm>
+    </Provider>
+    , document.getElementById("root"), console.log);
+```
+如果配置正确，会看到如下图效果：
+![](./images/normal.jpg)

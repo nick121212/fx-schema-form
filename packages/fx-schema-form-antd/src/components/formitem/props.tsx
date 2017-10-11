@@ -14,6 +14,7 @@ export interface SchemaFormItemBaseProps {
     arrayIndex?: number;
     arrayItems?: any;
     arrayItemItems?: Array<JSX.Element>;
+    formDefaultData?: any;
     formData?: any;
     formItemData?: any;
     meta?: any;

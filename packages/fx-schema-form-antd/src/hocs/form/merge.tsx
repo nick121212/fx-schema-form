@@ -66,6 +66,7 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<SchemaFor
                     allErrors: true,
                     jsonPointers: true,
                     verbose: true,
+                    useDefaults: true,
                     errorDataPath: "property"
                 }
             };
@@ -73,7 +74,7 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<SchemaFor
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
 
-            console.log(mergeSchemaList);
+            // console.log(mergeSchemaList);
 
             return (
                 <Component

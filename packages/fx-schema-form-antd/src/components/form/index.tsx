@@ -18,22 +18,25 @@ export interface SchemaFormProps extends SchemaFormBaseProps {
  * 通过schema和uiSchea生成表单元素
  */
 class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutProps, any> {
-
+    /**
+     * render
+     */
     public render(): JSX.Element {
-        const { children, mergeSchemaList, schemaKey, formData,
+        const { children, mergeSchemaList, schemaKey,
             arrayItems, arrayIndex, globalOptions, RootComponent, schemaFormOptions
         } = this.props;
         let RootComponentHock = RootComponent;
-
-        console.log("---------------SchemaForm rendered");
+        let formDefaultData = {};
+        // console.log("---------------SchemaForm rendered");
 
         // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
 
-        // 验证一次，设置默认值
-        schemaFormOptions.ajv.validate(schemaKey, formData);
+        // // 验证一次，设置默认值
+        schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
+        // console.log(formData);
 
         return (
             <RootComponentHock>
@@ -59,6 +62,7 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
                             schemaKey={schemaKey}
                             arrayIndex={arrayIndex}
                             arrayItems={arrayItems}
+                            formDefaultData={formDefaultData}
                             mergeSchemaList={mergeSchemaList}
                             mergeSchema={mergeSchema}
                             schemaFormOptions={schemaFormOptions}

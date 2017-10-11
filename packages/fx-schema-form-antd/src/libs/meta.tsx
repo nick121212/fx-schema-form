@@ -158,6 +158,9 @@ export class MetaData {
 
     /**
      * 获取当前meta的uuid
+     *  1. 如果meta中存在key的uuid，则返回
+     *  2. 如果meat不存在，则从map中获取
+     *  3. 如果都不存在，返回null，生成默认的uuid
      * @param escapeKey  key
      * @param strict     是否严格模式，非严格模式下，如果是object类型，则返回escapeKey
      */
@@ -168,7 +171,7 @@ export class MetaData {
             curUuid = jpp(this.data.meta).get(escapeKey);
         }
 
-        if (jpp(this.data.map).has(escapeKey) || !strict) {
+        if (!curUuid && (jpp(this.data.map).has(escapeKey) || !strict)) {
             curUuid = jpp.parse(escapeKey).join("/");
         }
 
@@ -202,15 +205,33 @@ export class MetaData {
 
     /**
      * 删除meta数据
+     *  1. 删除数据的uuid
+     *  2. 删除数据的map
+     *  3. 遍历子元素，删除uuid
      * @param curUuid   uuid
      * @param escapeKey key
      */
     private removeCurMetaData(curUuid: string, escapeKey: string) {
-        if (jpp(this.data.map).has(`/${curUuid}`)) {
-            jpp(this.data.map).remove(`/${curUuid}`);
+        let jMeta = jpp(this.data.meta);
+        let jMap = jpp(this.data.map);
+
+        if (jMap.has(`/${curUuid}`)) {
+            jMap.remove(`/${curUuid}`);
         }
-        if (jpp(this.data.meta).has(escapeKey)) {
-            jpp(this.data.meta).remove(escapeKey);
+        if (jMeta.has(escapeKey)) {
+            let meta = jMeta.get(escapeKey);
+
+            jMeta.remove(escapeKey);
+
+            for (let key in jpp.dict(meta)) {
+                if (jpp.dict(meta).hasOwnProperty(key)) {
+                    let element = jpp.dict(meta)[key];
+
+                    if (jMap.has(`/${element}`)) {
+                        jMap.remove(`/${element}`);
+                    }
+                }
+            }
         }
     }
 

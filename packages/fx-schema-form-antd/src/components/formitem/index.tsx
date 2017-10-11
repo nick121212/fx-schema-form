@@ -3,11 +3,10 @@ import { compose } from "recompose";
 
 import { SchemaFormItemBaseProps } from "./props";
 import { hoc } from "./container";
-import { FieldHocOutProps } from "./hocs/field";
-import { ThemeHocOutProps } from "./hocs/theme";
-import { ValidateHocOutProps } from "./hocs/validate";
-import { ArrayHocOutProps } from "./hocs/array";
-
+import { FieldHocOutProps } from "../../hocs/item/field";
+import { ThemeHocOutProps } from "../../hocs/item/theme";
+import { ValidateHocOutProps } from "../../hocs/item/validate";
+import { ArrayHocOutProps } from "../../hocs/item/array";
 
 export interface SchemaFormItemProps
     extends SchemaFormItemBaseProps, FieldHocOutProps, ThemeHocOutProps, ValidateHocOutProps, ArrayHocOutProps {

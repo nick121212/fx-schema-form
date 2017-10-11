@@ -35,14 +35,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
         }
     }
 
-    console.log("------------------------initItemMeta-----------------");
-    // mergeSchema.type === "array" && actions.initItemMeta({
-    //     keys,
-    //     meta: {
-    //         type: mergeSchema.type
-    //     }
-    // });
-
     // 返回validae方法，这里更新字段的值
     return {
         validate: (data: any) => {
