@@ -10,8 +10,7 @@
     - [npm](#installation-npm)
     - [cdn](#installation-cdn)
 - [依赖项](#dependencies)
-- [使用](#usage)
-    - [初始化表单](#usage-form)
+- [默认使用](#usage)
 - [表单定制化](#custoization)
     - [uiSchema配置](#custoization-ui-schema)
     - [供选择的表单组件](#custoization-widget)
@@ -21,7 +20,7 @@
         - [redio](#custoization-widget-redio)
     - [模板](#custoization-temps)
     - [HOCS](#custoization-hocs)
-    - [字段类型](#custoization-fields)
+    - [字段](#custoization-fields)
 - [高级配置](#advanced-customization)
     - [自定义字段](#advanced-customization-field)
     - [自定义模板](#advanced-customization-temp)
@@ -61,7 +60,7 @@ $ npm install fx-schema-form-antd --save
 - avj
 - json-pointer
 
-## <span id="usage">使用</span>
+## <span id="usage">默认使用</span>
 
 ``` jsx
 import React from "react";
@@ -123,6 +122,179 @@ ReactDom.render(
 ```
 如果配置正确，会看到如下图效果：
 ![](./images/normal.jpg)
+
+## <span id="custoization">表单定制化</span>
+
+> Note: JsonSchema用于定义数据结构以及验证规则;
+> 而表单的展现形式需要手动配置；
+
+### <span id="custoization-ui-schema">uiSchema配置</span>
+
+JsonSchema
+``` jsx
+const schema = {
+    type: "object",
+    title: "测试SCHEMA",
+    required: [ "geo"],
+    removeAdditional: true,
+    properties: {
+        name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
+        number: { type: "number", "title": "测试number类型" },
+        integer: { type: "integer", "title": "测试integer类型" },
+        boolean: { type: "boolean", "title": "测试boolean类型", default: true },
+        array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
+        object: {
+            type: "object",
+            title: "测试对象的生成",
+            default: {},
+            properties: {
+                settings: {
+                    type: "boolean",
+                    title: "测试boolean类型",
+                    default: true
+                }
+            }
+        },
+        array1: {
+            type: "array",
+            title: "测试无限极数组类型",
+            items: {
+                type: "object",
+                required: ["test"],
+                properties: {
+                    test: { type: "string", title: "无限极测试数据", minLength: 3 },
+                    children: { $ref: "test#/properties/array1" }
+                }
+            }
+        },
+        null: { type: "null", "title": "测试null类型" },
+        muti: { type: ["string", "integer", "number"], "title": "测试多类型" },
+        geo: {
+            type: "object",
+            title: "geo position",
+            required: ["lou", "lat"],
+            properties: {
+                lou: {
+                    type: "number",
+                    minimum: 0,
+                    maximum: 100,
+                    title: "纬度"
+                },
+                lat: {
+                    type: "number",
+                    title: "经度"
+                }
+            }
+        },
+    }
+};
+```
+
+UiSchema
+``` jsx
+let uiSchema = ["name", "array", {
+     "key": "array1",
+     "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+ }];
+```
+
+- 默认字段
+    - key:string            用于确定是哪个字段，格式为 */*形式(例如: name; array1/-/test)，这里的\-代表数组的索引;
+    - field:string          用于自定义field组件
+    - theme:string          用于自定义的样式
+    - widget:string         用于自定义组件
+    - items:Array           用于显示子元素
+    - ui:temp:Array         用于定义模板
+    - ui:item.hoc:Array     用于自定义hoc
+    - options:Object        设置项
+        - hoc:Object        设置hoc的参数项
+        - widget:Object     设置widget的参数，这里的widget需要替换成具体的widget的名称
+        - temp:Object       设置模板的配置参数，这里的temp需要替换成具体的temp的名称，可以有多个
+
+> Note: 如果直接设置成string类型，自动转换成{key:string}格式。
+
+## <span id="custoization-widget">供选择的表单组件</span>
+
+widget字段最终的展现形式。一个字段一般可以由多个widget来表现。比如一个string字段，可以使用text，textarea，select，radio等来表现，这个取决于个人喜好。
+
+> Note: 组件可以自行添加。
+### <span id="custoization-widget-input">input</span>
+用于显示文本的组件
+### <span id="custoization-widget-select">select</span>
+用于下拉展示的组件
+### <span id="custoization-widget-number">number</span>
+用于显示数字的组件
+### <span id="custoization-widget-redio">redio</span>
+用户展示单选组的组件
+## <span id="custoization-temps">模板</span>
+模板是包装widget的组件，可以使用多个模板来包装。
+
+- 默认模板
+    - card      antd中的Card组件
+    - col       antd中的col组件
+    - formitem  antd中的FormItem组件
+    - row       antd中的Row组件
+
+> Note: 模板之间的组合取决于样式库的组件，比如antd中，默认使用FormItem来包装widget。当然也可以使用Card，Row，Col等容器组件。这里FormItem包装了错误信息的显示，你也可以自定一个组件来显示错误信息。数组类型的字段使用默认使用三个模板["row", "col", "card"]
+## <span id="custoization-hocs">HOCS</span>
+
+[HOC](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775)用于包装组件，相当于一个装饰器模式；
+
+### 默认的hoc
+
+- SchemaForm组件：
+    - merge     用于合并JsonSchema和UiSchema。
+        1. 使用参数：
+            - schema 
+            - uiSchema
+            - schemaKey
+            - schemaFormOptions
+        2. 注入属性：
+            - mergeSchemaList       合并JsonSchema和UiSchema后的数组，SchemaForm遍历这个数组来生成SchemaFormItem组件。
+            - schemaFormOptions     合并数据时产生的中间数据。
+- SchemaFormItem组件：
+    - make      用于包装hoc的hoc；这里获取uiSchema中ui:item.hoc:Array字段的值，来动态包装hoc。
+        1. 注入属性：
+            - getHocOptions     获取字段的配置参数的方法。
+    - array     用于处理数组类型的hoc。
+        1. 注入属性：
+            - arrayItems                数组中的操作按钮，添加，显示/隐藏等。
+            - createItemChildButtons    数组子元素的操作按钮，删除，上下排序等。
+    - field     用于判断当前字段的Field组件和Widget组件。
+        1. 使用参数：
+            - currentTheme      当前的样式；通过ThemeHoc注入；
+            - mergeSchema       合并后的字段配置；通过SchemaForm调用SchemaFormItem后注入
+        2. 注入属性：
+            - FieldComponent    Field组件
+            - WidgetComponent   Widget组件
+    - temp      用于创建模板的hoc，使用UiSchema中的ui:temp字段。
+        1. 注入属性：
+            - uiSchemaOptions 当前字段UiSchema中的的options配置
+            - globalOptions   全局参数到temp
+            - tempKey         模板的名称到temp  
+    - theme     用于调用当前使用的样式，使用UiSchema中的theme字段。
+        1. 注入属性：
+            - currentTheme    当前使用的样式。  
+    - validate  用于验证字段的合法性，传递validate方法到组件。
+        1. 输入属性：
+            - validate        验证方法。
+
+- 组件使用hoc情况
+    - SchemaForm
+        - merge     
+    - SchemaFormItem
+        - make  
+
+> Note: SchemaFormItem中使用make来动态包装Hoc;这里的Hoc顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc；这个顺序不能改变，但是每个hoc之间可以插入新的hoc。
+
+## <span id="custoization-fields">字段</span>
+
+字段组件用于确定如何来显示子组件。可以同时设置uiSchema中的field值来指定。默认使用JsonSchema中的type来确定使用的字段类型。
+
+- 默认字段
+    - array     显示数组类型的字段；遍历数组元素，嵌套一层SchemaForm，并且传递arrayIndex数组索引字段。
+    - normal    显示普通类型的字段；直接展示widget组件
+    - object    显示对象类型的字段；嵌套一层SchemaForm
 
 ## <span id="license">License</span>
 
