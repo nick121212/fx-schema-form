@@ -22,6 +22,7 @@
     - [HOCS](#custoization-hocs)
     - [字段](#custoization-fields)
 - [高级配置](#advanced-customization)
+    - [自定义hoc](#advanced-customization-hoc)
     - [自定义字段](#advanced-customization-field)
     - [自定义模板](#advanced-customization-temp)
     - [自定义组件](#advanced-customization-widget)
@@ -295,6 +296,109 @@ widget字段最终的展现形式。一个字段一般可以由多个widget来�
     - array     显示数组类型的字段；遍历数组元素，嵌套一层SchemaForm，并且传递arrayIndex数组索引字段。
     - normal    显示普通类型的字段；直接展示widget组件
     - object    显示对象类型的字段；嵌套一层SchemaForm
+
+## <span id="advanced-customization">高级配置</span>
+
+### <span id="advanced-customization-hoc">自定义hoc</span>
+
+如果默认的hoc功能不够用，可以自定义hoc来扩展SchemaFormItem组件。
+比如需要一个显示/隐藏的功能：
+
+``` jsx
+
+import React from "react";
+import { compose } from "recompose";
+import { BaseFactory } from "fx-schema-form-core";
+import jpp from "json-pointer";
+
+import { ThemeHocOutProps } from "./theme";
+import { MakeHocOutProps } from "./make";
+import { RC } from "../../types";
+import { SchemaFormItemBaseProps } from "../../components/formitem/props";
+import { ValidateHocOutProps } from "./validate";
+import { mapMetaStateToProps } from "../select";
+
+export interface ConditionHocOutProps {
+
+}
+
+export interface ConditionSettings {
+    fields: Array<{
+        key: string,
+        val: any
+    }>;
+}
+
+/**
+ * condition hoc
+ * 用于组件的显示隐藏
+ *  1. 根据hoc设置中的condition字段来配置显示/隐藏的时机
+ *  2. 从formData中获取所需的值，与设置的值做对比，如果都匹配，则显示，否则隐藏
+ * @param hocFactory  hoc的工厂方法
+ * @param Component 需要包装的组件
+ */
+export const ConditionHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
+    class Hoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+        private fieldKey = "ui:condition";
+
+        /**
+         * render
+         */
+        public render(): JSX.Element {
+            const { getHocOptions, formData, formDefaultData } = this.props;
+            const hocOptions = getHocOptions();
+            const { condition: conditionHocOptions } = hocOptions;
+            const { fields } = conditionHocOptions as ConditionSettings;
+            let isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
+
+            if (fields && fields.length) {
+                isShow = fields.reduce((prev: boolean, { key, val }) => {
+                    if (!jFormData.has(key)) {
+                        return prev && false;
+                    } else {
+                        let data = jFormData.get(key);
+
+                        return prev && (data === val);
+                    }
+                }, isShow);
+            }
+
+            if (!isShow) {
+                return null;
+            }
+
+            return <Component {...this.props} />;
+        }
+    }
+
+    return Hoc;
+};
+
+hocFactory.add("condition",ConditionHoc);
+```
+
+设置uiScham的值，当object/settings的值为true的时候，显示name字段；
+
+``` json
+[{
+    "key": "name",
+    "ui:item.hoc": ["theme", "field", "validate", "array", "condition", "temp"],
+    "options": {
+        "hoc": {
+            "condition": {
+                "fields": [{ "key": "/object/settings", "val": true }]
+            }
+        }
+    }
+}, "object/settings"];
+```
+![](./images/hide.jpg)
+![](./images/show.jpg)
+
+### <span id="advanced-customization-field">自定义字段</span>
+### <span id="advanced-customization-temp">自定义模板</span>
+### <span id="advanced-customization-widget">自定义组件</span>
+
 
 ## <span id="license">License</span>
 

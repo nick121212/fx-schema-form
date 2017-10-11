@@ -17,7 +17,7 @@ defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 const schema = {
     type: "object",
     title: "测试SCHEMA",
-    required: [ "geo"],
+    required: ["geo"],
     removeAdditional: true,
     properties: {
         name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
@@ -72,10 +72,16 @@ const schema = {
 };
 
 let uiSchema: any = [{
-    "key": "geo",
-    "field": "geo",
-    "ui:temp": []
-}];
+    "key": "name",
+    "ui:item.hoc": ["theme", "field", "validate", "array", "condition", "temp"],
+    "options": {
+        "hoc": {
+            "condition": {
+                "fields": [{ "key": "/object/settings", "val": true }]
+            }
+        }
+    }
+}, "object/settings"];
 
 const globalOptions = {
     "ui:temp": ["formItem"],
