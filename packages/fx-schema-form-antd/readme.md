@@ -35,7 +35,7 @@
 ## <span id="installation">安装</span>
 
 Requires React 15.0.0+.
-> Note: 当前使用tsc -d来编译，代码为es6代码;
+> Note: 当前使用*tsc -d*来编译，代码为es6代码;
 >
 
 ### <span id="installation-npm">通过npm来安装</span>
@@ -123,3 +123,7 @@ ReactDom.render(
 ```
 如果配置正确，会看到如下图效果：
 ![](./images/normal.jpg)
+
+## <span id="license">License</span>
+
+Apache 2
