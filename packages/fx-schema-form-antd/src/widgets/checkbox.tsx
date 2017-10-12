@@ -23,7 +23,7 @@ export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> 
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate } = this.props;
+        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate, updateItemData } = this.props;
         const { checkbox = {} } = uiSchemaOptions.widget || {};
         const { checkbox: checkboxDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
@@ -31,6 +31,7 @@ export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> 
 
         return (
             <Checkbox onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                updateItemData((e.target as any).checked);
                 validate((e.target as any).checked);
             }}
                 disabled={readonly}

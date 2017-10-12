@@ -26,7 +26,8 @@ export class MetaData {
     public data: {
         map: any,
         meta: any;
-        isValid?: boolean
+        isValid?: boolean;
+        isLoading?: boolean;
     } = { map: {}, meta: {} };
     /**
      * reducer的actions
@@ -50,6 +51,9 @@ export class MetaData {
      * @param key    ajv的schema的key
      */
     public init(schemaFormOptions: any, key: string): void {
+        if (this.isInit) {
+            return;
+        }
         this.isInit = true;
 
         this.schemaFormOptions = schemaFormOptions;
@@ -59,9 +63,7 @@ export class MetaData {
      * 验证所有的数据
      * @param data 数据
      */
-    public validateAll(data: any) {
-        let result = this.schemaFormOptions.ajv.validate(this.curKey, data);
-
+    public async validateAll(data: any): Promise<MetaData> {
         // 设置所有的字段验证都通过
         for (let key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
@@ -72,9 +74,16 @@ export class MetaData {
                 }
             }
         }
-        // 如果验证有错误，则处理错误
-        if (!result) {
-            this.schemaFormOptions.ajv.errors.forEach((error: ajv.ErrorObject) => {
+        this.data.isLoading = true;
+        this.data.isValid = false;
+
+        try {
+            await this.schemaFormOptions.ajv.compile(this.schemaFormOptions.ajv.getSchema(this.curKey).schema)(data);
+
+            this.data.isValid = true;
+        } catch (err) {
+            console.log(err);
+            err.errors.forEach((error: ajv.ErrorObject) => {
                 let keys = jpp.parse(error.dataPath);
                 let meta = this.getMeta(keys);
 
@@ -83,11 +92,11 @@ export class MetaData {
                     isValid: false,
                     errors: [],
                     errorText: error.message
-                }, meta.type !== "array");
+                });
             });
         }
 
-        this.data.isValid = result as boolean;
+        return this;
     }
     /**
      * 获得当前字段的key

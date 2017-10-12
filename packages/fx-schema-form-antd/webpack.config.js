@@ -37,7 +37,7 @@ module.exports = {
     output: {
         path: path.resolve('./out'),
         filename: '[name].js',
-        publicPath: './',
+        publicPath: '/',
         libraryTarget: "umd",
         library: "fx-schema-form-antd"
     },
@@ -125,7 +125,6 @@ module.exports = {
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
-
                 svgo: {
                     plugins: [
                         { removeStyleElement: true },

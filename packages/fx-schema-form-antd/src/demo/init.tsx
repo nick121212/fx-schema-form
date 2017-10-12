@@ -13,12 +13,12 @@ defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
-defaultTheme.fieldFactory.add("integer", AntdInputNumberWidget);
+// defaultTheme.fieldFactory.add("integer", AntdInputNumberWidget);
 
 const curAjv = new Ajv({
     allErrors: true,
     jsonPointers: true,
-    verbose: true,
+    // verbose: true,
     useDefaults: true,
     $data: true,
     errorDataPath: "property"
@@ -92,7 +92,7 @@ curAjv.addKeyword("idExists", {
                 return resolve(true);
             }
             setTimeout(() => {
-                resolve(false);
+                resolve(data === "nick");
             }, 1000);
         });
     }) as SchemaValidateFunction

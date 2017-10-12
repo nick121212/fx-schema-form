@@ -16,7 +16,7 @@ export interface Actions {
     removeItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     addItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
-    validateAllField: EmptyActionCreator;
+    validateAllField: SimpleActionCreator<{ data: any }> ;
     updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
 }
 
@@ -48,7 +48,7 @@ export class FormReducer<T> {
     /**
      * 验证所有的字段
      */
-    private validateAllField: EmptyActionCreator = createAction("验证表单中所有的字段");
+    private validateAllField: SimpleActionCreator<{ data: any }> = createAction("验证表单中所有的字段");
 
     constructor(private initialState: any) { }
 
@@ -97,12 +97,12 @@ export class FormReducer<T> {
      * 验证所有字段
      * @param state 当前的state
      */
-    private validateAllFieldHandle(state: SchemaFormState<T>): SchemaFormState<T> {
-        let { originData, originMeta } = this.getOrigin(state);
+    private validateAllFieldHandle(state: SchemaFormState<T>, meta: any): SchemaFormState<T> {
+        // let { originData, originMeta } = this.getOrigin(state);
 
-        originMeta.validateAll(originData);
+        // originMeta.validateAll(originData);
 
-        return Object.assign({}, state, { meta: originMeta });
+        return Object.assign({}, state, { meta: meta });
     }
 
     /**

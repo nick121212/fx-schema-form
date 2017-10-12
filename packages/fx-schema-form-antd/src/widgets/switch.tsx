@@ -23,7 +23,7 @@ export class AntdSwitchWidget extends React.Component<AntdSwitchProps, any> {
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate } = this.props;
+        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate, updateItemData } = this.props;
         const { switch: switcho = {} } = uiSchemaOptions.widget || {};
         const { switch: switchDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
@@ -31,6 +31,7 @@ export class AntdSwitchWidget extends React.Component<AntdSwitchProps, any> {
 
         return (
             <Switch onChange={(checked: boolean) => {
+                updateItemData(checked);
                 validate(checked);
             }}
                 disabled={readonly}

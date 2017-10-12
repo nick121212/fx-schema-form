@@ -46,7 +46,7 @@ let uiSchema: any = ["*"];
 
     return {
         isValid: meta.data.isValid,
-        meta: meta.data,
+        meta: meta,
         data
     };
 })
@@ -61,7 +61,7 @@ export class ArraySchemaFormComponent extends React.Component<any> {
                     {this.props.data ? JSON.stringify(this.props.data) : {}}
                 </Panel>
                 <Panel header={"meta"} key="4">
-                    {this.props.meta ? JSON.stringify(this.props.meta) : {}}
+                    {this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}}
                 </Panel>
                 <Panel header={"生成的表单"} key="1">
                     <SchemaForm schemaKey={"array"}
@@ -70,15 +70,14 @@ export class ArraySchemaFormComponent extends React.Component<any> {
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
-                            <Button onClick={() => {
-                                reducer.actions.validateAllField.bind(reducer)();
-
+                            <Button onClick={async () => {
+                                reducer.actions.validateAllField(await this.props.meta.validateAll(this.props.data));
                                 setTimeout(() => {
                                     if (this.props.isValid) {
                                         alert("提交表单");
                                     }
-                                }, 10);
-                            }}>提交</Button>
+                                }, 100);
+                            }}>{this.props.isValid}提交</Button>
                         </Form.Item>
                     </SchemaForm>
                 </Panel>

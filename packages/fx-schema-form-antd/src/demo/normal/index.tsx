@@ -16,11 +16,11 @@ let schema = ajv.getSchema("test").schema;
 let uiSchema: any = ["*"];
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state.array;
+    let { meta, data } = state.normal;
 
     return {
         isValid: meta.data.isValid,
-        meta: meta.data,
+        meta: meta,
         data
     };
 })
@@ -35,23 +35,22 @@ export class NormalSchemaFormComponent extends React.Component<any> {
                     {this.props.data ? JSON.stringify(this.props.data) : {}}
                 </Panel>
                 <Panel header={"meta"} key="4">
-                    {this.props.meta ? JSON.stringify(this.props.meta) : {}}
+                    {this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}}
                 </Panel>
                 <Panel header={"生成的表单"} key="1">
-                    <SchemaForm schemaKey={"array"}
+                    <SchemaForm schemaKey={"normal"}
                         schemaFormOptions={schemaFormOptions}
                         schema={schema}
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
-                            <Button onClick={() => {
-                                reducer.actions.validateAllField.bind(reducer)();
-
+                            <Button onClick={async () => {
+                                reducer.actions.validateAllField(await this.props.meta.validateAll(this.props.data));
                                 setTimeout(() => {
                                     if (this.props.isValid) {
                                         alert("提交表单");
                                     }
-                                }, 10);
+                                }, 100);
                             }}>提交</Button>
                         </Form.Item>
                     </SchemaForm>

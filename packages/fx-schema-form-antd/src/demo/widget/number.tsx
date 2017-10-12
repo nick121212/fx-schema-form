@@ -15,7 +15,7 @@ export class AntdInputNumberWidget extends React.Component<AntdInputNumberWidget
         if (this.props.formItemData !== undefined) {
             props.value = this.props.formItemData;
         } else {
-            // props.value = null;
+            // props.value = undefined;
         }
 
         return props;
