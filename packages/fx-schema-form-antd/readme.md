@@ -279,6 +279,7 @@ widget字段最终的展现形式。一个字段一般可以由多个widget来�
     - validate  用于验证字段的合法性，传递validate方法到组件。
         1. 输入属性：
             - validate        验证方法。
+            - updateItemData  更新值方法。
 
 - 组件使用hoc情况
     - SchemaForm

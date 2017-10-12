@@ -55,7 +55,7 @@ export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
     const { data = {}, meta = { actions: {} } } = state[schemaKey];
 
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
-        (meta as MetaData).init(props.schemaFormOptions.ajv, props.schemaKey);
+        (meta as MetaData).init(props.schemaFormOptions, props.schemaKey);
     }
 
     return meta.actions;

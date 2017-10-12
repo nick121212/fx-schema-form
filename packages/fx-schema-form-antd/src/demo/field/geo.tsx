@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 
-import { SchemaFormItemProps, SchemaForm } from "./index";
+import { SchemaFormItemProps, SchemaForm } from "../../index";
 
 export class GeoPositionField extends React.PureComponent<SchemaFormItemProps> {
     public render(): JSX.Element {

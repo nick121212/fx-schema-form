@@ -2,7 +2,7 @@ import React, { SyntheticEvent, ReactText } from "react";
 import { InputNumber } from "antd";
 import { InputNumberProps } from "antd/lib/input-number";
 
-import { SchemaFormItemProps } from "./index";
+import { SchemaFormItemProps } from "./../../index";
 
 export interface AntdInputNumberWidgetProps extends SchemaFormItemProps {
 }

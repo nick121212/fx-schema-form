@@ -8,6 +8,7 @@ import ajv from "ajv";
  */
 export interface SchemaFormMeta {
     isShow?: boolean;
+    isLoading?: boolean;
     dirty?: boolean;
     isValid?: boolean;
     errors?: ajv.ErrorObject[];
@@ -22,38 +23,44 @@ export class MetaData {
     /**
      * 数据
      */
-    public data: { map: any, meta: any; isValid?: boolean } = { map: {}, meta: {} };
+    public data: {
+        map: any,
+        meta: any;
+        isValid?: boolean
+    } = { map: {}, meta: {} };
     /**
      * reducer的actions
      */
     public actions: any = {};
-
-    private curAjv: ajv.Ajv;
+    /**
+     * 当前的ajv
+     */
+    private schemaFormOptions: any;
+    /**
+     * 当前的验证key
+     */
     private curKey: string;
-
     /**
      * 是否初始化
      */
     private isInit = false;
-
     /**
      * 初始化一个ajv
      * @param curAjv ajv的实例
      * @param key    ajv的schema的key
      */
-    public init(curAjv: ajv.Ajv, key: string): void {
+    public init(schemaFormOptions: any, key: string): void {
         this.isInit = true;
 
-        this.curAjv = curAjv;
+        this.schemaFormOptions = schemaFormOptions;
         this.curKey = key;
     }
-
     /**
      * 验证所有的数据
      * @param data 数据
      */
     public validateAll(data: any) {
-        let result = this.curAjv.validate(this.curKey, data);
+        let result = this.schemaFormOptions.ajv.validate(this.curKey, data);
 
         // 设置所有的字段验证都通过
         for (let key in this.data.map) {
@@ -67,7 +74,7 @@ export class MetaData {
         }
         // 如果验证有错误，则处理错误
         if (!result) {
-            this.curAjv.errors.forEach((error: ajv.ErrorObject) => {
+            this.schemaFormOptions.ajv.errors.forEach((error: ajv.ErrorObject) => {
                 let keys = jpp.parse(error.dataPath);
                 let meta = this.getMeta(keys);
 
@@ -82,60 +89,86 @@ export class MetaData {
 
         this.data.isValid = result as boolean;
     }
-
     /**
-     * 设置meta数据
-     * @param keys   keys
-     * @param meta   meta数据
-     * @param strick 是否启用严格模式，针对array以及object类型的数据，进行特殊处理，返回keys的路径，否则返回对应的uuid
+     * 获得当前字段的key
+     * @param keys    当前字段的Keys
+     */
+    public getKey(keys: Array<string>): { schemaKey: string; originEscapeKey: string; normalKey: string; escapeKey: string; } {
+        const key = jpp.compile(keys);
+        let escapeKey = jpp.escape(key);
+
+        return {
+            schemaKey: keys.map((k: string) => {
+                if (typeof k === "number") {
+                    return "-";
+                }
+                return k;
+            }).join("/"),
+            normalKey: key,
+            originEscapeKey: escapeKey,
+            escapeKey: "/" + escapeKey
+        };
+    }
+    /**
+     * 设置meta信息
+     * @param keys     keys
+     * @param meta     meta数据
+     * @param strick   废弃属性
      */
     public setMeta(keys: Array<string>, meta: SchemaFormMeta, strick = true): void {
-        let { normalKey, escapeKey } = this.getKey(keys);
-        let curUuid = this.getCurMetaUuid(escapeKey, strick) || uuid();
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
         let curMeta = this.getCurMetaData(curUuid);
 
-        if (strick) {
-            this.setCurMetaUuid(keys, escapeKey, curUuid);
+        if (curUuid !== escapeKey) {
+            this.setCurMetaUuid(normalKey, curUuid);
         }
+
         this.setCurMetaData(curUuid, Object.assign({}, curMeta, meta));
     }
+    /**
+     * 获取当前keys的uuid
+     * @param param0     各种keys
+     */
+    public getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey }): string {
+        let jMap = jpp(this.data.map);
+        let jMeta = jpp(this.data.meta), curMeta, curUuid;
 
+        if (this.schemaFormOptions.map.has(schemaKey)) {
+            let schema = this.schemaFormOptions.map.get(schemaKey);
+
+            if (["array", "object"].indexOf(schema.type) >= 0) {
+                return escapeKey;
+            }
+        }
+
+        if (jMap.has(escapeKey)) {
+            return escapeKey;
+        }
+
+        // 如果meta中存在normalKey
+        if (jMeta.has(normalKey)) {
+            curMeta = jMeta.get(normalKey);
+            curUuid = curMeta;
+        }
+
+        if (typeof curMeta !== "string" || !curMeta) {
+            curUuid = "/" + jpp.escape(`/${uuid()}`);
+        }
+
+        return curUuid;
+    }
     /**
      * 返回meta数据
      * @param keys   keys
      * @param strick 是否严格模式
      */
     public getMeta(keys: Array<string>, strick = true): SchemaFormMeta {
-        let { normalKey, escapeKey } = this.getKey(keys);
-        let curUuid = this.getCurMetaUuid(escapeKey, strick);
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
 
         return this.getCurMetaData(curUuid);
     }
-
-    /**
-     * 删除meta数据
-     * @param keys keys
-     */
-    public removeMeta(keys: Array<string>) {
-        let { normalKey, escapeKey } = this.getKey(keys);
-        let curUuid = this.getCurMetaUuid(escapeKey);
-
-        this.removeCurMetaData(curUuid, escapeKey);
-    }
-
-    /**
-     * 获得当前字段的key
-     * @param keys    当前字段的Keys
-     */
-    public getKey(keys: Array<string>): { normalKey: string; escapeKey: string; } {
-        const key = jpp.compile(keys);
-
-        return {
-            normalKey: key,
-            escapeKey: key
-        };
-    }
-
     /**
      * 更换两个meta数据位置
      * @param keys        keys
@@ -143,52 +176,72 @@ export class MetaData {
      * @param switchIndex 更换的索引
      */
     public switchMeta(keys: Array<string>, curIndex: number, switchIndex: number): void {
-        let { normalKey, escapeKey } = this.getKey(keys);
+        let { normalKey, escapeKey, schemaKey, originEscapeKey } = this.getKey(keys);
 
-        if (!jpp(this.data.meta).has(escapeKey)) {
+        if (!jpp(this.data.meta).has(normalKey)) {
             return;
         }
 
-        let curMeta = jpp(this.data.meta).get(escapeKey);
+        let curMeta = jpp(this.data.meta).get(normalKey);
 
         [curMeta[curIndex], curMeta[switchIndex]] = [curMeta[switchIndex], curMeta[curIndex]];
 
-        jpp(this.data.meta).set(escapeKey, curMeta);
+        jpp(this.data.meta).set(normalKey, curMeta);
     }
-
     /**
-     * 获取当前meta的uuid
-     *  1. 如果meta中存在key的uuid，则返回
-     *  2. 如果meat不存在，则从map中获取
-     *  3. 如果都不存在，返回null，生成默认的uuid
-     * @param escapeKey  key
-     * @param strict     是否严格模式，非严格模式下，如果是object类型，则返回escapeKey
+     * 删除meta数据
+     *  1. 遍历map，清除map中是${originEscapeKey}开头的key
+     *  2. 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
+     *  3. 删除map中当前keys对应的uuid
+     * @param keys keys
      */
-    private getCurMetaUuid(escapeKey: string, strict = true): string {
-        let curUuid: string;
+    public removeMeta(keys: Array<string>): void {
+        let jMap = jpp(this.data.map), jMeta = jpp(this.data.meta);
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
+        let regexp = new RegExp(`^${originEscapeKey}`, "ig");
 
-        if (jpp(this.data.meta).has(escapeKey)) {
-            curUuid = jpp(this.data.meta).get(escapeKey);
+        // 遍历map，清除map中是${originEscapeKey}开头的key
+        for (let key in this.data.map) {
+            if (this.data.map.hasOwnProperty(key)) {
+                let mapKeys = this.getKey(jpp.parse(key));
+
+                if (regexp.test(mapKeys.originEscapeKey)) {
+                    jMap.remove(mapKeys.escapeKey);
+                }
+            }
         }
 
-        if (!curUuid && (jpp(this.data.map).has(escapeKey) || !strict)) {
-            curUuid = jpp.parse(escapeKey).join("/");
+        // 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
+        if (jMeta.has(normalKey)) {
+            let metaDict = jpp.dict(jMeta.get(normalKey));
+
+            jMeta.remove(normalKey);
+
+            // 遍历子元素，并且清除数据
+            for (let key in metaDict) {
+                if (metaDict.hasOwnProperty(key)) {
+                    let element = metaDict[key];
+
+                    if (jMap.has(element)) {
+                        jMap.remove(element);
+                    }
+                }
+            }
         }
 
-        // if (!strict || typeof curUuid === "object") {
-        //     curUuid = jpp.parse(escapeKey).join("/");
-        // }
-
-        return curUuid;
+        // 删除当前的uuid
+        if (jMap.has(curUuid)) {
+            jMap.remove(curUuid);
+        }
     }
-
     /**
      * 返回meta数据
      * @param curUuid uuid
      */
     private getCurMetaData(curUuid: string): SchemaFormMeta {
-        if (jpp(this.data.map).has(`/${curUuid}`)) {
-            return jpp(this.data.map).get(`/${curUuid}`);
+        if (jpp(this.data.map).has(`${curUuid}`)) {
+            return jpp(this.data.map).get(`${curUuid}`);
         }
 
         return { isShow: true };
@@ -200,66 +253,16 @@ export class MetaData {
      * @param meta    meta数据
      */
     private setCurMetaData(curUuid: string, meta: SchemaFormMeta) {
-        jpp(this.data.map).set(`/${curUuid}`, meta);
+        jpp(this.data.map).set(`${curUuid}`, meta);
     }
-
-    /**
-     * 删除meta数据
-     *  1. 删除数据的uuid
-     *  2. 删除数据的map
-     *  3. 遍历子元素，删除uuid
-     * @param curUuid   uuid
-     * @param escapeKey key
-     */
-    private removeCurMetaData(curUuid: string, escapeKey: string) {
-        let jMeta = jpp(this.data.meta);
-        let jMap = jpp(this.data.map);
-
-        if (jMap.has(`/${curUuid}`)) {
-            jMap.remove(`/${curUuid}`);
-        }
-        if (jMeta.has(escapeKey)) {
-            let meta = jMeta.get(escapeKey);
-
-            jMeta.remove(escapeKey);
-
-            for (let key in jpp.dict(meta)) {
-                if (jpp.dict(meta).hasOwnProperty(key)) {
-                    let element = jpp.dict(meta)[key];
-
-                    if (jMap.has(`/${element}`)) {
-                        jMap.remove(`/${element}`);
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * 设置当前meta的uuid
-     * @param keys    keys
      * @param key     key
      * @param curUuid uuid
      */
-    private setCurMetaUuid(keys: string[], key: string, curUuid: string) {
-        let parentKeys = [].concat(keys).splice(0, keys.length - 1);
-        let metaJpp = jpp(this.data.meta);
+    private setCurMetaUuid(key: string, curUuid: string) {
+        let jMeta = jpp(this.data.meta);
 
-        // 判断父亲节点有没有设置值，如果没有设置成{}
-        if (parentKeys.length) {
-            let { escapeKey: pescapeKey } = this.getKey(parentKeys);
-            let curMeta = metaJpp.has(pescapeKey) ? metaJpp.get(pescapeKey) : null;
-            let mapData = jpp(this.data.map).has(pescapeKey) ? jpp(this.data.map).get(pescapeKey) : {};
-
-            if (!curMeta || typeof curMeta !== "object") {
-                if (mapData && mapData.type === "array") {
-                    metaJpp.set(pescapeKey, []);
-                } else {
-                    metaJpp.set(pescapeKey, {});
-                }
-            }
-        }
-
-        metaJpp.set(key, curUuid);
+        jMeta.set(key, curUuid);
     }
 }

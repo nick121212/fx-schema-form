@@ -11,7 +11,7 @@ import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps, any>(
     lifecycle({
         shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps) {
-            let metaKeys = ["isShow", "isValid", "errorText"];
+            let metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
             let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
             let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
             let rtn = !formItemDataEqual || !metaEqual;

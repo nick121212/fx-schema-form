@@ -23,16 +23,20 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, schemaFormOptions, schemaKey, validate } = this.props;
+        const { mergeSchema, globalOptions, uiSchemaOptions, validate, updateItemData, formItemData } = this.props;
         const { input = {} } = uiSchemaOptions.widget || {};
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
         const { readonly = false } = uiSchema as any;
 
         return (
-            <Input onChange={(e: SyntheticEvent<HTMLInputElement>) => {
-                validate(e.currentTarget.value);
-            }}
+            <Input
+                onBlur={() => {
+                    validate(formItemData);
+                }}
+                onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                    updateItemData(e.currentTarget.value);
+                }}
                 disabled={readonly}
                 placeholder={mergeSchema.title}
                 {...input}

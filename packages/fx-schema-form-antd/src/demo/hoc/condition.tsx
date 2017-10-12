@@ -4,7 +4,7 @@ import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 import jpp from "json-pointer";
 
-import { ThemeHocOutProps, RC, SchemaFormItemBaseProps, MakeHocOutProps } from "./index";
+import { ThemeHocOutProps, RC, SchemaFormItemBaseProps, MakeHocOutProps } from "../../index";
 
 export interface ConditionHocOutProps {
 

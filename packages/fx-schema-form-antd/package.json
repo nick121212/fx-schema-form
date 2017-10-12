@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "ajv": "^5.2.2",
+    "ajv-async": "^0.1.0",
     "antd": "^2.13.0",
     "fx-schema-form-core": "0.0.8",
     "json-pointer": "^0.6.0",
@@ -55,6 +56,7 @@
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.6",
     "react-addons-perf": "^15.4.2",
+    "react-router-dom": "^4.2.2",
     "style-loader": "^0.18.2",
     "tslint": "^5.7.0",
     "tslint-loader": "^3.5.3",

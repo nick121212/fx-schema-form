@@ -17,7 +17,7 @@ export interface Actions {
     addItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     validateAllField: EmptyActionCreator;
-    initItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
+    updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
 }
 
 export class FormReducer<T> {
@@ -44,7 +44,7 @@ export class FormReducer<T> {
     /**
      * 初始化元素的meta信息
      */
-    private initItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("初始化元素的meta信息");
+    private updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("更新元素的meta信息");
     /**
      * 验证所有的字段
      */
@@ -63,7 +63,7 @@ export class FormReducer<T> {
             addItem: this.addItem,
             switchItem: this.switchItem,
             validateAllField: this.validateAllField,
-            initItemMeta: this.initItemMeta
+            updateItemMeta: this.updateItemMeta
         };
     }
 
@@ -78,7 +78,7 @@ export class FormReducer<T> {
             [this.removeItem as any]: this.removeItemHandle.bind(this),
             [this.switchItem as any]: this.switchItemHandle.bind(this),
             [this.validateAllField as any]: this.validateAllFieldHandle.bind(this),
-            [this.initItemMeta as any]: this.initMetaHandle.bind(this),
+            [this.updateItemMeta as any]: this.updateMetaHandle.bind(this),
         }, this.initialState);
     }
 
@@ -121,14 +121,14 @@ export class FormReducer<T> {
         return Object.assign({}, state, { data: originData, meta: originMeta });
     }
 
-    private initMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
-        let originMeta = state.meta;
+    private updateMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
+        let { originData, originMeta } = this.getOrigin(state);
         let { normalKey } = originMeta.getKey(keys);
         let curMeta = originMeta.getMeta(keys, false) || {};
 
-        originMeta.setMeta(keys, Object.assign({}, curMeta, meta), meta.type !== "array");
+        originMeta.setMeta(keys, meta);
 
-        return state;
+        return Object.assign({}, state, { meta: originMeta });
     }
 
     private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
@@ -136,7 +136,7 @@ export class FormReducer<T> {
         let { normalKey } = originMeta.getKey(keys);
         let curMeta = originMeta.getMeta(keys, false) || {};
 
-        originMeta.setMeta(keys, Object.assign({}, curMeta, { isShow: !!!curMeta.isShow }), false);
+        originMeta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
 
         return Object.assign({}, state, { meta: originMeta });
     }

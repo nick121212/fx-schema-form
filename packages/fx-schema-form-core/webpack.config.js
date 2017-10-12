@@ -13,7 +13,7 @@ const __STAG__ = env.toUpperCase() == "STG";
 
 module.exports = {
     entry: {
-        index: __DEV__ ? ['./src/demo.ts'] : ['./src/index.ts']
+        index: __DEV__ ? ['./src/demo/index.ts'] : ['./src/index.ts']
     },
     output: {
         path: path.resolve('./out'),

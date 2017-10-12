@@ -13,6 +13,7 @@ import { mapActionsStateToProps } from "../select";
 
 export interface ValidateHocOutProps {
     validate?: (data: any) => void;
+    updateItemData?: (data: any) => void;
 }
 
 /**
@@ -23,7 +24,8 @@ export interface ValidateHocOutProps {
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBaseProps & { actions: any }) => {
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
-    const validate = schemaFormOptions.ajv.getSchema(mergeSchema.schemaPathKey.join("/"));
+    // const schema = Object.assign({}, schemaFormOptions.ajv.getSchema(mergeSchema.schemaPathKey.join("/")).schema, { $async: true });
+    const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, async: true }));
 
     for (const key in actions) {
         if (actions.hasOwnProperty(key)) {
@@ -37,20 +39,35 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
 
     // 返回validae方法，这里更新字段的值
     return {
+        updateItemData: (data: any) => {
+            if (!actions.updateItem) {
+                console.error("没有更新的action！");
+            }
+
+            actions.updateItem({ keys, data, meta: {} });
+        },
         validate: (data: any) => {
             if (!actions.updateItem) {
                 console.error("没有更新的action！");
             }
 
             // 验证操作
-            let isValid = validate(data);
+            // let isValid = validate(data);
             let result = {
                 dirty: true,
-                isValid: isValid,
-                errorText: schemaFormOptions.ajv.errorsText(validate.errors)
+                isValid: false,
+                isLoading: false,
+                errorText: ""
             };
 
-            actions.updateItem({ keys, data, meta: result });
+            actions.updateItemMeta({ keys, meta: { isLoading: true } });
+            validate(data).then(() => {
+                result.isValid = true;
+                actions.updateItemMeta({ keys, meta: result });
+            }).catch((err) => {
+                result.errorText = err.errors ? schemaFormOptions.ajv.errorsText(err.errors) : err.message;
+                actions.updateItemMeta({ keys, meta: result });
+            });
         }
     };
 };
