@@ -2,6 +2,8 @@
 
 通过[json-schema](http://jsonschema.net/),[ui-schema](#custoization-ui-schema),以及[antd](https://ant.design/index-cn)自动生成表单组件。
 
+[点击这里查看demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-antd/out/index.html#/array)
+
 > 组件之间的功能组合使用hoc来实现。
 
 ## 目录
