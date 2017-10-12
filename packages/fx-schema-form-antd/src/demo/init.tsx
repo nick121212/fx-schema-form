@@ -4,6 +4,16 @@ import { Button } from "antd";
 
 import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
 import { schema } from "./schema/normal";
+import { AntdInputNumberWidget } from "./widget/number";
+import { ConditionHoc } from "./hoc/condition";
+import { GeoPositionField } from "./field/geo";
+
+hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
+defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
+defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
+
+defaultTheme.fieldFactory.add("geo", GeoPositionField);
+defaultTheme.fieldFactory.add("integer", AntdInputNumberWidget);
 
 const curAjv = new Ajv({
     allErrors: true,

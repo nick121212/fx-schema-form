@@ -10,10 +10,12 @@ import {
 
 import { ajv, schemaFormOptions } from "./init";
 import { reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
+import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";
 import { Menu, Icon } from "antd";
 
 let store = createStore<any>(combineReducers({
-    "array": arrayReducer.reducer
+    "array": arrayReducer.reducer,
+    "normal": normalReducer.reducer
 }));
 
 store.subscribe(() => {
@@ -31,14 +33,12 @@ ReactDom.render(
                     <Menu.Item key="array">
                         <Link to="/array"><Icon type="mail" />无限极数组</Link>
                     </Menu.Item>
-                    <Menu.Item key="object">
+                    {/* <Menu.Item key="object">
                         <Link to="/object"><Icon type="mail" />对象类型</Link>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </Menu>
 
-                <Route exact path="/" component={() => {
-                    return <span>hello world</span>;
-                }} />
+                <Route exact path="/" component={NormalSchemaFormComponent} />
                 <Route path="/array" component={ArraySchemaFormComponent} />
                 {/* <Route path="/topics" component={Topics} /> */}
             </div>

@@ -14,7 +14,8 @@ const __STAG__ = env.toUpperCase() == "STG";
 
 module.exports = {
     entry: {
-        index: __DEV__ ? ['./src/demo/index.tsx'] : ['./src/index.tsx']
+        index: ['./src/index.tsx'],
+        demo: ['./src/demo/index.tsx']
     },
     devServer: {
         historyApiFallback: true,
