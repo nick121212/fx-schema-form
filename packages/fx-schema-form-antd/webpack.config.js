@@ -16,6 +16,23 @@ module.exports = {
     entry: {
         index: __DEV__ ? ['./src/demo.tsx'] : ['./src/index.tsx']
     },
+    devServer: {
+        historyApiFallback: true,
+        hot: false,
+        inline: true,
+        // contentBase: './out',
+        port: 8081,
+        host: "127.0.0.1",
+        stats: { colors: true },
+        proxy: {
+            '/weixin': {
+                target: 'https://qyapi.weixin.qq.com/',
+                pathRewrite: { '^/weixin': '/cgi-bin/media/get' },
+                changeOrigin: true
+            }
+        }
+    },
+
     output: {
         path: path.resolve('./out'),
         filename: '[name].js',

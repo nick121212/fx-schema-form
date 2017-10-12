@@ -7,6 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "publish": "lerna publish"
   },
+  "keywords": [
+    "crawler",
+    "typescript",
+    "json-schema",
+    "jsonSchema",
+    "react",
+    "schema-form",
+    "form-generator",
+    "form",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
