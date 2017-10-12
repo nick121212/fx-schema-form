@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
                 errorText: ""
             };
 
-            actions.updateItemMeta({ keys, meta: { isLoading: true } });
+            actions.updateItemMeta({ keys, meta: { isLoading: true, isValid: false, errorText: false } });
             validate(data).then(() => {
                 result.isValid = true;
                 actions.updateItemMeta({ keys, meta: result });
