@@ -8,6 +8,8 @@ import {
     Link
 } from "react-router-dom";
 
+import "./index.less";
+
 import { ajv, schemaFormOptions } from "./init";
 import { reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
 import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";

@@ -59,14 +59,11 @@ module.exports = {
             loader: 'style-loader!css-loader?modules',
         }, {
             test: /\.less$/,
-            use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: ['css-loader', 'style-loader', 'less-loader']
-            })
+            use: ExtractTextPlugin.extract("css-loader!less-loader?sourceMap")
         }, {
             test: /\.css/,
             exclude: /module\.css/,
-            loader: 'style-loader!css-loader',
+            loader: 'style-loader!css-loader?modules',
         }, {
             test: /\.ts(x?)$/,
             exclude: /node_modules/,
@@ -82,7 +79,7 @@ module.exports = {
             test: /\.(jpg|png)/,
             loader: 'file-loader',
         }, {
-            test: /content\/.*\.svg$/,
+            test: /\.svg$/,
             loader: 'file-loader',
         }, {
             test: /icons\/.*\.svg$/,
@@ -90,6 +87,13 @@ module.exports = {
         }, {
             test: /\.md/,
             loader: 'raw-loader',
+        }, {
+            test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+            loader: 'url-loader',
+            query: {
+                limit: 10000,
+                name: './build/fonts/[name].[hash:7].[ext]'
+            }
         }],
     },
     plugins: [

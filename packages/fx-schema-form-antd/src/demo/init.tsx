@@ -1,6 +1,6 @@
 import React from "react";
 import Ajv, { Thenable, ValidateFunction, SchemaValidateFunction } from "ajv";
-import { Button, Popover } from "antd";
+import { Button, Popover, Popconfirm } from "antd";
 
 import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
 import { schema } from "./schema/normal";
@@ -36,10 +36,10 @@ const globalOptions = {
                 const { isShow = true } = props.meta;
                 return (
                     <div>
-                        <Button type="primary" shape="circle" icon="plus" ghost={true}
+                        <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="add" ghost={true}
                             onClick={() => { props.addItem(); }}></Button>
                         <Button type={!isShow ? "dashed" : "primary"}
-                            shape="circle" icon={isShow ? "shrink" : "arrows-alt"}
+                            shape="circle" icon={isShow ? "moreunfold" : "less"}
                             onClick={() => { props.toggleItem(); }}></Button>
                     </div>
                 );
@@ -48,15 +48,23 @@ const globalOptions = {
                 return (
                     <Popover placement="topLeft" title={null} content={(
                         <div>
-                            <Button ghost={true} type="danger" shape="circle" icon="minus"
-                                onClick={() => { props.removeItem(idx); }}></Button>
-                            <Button ghost={false} type="dashed" shape="circle" icon="arrow-up"
+                            <Popconfirm
+                                style={{ marginRight: 5 }}
+                                title="Are you sure？"
+                                onConfirm={() => {
+                                    props.removeItem(idx);
+                                }}
+                                okText="Yes"
+                                cancelText="No">
+                                <Button ghost={true} type="danger" shape="circle" icon="delete1"></Button>
+                            </Popconfirm>
+                            <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup"
                                 onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
-                            <Button ghost={false} type="dashed" shape="circle" icon="arrow-down"
+                            <Button ghost={false} type="dashed" shape="circle" icon="unfold"
                                 onClick={() => { props.switchItem(idx, idx + 1); }}></Button>
                         </div>
                     )} trigger="hover">
-                        <Button icon="appstore" shape="circle"></Button>
+                        <Button icon="switch" shape="circle"></Button>
                     </Popover>
                 );
             }

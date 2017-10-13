@@ -49,12 +49,14 @@
     "css-loader": "^0.28.7",
     "cssnano": "^3.10.0",
     "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^1.1.5",
     "fuse-box": "^2.2.3",
     "fuse-test-runner": "^1.0.12",
     "fuse-tools": "^1.0.3",
     "html-webpack-plugin": "^2.30.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
+    "modules-loader": "^0.1.0",
     "postcss-loader": "^2.0.6",
     "react-addons-perf": "^15.4.2",
     "react-router-dom": "^4.2.2",
@@ -63,6 +65,7 @@
     "tslint-loader": "^3.5.3",
     "typescript": "^2.5.2",
     "update-notifier": "^2.2.0",
+    "url-loader": "^0.6.2",
     "webpack": "^3.5.5"
   }
 }
