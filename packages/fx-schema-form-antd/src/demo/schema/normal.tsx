@@ -2,7 +2,7 @@ export const schema = {
     "$async": true,
     type: "object",
     title: "测试SCHEMA",
-    required: [],
+    required: ["name"],
     properties: {
         name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
         number: { type: "number", "title": "测试number类型" },
