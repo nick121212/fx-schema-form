@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input } from "antd";
+import { Form, Input, Row, Col } from "antd";
 import { FormItemProps } from "antd/lib/form/FormItem";
 
 import { SchemaFormItemProps } from "../components/formitem";
@@ -35,8 +35,10 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
                 hasFeedback={dirty && hasFeedback}
                 {...props}
                 {...tempOptions}>
-                {children}
-                {arrayItems && arrayItems()}
+                <Row type="flex">
+                    <Col span={20}>{children}</Col>
+                    <Col offset={1} span={3}>{arrayItems && arrayItems()}</Col>
+                </Row>
             </Form.Item>
         );
     }

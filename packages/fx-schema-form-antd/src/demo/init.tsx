@@ -1,6 +1,6 @@
 import React from "react";
 import Ajv, { Thenable, ValidateFunction, SchemaValidateFunction } from "ajv";
-import { Button } from "antd";
+import { Button, Popover } from "antd";
 
 import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
 import { schema } from "./schema/normal";
@@ -33,23 +33,31 @@ const globalOptions = {
     "hoc": {
         "array": {
             createItemButtons: (props: any) => {
+                const { isShow = true } = props.meta;
                 return (
                     <div>
-                        <Button type="primary" shape="circle" icon="plus" ghost={true} onClick={() => { props.addItem(); }}></Button>
-                        <Button type="primary" shape="circle" icon="shrink" ghost={true} onClick={() => { props.toggleItem(); }}></Button>
+                        <Button type="primary" shape="circle" icon="plus" ghost={true}
+                            onClick={() => { props.addItem(); }}></Button>
+                        <Button type={!isShow ? "dashed" : "primary"}
+                            shape="circle" icon={isShow ? "shrink" : "arrows-alt"}
+                            onClick={() => { props.toggleItem(); }}></Button>
                     </div>
                 );
             },
             createItemChildButtons: (props: any, idx: number, maxLength: number) => {
                 return (
-                    <div>
-                        <Button ghost={true} type="primary" shape="circle" icon="minus"
-                            onClick={() => { props.removeItem(idx); }}></Button>
-                        <Button ghost={true} type="primary" shape="circle" icon="arrow-up"
-                            onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
-                        <Button ghost={true} type="primary" shape="circle" icon="arrow-down"
-                            onClick={() => { props.switchItem(idx, idx + 1); }}></Button>
-                    </div>
+                    <Popover placement="topLeft" title={null} content={(
+                        <div>
+                            <Button ghost={true} type="danger" shape="circle" icon="minus"
+                                onClick={() => { props.removeItem(idx); }}></Button>
+                            <Button ghost={false} type="dashed" shape="circle" icon="arrow-up"
+                                onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
+                            <Button ghost={false} type="dashed" shape="circle" icon="arrow-down"
+                                onClick={() => { props.switchItem(idx, idx + 1); }}></Button>
+                        </div>
+                    )} trigger="hover">
+                        <Button icon="appstore" shape="circle"></Button>
+                    </Popover>
                 );
             }
         }
@@ -62,7 +70,7 @@ const globalOptions = {
         },
         "wrapperCol": {
             "xs": { "span": 24 },
-            "sm": { "span": 19 },
+            "sm": { "span": 19, push: 1 },
         },
     },
     "row": {
