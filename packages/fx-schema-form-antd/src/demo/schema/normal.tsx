@@ -15,6 +15,7 @@ export const schema = {
             properties: {
                 settings: {
                     type: "boolean",
+                    enum: [true],
                     title: "测试boolean类型",
                     default: true
                 }
