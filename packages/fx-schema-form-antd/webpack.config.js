@@ -106,15 +106,15 @@ module.exports = {
                 "__STAG__": __STAG__
             },
         }),
-        __DEV__ ? new HtmlWebpackPlugin({
+        !__PROD__ ? new HtmlWebpackPlugin({
             // favicon: 'static/favicon.png',
             template: 'test.html',
         }) : new CleanWebpackPlugin(
-            ['out/**',],　 //匹配删除的文件
+            ['out/**',],
             {
-                root: __dirname,       　　　　　　　　　　//根目录
-                verbose: true,        　　　　　　　　　　//开启在控制台输出信息
-                dry: false        　　　　　　　　　　//启用删除文件
+                root: __dirname,
+                verbose: true,
+                dry: false
             }
         ),
         new webpack.optimize.OccurrenceOrderPlugin(),
@@ -141,7 +141,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
-    externals: __DEV__ ? {} : {
+    externals: __PROD__ ? {} : {
         "react": true,
         "recompose": true
     }
