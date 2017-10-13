@@ -136,7 +136,7 @@ module.exports = {
                 },
             }
         }),
-        new ExtractTextPlugin("styles.css")
+        new ExtractTextPlugin("styles/[name].[contenthash:6].css", { allChunks: false /*是否将分散的css文件合并成一个文件*/ })
     ],
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
