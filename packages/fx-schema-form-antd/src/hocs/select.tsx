@@ -37,6 +37,21 @@ export const getData = (state: any, props: SchemaFormItemBaseProps) => {
  * @param state 全局state
  * @param props 当前component的props
  */
+export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
+    const { schemaKey } = props;
+    const { meta } = state[props.schemaKey];
+
+    return {
+        isLoading: meta.data.isLoading,
+        isValid: meta.data.isValid
+    };
+};
+
+/**
+ * 获取state中的meta数据
+ * @param state 全局state
+ * @param props 当前component的props
+ */
 export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
     const { schemaKey, mergeSchema } = props;
     const { keys = [] } = mergeSchema;
@@ -78,8 +93,8 @@ export const mapMetaStateToProps = createSelector(
  * 返回actions
  */
 export const mapActionsStateToProps = createSelector(
-    [getActions],
-    (actions: any) => {
-        return { actions };
+    [getActions, getMetaStateData],
+    (actions: any, metaState: any) => {
+        return { actions, metaState };
     }
 );

@@ -22,21 +22,23 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
      * render
      */
     public render(): JSX.Element {
-        const { children, mergeSchemaList, schemaKey,
-            arrayItems, arrayIndex, globalOptions, RootComponent, schemaFormOptions
+        const { children,
+            mergeSchemaList,
+            schemaKey,
+            arrayItems,
+            arrayIndex,
+            globalOptions,
+            RootComponent,
+            schemaFormOptions,
+            formDefaultData
         } = this.props;
+
         let RootComponentHock = RootComponent;
-        let formDefaultData = {};
-        // console.log("---------------SchemaForm rendered");
 
         // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
-
-        // // 验证一次，设置默认值
-        schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
-        // console.log(formData);
 
         return (
             <RootComponentHock>

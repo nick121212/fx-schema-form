@@ -24,7 +24,6 @@ export interface ValidateHocOutProps {
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBaseProps & { actions: any }) => {
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
-    // const schema = Object.assign({}, schemaFormOptions.ajv.getSchema(mergeSchema.schemaPathKey.join("/")).schema, { $async: true });
     const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, async: true }));
 
     for (const key in actions) {
@@ -52,7 +51,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
             }
 
             // 验证操作
-            // let isValid = validate(data);
             let result = {
                 dirty: true,
                 isValid: false,

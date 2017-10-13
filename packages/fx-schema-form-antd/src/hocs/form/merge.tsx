@@ -14,6 +14,11 @@ import { mapActionsStateToProps } from "../select";
 export interface MergeHocOutProps {
     schemaFormOptions: any;
     mergeSchemaList: any;
+    formDefaultData?: any;
+}
+
+interface MergeHocProps extends SchemaFormBaseProps {
+    metaState: { isLoading: boolean; isValid: boolean; };
 }
 
 /**
@@ -47,15 +52,16 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormBasePro
  * schemaKey          生成的schemaKey
  * mergeSchemaList    合并之后的数据
  */
-export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<SchemaFormBaseProps, any> => {
-    @(compose<SchemaFormBaseProps, any>(
+export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocProps, any> => {
+    @(compose<MergeHocProps, any>(
         connect(mapActionsStateToProps),
         connect(null, mapDispatchToProps),
-        onlyUpdateForKeys(["schema", "uiSchema"])
+        onlyUpdateForKeys(["schema", "uiSchema", "metaState"])
     ) as any)
-    class Hoc extends React.Component<SchemaFormBaseProps, any> {
+    class Hoc extends React.Component<MergeHocProps, any> {
         public render(): JSX.Element {
             let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions } = this.props, mergeSchemaList;
+            let formDefaultData = {};
 
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
@@ -73,13 +79,14 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<SchemaFor
             schemaFormOptions.parentKeys = parentKeys || [];
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
-
-            // console.log(mergeSchemaList);
+            // 验证一次，设置默认值
+            schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
 
             return (
                 <Component
                     schemaFormOptions={schemaFormOptions || {}}
                     schemaKey={schemaKey}
+                    formDefaultData={formDefaultData}
                     mergeSchemaList={mergeSchemaList}
                     {...this.props}>
                 </Component>

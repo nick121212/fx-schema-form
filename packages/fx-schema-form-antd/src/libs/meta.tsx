@@ -82,13 +82,14 @@ export class MetaData {
 
             this.data.isValid = true;
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             err.errors.forEach((error: ajv.ErrorObject) => {
                 let keys = jpp.parse(error.dataPath);
                 let meta = this.getMeta(keys);
 
                 this.setMeta(keys, {
                     dirty: true,
+                    isLoading: false,
                     isValid: false,
                     errors: [],
                     errorText: error.message

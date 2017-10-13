@@ -20,12 +20,26 @@ let uiSchema: any = ["*"];
 
     return {
         isValid: meta.data.isValid,
+        isLoading: meta.data.isLoading,
         meta: meta,
         data
     };
 })
 export class NormalSchemaFormComponent extends React.Component<any> {
+    private async doSubmit(): Promise<void> {
+        reducer.actions.updateMetaState({ isLoading: true, isValid: false });
+        reducer.actions.updateMetaState({
+            isLoading: false,
+            meta: await this.props.meta.validateAll(this.props.data)
+        });
+        if (this.props.isValid) {
+            alert("提交表单");
+        }
+    }
+
     public render(): JSX.Element {
+        const { isLoading } = this.props;
+
         return (
             <Collapse bordered={false} defaultActiveKey={["1", "4"]}>
                 <Panel header={"schema"} key="2">
@@ -44,14 +58,7 @@ export class NormalSchemaFormComponent extends React.Component<any> {
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
-                            <Button onClick={async () => {
-                                reducer.actions.validateAllField(await this.props.meta.validateAll(this.props.data));
-                                setTimeout(() => {
-                                    if (this.props.isValid) {
-                                        alert("提交表单");
-                                    }
-                                }, 100);
-                            }}>提交</Button>
+                            <Button type="primary" loading={isLoading} onClick={this.doSubmit.bind(this)}>提交</Button>
                         </Form.Item>
                     </SchemaForm>
                 </Panel>

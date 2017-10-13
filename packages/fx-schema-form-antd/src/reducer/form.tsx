@@ -16,7 +16,7 @@ export interface Actions {
     removeItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     addItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
-    validateAllField: SimpleActionCreator<{ data: any }> ;
+    updateMetaState: SimpleActionCreator<any>;
     updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
 }
 
@@ -46,9 +46,9 @@ export class FormReducer<T> {
      */
     private updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }> = createAction("更新元素的meta信息");
     /**
-     * 验证所有的字段
+     * 更改meta的状态
      */
-    private validateAllField: SimpleActionCreator<{ data: any }> = createAction("验证表单中所有的字段");
+    private updateMetaState: SimpleActionCreator<{ data: any }> = createAction("更改meta的状态");
 
     constructor(private initialState: any) { }
 
@@ -62,7 +62,7 @@ export class FormReducer<T> {
             removeItem: this.removeItem,
             addItem: this.addItem,
             switchItem: this.switchItem,
-            validateAllField: this.validateAllField,
+            updateMetaState: this.updateMetaState,
             updateItemMeta: this.updateItemMeta
         };
     }
@@ -77,7 +77,7 @@ export class FormReducer<T> {
             [this.addItem as any]: this.addItemHandle.bind(this),
             [this.removeItem as any]: this.removeItemHandle.bind(this),
             [this.switchItem as any]: this.switchItemHandle.bind(this),
-            [this.validateAllField as any]: this.validateAllFieldHandle.bind(this),
+            [this.updateMetaState as any]: this.updateMetaStateHandle.bind(this),
             [this.updateItemMeta as any]: this.updateMetaHandle.bind(this),
         }, this.initialState);
     }
@@ -94,15 +94,26 @@ export class FormReducer<T> {
     }
 
     /**
-     * 验证所有字段
+     * 更改meta的状态
+     *  1. 如果存在meta，则更新meta
      * @param state 当前的state
      */
-    private validateAllFieldHandle(state: SchemaFormState<T>, meta: any): SchemaFormState<T> {
-        // let { originData, originMeta } = this.getOrigin(state);
+    private updateMetaStateHandle(state: SchemaFormState<T>,
+        { isLoading, isValid, meta }: { isLoading?: boolean; isValid?: boolean; meta?: MetaData }): SchemaFormState<T> {
+        let { originMeta } = this.getOrigin(state);
 
-        // originMeta.validateAll(originData);
+        if (meta) {
+            originMeta = meta;
+        }
 
-        return Object.assign({}, state, { meta: meta });
+        if (isLoading !== undefined) {
+            originMeta.data.isLoading = isLoading;
+        }
+        if (isValid !== undefined) {
+            originMeta.data.isValid = isValid;
+        }
+
+        return Object.assign({}, state, { meta: originMeta });
     }
 
     /**
