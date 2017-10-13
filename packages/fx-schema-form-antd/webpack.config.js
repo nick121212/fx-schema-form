@@ -141,7 +141,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
-    externals: __PROD__ ? {} : {
+    externals: !__PROD__ ? {} : {
         "react": true,
         "recompose": true
     }
