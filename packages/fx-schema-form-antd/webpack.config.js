@@ -41,7 +41,7 @@ module.exports = {
         libraryTarget: "umd",
         library: "fx-schema-form-antd"
     },
-    devtool: __DEV__ ? "cheap-module-eval-source-map" : "cheap-module-source-map",
+    devtool: !(__PROD__ || __STAG__) ? "cheap-module-eval-source-map" : "cheap-module-source-map",
     module: {
         rules: [{
             enforce: 'pre',
@@ -106,7 +106,7 @@ module.exports = {
                 "__STAG__": __STAG__
             },
         }),
-        !__PROD__ ? new HtmlWebpackPlugin({
+        !(__PROD__ || __STAG__) ? new HtmlWebpackPlugin({
             // favicon: 'static/favicon.png',
             template: 'test.html',
         }) : new CleanWebpackPlugin(
@@ -141,7 +141,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
-    externals: !__PROD__ ? {} : {
+    externals: !(__PROD__ || __STAG__) ? {} : {
         "react": true,
         "recompose": true
     }
