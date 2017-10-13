@@ -36,7 +36,7 @@ module.exports = {
 
     output: {
         path: path.resolve('./out'),
-        filename: '[name].js',
+        filename: '[name].[chunkhash:8].js',
         publicPath: __TEST__ ? './' : '/',
         libraryTarget: "umd",
         library: "fx-schema-form-antd"
