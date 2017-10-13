@@ -36,10 +36,10 @@ const globalOptions = {
                 const { isShow = true } = props.meta;
                 return (
                     <div>
-                        <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="add" ghost={true}
+                        <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true}
                             onClick={() => { props.addItem(); }}></Button>
                         <Button type={!isShow ? "dashed" : "primary"}
-                            shape="circle" icon={isShow ? "moreunfold" : "less"}
+                            shape="circle" icon={isShow ? "shrink" : "arrows-alt"}
                             onClick={() => { props.toggleItem(); }}></Button>
                     </div>
                 );
@@ -56,7 +56,7 @@ const globalOptions = {
                                 }}
                                 okText="Yes"
                                 cancelText="No">
-                                <Button ghost={true} type="danger" shape="circle" icon="delete1"></Button>
+                                <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
                             </Popconfirm>
                             <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup"
                                 onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
