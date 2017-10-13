@@ -7,13 +7,12 @@ import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
 
+let schema = ajv.getSchema("test").schema;
+let uiSchema: any = ["*"];
+
 let reducer = createForms.createOne("normal", {
 
-});
-
-let schema = ajv.getSchema("test").schema;
-
-let uiSchema: any = ["*"];
+}, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
     let { meta, data } = state.normal;

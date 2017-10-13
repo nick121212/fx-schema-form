@@ -6,13 +6,6 @@ import { createForms, SchemaForm, SchemaFormItemBaseProps } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
-
-let reducer = createForms.createOne("array", {
-    array1: [{
-        test: "array_test", children: [{ test: "array_item_test" }]
-    }]
-});
-
 let schema = {
     "$async": true,
     type: "object",
@@ -23,23 +16,13 @@ let schema = {
         }
     }
 };
-let schema1 = {
-    "$async": true,
-    "type": "object",
-    "properties": {
-        "userId": {
-            "type": "string",
-            "idExists": { "table": "users" }
-        },
-        "postId": {
-            "type": "string",
-            "idExists": { "table": "posts" }
-        }
-    }
-};
-
-
 let uiSchema: any = ["*"];
+
+let reducer = createForms.createOne("array", {
+    array1: [{
+        test: "array_test", children: [{ test: "array_item_test" }]
+    }]
+}, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
     let { meta, data } = state.array;

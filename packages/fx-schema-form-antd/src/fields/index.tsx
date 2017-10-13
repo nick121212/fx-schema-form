@@ -7,6 +7,7 @@ export default {
     boolean: NormalField,
     number: NormalField,
     integer: NormalField,
+    null: NormalField,
     object: ObjectField,
     array: ArrayField
 };

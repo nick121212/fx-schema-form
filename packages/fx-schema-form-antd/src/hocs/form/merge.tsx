@@ -60,7 +60,7 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
     ) as any)
     class Hoc extends React.Component<MergeHocProps, any> {
         public render(): JSX.Element {
-            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions } = this.props, mergeSchemaList;
+            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions, formData } = this.props, mergeSchemaList;
             let formDefaultData = {};
 
             if (!schemaKey) {
@@ -80,13 +80,14 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
             // 验证一次，设置默认值
-            schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
+            // schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
+            // schemaFormOptions.ajv.validate(schemaKey, formData);
+            // actions.updateData(formDefaultData);
 
             return (
                 <Component
                     schemaFormOptions={schemaFormOptions || {}}
                     schemaKey={schemaKey}
-                    formDefaultData={formDefaultData}
                     mergeSchemaList={mergeSchemaList}
                     {...this.props}>
                 </Component>

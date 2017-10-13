@@ -12,17 +12,17 @@ export class AntdInputNumberWidget extends React.Component<AntdInputNumberWidget
         const { mergeSchema } = this.props;
         const props: InputNumberProps = {};
 
-        if (this.props.formItemData !== undefined) {
-            props.value = this.props.formItemData;
+        if (typeof this.props.formItemData !== "number") {
+            // props.value = NaN;
         } else {
-            // props.value = undefined;
+            props.value = this.props.formItemData;
         }
 
         return props;
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, schemaFormOptions, schemaKey, validate } = this.props;
+        const { mergeSchema, globalOptions, uiSchemaOptions, validate, updateItemData } = this.props;
         const { input = {} } = uiSchemaOptions.widget || {};
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
@@ -30,7 +30,10 @@ export class AntdInputNumberWidget extends React.Component<AntdInputNumberWidget
 
         return (
             <InputNumber
-                onChange={validate.bind(this)}
+                onChange={(val: number) => {
+                    updateItemData(val);
+                    validate(val);
+                }}
                 style={{ width: "100%" }}
                 disabled={readonly}
                 placeholder={mergeSchema.title}

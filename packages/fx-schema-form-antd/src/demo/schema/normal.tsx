@@ -8,7 +8,6 @@ export const schema = {
         number: { type: "number", "title": "测试number类型" },
         integer: { type: "integer", "title": "测试integer类型" },
         boolean: { type: "boolean", "title": "测试boolean类型", default: true },
-        array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
         object: {
             type: "object",
             title: "测试对象的生成",
@@ -21,6 +20,7 @@ export const schema = {
                 }
             }
         },
+        array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
         array1: {
             "$async": true,
             type: "array",
@@ -41,8 +41,11 @@ export const schema = {
                 }
             }
         },
-        null: { type: "null", "title": "测试null类型" },
-        muti: { type: ["string", "integer", "number"], "title": "测试多类型" },
+        null: { type: "null", "title": "测试null类型", default: null },
+        muti: {
+            type: ["string", "integer", "number"], "title": "测试多类型",
+            "description": "这个字段可以有【stirng，number，integer】三个类型，这里可以自定义一个组件，来处理多类型的字段(eg: 下拉选择类型，来生成不同的输入组件)"
+        },
         geo: {
             type: "object",
             title: "geo position",

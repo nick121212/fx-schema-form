@@ -18,6 +18,7 @@ export interface Actions {
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     updateMetaState: SimpleActionCreator<any>;
     updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
+    updateData: SimpleActionCreator<{ data: any }>;
 }
 
 export class FormReducer<T> {
@@ -49,6 +50,10 @@ export class FormReducer<T> {
      * 更改meta的状态
      */
     private updateMetaState: SimpleActionCreator<{ data: any }> = createAction("更改meta的状态");
+    /**
+     * 更改meta的状态
+     */
+    private updateData: SimpleActionCreator<{ data: any }> = createAction("更改data的值");
 
     constructor(private initialState: any) { }
 
@@ -63,7 +68,8 @@ export class FormReducer<T> {
             addItem: this.addItem,
             switchItem: this.switchItem,
             updateMetaState: this.updateMetaState,
-            updateItemMeta: this.updateItemMeta
+            updateItemMeta: this.updateItemMeta,
+            updateData: this.updateData
         };
     }
 
@@ -79,7 +85,17 @@ export class FormReducer<T> {
             [this.switchItem as any]: this.switchItemHandle.bind(this),
             [this.updateMetaState as any]: this.updateMetaStateHandle.bind(this),
             [this.updateItemMeta as any]: this.updateMetaHandle.bind(this),
+            [this.updateData as any]: this.updateDataHandle.bind(this),
         }, this.initialState);
+    }
+
+    private updateDataHandle(state: SchemaFormState<any>, data: any) {
+        let { originData } = this.getOrigin(state);
+
+        jpp(state).set("/data", Object.assign({}, data, originData || {}));
+        // state.data = Object.assign({}, data, state.data || {});
+
+        return state;
     }
 
     /**

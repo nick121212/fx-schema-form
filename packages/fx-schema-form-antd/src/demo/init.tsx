@@ -30,6 +30,9 @@ const schemaFormOptions = {
 
 const globalOptions = {
     "ui:temp": ["formItem"],
+    "boolean": {
+        "widget": "switch"
+    },
     "hoc": {
         "array": {
             createItemButtons: (props: any) => {
@@ -78,7 +81,7 @@ const globalOptions = {
         },
         "wrapperCol": {
             "xs": { "span": 24 },
-            "sm": { "span": 19, push: 1 },
+            "sm": { "span": 19 },
         },
     },
     "row": {

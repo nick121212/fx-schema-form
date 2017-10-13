@@ -32,18 +32,37 @@ export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schem
             const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
             let FieldComponent, WidgetComponent;
 
+            if (typeof mergeSchema.type === "object") {
+                mergeSchema.type = mergeSchema.type[0];
+            }
+
+            let field = uiSchema.field || mergeSchema.type;
+
+            if (typeof field === "object") {
+                if (field.length) {
+                    field = field[0];
+                }
+            }
+
             if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
                 FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
             } else {
                 console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
-
                 return null;
+            }
+
+            let widget = uiSchema.widget || mergeSchema.type;
+
+            if (typeof widget === "object") {
+                if (widget.length) {
+                    widget = widget[0];
+                }
             }
 
             if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
                 WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
             } else {
-                console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`);
+                console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
             }
 
             return <Component {...this.props}

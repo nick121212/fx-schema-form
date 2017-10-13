@@ -1,10 +1,12 @@
+import ajv from "ajv";
 
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
 
 export class SchemaFormCreate {
-    public createOne<T>(key, data: T): FormReducer<T> {
+    public createOne<T>(key, data: T, curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
         let meta: MetaData = new MetaData();
+        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(console.error);
         let reducer = new FormReducer<T>({
             data: data,
             meta: meta
