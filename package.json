@@ -12,6 +12,7 @@
     "typescript",
     "json-schema",
     "jsonSchema",
+    "react-schema-form",
     "react",
     "schema-form",
     "form-generator",

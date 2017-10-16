@@ -60,7 +60,7 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
                             });
                         }
                         return <SchemaFormItem
-                            key={`${schemaKey}-${idx.toString()}`}
+                            key={`${schemaKey}-${idx.toString()}}`}
                             schemaKey={schemaKey}
                             arrayIndex={arrayIndex}
                             arrayItems={arrayItems}

@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
@@ -18,7 +18,7 @@ let schema = {
 };
 let uiSchema: any = ["object", "object/settings"];
 
-let reducer = createForms.createOne("object", {
+let reducer: FormReducer<any> = createForms.createOne("object", {
 }, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {

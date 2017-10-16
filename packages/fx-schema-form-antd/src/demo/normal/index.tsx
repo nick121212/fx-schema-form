@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
@@ -10,7 +10,7 @@ const Panel = Collapse.Panel;
 let schema = ajv.getSchema("test").schema;
 let uiSchema: any = ["*"];
 
-let reducer = createForms.createOne("normal", {
+let reducer: FormReducer<any> = createForms.createOne("normal", {
 
 }, ajv, schema);
 
@@ -43,6 +43,9 @@ export class NormalSchemaFormComponent extends React.Component<any> {
             <Collapse bordered={false} defaultActiveKey={["1", "4"]}>
                 <Panel header={"schema"} key="2">
                     {JSON.stringify(schema)}
+                </Panel>
+                <Panel header={"uiSchema"} key="5">
+                    {uiSchema ? JSON.stringify(uiSchema || {}) : {}}
                 </Panel>
                 <Panel header={"data"} key="3">
                     {this.props.data ? JSON.stringify(this.props.data) : {}}

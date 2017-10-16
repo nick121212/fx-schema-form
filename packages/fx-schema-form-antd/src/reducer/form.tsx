@@ -90,12 +90,14 @@ export class FormReducer<T> {
     }
 
     private updateDataHandle(state: SchemaFormState<any>, data: any) {
-        let { originData } = this.getOrigin(state);
+        // let { originData } = this.getOrigin(state);
 
-        jpp(state).set("/data", Object.assign({}, data, originData || {}));
+        // jpp(state).set("/data", Object.assign({}, data, originData || {}));
         // state.data = Object.assign({}, data, state.data || {});
 
-        return state;
+        // state.data = data;
+
+        return Object.assign({}, state, { data });
     }
 
     /**

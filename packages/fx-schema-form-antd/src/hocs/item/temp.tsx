@@ -14,6 +14,7 @@ const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps, any>(
             let metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
             let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
             let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+            // let mergeSchemaEqual = isEqual(nextProps.mergeSchema, this.props.mergeSchema);
             let rtn = !formItemDataEqual || !metaEqual;
 
             console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);

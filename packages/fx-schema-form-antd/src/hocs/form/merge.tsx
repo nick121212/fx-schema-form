@@ -17,7 +17,7 @@ export interface MergeHocOutProps {
     formDefaultData?: any;
 }
 
-interface MergeHocProps extends SchemaFormBaseProps {
+export interface MergeHocProps extends SchemaFormBaseProps {
     metaState: { isLoading: boolean; isValid: boolean; };
 }
 
@@ -79,10 +79,6 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
             schemaFormOptions.parentKeys = parentKeys || [];
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
-            // 验证一次，设置默认值
-            // schemaFormOptions.ajv.validate(schemaKey, formDefaultData);
-            // schemaFormOptions.ajv.validate(schemaKey, formData);
-            // actions.updateData(formDefaultData);
 
             return (
                 <Component

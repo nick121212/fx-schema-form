@@ -11,14 +11,16 @@ import {
 import "./index.less";
 
 import { ajv, schemaFormOptions } from "./init";
-import { reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
+import { settings as arraySettings, reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
 import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";
 import { reducer as objectReducer, ObjectSchemaFormComponent } from "./object";
 import { reducer as cushocReducer, CustomHocSchemaFormComponent } from "./custom.hoc";
 
 import { Menu, Icon } from "antd";
+import { FormExampleCompnent } from "./components/form.example";
 
 let store = createStore<any>(combineReducers({
+    "arraySetting": arraySettings.reducer,
     "array": arrayReducer.reducer,
     "normal": normalReducer.reducer,
     "object": objectReducer.reducer,

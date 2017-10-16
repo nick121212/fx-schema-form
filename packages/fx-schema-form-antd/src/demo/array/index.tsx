@@ -1,12 +1,18 @@
 import React from "react";
-import { Form, Button, Collapse } from "antd";
+import { Form, Button, Collapse, Row, Col } from "antd";
 import { connect } from "react-redux";
+import cloneDeep from "lodash.clonedeep";
+import ReactCodeMirror from "react-codemirror";
+import isEqual from "lodash.isequal";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
+import { FormExampleReducer } from "../reducer/schema";
+import { FormExampleCompnent } from "../components/form.example";
+import { Dispatch } from "redux";
 
 const Panel = Collapse.Panel;
-let schema = {
+let defaultSchema = {
     "$async": true,
     type: "object",
     required: [],
@@ -16,23 +22,36 @@ let schema = {
         }
     }
 };
-let uiSchema: any = ["*"];
 
-let reducer = createForms.createOne("array", {
+let settings = new FormExampleReducer({
+    schema: cloneDeep(defaultSchema),
+    uiSchema: ["*"]
+});
+let reducer: FormReducer<any> = createForms.createOne("array", {
     array1: [{
         test: "array_test", children: [{ test: "array_item_test" }]
     }]
-}, ajv, schema);
+}, ajv, defaultSchema);
+let nextKey = "array";
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
     let { meta, data } = state.array;
+    let { schema, uiSchema } = state.arraySetting;
 
     return {
         isValid: meta.data.isValid,
         isLoading: meta.data.isLoading,
         meta: meta,
-        data
+        data,
+        schema,
+        uiSchema
     };
+}, (dispatch: Dispatch<any>) => {
+    if (!settings.actions.updateData.assigned()) {
+        settings.actions.updateData.assignTo(dispatch);
+    }
+
+    return {};
 })
 export class ArraySchemaFormComponent extends React.Component<any> {
 
@@ -47,30 +66,69 @@ export class ArraySchemaFormComponent extends React.Component<any> {
         }
     }
 
+    public shouldComponentUpdate(nextProps, nextState) {
+        if (!isEqual(this.props.schema, nextProps.schema) || !isEqual(this.props.uiSchema, nextProps.uiSchema)) {
+            nextKey = "" + Date.now();
+            ajv.removeSchema("array");
+        }
+
+        return true;
+    }
+
+
     public render(): JSX.Element {
-        const { isLoading } = this.props;
+        const { isLoading, schema, uiSchema, data, meta } = this.props;
+        const options = {
+            lineNumbers: true,
+            mode: "javascript",
+            smartIndent: true,
+            indentUnit: 4,
+            indentWithTabs: true,
+            readOnly: true
+        };
 
         return (
-            <Collapse bordered={false} defaultActiveKey={["1", "4"]}>
-                <Panel header={"schema"} key="2">
-                    {JSON.stringify(schema)}
-                </Panel>
-                <Panel header={"data"} key="3">
-                    {this.props.data ? JSON.stringify(this.props.data) : {}}
-                </Panel>
-                <Panel header={"meta"} key="4">
-                    {this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}}
+            <Collapse bordered={false} defaultActiveKey={["1", "2"]}>
+                <Panel header={"meta 和 data"} key="2">
+                    <Row>
+                        <Col span={12}>
+                            <ReactCodeMirror
+                                key={Date.now()}
+                                value={this.props.meta ? JSON.stringify(this.props.meta.data || {}, null, 4) : ""} options={options} />
+                        </Col>
+                        <Col span={12}>
+                            <ReactCodeMirror
+                                key={Date.now()}
+                                value={data ? JSON.stringify(data || {}, null, 4) : ""} options={options} />
+                        </Col>
+                    </Row>
                 </Panel>
                 <Panel header={"生成的表单"} key="1">
-                    <SchemaForm schemaKey={"array"}
-                        schemaFormOptions={schemaFormOptions}
-                        schema={schema}
-                        RootComponent={Form} uiSchema={uiSchema}
-                        globalOptions={globalOptions}>
-                        <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
-                            <Button type="primary" loading={isLoading} onClick={this.doSubmit.bind(this)}>提交</Button>
-                        </Form.Item>
-                    </SchemaForm>
+                    <Row>
+                        <Col span={16}>
+                            <SchemaForm schemaKey={"array"}
+                                schemaFormOptions={{
+                                    ajv
+                                }}
+                                key={nextKey}
+                                schema={schema}
+                                uiSchema={uiSchema}
+                                RootComponent={Form}
+                                globalOptions={globalOptions}>
+                                <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
+                                    <Button type="primary" loading={isLoading} onClick={this.doSubmit.bind(this)}>提交</Button>
+                                </Form.Item>
+                            </SchemaForm>
+                        </Col>
+                        <Col span={8}>
+                            <FormExampleCompnent
+                                schema={JSON.stringify(schema, null, 4)}
+                                data={JSON.stringify(data, null, 4)}
+                                uiSchema={JSON.stringify(uiSchema, null, 4)}
+                                onChangeData={reducer.actions.updateData.bind(reducer)}
+                                onChange={settings.actions.updateData.bind(settings)} />
+                        </Col>
+                    </Row>
                 </Panel>
             </Collapse>
         );
@@ -78,5 +136,6 @@ export class ArraySchemaFormComponent extends React.Component<any> {
 }
 
 export {
-    reducer
+    reducer,
+    settings
 };

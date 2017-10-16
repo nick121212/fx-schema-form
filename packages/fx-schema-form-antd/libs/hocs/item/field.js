@@ -1,0 +1,51 @@
+import React from "react";
+/**
+ * 包装Field的组件HOC
+ * @param hocFactory  hoc的工厂方法
+ * @param Component 需要包装的组件
+ * 加入属性FieldComponent   schema对应的fieldcomponent
+ * 加入属性WidgetComponent  schema对应的widgetcomponent
+ */
+export const FieldHoc = (hocFactory, Component) => {
+    class Hoc extends React.Component {
+        shouldComponentUpdate() {
+            return false;
+        }
+        render() {
+            const { mergeSchema, currentTheme } = this.props;
+            const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
+            let FieldComponent, WidgetComponent;
+            if (typeof mergeSchema.type === "object") {
+                mergeSchema.type = mergeSchema.type[0];
+            }
+            let field = uiSchema.field || mergeSchema.type;
+            if (typeof field === "object") {
+                if (field.length) {
+                    field = field[0];
+                }
+            }
+            if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
+                FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
+            }
+            else {
+                console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
+                return null;
+            }
+            let widget = uiSchema.widget || mergeSchema.type;
+            if (typeof widget === "object") {
+                if (widget.length) {
+                    widget = widget[0];
+                }
+            }
+            if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
+                WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
+            }
+            else {
+                console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
+            }
+            return React.createElement(Component, Object.assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
+        }
+    }
+    return Hoc;
+};
+//# sourceMappingURL=field.js.map
