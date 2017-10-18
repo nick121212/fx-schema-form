@@ -1,9 +1,4 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+import * as tslib_1 from "tslib";
 import React from "react";
 import { schemaMerge } from "fx-schema-form-core";
 import { connect } from "react-redux";
@@ -14,17 +9,17 @@ import { mapActionsStateToProps } from "../select";
  * @param dispatch dispatch
  * @param ownProps 属性
  */
-const mapDispatchToProps = (dispatch, ownProps) => {
-    const { actions } = ownProps;
-    for (const key in actions) {
+var mapDispatchToProps = function (dispatch, ownProps) {
+    var actions = ownProps.actions;
+    for (var key in actions) {
         if (actions.hasOwnProperty(key)) {
-            const element = actions[key];
+            var element = actions[key];
             if (!element.assigned(dispatch)) {
                 element.assignTo(dispatch);
             }
         }
     }
-    return { actions };
+    return { actions: actions };
 };
 /**
  * merge参数中的schema和uiSchema，生成新的对象mergeSchemaList，传入组件的props中
@@ -35,11 +30,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
  * schemaKey          生成的schemaKey
  * mergeSchemaList    合并之后的数据
  */
-export const MergeHoc = (hocFactory, Component) => {
-    let Hoc = class Hoc extends React.Component {
-        render() {
-            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions, formData } = this.props, mergeSchemaList;
-            let formDefaultData = {};
+export var MergeHoc = function (hocFactory, Component) {
+    var Hoc = /** @class */ (function (_super) {
+        tslib_1.__extends(Hoc, _super);
+        function Hoc() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Hoc.prototype.render = function () {
+            var _a = this.props, schema = _a.schema, uiSchema = _a.uiSchema, parentKeys = _a.parentKeys, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey, actions = _a.actions, formData = _a.formData, mergeSchemaList;
+            var formDefaultData = {};
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
             }
@@ -56,12 +55,13 @@ export const MergeHoc = (hocFactory, Component) => {
             schemaFormOptions.parentKeys = parentKeys || [];
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
-            return (React.createElement(Component, Object.assign({ schemaFormOptions: schemaFormOptions || {}, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList }, this.props)));
-        }
-    };
-    Hoc = __decorate([
-        compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), onlyUpdateForKeys(["schema", "uiSchema", "metaState"]))
-    ], Hoc);
+            return (React.createElement(Component, tslib_1.__assign({ schemaFormOptions: schemaFormOptions || {}, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList }, this.props)));
+        };
+        Hoc = tslib_1.__decorate([
+            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), onlyUpdateForKeys(["schema", "uiSchema", "metaState"]))
+        ], Hoc);
+        return Hoc;
+    }(React.Component));
     return Hoc;
 };
 //# sourceMappingURL=merge.js.map

@@ -1,6 +1,6 @@
 import { compose } from "recompose";
 import { hocFactory } from "../../hocs";
-export const hoc = compose(
+export var hoc = compose(
 // connect((state: any, props: SchemaFormBaseProps) => {
 //     let { meta, data } = state[props.schemaKey];
 //     return {

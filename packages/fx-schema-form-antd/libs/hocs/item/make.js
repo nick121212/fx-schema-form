@@ -1,3 +1,4 @@
+import * as tslib_1 from "tslib";
 import React from "react";
 import { compose } from "recompose";
 /**
@@ -8,34 +9,37 @@ import { compose } from "recompose";
  *  2. 加入属性WidgetComponent  schema对应的widgetcomponent
  *  3. HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
  */
-export const MakeHoc = (hocFactory, Component) => {
-    class Hoc extends React.Component {
-        constructor() {
-            super(...arguments);
-            this.fieldKey = "ui:item.hoc";
+export var MakeHoc = function (hocFactory, Component) {
+    var Hoc = /** @class */ (function (_super) {
+        tslib_1.__extends(Hoc, _super);
+        function Hoc() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.fieldKey = "ui:item.hoc";
+            return _this;
         }
-        shouldComponentUpdate() {
+        Hoc.prototype.shouldComponentUpdate = function () {
             return false;
-        }
-        render() {
-            const { mergeSchema, globalOptions } = this.props;
-            const { uiSchema = { options: {} }, keys, type } = mergeSchema;
-            const typeDefaultOptions = globalOptions[type] || {};
-            const hocs = uiSchema[this.fieldKey] ||
+        };
+        Hoc.prototype.render = function () {
+            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
+            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
+            var typeDefaultOptions = globalOptions[type] || {};
+            var hocs = uiSchema[this.fieldKey] ||
                 typeDefaultOptions[this.fieldKey] ||
                 globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
-            let ComponentWithHocs = compose(...hocs.map(hoc => hocFactory.get(hoc)))(Component);
+            var ComponentWithHocs = compose.apply(void 0, hocs.map(function (hoc) { return hocFactory.get(hoc); }))(Component);
             // console.log("make render");
-            return React.createElement(ComponentWithHocs, Object.assign({ getHocOptions: this.getHocOptions.bind(this) }, this.props));
-        }
-        getHocOptions() {
-            const { mergeSchema, globalOptions } = this.props;
-            const { uiSchema } = mergeSchema;
-            const uiSchemaOptions = uiSchema.options || {};
-            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+            return React.createElement(ComponentWithHocs, tslib_1.__assign({ getHocOptions: this.getHocOptions.bind(this) }, this.props));
+        };
+        Hoc.prototype.getHocOptions = function () {
+            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
+            var uiSchema = mergeSchema.uiSchema;
+            var uiSchemaOptions = uiSchema.options || {};
+            var hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
             return hocOptions;
-        }
-    }
+        };
+        return Hoc;
+    }(React.Component));
     return Hoc;
 };
 //# sourceMappingURL=make.js.map

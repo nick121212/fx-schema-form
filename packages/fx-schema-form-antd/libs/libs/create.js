@@ -1,23 +1,26 @@
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
-export class SchemaFormCreate {
-    createOne(key, data, curJjv, schema) {
-        let meta = new MetaData();
-        let defaultValue = curJjv.validate(schema, data).catch(console.error);
-        let reducer = new FormReducer({
+var SchemaFormCreate = /** @class */ (function () {
+    function SchemaFormCreate() {
+    }
+    SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema) {
+        var meta = new MetaData();
+        var defaultValue = curJjv.validate(schema, data).catch(console.error);
+        var reducer = new FormReducer({
             data: data,
             meta: meta
         });
         meta.actions = reducer.actions;
         return reducer;
-    }
-    createMuti(forms = {}) {
-        let reducers = {};
-        for (let key in forms) {
+    };
+    SchemaFormCreate.prototype.createMuti = function (forms) {
+        if (forms === void 0) { forms = {}; }
+        var reducers = {};
+        for (var key in forms) {
             if (forms.hasOwnProperty(key)) {
-                let element = forms[key];
-                let meta = new MetaData();
-                let reducer = new FormReducer({
+                var element = forms[key];
+                var meta = new MetaData();
+                var reducer = new FormReducer({
                     data: element,
                     meta: meta
                 });
@@ -28,7 +31,9 @@ export class SchemaFormCreate {
             }
         }
         return reducers;
-    }
-}
+    };
+    return SchemaFormCreate;
+}());
+export { SchemaFormCreate };
 export default new SchemaFormCreate();
 //# sourceMappingURL=create.js.map

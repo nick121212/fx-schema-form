@@ -1,3 +1,4 @@
+import * as tslib_1 from "tslib";
 import React from "react";
 import jpp from "json-pointer";
 /**
@@ -8,28 +9,31 @@ import jpp from "json-pointer";
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export const ConditionHoc = (hocFactory, Component) => {
-    class Hoc extends React.Component {
-        constructor() {
-            super(...arguments);
-            this.fieldKey = "ui:condition";
+export var ConditionHoc = function (hocFactory, Component) {
+    var Hoc = /** @class */ (function (_super) {
+        tslib_1.__extends(Hoc, _super);
+        function Hoc() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.fieldKey = "ui:condition";
+            return _this;
         }
         /**
          * render
          */
-        render() {
-            const { getHocOptions, formData, formDefaultData } = this.props;
-            const hocOptions = getHocOptions();
-            const { condition: conditionHocOptions } = hocOptions;
-            const { fields } = conditionHocOptions;
-            let isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
+        Hoc.prototype.render = function () {
+            var _a = this.props, getHocOptions = _a.getHocOptions, formData = _a.formData, formDefaultData = _a.formDefaultData;
+            var hocOptions = getHocOptions();
+            var conditionHocOptions = hocOptions.condition;
+            var fields = conditionHocOptions.fields;
+            var isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
             if (fields && fields.length) {
-                isShow = fields.reduce((prev, { key, val }) => {
+                isShow = fields.reduce(function (prev, _a) {
+                    var key = _a.key, val = _a.val;
                     if (!jFormData.has(key)) {
                         return prev && false;
                     }
                     else {
-                        let data = jFormData.get(key);
+                        var data = jFormData.get(key);
                         return prev && (data === val);
                     }
                 }, isShow);
@@ -37,9 +41,10 @@ export const ConditionHoc = (hocFactory, Component) => {
             if (!isShow) {
                 return null;
             }
-            return React.createElement(Component, Object.assign({}, this.props));
-        }
-    }
+            return React.createElement(Component, tslib_1.__assign({}, this.props));
+        };
+        return Hoc;
+    }(React.Component));
     return Hoc;
 };
 //# sourceMappingURL=condition.js.map

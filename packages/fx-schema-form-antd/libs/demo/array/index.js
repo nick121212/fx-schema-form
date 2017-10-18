@@ -1,17 +1,4 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+import * as tslib_1 from "tslib";
 import React from "react";
 import { Form, Button, Collapse, Row, Col } from "antd";
 import { connect } from "react-redux";
@@ -22,8 +9,8 @@ import { createForms, SchemaForm } from "../../index";
 import { ajv, globalOptions } from "../init";
 import { FormExampleReducer } from "../reducer/schema";
 import { FormExampleCompnent } from "../components/form.example";
-const Panel = Collapse.Panel;
-let defaultSchema = {
+var Panel = Collapse.Panel;
+var defaultSchema = {
     "$async": true,
     type: "object",
     required: [],
@@ -33,39 +20,54 @@ let defaultSchema = {
         }
     }
 };
-let settings = new FormExampleReducer({
+var settings = new FormExampleReducer({
     schema: cloneDeep(defaultSchema),
     uiSchema: ["*"]
 });
-let reducer = createForms.createOne("array", {
+var reducer = createForms.createOne("array", {
     array1: [{
             test: "array_test", children: [{ test: "array_item_test" }]
         }]
 }, ajv, defaultSchema);
-let nextKey = "array";
-let ArraySchemaFormComponent = class ArraySchemaFormComponent extends React.Component {
-    doSubmit() {
-        return __awaiter(this, void 0, void 0, function* () {
-            reducer.actions.updateMetaState({ isLoading: true, isValid: false });
-            reducer.actions.updateMetaState({
-                isLoading: false,
-                meta: yield this.props.meta.validateAll(this.props.data)
-            });
-            if (this.props.isValid) {
-                alert("提交表单");
-            }
-        });
+var nextKey = "array";
+var ArraySchemaFormComponent = /** @class */ (function (_super) {
+    tslib_1.__extends(ArraySchemaFormComponent, _super);
+    function ArraySchemaFormComponent() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    shouldComponentUpdate(nextProps, nextState) {
+    ArraySchemaFormComponent.prototype.doSubmit = function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return tslib_1.__generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        reducer.actions.updateMetaState({ isLoading: true, isValid: false });
+                        _b = (_a = reducer.actions).updateMetaState;
+                        _c = {
+                            isLoading: false
+                        };
+                        return [4 /*yield*/, this.props.meta.validateAll(this.props.data)];
+                    case 1:
+                        _b.apply(_a, [(_c.meta = _d.sent(),
+                                _c)]);
+                        if (this.props.isValid) {
+                            alert("提交表单");
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ArraySchemaFormComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
         if (!isEqual(this.props.schema, nextProps.schema) || !isEqual(this.props.uiSchema, nextProps.uiSchema)) {
             nextKey = "" + Date.now();
             ajv.removeSchema("array");
         }
         return true;
-    }
-    render() {
-        const { isLoading, schema, uiSchema, data, meta } = this.props;
-        const options = {
+    };
+    ArraySchemaFormComponent.prototype.render = function () {
+        var _a = this.props, isLoading = _a.isLoading, schema = _a.schema, uiSchema = _a.uiSchema, data = _a.data, meta = _a.meta;
+        var options = {
             lineNumbers: true,
             mode: "javascript",
             smartIndent: true,
@@ -84,33 +86,34 @@ let ArraySchemaFormComponent = class ArraySchemaFormComponent extends React.Comp
                 React.createElement(Row, null,
                     React.createElement(Col, { span: 16 },
                         React.createElement(SchemaForm, { schemaKey: "array", schemaFormOptions: {
-                                ajv
+                                ajv: ajv
                             }, key: nextKey, schema: schema, uiSchema: uiSchema, RootComponent: Form, globalOptions: globalOptions },
                             React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                                 React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4")))),
                     React.createElement(Col, { span: 8 },
                         React.createElement(FormExampleCompnent, { schema: JSON.stringify(schema, null, 4), data: JSON.stringify(data, null, 4), uiSchema: JSON.stringify(uiSchema, null, 4), onChangeData: reducer.actions.updateData.bind(reducer), onChange: settings.actions.updateData.bind(settings) }))))));
-    }
-};
-ArraySchemaFormComponent = __decorate([
-    connect((state, props) => {
-        let { meta, data } = state.array;
-        let { schema, uiSchema } = state.arraySetting;
-        return {
-            isValid: meta.data.isValid,
-            isLoading: meta.data.isLoading,
-            meta: meta,
-            data,
-            schema,
-            uiSchema
-        };
-    }, (dispatch) => {
-        if (!settings.actions.updateData.assigned()) {
-            settings.actions.updateData.assignTo(dispatch);
-        }
-        return {};
-    })
-], ArraySchemaFormComponent);
+    };
+    ArraySchemaFormComponent = tslib_1.__decorate([
+        connect(function (state, props) {
+            var _a = state.array, meta = _a.meta, data = _a.data;
+            var _b = state.arraySetting, schema = _b.schema, uiSchema = _b.uiSchema;
+            return {
+                isValid: meta.data.isValid,
+                isLoading: meta.data.isLoading,
+                meta: meta,
+                data: data,
+                schema: schema,
+                uiSchema: uiSchema
+            };
+        }, function (dispatch) {
+            if (!settings.actions.updateData.assigned()) {
+                settings.actions.updateData.assignTo(dispatch);
+            }
+            return {};
+        })
+    ], ArraySchemaFormComponent);
+    return ArraySchemaFormComponent;
+}(React.Component));
 export { ArraySchemaFormComponent };
 export { reducer, settings };
 //# sourceMappingURL=index.js.map

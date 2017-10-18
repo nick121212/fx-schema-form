@@ -1,4 +1,4 @@
-import { schemaMerge } from "./index";
+import { schemaMerge } from "../index";
 
 const schema = {
     type: "object",

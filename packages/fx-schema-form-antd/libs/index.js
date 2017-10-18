@@ -6,10 +6,10 @@ export { default as createForms } from "./libs/create";
 export { hocFactory } from "./hocs";
 import jpp from "json-pointer";
 jpp.set = function set(obj, pointer, value) {
-    let refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer), nextTok = refTokens[0];
+    var refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer), nextTok = refTokens[0];
     // console.log("oeifjlkdajlfjld");
-    for (let i = 0; i < refTokens.length - 1; ++i) {
-        let tok = refTokens[i];
+    for (var i = 0; i < refTokens.length - 1; ++i) {
+        var tok = refTokens[i];
         if (tok === "-" && Array.isArray(obj)) {
             tok = obj.length;
         }

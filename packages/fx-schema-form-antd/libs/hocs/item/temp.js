@@ -1,20 +1,15 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
+import * as tslib_1 from "tslib";
 import React from "react";
 import { compose, lifecycle } from "recompose";
 import pick from "recompose/utils/pick";
 import isEqual from "lodash.isequal";
-const metaConnect = compose(lifecycle({
+var metaConnect = compose(lifecycle({
     shouldComponentUpdate: function (nextProps) {
-        let metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
-        let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
-        let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+        var metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
+        var formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
+        var metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
         // let mergeSchemaEqual = isEqual(nextProps.mergeSchema, this.props.mergeSchema);
-        let rtn = !formItemDataEqual || !metaEqual;
+        var rtn = !formItemDataEqual || !metaEqual;
         console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
         console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
         console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
@@ -28,38 +23,38 @@ const metaConnect = compose(lifecycle({
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export const TempHoc = (hocFactory, Component) => {
+export var TempHoc = function (hocFactory, Component) {
     /**
     * 获取模板的components
     * @param uiSchema 合并后的数据
     */
-    let Hoc = class Hoc extends React.Component {
+    var Hoc = /** @class */ (function (_super) {
+        tslib_1.__extends(Hoc, _super);
+        function Hoc() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.tempField = "ui:temp";
+            return _this;
+        }
+        Hoc.prototype.render = function () {
+            var _this = this;
+            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
+            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
+            var TempComponents = this.getTemplates();
+            var uiSchemaOptions = uiSchema.options || {};
+            var index = 0;
+            return TempComponents.reduce(function (prev, _a) {
+                var key = _a.key, Temp = _a.Temp;
+                return React.createElement(Temp, tslib_1.__assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, _this.props), prev);
+            }, React.createElement(Component, tslib_1.__assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
+        };
         /**
         * 获取模板的components
-        * @param uiSchema 合并后的数据
         */
-        constructor() {
-            super(...arguments);
-            this.tempField = "ui:temp";
-        }
-        render() {
-            const { mergeSchema, globalOptions } = this.props;
-            const { uiSchema = { options: {} }, keys } = mergeSchema;
-            const TempComponents = this.getTemplates();
-            const uiSchemaOptions = uiSchema.options || {};
-            let index = 0;
-            return TempComponents.reduce((prev, { key, Temp }) => {
-                return React.createElement(Temp, Object.assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, this.props), prev);
-            }, React.createElement(Component, Object.assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
-        }
-        /**
-        * 获取模板的components
-        */
-        getTemplates() {
-            const { mergeSchema, globalOptions, currentTheme } = this.props;
-            const { uiSchema = { options: {} }, keys, type } = mergeSchema;
-            const typeDefaultOptions = globalOptions[type] || {};
-            const template = uiSchema[this.tempField] ||
+        Hoc.prototype.getTemplates = function () {
+            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
+            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
+            var typeDefaultOptions = globalOptions[type] || {};
+            var template = uiSchema[this.tempField] ||
                 typeDefaultOptions[this.tempField] ||
                 globalOptions[this.tempField] || "default", TempComponent = [];
             // 获取模板的数据，单个模板
@@ -71,9 +66,9 @@ export const TempHoc = (hocFactory, Component) => {
             }
             else {
                 // 多个模板
-                [].concat(template).reverse().forEach((tml, idx) => {
+                [].concat(template).reverse().forEach(function (tml, idx) {
                     if (!currentTheme.tempFactory.has(tml || "default")) {
-                        console.error(`不存在${tml}的temp！`);
+                        console.error("\u4E0D\u5B58\u5728" + tml + "\u7684temp\uFF01");
                     }
                     else {
                         TempComponent.push({
@@ -84,11 +79,12 @@ export const TempHoc = (hocFactory, Component) => {
                 });
             }
             return TempComponent;
-        }
-    };
-    Hoc = __decorate([
-        metaConnect
-    ], Hoc);
+        };
+        Hoc = tslib_1.__decorate([
+            metaConnect
+        ], Hoc);
+        return Hoc;
+    }(React.Component));
     return Hoc;
 };
 //# sourceMappingURL=temp.js.map

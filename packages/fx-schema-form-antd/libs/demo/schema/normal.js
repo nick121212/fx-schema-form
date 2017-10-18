@@ -1,4 +1,4 @@
-export const schema = {
+export var schema = {
     "$async": true,
     type: "object",
     title: "测试SCHEMA",

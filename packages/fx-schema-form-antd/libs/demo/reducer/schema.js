@@ -1,29 +1,38 @@
 import { createAction, createReducer } from "redux-act";
-export class FormExampleReducer {
-    constructor(initialState) {
+var FormExampleReducer = /** @class */ (function () {
+    function FormExampleReducer(initialState) {
         this.initialState = initialState;
         /**
          * 更改meta的状态
          */
         this.updateData = createAction("更改data的值");
     }
-    /**
-     * 获取当前的actions
-     */
-    get actions() {
-        return {
-            updateData: this.updateData
-        };
-    }
-    /**
-     * 返回当前的reducer
-     */
-    get reducer() {
-        return createReducer({
-            [this.updateData]: this.updateDataHandle.bind(this),
-        }, this.initialState);
-    }
-    updateDataHandle(state, data) {
+    Object.defineProperty(FormExampleReducer.prototype, "actions", {
+        /**
+         * 获取当前的actions
+         */
+        get: function () {
+            return {
+                updateData: this.updateData
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FormExampleReducer.prototype, "reducer", {
+        /**
+         * 返回当前的reducer
+         */
+        get: function () {
+            return createReducer((_a = {},
+                _a[this.updateData] = this.updateDataHandle.bind(this),
+                _a), this.initialState);
+            var _a;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FormExampleReducer.prototype.updateDataHandle = function (state, data) {
         if (!data.schema) {
             data.schema = state.schema;
         }
@@ -31,6 +40,8 @@ export class FormExampleReducer {
             data.uiSchema = state.uiSchema;
         }
         return Object.assign({}, state, { schema: data.schema, uiSchema: data.uiSchema });
-    }
-}
+    };
+    return FormExampleReducer;
+}());
+export { FormExampleReducer };
 //# sourceMappingURL=schema.js.map

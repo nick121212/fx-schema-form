@@ -5,8 +5,8 @@ import { createSelector } from "reselect";
  * @param state state
  * @param props 属性
  */
-export const getAllData = (state, props) => {
-    let { data = {} } = state[props.schemaKey];
+export var getAllData = function (state, props) {
+    var _a = state[props.schemaKey].data, data = _a === void 0 ? {} : _a;
     return data;
 };
 /**
@@ -14,10 +14,10 @@ export const getAllData = (state, props) => {
  * @param state 全局state
  * @param props 当前component的props
  */
-export const getData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    let { data = {} } = state[props.schemaKey];
+export var getData = function (state, props) {
+    var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
+    var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
+    var _b = state[props.schemaKey].data, data = _b === void 0 ? {} : _b;
     return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
 };
 /**
@@ -25,10 +25,10 @@ export const getData = (state, props) => {
  * @param state 全局state
  * @param props 当前component的props
  */
-export const getMetaData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    const { meta } = state[props.schemaKey];
+export var getMetaData = function (state, props) {
+    var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
+    var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
+    var meta = state[props.schemaKey].meta;
     return meta.getMeta(keys, mergeSchema.type !== "array");
 };
 /**
@@ -36,9 +36,9 @@ export const getMetaData = (state, props) => {
  * @param state 全局state
  * @param props 当前component的props
  */
-export const getActions = (state, props) => {
-    const { schemaKey } = props;
-    const { data = {}, meta = { actions: {} } } = state[schemaKey];
+export var getActions = function (state, props) {
+    var schemaKey = props.schemaKey;
+    var _a = state[schemaKey], _b = _a.data, data = _b === void 0 ? {} : _b, _c = _a.meta, meta = _c === void 0 ? { actions: {} } : _c;
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
         meta.init(props.schemaFormOptions.ajv, props.schemaKey);
     }
@@ -50,13 +50,13 @@ export const getActions = (state, props) => {
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
-export const mapMetaStateToProps = createSelector([getMetaData, getData, getAllData], (meta, formItemData, formData) => {
-    return { meta, formData, formItemData };
+export var mapMetaStateToProps = createSelector([getMetaData, getData, getAllData], function (meta, formItemData, formData) {
+    return { meta: meta, formData: formData, formItemData: formItemData };
 });
 /**
  * 返回actions
  */
-export const mapActionsStateToProps = createSelector([getActions], (actions) => {
-    return { actions };
+export var mapActionsStateToProps = createSelector([getActions], function (actions) {
+    return { actions: actions };
 });
 //# sourceMappingURL=select.js.map

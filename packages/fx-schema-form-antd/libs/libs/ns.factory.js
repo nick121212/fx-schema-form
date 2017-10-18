@@ -1,8 +1,12 @@
+import * as tslib_1 from "tslib";
 import { BaseFactory } from "fx-schema-form-core";
-export class SchemaFormNsFactory extends BaseFactory {
-    constructor() {
-        super();
+var SchemaFormNsFactory = /** @class */ (function (_super) {
+    tslib_1.__extends(SchemaFormNsFactory, _super);
+    function SchemaFormNsFactory() {
+        return _super.call(this) || this;
     }
-}
-export const nsFactory = new SchemaFormNsFactory();
+    return SchemaFormNsFactory;
+}(BaseFactory));
+export { SchemaFormNsFactory };
+export var nsFactory = new SchemaFormNsFactory();
 //# sourceMappingURL=ns.factory.js.map

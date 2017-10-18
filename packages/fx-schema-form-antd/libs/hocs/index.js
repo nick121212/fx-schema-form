@@ -6,8 +6,8 @@ import { ThemeHoc } from "./item/theme";
 import { ValidateHoc } from "./item/validate";
 import { ArrayHoc } from "./item/array";
 import { MakeHoc } from "./item/make";
-const hocFactory = new BaseFactory();
-const hocs = {
+var hocFactory = new BaseFactory();
+var hocs = {
     merge: MergeHoc.bind(MergeHoc, hocFactory),
     temp: TempHoc.bind(TempHoc, hocFactory),
     field: FieldHoc.bind(FieldHoc, hocFactory),
@@ -16,9 +16,9 @@ const hocs = {
     array: ArrayHoc.bind(ArrayHoc, hocFactory),
     make: MakeHoc.bind(MakeHoc, hocFactory),
 };
-for (let key in hocs) {
+for (var key in hocs) {
     if (hocs.hasOwnProperty(key)) {
-        let hoc = hocs[key];
+        var hoc = hocs[key];
         hocFactory.add(key, hoc);
         hocFactory.lock(key);
     }

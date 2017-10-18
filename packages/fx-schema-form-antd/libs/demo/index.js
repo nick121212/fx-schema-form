@@ -9,14 +9,14 @@ import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";
 import { reducer as objectReducer, ObjectSchemaFormComponent } from "./object";
 import { reducer as cushocReducer, CustomHocSchemaFormComponent } from "./custom.hoc";
 import { Menu, Icon } from "antd";
-let store = createStore(combineReducers({
+var store = createStore(combineReducers({
     "arraySetting": arraySettings.reducer,
     "array": arrayReducer.reducer,
     "normal": normalReducer.reducer,
     "object": objectReducer.reducer,
     "custom.hoc": cushocReducer.reducer
 }));
-store.subscribe(() => {
+store.subscribe(function () {
     console.log(store.getState());
 });
 ReactDom.render(React.createElement(Provider, { store: store },

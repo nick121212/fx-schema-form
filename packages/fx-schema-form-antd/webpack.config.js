@@ -4,21 +4,24 @@ const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const { CheckerPlugin } = require('awesome-typescript-loader')
 
 const env = process.env.NODE_ENV || "dev";
 
 const __DEV__ = env.toUpperCase() == "DEV" || env.toUpperCase() == "DEVELOPMENT";
 const __TEST__ = env.toUpperCase() == "UAT";
-const __PROD__ = env.toUpperCase() == "production";
+const __PROD__ = env.toUpperCase() == "PRODUCTION";
 const __STAG__ = env.toUpperCase() == "STG";
 
 module.exports = {
-    entry: {
+    entry: __PROD__ ? {
         index: ['./src/index.tsx'],
-        demo: ['./src/demo/index.tsx']
-    },
+        // vender: ["antd", "react", "react-dom", "recompose", "fx-schema-form-core", "reselect", "ajv", "react-redux", "reudx", "redux-act", "lodash.clonedeep", "lodash.isequal", "uuid", "json-pointer"],
+    } : {
+            demo: ['./src/demo/index.tsx']
+        },
     // devServer: {
-    //     historyApiFallback: true,
+    //     historyApiFallback,
     //     hot: true,
     //     // inline: true,
     //     // contentBase: './out',
@@ -33,13 +36,14 @@ module.exports = {
     //         }
     //     }
     // },
-
     output: {
         path: path.resolve('./out'),
-        filename: '[name].[chunkhash:8].js',
+        filename: '[name].js',
         publicPath: __TEST__ ? './' : '/',
         libraryTarget: "umd",
-        library: "fx-schema-form-antd"
+        umdNamedDefine: true,
+        library: "fx-schema-form-antd",
+        chunkFilename: '[id].[chunkhash].bundle.js'
     },
     devtool: !(__PROD__ || __STAG__) ? "cheap-module-eval-source-map" : "cheap-module-source-map",
     module: {
@@ -67,7 +71,7 @@ module.exports = {
         }, {
             test: /\.ts(x?)$/,
             exclude: /node_modules/,
-            loader: 'babel-loader!awesome-typescript-loader',
+            loader: 'awesome-typescript-loader',
         }, {
             test: /\.js$/,
             loader: 'babel-loader',
@@ -79,22 +83,14 @@ module.exports = {
             test: /\.(jpg|png)/,
             loader: 'file-loader',
         }, {
-            test: /\.svg$/,
-            loader: 'file-loader',
-        }, {
             test: /icons\/.*\.svg$/,
             loader: 'raw-loader!svgo-loader?{"plugins":[{"removeStyleElement":true}]}',
-        }, {
-            test: /\.md/,
-            loader: 'raw-loader',
-        }, {
-            test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-            loader: 'url-loader',
-            query: {
-                limit: 10000,
-                name: './build/fonts/[name].[hash:7].[ext]'
-            }
-        }],
+        }, { test: /\.md/, loader: 'raw-loader' },
+        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml' },
+        { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/font-woff" },
+        { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/font-woff" },
+        { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/octet-stream" },
+        { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader" }],
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -106,6 +102,7 @@ module.exports = {
                 "__STAG__": __STAG__
             },
         }),
+        new CheckerPlugin(),
         !(__PROD__ || __STAG__) ? new HtmlWebpackPlugin({
             // favicon: 'static/favicon.png',
             template: 'test.html',
@@ -117,12 +114,18 @@ module.exports = {
                 dry: false
             }
         ),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'commons',
+        //     chunks: ["vender"],
+        //     filename: '[name].bundle.js',
+        //     minChunks: 4,
+        // }),
         new webpack.optimize.OccurrenceOrderPlugin(),
         // new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             comments: false,
             compress: {
-                unused: true,
+                unused: false,
                 dead_code: true,
                 warnings: false,
             }
@@ -139,10 +142,22 @@ module.exports = {
         new ExtractTextPlugin("styles/[name].[contenthash:6].css")
     ],
     resolve: {
-        extensions: ['.js', '.ts', '.tsx']
+        extensions: ['.js', '.ts', '.less', '.tsx']
     },
-    externals: !(__PROD__ || __STAG__) ? {} : {
+    externals: !(__PROD__) ? [{}] : [{
         "react": true,
-        "recompose": true
-    }
+        "react-dom": true,
+        "recompose": true,
+        "antd": true,
+        "fx-schema-form-core": true,
+        "reselect": true,
+        "ajv": true,
+        "react-redux": true,
+        "reudx": true,
+        "redux-act": true,
+        "lodash.clonedeep": true,
+        "lodash.isequal": true,
+        "uuid": true,
+        "json-pointer": true
+    }]
 }
