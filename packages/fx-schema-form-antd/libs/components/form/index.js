@@ -16,7 +16,7 @@ var SchemaFormComponent = /** @class */ (function (_super) {
      * render
      */
     SchemaFormComponent.prototype.render = function () {
-        var _a = this.props, children = _a.children, mergeSchemaList = _a.mergeSchemaList, schemaKey = _a.schemaKey, arrayItems = _a.arrayItems, arrayIndex = _a.arrayIndex, globalOptions = _a.globalOptions, RootComponent = _a.RootComponent, schemaFormOptions = _a.schemaFormOptions, formDefaultData = _a.formDefaultData;
+        var _a = this.props, children = _a.children, mergeSchemaList = _a.mergeSchemaList, schemaKey = _a.schemaKey, arrayItems = _a.arrayItems, arrayIndex = _a.arrayIndex, globalOptions = _a.globalOptions, RootComponent = _a.RootComponent, schemaFormOptions = _a.schemaFormOptions, formDefaultData = _a.formDefaultData, getCurrentState = _a.getCurrentState;
         var RootComponentHock = RootComponent;
         // 计算顶部容器，如果有RootComponent，则使用，否则使用默认的容器组件
         if (!RootComponentHock) {
@@ -36,7 +36,7 @@ var SchemaFormComponent = /** @class */ (function (_super) {
                         return key;
                     });
                 }
-                return React.createElement(SchemaFormItem, { key: schemaKey + "-" + idx.toString() + "}", schemaKey: schemaKey, arrayIndex: arrayIndex, arrayItems: arrayItems, formDefaultData: formDefaultData, mergeSchemaList: mergeSchemaList, mergeSchema: mergeSchema, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions });
+                return React.createElement(SchemaFormItem, { key: schemaKey + "-" + idx.toString() + "}", getCurrentState: getCurrentState, schemaKey: schemaKey, arrayIndex: arrayIndex, arrayItems: arrayItems, formDefaultData: formDefaultData, mergeSchemaList: mergeSchemaList, mergeSchema: mergeSchema, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions });
             }),
             children));
     };

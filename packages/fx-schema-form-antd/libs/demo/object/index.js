@@ -53,13 +53,15 @@ var ObjectSchemaFormComponent = /** @class */ (function (_super) {
             React.createElement(Panel, { header: "meta", key: "4" }, this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}),
             React.createElement(Panel, { header: "生成的表单", key: "1" },
                 React.createElement("div", null, "\u8FD9\u91CC\u67092\u4E2Aswitch\u7EC4\u4EF6\uFF0C2\u4E2A\u662F\u540C\u4E00\u4E2A\u5B57\u6BB5\uFF0C\u4F46\u662F\u5B57\u6BB5\u7684\u8DEF\u5F84\u4E0D\u540C\u3002UiSchema\uFF1A[\"object\", \"object/settings\"]"),
-                React.createElement(SchemaForm, { schemaKey: "object", schemaFormOptions: schemaFormOptions, schema: schema, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
+                React.createElement(SchemaForm, { schemaKey: "object", schemaFormOptions: schemaFormOptions, schema: schema, getCurrentState: function (state, props) {
+                        return state.get("object");
+                    }, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
                     React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                         React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4"))))));
     };
     ObjectSchemaFormComponent = tslib_1.__decorate([
         connect(function (state, props) {
-            var _a = state.object, meta = _a.meta, data = _a.data;
+            var _a = state.get("object"), meta = _a.meta, data = _a.data;
             return {
                 isValid: meta.data.isValid,
                 isLoading: meta.data.isLoading,

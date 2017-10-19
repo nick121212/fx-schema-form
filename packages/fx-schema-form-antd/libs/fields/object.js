@@ -7,9 +7,9 @@ var ObjectField = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ObjectField.prototype.render = function () {
-        var _a = this.props, mergeSchema = _a.mergeSchema, currentTheme = _a.currentTheme, WidgetComponent = _a.WidgetComponent, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey;
+        var _a = this.props, mergeSchema = _a.mergeSchema, currentTheme = _a.currentTheme, WidgetComponent = _a.WidgetComponent, getCurrentState = _a.getCurrentState, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey;
         var uiSchema = mergeSchema.uiSchema;
-        return (React.createElement(SchemaForm, { schemaFormOptions: schemaFormOptions, schemaKey: schemaKey, schema: mergeSchema, parentKeys: mergeSchema.keys, RootComponent: uiSchema.root, uiSchema: uiSchema.items || ["*"], globalOptions: globalOptions }));
+        return (React.createElement(SchemaForm, { schemaFormOptions: schemaFormOptions, getCurrentState: getCurrentState, schemaKey: schemaKey, schema: mergeSchema, parentKeys: mergeSchema.keys, RootComponent: uiSchema.root, uiSchema: uiSchema.items || ["*"], globalOptions: globalOptions }));
     };
     return ObjectField;
 }(React.Component));

@@ -9,6 +9,7 @@ export interface SchemaFormBaseProps {
     parentKeys?: Array<string>;
     schemaFormOptions?: any;
     actions?: any;
+    getCurrentState?: (state: any, props: any) => any;
     arrayIndex?: number;
     arrayItems?: Array<JSX.Element>;
     arrayItemItems?: Array<JSX.Element>;

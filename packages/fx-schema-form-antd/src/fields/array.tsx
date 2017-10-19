@@ -18,13 +18,15 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
      * @param idx 数组的索引
      */
     private renderItem(idx: number, maxLen: number): JSX.Element {
-        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, arrayItems, createItemChildButtons } = this.props;
+        const { mergeSchema, schemaKey, globalOptions, schemaFormOptions,
+            getCurrentState, arrayItems, createItemChildButtons } = this.props;
         const { uiSchema, keys } = mergeSchema;
 
         return (
             <SchemaForm
                 key={keys.join(".") + idx}
                 schema={mergeSchema}
+                getCurrentState={getCurrentState}
                 arrayIndex={idx}
                 arrayItems={createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null}
                 parentKeys={mergeSchema.keys}

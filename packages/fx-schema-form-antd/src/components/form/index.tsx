@@ -30,7 +30,8 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
             globalOptions,
             RootComponent,
             schemaFormOptions,
-            formDefaultData
+            formDefaultData,
+            getCurrentState
         } = this.props;
 
         let RootComponentHock = RootComponent;
@@ -61,6 +62,7 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
                         }
                         return <SchemaFormItem
                             key={`${schemaKey}-${idx.toString()}}`}
+                            getCurrentState={getCurrentState}
                             schemaKey={schemaKey}
                             arrayIndex={arrayIndex}
                             arrayItems={arrayItems}

@@ -44,13 +44,15 @@ var NormalSchemaFormComponent = /** @class */ (function (_super) {
             React.createElement(Panel, { header: "data", key: "3" }, this.props.data ? JSON.stringify(this.props.data) : {}),
             React.createElement(Panel, { header: "meta", key: "4" }, this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}),
             React.createElement(Panel, { header: "生成的表单", key: "1" },
-                React.createElement(SchemaForm, { schemaKey: "normal", schemaFormOptions: schemaFormOptions, schema: schema, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
+                React.createElement(SchemaForm, { schemaKey: "normal", schemaFormOptions: schemaFormOptions, schema: schema, getCurrentState: function (state, props) {
+                        return state.get("normal");
+                    }, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
                     React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                         React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4"))))));
     };
     NormalSchemaFormComponent = tslib_1.__decorate([
         connect(function (state, props) {
-            var _a = state.normal, meta = _a.meta, data = _a.data;
+            var _a = state.get("normal"), meta = _a.meta, data = _a.data;
             return {
                 isValid: meta.data.isValid,
                 isLoading: meta.data.isLoading,

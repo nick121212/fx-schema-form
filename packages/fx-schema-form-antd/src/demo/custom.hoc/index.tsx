@@ -36,7 +36,7 @@ let reducer: FormReducer<any> = createForms.createOne("custom.hoc", {
 }, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state["custom.hoc"];
+    let { meta, data } = state.get("custom.hoc");
 
     return {
         isValid: meta.data.isValid,
@@ -80,6 +80,9 @@ export class CustomHocSchemaFormComponent extends React.Component<any> {
                     <SchemaForm schemaKey={"custom.hoc"}
                         schemaFormOptions={schemaFormOptions}
                         schema={schema}
+                        getCurrentState={(state, props) => {
+                            return state.get("custom.hoc");
+                        }}
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>

@@ -6,11 +6,24 @@ import { schema } from "./schema/normal";
 import { AntdInputNumberWidget } from "./widget/number";
 import { ConditionHoc } from "./hoc/condition";
 import { GeoPositionField } from "./field/geo";
+import templates from "../templates";
+import widgets from "../widgets";
 hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
-// defaultTheme.fieldFactory.add("integer", AntdInputNumberWidget);
+for (var key in widgets) {
+    if (widgets.hasOwnProperty(key)) {
+        var widget = widgets[key];
+        defaultTheme.widgetFactory.add(key, widget);
+    }
+}
+for (var key in templates) {
+    if (templates.hasOwnProperty(key)) {
+        var template = templates[key];
+        defaultTheme.tempFactory.add(key, template);
+    }
+}
 var curAjv = new Ajv({
     allErrors: true,
     jsonPointers: true,

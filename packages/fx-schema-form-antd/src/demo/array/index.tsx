@@ -35,8 +35,8 @@ let reducer: FormReducer<any> = createForms.createOne("array", {
 let nextKey = "array";
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state.array;
-    let { schema, uiSchema } = state.arraySetting;
+    let { meta, data } = state.get("array");
+    let { schema, uiSchema } = state.get("arraySetting");
 
     return {
         isValid: meta.data.isValid,
@@ -111,6 +111,9 @@ export class ArraySchemaFormComponent extends React.Component<any> {
                                     ajv
                                 }}
                                 key={nextKey}
+                                getCurrentState={(state, props) => {
+                                    return state.get("array");
+                                }}
                                 schema={schema}
                                 uiSchema={uiSchema}
                                 RootComponent={Form}

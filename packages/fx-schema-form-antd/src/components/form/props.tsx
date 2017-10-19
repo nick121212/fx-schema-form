@@ -13,6 +13,8 @@ export interface SchemaFormBaseProps {
 
     actions?: any;
 
+    getCurrentState?: (state: any, props: any) => any;
+
     arrayIndex?: number;
     arrayItems?: Array<JSX.Element>;
     arrayItemItems?: Array<JSX.Element>;

@@ -15,7 +15,7 @@ let reducer: FormReducer<any> = createForms.createOne("normal", {
 }, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state.normal;
+    let { meta, data } = state.get("normal");
 
     return {
         isValid: meta.data.isValid,
@@ -57,6 +57,9 @@ export class NormalSchemaFormComponent extends React.Component<any> {
                     <SchemaForm schemaKey={"normal"}
                         schemaFormOptions={schemaFormOptions}
                         schema={schema}
+                        getCurrentState={(state, props) => {
+                            return state.get("normal");
+                        }}
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>

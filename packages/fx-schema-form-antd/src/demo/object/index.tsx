@@ -22,7 +22,7 @@ let reducer: FormReducer<any> = createForms.createOne("object", {
 }, ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state.object;
+    let { meta, data } = state.get("object");
 
     return {
         isValid: meta.data.isValid,
@@ -63,6 +63,9 @@ export class ObjectSchemaFormComponent extends React.Component<any> {
                     <SchemaForm schemaKey={"object"}
                         schemaFormOptions={schemaFormOptions}
                         schema={schema}
+                        getCurrentState={(state, props) => {
+                            return state.get("object");
+                        }}
                         RootComponent={Form} uiSchema={uiSchema}
                         globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>

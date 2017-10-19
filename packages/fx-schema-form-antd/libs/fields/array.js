@@ -14,9 +14,9 @@ var ArrayField = /** @class */ (function (_super) {
      * @param idx 数组的索引
      */
     ArrayField.prototype.renderItem = function (idx, maxLen) {
-        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, arrayItems = _a.arrayItems, createItemChildButtons = _a.createItemChildButtons;
+        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, getCurrentState = _a.getCurrentState, arrayItems = _a.arrayItems, createItemChildButtons = _a.createItemChildButtons;
         var uiSchema = mergeSchema.uiSchema, keys = mergeSchema.keys;
-        return (React.createElement(SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, arrayIndex: idx, arrayItems: createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
+        return (React.createElement(SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, getCurrentState: getCurrentState, arrayIndex: idx, arrayItems: createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
     };
     /**
      * 渲染页面

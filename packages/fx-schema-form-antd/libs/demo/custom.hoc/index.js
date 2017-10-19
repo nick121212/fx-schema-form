@@ -68,13 +68,15 @@ var CustomHocSchemaFormComponent = /** @class */ (function (_super) {
             React.createElement(Panel, { header: "meta", key: "4" }, this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}),
             React.createElement(Panel, { header: "生成的表单", key: "1" },
                 React.createElement("div", null, "\u8FD9\u91CC\u7684name\u5B57\u6BB5\uFF0C\u53EA\u6709\u5F53switch\u672A\u5F00\u7684\u65F6\u5019\u624D\u4F1A\u663E\u793A"),
-                React.createElement(SchemaForm, { schemaKey: "custom.hoc", schemaFormOptions: schemaFormOptions, schema: schema, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
+                React.createElement(SchemaForm, { schemaKey: "custom.hoc", schemaFormOptions: schemaFormOptions, schema: schema, getCurrentState: function (state, props) {
+                        return state.get("custom.hoc");
+                    }, RootComponent: Form, uiSchema: uiSchema, globalOptions: globalOptions },
                     React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                         React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4"))))));
     };
     CustomHocSchemaFormComponent = tslib_1.__decorate([
         connect(function (state, props) {
-            var _a = state["custom.hoc"], meta = _a.meta, data = _a.data;
+            var _a = state.get("custom.hoc"), meta = _a.meta, data = _a.data;
             return {
                 isValid: meta.data.isValid,
                 isLoading: meta.data.isLoading,

@@ -6,8 +6,8 @@ import { nsFactory } from "./libs/ns.factory";
 
 import hocs from "./hocs";
 import fields from "./fields";
-import templates from "./templates";
-import widgets from "./widgets";
+// import templates from "./templates";
+// import widgets from "./widgets";
 import { FormReducer } from "./reducer/form";
 
 const defaultTheme = {

@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { createStore, combineReducers } from "redux";
+import { createStore } from "redux";
+import { combineReducers } from "redux-immutable";
+import * as immutable from "immutable";
+
 import { Provider } from "react-redux";
 import {
     HashRouter as Router,
@@ -25,7 +28,7 @@ let store = createStore<any>(combineReducers({
     "normal": normalReducer.reducer,
     "object": objectReducer.reducer,
     "custom.hoc": cushocReducer.reducer
-}));
+}), immutable.Map());
 
 store.subscribe(() => {
     console.log(store.getState());

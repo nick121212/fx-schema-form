@@ -87,7 +87,9 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
                     React.createElement(Col, { span: 16 },
                         React.createElement(SchemaForm, { schemaKey: "array", schemaFormOptions: {
                                 ajv: ajv
-                            }, key: nextKey, schema: schema, uiSchema: uiSchema, RootComponent: Form, globalOptions: globalOptions },
+                            }, key: nextKey, getCurrentState: function (state, props) {
+                                return state.get("array");
+                            }, schema: schema, uiSchema: uiSchema, RootComponent: Form, globalOptions: globalOptions },
                             React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                                 React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4")))),
                     React.createElement(Col, { span: 8 },
@@ -95,8 +97,8 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
     };
     ArraySchemaFormComponent = tslib_1.__decorate([
         connect(function (state, props) {
-            var _a = state.array, meta = _a.meta, data = _a.data;
-            var _b = state.arraySetting, schema = _b.schema, uiSchema = _b.uiSchema;
+            var _a = state.get("array"), meta = _a.meta, data = _a.data;
+            var _b = state.get("arraySetting"), schema = _b.schema, uiSchema = _b.uiSchema;
             return {
                 isValid: meta.data.isValid,
                 isLoading: meta.data.isLoading,

@@ -1,12 +1,18 @@
 import * as jpp from "json-pointer";
 import { createSelector } from "reselect";
+var getCurrentState = function (state, props) {
+    if (props.getCurrentState) {
+        return props.getCurrentState(state, props);
+    }
+    return state[props.schemaKey];
+};
 /**
  * 获取formData的数据
  * @param state state
  * @param props 属性
  */
 export var getAllData = function (state, props) {
-    var _a = state[props.schemaKey].data, data = _a === void 0 ? {} : _a;
+    var _a = getCurrentState(state, props).data, data = _a === void 0 ? {} : _a;
     return data;
 };
 /**
@@ -17,7 +23,7 @@ export var getAllData = function (state, props) {
 export var getData = function (state, props) {
     var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
-    var _b = state[props.schemaKey].data, data = _b === void 0 ? {} : _b;
+    var _b = getCurrentState(state, props).data, data = _b === void 0 ? {} : _b;
     return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
 };
 /**
@@ -27,7 +33,7 @@ export var getData = function (state, props) {
  */
 export var getMetaStateData = function (state, props) {
     var schemaKey = props.schemaKey;
-    var meta = state[props.schemaKey].meta;
+    var meta = getCurrentState(state, props).meta;
     return {
         isLoading: meta.data.isLoading,
         isValid: meta.data.isValid
@@ -41,7 +47,7 @@ export var getMetaStateData = function (state, props) {
 export var getMetaData = function (state, props) {
     var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
-    var meta = state[props.schemaKey].meta;
+    var meta = getCurrentState(state, props).meta;
     return meta.getMeta(keys, mergeSchema.type !== "array");
 };
 /**
@@ -51,7 +57,7 @@ export var getMetaData = function (state, props) {
  */
 export var getActions = function (state, props) {
     var schemaKey = props.schemaKey;
-    var _a = state[schemaKey], _b = _a.data, data = _b === void 0 ? {} : _b, _c = _a.meta, meta = _c === void 0 ? { actions: {} } : _c;
+    var _a = getCurrentState(state, props), _b = _a.data, data = _b === void 0 ? {} : _b, _c = _a.meta, meta = _c === void 0 ? { actions: {} } : _c;
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
         meta.init(props.schemaFormOptions, props.schemaKey);
     }

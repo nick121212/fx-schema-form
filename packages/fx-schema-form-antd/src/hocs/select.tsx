@@ -8,13 +8,22 @@ import cloneDeep from "lodash.clonedeep";
 import { SchemaFormItemBaseProps } from "../components/formitem/props";
 import { SchemaFormMeta, MetaData } from "../libs/meta";
 
+const getCurrentState = (state: any, props: SchemaFormItemBaseProps) => {
+    if (props.getCurrentState) {
+        return props.getCurrentState(state, props);
+    }
+
+    return state[props.schemaKey];
+};
+
+
 /**
  * 获取formData的数据
  * @param state state
  * @param props 属性
  */
 export const getAllData = (state: any, props: SchemaFormItemBaseProps) => {
-    let { data = {} } = state[props.schemaKey];
+    let { data = {} } = getCurrentState(state, props);
 
     return data;
 };
@@ -27,7 +36,7 @@ export const getAllData = (state: any, props: SchemaFormItemBaseProps) => {
 export const getData = (state: any, props: SchemaFormItemBaseProps) => {
     const { schemaKey, mergeSchema } = props;
     const { keys = [] } = mergeSchema;
-    let { data = {} } = state[props.schemaKey];
+    let { data = {} } = getCurrentState(state, props);
 
     return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
 };
@@ -39,7 +48,7 @@ export const getData = (state: any, props: SchemaFormItemBaseProps) => {
  */
 export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
     const { schemaKey } = props;
-    const { meta } = state[props.schemaKey];
+    const { meta } = getCurrentState(state, props);
 
     return {
         isLoading: meta.data.isLoading,
@@ -55,7 +64,7 @@ export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): Sc
 export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
     const { schemaKey, mergeSchema } = props;
     const { keys = [] } = mergeSchema;
-    const { meta } = state[props.schemaKey];
+    const { meta } = getCurrentState(state, props);
 
     return meta.getMeta(keys, mergeSchema.type !== "array");
 };
@@ -67,7 +76,7 @@ export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaF
  */
 export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
     const { schemaKey } = props;
-    const { data = {}, meta = { actions: {} } } = state[schemaKey];
+    const { data = {}, meta = { actions: {} } } = getCurrentState(state, props);
 
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
         (meta as MetaData).init(props.schemaFormOptions, props.schemaKey);
