@@ -55,7 +55,7 @@ export class FormReducer<T> {
      */
     private updateData: SimpleActionCreator<{ data: any }> = createAction("更改data的值");
 
-    constructor(private initialState: any) { }
+    constructor(private initialState: any, private meta: MetaData) { }
 
     /**
      * 获取当前的actions
@@ -90,13 +90,6 @@ export class FormReducer<T> {
     }
 
     private updateDataHandle(state: SchemaFormState<any>, data: any) {
-        // let { originData } = this.getOrigin(state);
-
-        // jpp(state).set("/data", Object.assign({}, data, originData || {}));
-        // state.data = Object.assign({}, data, state.data || {});
-
-        // state.data = data;
-
         return Object.assign({}, state, { data });
     }
 
@@ -106,7 +99,7 @@ export class FormReducer<T> {
     */
     private getOrigin(state: SchemaFormState<any>): { originData: any; originMeta: MetaData } {
         let originData = cloneDeep(state.data);
-        let originMeta = cloneDeep(state.meta);
+        let originMeta = cloneDeep(this.meta);
 
         return { originData, originMeta };
     }
@@ -131,7 +124,7 @@ export class FormReducer<T> {
             originMeta.data.isValid = isValid;
         }
 
-        return Object.assign({}, state, { meta: originMeta });
+        return Object.assign({}, state, { meta: originMeta.data });
     }
 
     /**
@@ -147,7 +140,7 @@ export class FormReducer<T> {
         jpp(originData).set(normalKey, data);
         originMeta.setMeta(keys, meta);
 
-        return Object.assign({}, state, { data: originData, meta: originMeta });
+        return Object.assign({}, state, { data: originData, meta: originMeta.data });
     }
 
     private updateMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
@@ -157,7 +150,7 @@ export class FormReducer<T> {
 
         originMeta.setMeta(keys, meta);
 
-        return Object.assign({}, state, { meta: originMeta });
+        return Object.assign({}, state, { meta: originMeta.data });
     }
 
     private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
@@ -167,7 +160,7 @@ export class FormReducer<T> {
 
         originMeta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
 
-        return Object.assign({}, state, { meta: originMeta });
+        return Object.assign({}, state, { meta: originMeta.data });
     }
 
     private addItemHandle(state: SchemaFormState<T>, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
@@ -190,7 +183,7 @@ export class FormReducer<T> {
 
         originMeta.removeMeta([...keys, index.toString()]);
 
-        return Object.assign({}, state, { data: originData, meta: originMeta });
+        return Object.assign({}, state, { data: originData, meta: originMeta.data });
     }
 
     private switchItemHandle(state: SchemaFormState<T>,
@@ -204,6 +197,6 @@ export class FormReducer<T> {
         jpp(originData).set(normalKey, curData);
         originMeta.switchMeta(keys, curIndex, switchIndex);
 
-        return Object.assign({}, state, { data: originData, meta: originMeta });
+        return Object.assign({}, state, { data: originData, meta: originMeta.data });
     }
 }

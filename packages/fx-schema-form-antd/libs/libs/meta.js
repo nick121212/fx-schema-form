@@ -193,7 +193,7 @@ var MetaData = /** @class */ (function () {
             }
         }
         // 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
-        if (jMeta.has(normalKey)) {
+        if (jMeta.has(normalKey) && jMeta.get(normalKey)) {
             var metaDict = jpp.dict(jMeta.get(normalKey));
             jMeta.remove(normalKey);
             // 遍历子元素，并且清除数据

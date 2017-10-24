@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 import ReactCodeMirror from "react-codemirror";
 import isEqual from "lodash.isequal";
-import { createForms, SchemaForm } from "../../index";
+import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
 import { ajv, globalOptions } from "../init";
 import { FormExampleReducer } from "../reducer/schema";
 import { FormExampleCompnent } from "../components/form.example";
@@ -37,16 +37,17 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
     }
     ArraySchemaFormComponent.prototype.doSubmit = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var _a, _b, _c;
+            var metaData, _a, _b, _c;
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
+                        metaData = SchemaFormCreate.metas.array;
                         reducer.actions.updateMetaState({ isLoading: true, isValid: false });
                         _b = (_a = reducer.actions).updateMetaState;
                         _c = {
                             isLoading: false
                         };
-                        return [4 /*yield*/, this.props.meta.validateAll(this.props.data)];
+                        return [4 /*yield*/, metaData.validateAll(this.props.data)];
                     case 1:
                         _b.apply(_a, [(_c.meta = _d.sent(),
                                 _c)]);
@@ -79,7 +80,7 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
             React.createElement(Panel, { header: "meta 和 data", key: "2" },
                 React.createElement(Row, null,
                     React.createElement(Col, { span: 12 },
-                        React.createElement(ReactCodeMirror, { key: Date.now(), value: this.props.meta ? JSON.stringify(this.props.meta.data || {}, null, 4) : "", options: options })),
+                        React.createElement(ReactCodeMirror, { key: Date.now(), value: this.props.meta ? JSON.stringify(this.props.meta || {}, null, 4) : "", options: options })),
                     React.createElement(Col, { span: 12 },
                         React.createElement(ReactCodeMirror, { key: Date.now(), value: data ? JSON.stringify(data || {}, null, 4) : "", options: options })))),
             React.createElement(Panel, { header: "生成的表单", key: "1" },
@@ -100,8 +101,8 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
             var _a = state.get("array"), meta = _a.meta, data = _a.data;
             var _b = state.get("arraySetting"), schema = _b.schema, uiSchema = _b.uiSchema;
             return {
-                isValid: meta.data.isValid,
-                isLoading: meta.data.isLoading,
+                isValid: meta.isValid,
+                isLoading: meta.isLoading,
                 meta: meta,
                 data: data,
                 schema: schema,

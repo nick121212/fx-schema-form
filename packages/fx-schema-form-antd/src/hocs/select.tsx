@@ -7,6 +7,8 @@ import cloneDeep from "lodash.clonedeep";
 
 import { SchemaFormItemBaseProps } from "../components/formitem/props";
 import { SchemaFormMeta, MetaData } from "../libs/meta";
+import { SchemaFormCreate } from "../libs/create";
+
 
 const getCurrentState = (state: any, props: SchemaFormItemBaseProps) => {
     if (props.getCurrentState) {
@@ -51,8 +53,8 @@ export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): Sc
     const { meta } = getCurrentState(state, props);
 
     return {
-        isLoading: meta.data.isLoading,
-        isValid: meta.data.isValid
+        isLoading: meta.isLoading,
+        isValid: meta.isValid
     };
 };
 
@@ -64,9 +66,14 @@ export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): Sc
 export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
     const { schemaKey, mergeSchema } = props;
     const { keys = [] } = mergeSchema;
+    const metaData = SchemaFormCreate.metas[schemaKey];
     const { meta } = getCurrentState(state, props);
 
-    return meta.getMeta(keys, mergeSchema.type !== "array");
+    if (meta) {
+        metaData.data = meta;
+    }
+
+    return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
 
 /**
@@ -76,13 +83,13 @@ export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaF
  */
 export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
     const { schemaKey } = props;
-    const { data = {}, meta = { actions: {} } } = getCurrentState(state, props);
+    const metaData = SchemaFormCreate.metas[schemaKey];
 
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
-        (meta as MetaData).init(props.schemaFormOptions, props.schemaKey);
+        metaData.init(props.schemaFormOptions, props.schemaKey);
     }
 
-    return meta.actions;
+    return metaData.actions;
 };
 
 /**

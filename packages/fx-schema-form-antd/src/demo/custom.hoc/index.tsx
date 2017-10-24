@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer, SchemaFormCreate } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
@@ -39,8 +39,8 @@ let reducer: FormReducer<any> = createForms.createOne("custom.hoc", {
     let { meta, data } = state.get("custom.hoc");
 
     return {
-        isValid: meta.data.isValid,
-        isLoading: meta.data.isLoading,
+        isValid: meta.isValid,
+        isLoading: meta.isLoading,
         meta: meta,
         data
     };
@@ -48,10 +48,12 @@ let reducer: FormReducer<any> = createForms.createOne("custom.hoc", {
 export class CustomHocSchemaFormComponent extends React.Component<any> {
 
     private async doSubmit(): Promise<void> {
+        let metaData = SchemaFormCreate.metas["custom.hoc"];
+
         reducer.actions.updateMetaState({ isLoading: true, isValid: false });
         reducer.actions.updateMetaState({
             isLoading: false,
-            meta: await this.props.meta.validateAll(this.props.data)
+            meta: await metaData.validateAll(this.props.data)
         });
         if (this.props.isValid) {
             alert("提交表单");
@@ -73,7 +75,7 @@ export class CustomHocSchemaFormComponent extends React.Component<any> {
                     {this.props.data ? JSON.stringify(this.props.data) : {}}
                 </Panel>
                 <Panel header={"meta"} key="4">
-                    {this.props.meta ? JSON.stringify(this.props.meta.data || {}) : {}}
+                    {this.props.meta ? JSON.stringify(this.props.meta || {}) : {}}
                 </Panel>
                 <Panel header={"生成的表单"} key="1">
                     {<div>这里的name字段，只有当switch未开的时候才会显示</div>}

@@ -36,6 +36,7 @@ export interface Actions {
 }
 export declare class FormReducer<T> {
     private initialState;
+    private meta;
     /**
      * 单个元素的值变化时候调用
      */
@@ -68,7 +69,7 @@ export declare class FormReducer<T> {
      * 更改meta的状态
      */
     private updateData;
-    constructor(initialState: any);
+    constructor(initialState: any, meta: MetaData);
     /**
      * 获取当前的actions
      */

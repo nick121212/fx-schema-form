@@ -96,11 +96,11 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 "NODE_ENV": JSON.stringify(env),
-                "__DEV__": __DEV__,
-                "__TEST__": __TEST__,
-                "__PROD__": __PROD__,
-                "__STAG__": __STAG__
             },
+            "__DEV__": JSON.stringify(__DEV__),
+            "__TEST__": JSON.stringify(__TEST__),
+            "__PROD__": JSON.stringify(__PROD__),
+            "__STAG__": JSON.stringify(__STAG__)
         }),
         new CheckerPlugin(),
         !(__PROD__ || __STAG__) ? new HtmlWebpackPlugin({

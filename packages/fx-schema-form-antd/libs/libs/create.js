@@ -5,12 +5,15 @@ var SchemaFormCreate = /** @class */ (function () {
     }
     SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema) {
         var meta = new MetaData();
-        var defaultValue = curJjv.validate(schema, data).catch(console.error);
+        var defaultValue = curJjv.validate(schema, data).catch(function () {
+            console.log("");
+        });
         var reducer = new FormReducer({
             data: data,
-            meta: meta
-        });
+            meta: meta.data
+        }, meta);
         meta.actions = reducer.actions;
+        SchemaFormCreate.metas[key] = meta;
         return reducer;
     };
     SchemaFormCreate.prototype.createMuti = function (forms) {
@@ -23,8 +26,9 @@ var SchemaFormCreate = /** @class */ (function () {
                 var reducer = new FormReducer({
                     data: element,
                     meta: meta
-                });
+                }, meta);
                 meta.actions = reducer.actions;
+                SchemaFormCreate.metas[key] = meta;
                 if (element) {
                     reducers[key] = reducer.reducer;
                 }
@@ -32,6 +36,7 @@ var SchemaFormCreate = /** @class */ (function () {
         }
         return reducers;
     };
+    SchemaFormCreate.metas = {};
     return SchemaFormCreate;
 }());
 export { SchemaFormCreate };

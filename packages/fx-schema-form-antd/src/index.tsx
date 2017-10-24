@@ -4,7 +4,7 @@ export { SchemaFormItemBaseProps } from "./components/formitem/props";
 export { FormReducer } from "./reducer/form";
 export { defaultTheme, nsFactory } from "./factory";
 export { RC } from "./types";
-export { default as createForms } from "./libs/create";
+export { default as createForms, SchemaFormCreate } from "./libs/create";
 export {
     hocFactory,
     ThemeHocOutProps,
@@ -21,9 +21,7 @@ jpp.set = function set(obj, pointer, value) {
     let refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer),
         nextTok: any = refTokens[0];
 
-    // console.log("oeifjlkdajlfjld");
-
-    for (let i = 0; i < refTokens.length - 1; ++i) {
+    for (let i = 0, n = refTokens.length; i < n - 1; ++i) {
         let tok: any = refTokens[i];
         if (tok === "-" && Array.isArray(obj)) {
             tok = obj.length;
@@ -37,15 +35,13 @@ jpp.set = function set(obj, pointer, value) {
                 obj[tok] = {};
             }
         }
-        obj = obj[tok];
 
-        if (!obj && nextTok) {
-            if (!Number.isNaN(nextTok * 1)) {
-                obj = [];
-            } else {
-                obj = {};
-            }
+        if (!obj[tok] && nextTok) {
+            // let keys = refTokens.concat([]).splice(i);
+            obj[tok] = !Number.isNaN(nextTok * 1) ? [] : {};
         }
+
+        obj = obj[tok];
     }
     if (nextTok === "-" && Array.isArray(obj)) {
         nextTok = obj.length;

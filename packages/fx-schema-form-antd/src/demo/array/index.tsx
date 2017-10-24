@@ -5,7 +5,7 @@ import cloneDeep from "lodash.clonedeep";
 import ReactCodeMirror from "react-codemirror";
 import isEqual from "lodash.isequal";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer, SchemaFormCreate } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 import { FormExampleReducer } from "../reducer/schema";
 import { FormExampleCompnent } from "../components/form.example";
@@ -39,8 +39,8 @@ let nextKey = "array";
     let { schema, uiSchema } = state.get("arraySetting");
 
     return {
-        isValid: meta.data.isValid,
-        isLoading: meta.data.isLoading,
+        isValid: meta.isValid,
+        isLoading: meta.isLoading,
         meta: meta,
         data,
         schema,
@@ -56,10 +56,12 @@ let nextKey = "array";
 export class ArraySchemaFormComponent extends React.Component<any> {
 
     private async doSubmit(): Promise<void> {
+        let metaData = SchemaFormCreate.metas.array;
+
         reducer.actions.updateMetaState({ isLoading: true, isValid: false });
         reducer.actions.updateMetaState({
             isLoading: false,
-            meta: await this.props.meta.validateAll(this.props.data)
+            meta: await metaData.validateAll(this.props.data)
         });
         if (this.props.isValid) {
             alert("提交表单");
@@ -94,7 +96,7 @@ export class ArraySchemaFormComponent extends React.Component<any> {
                         <Col span={12}>
                             <ReactCodeMirror
                                 key={Date.now()}
-                                value={this.props.meta ? JSON.stringify(this.props.meta.data || {}, null, 4) : ""} options={options} />
+                                value={this.props.meta ? JSON.stringify(this.props.meta || {}, null, 4) : ""} options={options} />
                         </Col>
                         <Col span={12}>
                             <ReactCodeMirror

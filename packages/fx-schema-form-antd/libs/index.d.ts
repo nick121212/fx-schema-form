@@ -4,5 +4,5 @@ export { SchemaFormItemBaseProps } from "./components/formitem/props";
 export { FormReducer } from "./reducer/form";
 export { defaultTheme, nsFactory } from "./factory";
 export { RC } from "./types";
-export { default as createForms } from "./libs/create";
+export { default as createForms, SchemaFormCreate } from "./libs/create";
 export { hocFactory, ThemeHocOutProps, FieldHocOutProps, ArrayHocOutProps, MergeHocOutProps, MakeHocOutProps, ValidateHocOutProps } from "./hocs";

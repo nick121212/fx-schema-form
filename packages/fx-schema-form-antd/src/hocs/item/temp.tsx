@@ -7,21 +7,35 @@ import isEqual from "lodash.isequal";
 import { ThemeHocOutProps } from "./theme";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
+import { MakeHocOutProps } from "./make";
 
-const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps, any>(
+const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps & MakeHocOutProps, any>(
     lifecycle({
-        shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps) {
+        shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps & MakeHocOutProps) {
+            // let { otherEqualKeys } = this.props;
+            let opts = this.props.getHocOptions();
             let metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
             let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
             let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-            // let mergeSchemaEqual = isEqual(nextProps.mergeSchema, this.props.mergeSchema);
             let rtn = !formItemDataEqual || !metaEqual;
+            let tempOpts = opts.temp || {};
 
-            console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
-            console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
-            console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-            console.log("shouldUpdate", formItemDataEqual, metaEqual);
-            console.groupEnd();
+            if (tempOpts.equalKeys && !rtn) {
+                let { formData = {} } = nextProps;
+                let { formData: formData1 = {} } = this.props;
+
+                rtn = tempOpts.equalKeys.reduce((prev: boolean, next: string) => {
+                    return prev && isEqual(formData[next], formData[next]);
+                }, rtn);
+            }
+
+            if (!__PROD__) {
+                console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
+                console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
+                console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+                console.log("shouldUpdate", formItemDataEqual, metaEqual);
+                console.groupEnd();
+            }
 
             return rtn;
         }

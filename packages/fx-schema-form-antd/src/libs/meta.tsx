@@ -223,7 +223,7 @@ export class MetaData {
         }
 
         // 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
-        if (jMeta.has(normalKey)) {
+        if (jMeta.has(normalKey) && jMeta.get(normalKey)) {
             let metaDict = jpp.dict(jMeta.get(normalKey));
 
             jMeta.remove(normalKey);

@@ -5,16 +5,27 @@ import pick from "recompose/utils/pick";
 import isEqual from "lodash.isequal";
 var metaConnect = compose(lifecycle({
     shouldComponentUpdate: function (nextProps) {
+        // let { otherEqualKeys } = this.props;
+        var opts = this.props.getHocOptions();
         var metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
         var formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
         var metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-        // let mergeSchemaEqual = isEqual(nextProps.mergeSchema, this.props.mergeSchema);
         var rtn = !formItemDataEqual || !metaEqual;
-        console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
-        console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
-        console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-        console.log("shouldUpdate", formItemDataEqual, metaEqual);
-        console.groupEnd();
+        var tempOpts = opts.temp || {};
+        if (tempOpts.equalKeys && !rtn) {
+            var _a = nextProps.formData, formData_1 = _a === void 0 ? {} : _a;
+            var _b = this.props.formData, formData1 = _b === void 0 ? {} : _b;
+            rtn = tempOpts.equalKeys.reduce(function (prev, next) {
+                return prev && isEqual(formData_1[next], formData_1[next]);
+            }, rtn);
+        }
+        if (!__PROD__) {
+            console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
+            console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
+            console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
+            console.log("shouldUpdate", formItemDataEqual, metaEqual);
+            console.groupEnd();
+        }
         return rtn;
     }
 }));

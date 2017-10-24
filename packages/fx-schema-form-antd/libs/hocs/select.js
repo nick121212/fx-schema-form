@@ -1,5 +1,6 @@
 import * as jpp from "json-pointer";
 import { createSelector } from "reselect";
+import { SchemaFormCreate } from "../libs/create";
 var getCurrentState = function (state, props) {
     if (props.getCurrentState) {
         return props.getCurrentState(state, props);
@@ -35,8 +36,8 @@ export var getMetaStateData = function (state, props) {
     var schemaKey = props.schemaKey;
     var meta = getCurrentState(state, props).meta;
     return {
-        isLoading: meta.data.isLoading,
-        isValid: meta.data.isValid
+        isLoading: meta.isLoading,
+        isValid: meta.isValid
     };
 };
 /**
@@ -47,8 +48,12 @@ export var getMetaStateData = function (state, props) {
 export var getMetaData = function (state, props) {
     var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
+    var metaData = SchemaFormCreate.metas[schemaKey];
     var meta = getCurrentState(state, props).meta;
-    return meta.getMeta(keys, mergeSchema.type !== "array");
+    if (meta) {
+        metaData.data = meta;
+    }
+    return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
 /**
  * 获取state中的meta数据中的actions
@@ -57,11 +62,11 @@ export var getMetaData = function (state, props) {
  */
 export var getActions = function (state, props) {
     var schemaKey = props.schemaKey;
-    var _a = getCurrentState(state, props), _b = _a.data, data = _b === void 0 ? {} : _b, _c = _a.meta, meta = _c === void 0 ? { actions: {} } : _c;
+    var metaData = SchemaFormCreate.metas[schemaKey];
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
-        meta.init(props.schemaFormOptions, props.schemaKey);
+        metaData.init(props.schemaFormOptions, props.schemaKey);
     }
-    return meta.actions;
+    return metaData.actions;
 };
 /**
  * 获取单个字段的信息

@@ -4,15 +4,21 @@ import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
 
 export class SchemaFormCreate {
+    public static metas: { [key: string]: MetaData } = {};
+
     public createOne<T>(key, data: T, curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
         let meta: MetaData = new MetaData();
-        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(console.error);
+        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(() => {
+            console.log("");
+        });
         let reducer = new FormReducer<T>({
             data: data,
-            meta: meta
-        });
+            meta: meta.data
+        }, meta);
 
         meta.actions = reducer.actions;
+
+        SchemaFormCreate.metas[key] = meta;
 
         return reducer;
     }
@@ -27,9 +33,10 @@ export class SchemaFormCreate {
                 let reducer = new FormReducer({
                     data: element,
                     meta: meta
-                });
+                }, meta);
 
                 meta.actions = reducer.actions;
+                SchemaFormCreate.metas[key] = meta;
 
                 if (element) {
                     reducers[key] = reducer.reducer;

@@ -29,7 +29,7 @@ export declare const getMetaData: (state: any, props: SchemaFormItemBaseProps) =
  * @param state 全局state
  * @param props 当前component的props
  */
-export declare const getActions: (state: any, props: SchemaFormItemBaseProps) => {};
+export declare const getActions: (state: any, props: SchemaFormItemBaseProps) => any;
 /**
  * 获取单个字段的信息
  * meta            额外的信息

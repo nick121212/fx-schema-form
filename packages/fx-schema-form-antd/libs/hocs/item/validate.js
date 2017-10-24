@@ -11,7 +11,7 @@ import { mapActionsStateToProps } from "../select";
 var mapDispatchToProps = function (dispatch, ownProps) {
     var mergeSchema = ownProps.mergeSchema, actions = ownProps.actions, schemaFormOptions = ownProps.schemaFormOptions, schemaKey = ownProps.schemaKey, formData = ownProps.formData;
     var keys = mergeSchema.keys;
-    var validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, async: true }));
+    var validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
     for (var key in actions) {
         if (actions.hasOwnProperty(key)) {
             var element = actions[key];
