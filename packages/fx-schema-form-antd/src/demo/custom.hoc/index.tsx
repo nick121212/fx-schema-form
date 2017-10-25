@@ -23,6 +23,7 @@ let schema = {
 let uiSchema: any = [{
     "key": "name",
     "ui:item.hoc": ["theme", "field", "validate", "array", "condition", "temp"],
+
     "options": {
         "hoc": {
             "condition": {

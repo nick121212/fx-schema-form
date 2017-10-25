@@ -7,7 +7,7 @@ import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
 
-let schema = ajv.getSchema("test").schema;
+let schema = ajv.getSchema("normal").schema;
 let uiSchema: any = ["*"];
 
 let reducer: FormReducer<any> = createForms.createOne("normal", {

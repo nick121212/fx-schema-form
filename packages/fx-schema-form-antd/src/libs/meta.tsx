@@ -63,7 +63,7 @@ export class MetaData {
      * 验证所有的数据
      * @param data 数据
      */
-    public async validateAll(data: any): Promise<MetaData> {
+    public async validateAll(data: any): Promise<any> {
         // 设置所有的字段验证都通过
         for (let key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
@@ -97,7 +97,7 @@ export class MetaData {
             });
         }
 
-        return this;
+        return this.data;
     }
     /**
      * 获得当前字段的key
@@ -109,7 +109,7 @@ export class MetaData {
 
         return {
             schemaKey: keys.map((k: string) => {
-                if (typeof k === "number") {
+                if (!Number.isNaN(Number(k))) {
                     return "-";
                 }
                 return k;

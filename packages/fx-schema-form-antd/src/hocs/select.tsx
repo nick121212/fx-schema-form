@@ -69,9 +69,9 @@ export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaF
     const metaData = SchemaFormCreate.metas[schemaKey];
     const { meta } = getCurrentState(state, props);
 
-    if (meta) {
-        metaData.data = meta;
-    }
+    // if (meta) {
+    //     metaData.data = meta;
+    // }
 
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };

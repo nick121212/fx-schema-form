@@ -4,6 +4,9 @@ import { Button, Popover, Popconfirm } from "antd";
 
 import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
 import { schema } from "./schema/normal";
+import normal from "./schema/normal1";
+import flow from "./schema/flow";
+
 import { AntdInputNumberWidget } from "./widget/number";
 import { ConditionHoc } from "./hoc/condition";
 import { GeoPositionField } from "./field/geo";
@@ -110,12 +113,18 @@ const globalOptions = {
         "noHovering": true,
         "bordered": false
     },
+    "object": {
+        "ui:temp": ["card"]
+    },
     "array": {
         "ui:temp": ["row", "col", "card"]
     }
 };
 
 curAjv.addSchema(schema, "test");
+
+curAjv.addSchema(normal);
+curAjv.addSchema(flow);
 
 curAjv.addKeyword("idExists", {
     async: true,

@@ -1,4 +1,10 @@
 .vscode
 .history
-.node_modules
+/packages/**/package-lock.json
+/packages/**/images
+/packages/**/package.json
+/packages/**/stats.json
+/packages/**/tsconfig.json
+/packages/**/tslint.json
+/packages/**/webpack.config.js
 .src
