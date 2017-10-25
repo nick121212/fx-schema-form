@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-antd",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "自动生成表单组件",
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
