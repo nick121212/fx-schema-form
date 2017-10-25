@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-antd",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "自动生成表单组件",
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "ajv": "^5.2.2",
     "antd": "^2.13.0",
-    "fx-schema-form-core": "^1.0.17",
+    "fx-schema-form-core": "^1.0.18",
     "json-pointer": "^0.6.0",
     "jsonata": "^1.3.0",
     "lodash.clonedeep": "^4.5.0",
