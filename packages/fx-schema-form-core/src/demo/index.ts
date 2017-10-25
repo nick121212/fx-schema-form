@@ -37,6 +37,9 @@ const schema = {
 let uiSchema: any = ["array"];
 
 uiSchema = [{
+    "key": "",
+    items: [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+}, {
     "key": "array1",
     "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
 }];
@@ -45,12 +48,3 @@ let options: any = {};
 let aaa = schemaMerge.merge("test", schema, uiSchema, options);
 
 console.log(aaa);
-let bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
-bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-// bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-// bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-// bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-// bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-// bbb = schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-
-console.log(bbb);

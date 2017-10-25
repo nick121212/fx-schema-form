@@ -36,13 +36,13 @@ var schema = {
 };
 var uiSchema = ["array"];
 uiSchema = [{
+        "key": "",
+        items: [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+    }, {
         "key": "array1",
         "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
     }];
 var options = {};
 var aaa = index_1.schemaMerge.merge("test", schema, uiSchema, options);
 console.log(aaa);
-var bbb = index_1.schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, Object.assign({}, options, { parentKeys: aaa[0].keys }));
-bbb = index_1.schemaMerge.merge("test", bbb[1], bbb[1].uiSchema.items, Object.assign({}, options, { parentKeys: bbb[1].keys }));
-console.log(bbb);
 //# sourceMappingURL=index.js.map

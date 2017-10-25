@@ -9,14 +9,27 @@ const Panel = Collapse.Panel;
 let schema = {
     "$async": true,
     type: "object",
-    required: [],
+    required: ["name"],
     properties: {
         object: {
             $ref: "test#/properties/object"
+        },
+        name: {
+            $ref: "test#/properties/name"
         }
     }
 };
-let uiSchema: any = ["object", "object/settings"];
+let uiSchema: any = [
+    {
+        field: "object",
+        "ui:item.hoc": ["theme", "field", "array", "temp"],
+        items: ["object/settings", {
+            "key": "name"
+        }],
+    },
+    "name",
+    "object",
+    "object/settings"];
 
 let reducer: FormReducer<any> = createForms.createOne("object", {
 }, ajv, schema);

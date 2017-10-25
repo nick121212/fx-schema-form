@@ -23,6 +23,22 @@ module.exports = {
         library: "fxSchemaFormCore"
     },
     devtool: __DEV__ ? "cheap-module-eval-source-map" : "cheap-module-eval-source-map",
+    devServer: {
+        // historyApiFall:"",
+        hot: true,
+        inline: true,
+        // contentBase: './out',
+        port: 8083,
+        host: "127.0.0.1",
+        stats: { colors: true },
+        proxy: {
+            '/weixin': {
+                target: 'https://qyapi.weixin.qq.com/',
+                pathRewrite: { '^/weixin': '/cgi-bin/media/get' },
+                changeOrigin: true
+            }
+        }
+    },
     module: {
         rules: [{
             enforce: 'pre',
@@ -35,7 +51,7 @@ module.exports = {
         }, {
             test: /module\.styl/,
             loader: 'style-loader!css-loader?modules!postcss-loader!stylus-loader',
-        },{
+        }, {
             test: /module\.css/,
             loader: 'style-loader!css-loader?modules!postcss-loader',
         }, {

@@ -110,6 +110,10 @@ export class UiMerge {
 
                 if (uiSchema) {
                     uiSchemasFirst.push(uiSchema);
+                } else {
+                    if (keyProp.constructor === Object) {
+                        uiSchemasFirst.push({ keys: [], uiSchema: keyProp });
+                    }
                 }
             });
         }
@@ -119,6 +123,10 @@ export class UiMerge {
 
             if (uiSchema) {
                 uiSchemasLast.push(uiSchema);
+            } else {
+                if (keyProp.constructor === Object) {
+                    uiSchemasLast.push({ keys: [], uiSchema: keyProp });
+                }
             }
         });
 

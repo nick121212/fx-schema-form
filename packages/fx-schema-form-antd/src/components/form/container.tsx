@@ -1,4 +1,4 @@
-import { compose, ComponentEnhancer } from "recompose";
+import { compose, ComponentEnhancer, pure } from "recompose";
 import { connect } from "react-redux";
 
 import { SchemaFormBaseProps } from "./props";
@@ -13,5 +13,6 @@ export const hoc: ComponentEnhancer<SchemaFormBaseProps, any> = compose<SchemaFo
     //         isLoading: meta.data.isLoading
     //     };
     // }),
-    hocFactory.get("merge")
+    hocFactory.get("merge"),
+    pure
 );

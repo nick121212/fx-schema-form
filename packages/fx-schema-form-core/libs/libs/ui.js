@@ -74,12 +74,22 @@ var UiMerge = (function () {
                 if (uiSchema) {
                     uiSchemasFirst.push(uiSchema);
                 }
+                else {
+                    if (keyProp.constructor === Object) {
+                        uiSchemasFirst.push({ keys: [], uiSchema: keyProp });
+                    }
+                }
             });
         }
         uiSchemas.slice(idx + 1).forEach(function (keyProp) {
             var uiSchema = _this.mergeNormal(keyProp, map, keys, options);
             if (uiSchema) {
                 uiSchemasLast.push(uiSchema);
+            }
+            else {
+                if (keyProp.constructor === Object) {
+                    uiSchemasLast.push({ keys: [], uiSchema: keyProp });
+                }
             }
         });
         if (idx >= 0 && schema.type === "object" && schema.properties) {

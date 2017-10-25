@@ -1,7 +1,7 @@
 
 import React from "react";
 import { connect, Dispatch } from "react-redux";
-import { compose, shouldUpdate } from "recompose";
+import { compose, shouldUpdate, pure } from "recompose";
 import ajv from "ajv";
 import * as jpp from "json-pointer";
 import { BaseFactory } from "fx-schema-form-core";
@@ -88,6 +88,7 @@ export const ValidateHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Sc
                 ),
                 connect(mapActionsStateToProps),
                 connect(null, mapDispatchToProps),
+                pure
             )(Component);
 
             return <ComponentWithHoc {...this.props} />;
