@@ -51,6 +51,9 @@ declare const globalOptions: {
         "noHovering": boolean;
         "bordered": boolean;
     };
+    "object": {
+        "ui:temp": string[];
+    };
     "array": {
         "ui:temp": string[];
     };

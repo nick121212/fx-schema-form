@@ -50,9 +50,9 @@ export var getMetaData = function (state, props) {
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
     var metaData = SchemaFormCreate.metas[schemaKey];
     var meta = getCurrentState(state, props).meta;
-    if (meta) {
-        metaData.data = meta;
-    }
+    // if (meta) {
+    //     metaData.data = meta;
+    // }
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
 /**

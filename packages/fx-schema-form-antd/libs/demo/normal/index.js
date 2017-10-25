@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 var Panel = Collapse.Panel;
-var schema = ajv.getSchema("test").schema;
+var schema = ajv.getSchema("normal").schema;
 var uiSchema = ["*"];
 var reducer = createForms.createOne("normal", {}, ajv, schema);
 var NormalSchemaFormComponent = /** @class */ (function (_super) {

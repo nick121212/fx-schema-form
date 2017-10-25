@@ -1,7 +1,7 @@
 import * as tslib_1 from "tslib";
 import React from "react";
 import { connect } from "react-redux";
-import { compose, shouldUpdate } from "recompose";
+import { compose, shouldUpdate, pure } from "recompose";
 import { mapActionsStateToProps } from "../select";
 /**
  * 处理actions,这里吧actions添加到dispatch
@@ -66,7 +66,7 @@ export var ValidateHoc = function (hocFactory, Component) {
         Hoc.prototype.render = function () {
             var ComponentWithHoc = compose(shouldUpdate(function (props, nextProps) {
                 return false;
-            }), connect(mapActionsStateToProps), connect(null, mapDispatchToProps))(Component);
+            }), connect(mapActionsStateToProps), connect(null, mapDispatchToProps), pure)(Component);
             return React.createElement(ComponentWithHoc, tslib_1.__assign({}, this.props));
         };
         return Hoc;

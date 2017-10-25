@@ -8,14 +8,28 @@ var Panel = Collapse.Panel;
 var schema = {
     "$async": true,
     type: "object",
-    required: [],
+    required: ["name"],
     properties: {
         object: {
             $ref: "test#/properties/object"
+        },
+        name: {
+            $ref: "test#/properties/name"
         }
     }
 };
-var uiSchema = ["object", "object/settings"];
+var uiSchema = [
+    {
+        field: "object",
+        "ui:item.hoc": ["theme", "field", "array", "temp"],
+        items: ["object/settings", {
+                "key": "name"
+            }],
+    },
+    "name",
+    "object",
+    "object/settings"
+];
 var reducer = createForms.createOne("object", {}, ajv, schema);
 var ObjectSchemaFormComponent = /** @class */ (function (_super) {
     tslib_1.__extends(ObjectSchemaFormComponent, _super);

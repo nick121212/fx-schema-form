@@ -20,14 +20,22 @@ let schema = {
     }
 };
 let uiSchema: any = [
+    "name",
     {
+        title: "纯容器（使用card），包装2个item",
         field: "object",
+        "ui:temp": ["card"],
         "ui:item.hoc": ["theme", "field", "array", "temp"],
         items: ["object/settings", {
             "key": "name"
         }],
+        options: {
+            card: {
+                extra: <span>我就测试下属性的覆盖情况</span>,
+                bordered: true
+            }
+        }
     },
-    "name",
     "object",
     "object/settings"];
 

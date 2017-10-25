@@ -1,9 +1,8 @@
 import { SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux";
-import { MetaData } from "../libs/meta";
 export interface SchemaFormState<T> {
     data: T;
-    meta: MetaData;
+    meta: any;
 }
 export interface Actions {
     updateItem: SimpleActionCreator<{
@@ -69,7 +68,7 @@ export declare class FormReducer<T> {
      * 更改meta的状态
      */
     private updateData;
-    constructor(initialState: any, meta: MetaData);
+    constructor(initialState: any, meta: any);
     /**
      * 获取当前的actions
      */

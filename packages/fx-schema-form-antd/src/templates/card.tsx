@@ -15,9 +15,9 @@ export class AntdCardTemp extends React.Component<AntdCardTempProps, any> {
         let { dirty, isValid, errorText = "" } = meta;
 
         return (
-            <Card {...tempOptions} title={title || uiSchema.title} extra={arrayItems} bodyStyle={{
+            <Card  title={title || uiSchema.title} extra={arrayItems} bodyStyle={{
                 "display": meta.isShow === false ? "none" : "block"
-            }}>
+            }} {...tempOptions}>
                 {children}
                 {!isValid ? errorText : ""}
             </Card>

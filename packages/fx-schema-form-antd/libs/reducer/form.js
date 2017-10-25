@@ -86,7 +86,7 @@ var FormReducer = /** @class */ (function () {
     */
     FormReducer.prototype.getOrigin = function (state) {
         var originData = cloneDeep(state.data);
-        var originMeta = cloneDeep(this.meta);
+        var originMeta = cloneDeep(state.meta);
         return { originData: originData, originMeta: originMeta };
     };
     /**
@@ -101,12 +101,12 @@ var FormReducer = /** @class */ (function () {
             originMeta = meta;
         }
         if (isLoading !== undefined) {
-            originMeta.data.isLoading = isLoading;
+            originMeta.isLoading = isLoading;
         }
         if (isValid !== undefined) {
-            originMeta.data.isValid = isValid;
+            originMeta.isValid = isValid;
         }
-        return Object.assign({}, state, { meta: originMeta.data });
+        return Object.assign({}, state, { meta: originMeta });
     };
     /**
      * 更新数据
@@ -115,56 +115,55 @@ var FormReducer = /** @class */ (function () {
      */
     FormReducer.prototype.updateItemHandle = function (state, _a) {
         var keys = _a.keys, data = _a.data, meta = _a.meta;
-        var _b = this.getOrigin(state), originData = _b.originData, originMeta = _b.originMeta;
-        var normalKey = originMeta.getKey(keys).normalKey;
+        var originData = this.getOrigin(state).originData;
+        var normalKey = this.meta.getKey(keys).normalKey;
         jpp(originData).set(normalKey, data);
-        originMeta.setMeta(keys, meta);
-        return Object.assign({}, state, { data: originData, meta: originMeta.data });
+        this.meta.setMeta(keys, meta);
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.updateMetaHandle = function (state, _a) {
         var keys = _a.keys, meta = _a.meta;
-        var _b = this.getOrigin(state), originData = _b.originData, originMeta = _b.originMeta;
-        var normalKey = originMeta.getKey(keys).normalKey;
-        var curMeta = originMeta.getMeta(keys, false) || {};
-        originMeta.setMeta(keys, meta);
-        return Object.assign({}, state, { meta: originMeta.data });
+        var originData = this.getOrigin(state).originData;
+        var normalKey = this.meta.getKey(keys).normalKey;
+        var curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.setMeta(keys, meta);
+        return Object.assign({}, state, { meta: this.meta.data });
     };
     FormReducer.prototype.toggleItemHandle = function (state, _a) {
         var keys = _a.keys;
-        var originMeta = this.getOrigin(state).originMeta;
-        var normalKey = originMeta.getKey(keys).normalKey;
-        var curMeta = originMeta.getMeta(keys, false) || {};
-        originMeta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
-        return Object.assign({}, state, { meta: originMeta.data });
+        var normalKey = this.meta.getKey(keys).normalKey;
+        var curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
+        return Object.assign({}, state, { meta: this.meta.data });
     };
     FormReducer.prototype.addItemHandle = function (state, _a) {
         var keys = _a.keys, data = _a.data;
-        var _b = this.getOrigin(state), originData = _b.originData, originMeta = _b.originMeta;
-        var normalKey = originMeta.getKey(keys).normalKey;
+        var originData = this.getOrigin(state).originData;
+        var normalKey = this.meta.getKey(keys).normalKey;
         var curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
         jpp(originData).set(normalKey, curData.concat([data]));
         return Object.assign({}, state, { data: originData });
     };
     FormReducer.prototype.removeItemHandle = function (state, _a) {
         var keys = _a.keys, index = _a.index;
-        var _b = this.getOrigin(state), originData = _b.originData, originMeta = _b.originMeta;
-        var normalKey = originMeta.getKey(keys.concat([index.toString()])).normalKey;
+        var originData = this.getOrigin(state).originData;
+        var normalKey = this.meta.getKey(keys.concat([index.toString()])).normalKey;
         if (originData && jpp(originData).has(normalKey)) {
             jpp(originData).remove(normalKey);
         }
-        originMeta.removeMeta(keys.concat([index.toString()]));
-        return Object.assign({}, state, { data: originData, meta: originMeta.data });
+        this.meta.removeMeta(keys.concat([index.toString()]));
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.switchItemHandle = function (state, _a) {
         var keys = _a.keys, curIndex = _a.curIndex, switchIndex = _a.switchIndex;
-        var _b = this.getOrigin(state), originData = _b.originData, originMeta = _b.originMeta;
-        var normalKey = originMeta.getKey(keys).normalKey;
+        var originData = this.getOrigin(state).originData;
+        var normalKey = this.meta.getKey(keys).normalKey;
         var curData = jpp(originData).get(normalKey);
-        _c = [curData[switchIndex], curData[curIndex]], curData[curIndex] = _c[0], curData[switchIndex] = _c[1];
+        _b = [curData[switchIndex], curData[curIndex]], curData[curIndex] = _b[0], curData[switchIndex] = _b[1];
         jpp(originData).set(normalKey, curData);
-        originMeta.switchMeta(keys, curIndex, switchIndex);
-        return Object.assign({}, state, { data: originData, meta: originMeta.data });
-        var _c;
+        this.meta.switchMeta(keys, curIndex, switchIndex);
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+        var _b;
     };
     return FormReducer;
 }());

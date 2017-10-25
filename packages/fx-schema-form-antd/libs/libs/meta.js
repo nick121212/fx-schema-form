@@ -77,7 +77,7 @@ var MetaData = /** @class */ (function () {
                             });
                         });
                         return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/, this];
+                    case 4: return [2 /*return*/, this.data];
                 }
             });
         });
@@ -91,7 +91,7 @@ var MetaData = /** @class */ (function () {
         var escapeKey = jpp.escape(key);
         return {
             schemaKey: keys.map(function (k) {
-                if (typeof k === "number") {
+                if (!Number.isNaN(Number(k))) {
                     return "-";
                 }
                 return k;

@@ -50,7 +50,7 @@ export declare class MetaData {
      * 验证所有的数据
      * @param data 数据
      */
-    validateAll(data: any): Promise<MetaData>;
+    validateAll(data: any): Promise<any>;
     /**
      * 获得当前字段的key
      * @param keys    当前字段的Keys
