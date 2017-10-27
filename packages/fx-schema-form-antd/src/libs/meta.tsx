@@ -69,9 +69,8 @@ export class MetaData {
             if (this.data.map.hasOwnProperty(key)) {
                 let element = this.data.map[key];
 
-                if (element.isValid === false) {
-                    element.isValid = true;
-                }
+                element.isValid = true;
+                element.dirty = true;
             }
         }
         this.data.isLoading = true;
@@ -82,23 +81,34 @@ export class MetaData {
 
             this.data.isValid = true;
         } catch (err) {
-            // console.log(err);
-            err.errors.forEach((error: ajv.ErrorObject) => {
-                let keys = jpp.parse(error.dataPath);
-                let meta = this.getMeta(keys);
-
-                this.setMeta(keys, {
-                    dirty: true,
-                    isLoading: false,
-                    isValid: false,
-                    errors: [],
-                    errorText: error.message
-                });
-            });
+            if (err.errors && err.errors.length) {
+                this.setErrors(err.errors);
+            }
         }
 
         return this.data;
     }
+
+    /**
+     * 设置表单的错误
+     * @param errors 错误详情
+     */
+    public setErrors(errors: ajv.ErrorObject[]) {
+        errors.forEach((error: ajv.ErrorObject) => {
+            let keys = jpp.parse(error.dataPath);
+            let meta = this.getMeta(keys);
+
+            this.setMeta(keys, {
+                dirty: true,
+                isLoading: false,
+                isValid: false,
+                errors: [],
+                errorText: error.message
+            });
+        });
+        this.data.isValid = false;
+    }
+
     /**
      * 获得当前字段的key
      * @param keys    当前字段的Keys

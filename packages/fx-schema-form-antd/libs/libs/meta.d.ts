@@ -52,6 +52,11 @@ export declare class MetaData {
      */
     validateAll(data: any): Promise<any>;
     /**
+     * 设置表单的错误
+     * @param errors 错误详情
+     */
+    setErrors(errors: ajv.ErrorObject[]): void;
+    /**
      * 获得当前字段的key
      * @param keys    当前字段的Keys
      */

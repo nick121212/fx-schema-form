@@ -19,14 +19,22 @@ var schema = {
     }
 };
 var uiSchema = [
+    "name",
     {
+        title: "纯容器（使用card），包装2个item",
         field: "object",
+        "ui:temp": ["card"],
         "ui:item.hoc": ["theme", "field", "array", "temp"],
         items: ["object/settings", {
                 "key": "name"
             }],
+        options: {
+            card: {
+                extra: React.createElement("span", null, "\u6211\u5C31\u6D4B\u8BD5\u4E0B\u5C5E\u6027\u7684\u8986\u76D6\u60C5\u51B5"),
+                bordered: true
+            }
+        }
     },
-    "name",
     "object",
     "object/settings"
 ];

@@ -38,7 +38,6 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.validateAll = function (data) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var key, element, err_1;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
@@ -47,9 +46,8 @@ var MetaData = /** @class */ (function () {
                         for (key in this.data.map) {
                             if (this.data.map.hasOwnProperty(key)) {
                                 element = this.data.map[key];
-                                if (element.isValid === false) {
-                                    element.isValid = true;
-                                }
+                                element.isValid = true;
+                                element.dirty = true;
                             }
                         }
                         this.data.isLoading = true;
@@ -64,23 +62,33 @@ var MetaData = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         err_1 = _a.sent();
-                        // console.log(err);
-                        err_1.errors.forEach(function (error) {
-                            var keys = jpp.parse(error.dataPath);
-                            var meta = _this.getMeta(keys);
-                            _this.setMeta(keys, {
-                                dirty: true,
-                                isLoading: false,
-                                isValid: false,
-                                errors: [],
-                                errorText: error.message
-                            });
-                        });
+                        if (err_1.errors && err_1.errors.length) {
+                            this.setErrors(err_1.errors);
+                        }
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, this.data];
                 }
             });
         });
+    };
+    /**
+     * 设置表单的错误
+     * @param errors 错误详情
+     */
+    MetaData.prototype.setErrors = function (errors) {
+        var _this = this;
+        errors.forEach(function (error) {
+            var keys = jpp.parse(error.dataPath);
+            var meta = _this.getMeta(keys);
+            _this.setMeta(keys, {
+                dirty: true,
+                isLoading: false,
+                isValid: false,
+                errors: [],
+                errorText: error.message
+            });
+        });
+        this.data.isValid = false;
     };
     /**
      * 获得当前字段的key

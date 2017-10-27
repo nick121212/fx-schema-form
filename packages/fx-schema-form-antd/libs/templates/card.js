@@ -11,9 +11,9 @@ var AntdCardTemp = /** @class */ (function (_super) {
         var tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
         var uiSchema = mergeSchema.uiSchema, title = mergeSchema.title;
         var dirty = meta.dirty, isValid = meta.isValid, _b = meta.errorText, errorText = _b === void 0 ? "" : _b;
-        return (React.createElement(Card, tslib_1.__assign({}, tempOptions, { title: title || uiSchema.title, extra: arrayItems, bodyStyle: {
+        return (React.createElement(Card, tslib_1.__assign({ title: title || uiSchema.title, extra: arrayItems, bodyStyle: {
                 "display": meta.isShow === false ? "none" : "block"
-            } }),
+            } }, tempOptions),
             children,
             !isValid ? errorText : ""));
     };
