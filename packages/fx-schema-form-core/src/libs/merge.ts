@@ -66,7 +66,6 @@ export class SchemaMerge {
         if (!options.ajv.getSchema(key)) {
             options.ajv.addSchema(schema, key);
         }
-
         /**
          * 生成map
          */

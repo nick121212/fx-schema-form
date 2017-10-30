@@ -38,7 +38,8 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.validateAll = function (data) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var key, element, err_1;
+            var _this = this;
+            var key, element, schema, validate, err_1;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -55,16 +56,27 @@ var MetaData = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.schemaFormOptions.ajv.compile(this.schemaFormOptions.ajv.getSchema(this.curKey).schema)(data)];
+                        schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
+                        validate = this.schemaFormOptions.ajv.compile(schema);
+                        // this.schemaFormOptions.ajv.removeSchema
+                        // 调用验证方法
+                        return [4 /*yield*/, validate(data)
+                                .then(function () {
+                                _this.data.isValid = true;
+                            }).catch(function (err) {
+                                _this.data.isValid = false;
+                                if (err.errors && err.errors.length) {
+                                    _this.setErrors(err.errors);
+                                }
+                            })];
                     case 2:
+                        // this.schemaFormOptions.ajv.removeSchema
+                        // 调用验证方法
                         _a.sent();
-                        this.data.isValid = true;
                         return [3 /*break*/, 4];
                     case 3:
                         err_1 = _a.sent();
-                        if (err_1.errors && err_1.errors.length) {
-                            this.setErrors(err_1.errors);
-                        }
+                        console.log("dfkljalkdsjfkla", err_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, this.data];
                 }
@@ -77,6 +89,7 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.setErrors = function (errors) {
         var _this = this;
+        this.data.isValid = false;
         errors.forEach(function (error) {
             var keys = jpp.parse(error.dataPath);
             var meta = _this.getMeta(keys);
@@ -85,10 +98,9 @@ var MetaData = /** @class */ (function () {
                 isLoading: false,
                 isValid: false,
                 errors: [],
-                errorText: error.message
+                errorText: _this.schemaFormOptions.ajv.errorsText([error], { separator: ",", dataVar: "" })
             });
         });
-        this.data.isValid = false;
     };
     /**
      * 获得当前字段的key

@@ -63,7 +63,9 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
                 result.isValid = true;
                 actions.updateItemMeta({ keys, meta: result });
             }).catch((err) => {
-                result.errorText = err.errors ? schemaFormOptions.ajv.errorsText(err.errors) : err.message;
+                result.errorText = err.errors ?
+                    schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
+                    : err.message;
                 actions.updateItemMeta({ keys, meta: result });
             });
         }

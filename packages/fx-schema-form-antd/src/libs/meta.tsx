@@ -77,13 +77,22 @@ export class MetaData {
         this.data.isValid = false;
 
         try {
-            await this.schemaFormOptions.ajv.compile(this.schemaFormOptions.ajv.getSchema(this.curKey).schema)(data);
+            let schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
+            let validate = this.schemaFormOptions.ajv.compile(schema);
 
-            this.data.isValid = true;
+            // this.schemaFormOptions.ajv.removeSchema
+            // 调用验证方法
+            await validate(data)
+                .then(() => {
+                    this.data.isValid = true;
+                }).catch((err: any) => {
+                    this.data.isValid = false;
+                    if (err.errors && err.errors.length) {
+                        this.setErrors(err.errors);
+                    }
+                });
         } catch (err) {
-            if (err.errors && err.errors.length) {
-                this.setErrors(err.errors);
-            }
+            console.log("dfkljalkdsjfkla", err);
         }
 
         return this.data;
@@ -94,6 +103,8 @@ export class MetaData {
      * @param errors 错误详情
      */
     public setErrors(errors: ajv.ErrorObject[]) {
+        this.data.isValid = false;
+
         errors.forEach((error: ajv.ErrorObject) => {
             let keys = jpp.parse(error.dataPath);
             let meta = this.getMeta(keys);
@@ -103,10 +114,9 @@ export class MetaData {
                 isLoading: false,
                 isValid: false,
                 errors: [],
-                errorText: error.message
+                errorText: this.schemaFormOptions.ajv.errorsText([error], { separator: ",", dataVar: "" })
             });
         });
-        this.data.isValid = false;
     }
 
     /**

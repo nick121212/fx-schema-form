@@ -44,7 +44,7 @@ export class UiMerge {
             if (uiSchema.uiSchema.items) {
                 uiSchema.uiSchema.items = this.merge(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
             }
-            delete uiSchema.$ref;
+            // delete uiSchema.$ref;
 
             return uiSchema;
         }
@@ -56,7 +56,7 @@ export class UiMerge {
         if (map.has(keyPath.join("/")) && !keys[keyProp]) {
             let uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
 
-            delete uiSchema.$ref;
+            // delete uiSchema.$ref;
 
             return uiSchema;
         }
@@ -80,7 +80,7 @@ export class UiMerge {
             if (map.has(keyPath.join("/")) && !keyPath[keyProps]) {
                 let uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
 
-                delete uiSchema.$ref;
+                // delete uiSchema.$ref;
 
                 return uiSchema;
             }

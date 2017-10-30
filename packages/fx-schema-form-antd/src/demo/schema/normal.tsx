@@ -1,5 +1,7 @@
 export const schema = {
-    "$async": true,
+    $async: true,
+    async: true,
+    id: "test",
     type: "object",
     title: "测试SCHEMA",
     required: ["name"],
@@ -23,11 +25,13 @@ export const schema = {
         },
         array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
         array1: {
-            "$async": true,
+            $async: true,
+            async: true,
             type: "array",
             title: "测试无限极数组类型",
             items: {
-                "$async": true,
+                $async: true,
+                async: true,
                 type: "object",
                 required: ["test"],
                 properties: {
@@ -38,7 +42,10 @@ export const schema = {
                         minLength: 3,
                         idExists: { "table": "posts" },
                     },
-                    children: { $ref: "test#/properties/array1" }
+                    children: {
+                        "async": true,
+                        $ref: "test#/properties/array1"
+                    }
                 }
             }
         },

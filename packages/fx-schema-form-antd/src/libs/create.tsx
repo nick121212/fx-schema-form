@@ -8,9 +8,7 @@ export class SchemaFormCreate {
 
     public createOne<T>(key, data: T, curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
         let meta: MetaData = new MetaData();
-        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(() => {
-            console.log("");
-        });
+        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(() => 1);
         let reducer = new FormReducer<T>({
             data: data,
             meta: meta.data

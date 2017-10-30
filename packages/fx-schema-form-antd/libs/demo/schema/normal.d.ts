@@ -1,5 +1,7 @@
 export declare const schema: {
-    "$async": boolean;
+    $async: boolean;
+    async: boolean;
+    id: string;
     type: string;
     title: string;
     required: string[];
@@ -46,11 +48,13 @@ export declare const schema: {
             "title": string;
         };
         array1: {
-            "$async": boolean;
+            $async: boolean;
+            async: boolean;
             type: string;
             title: string;
             items: {
-                "$async": boolean;
+                $async: boolean;
+                async: boolean;
                 type: string;
                 required: string[];
                 properties: {
@@ -64,6 +68,7 @@ export declare const schema: {
                         };
                     };
                     children: {
+                        "async": boolean;
                         $ref: string;
                     };
                 };

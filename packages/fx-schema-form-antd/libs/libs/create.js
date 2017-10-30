@@ -5,9 +5,7 @@ var SchemaFormCreate = /** @class */ (function () {
     }
     SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema) {
         var meta = new MetaData();
-        var defaultValue = curJjv.validate(schema, data).catch(function () {
-            console.log("");
-        });
+        var defaultValue = curJjv.validate(schema, data).catch(function () { return 1; });
         var reducer = new FormReducer({
             data: data,
             meta: meta.data

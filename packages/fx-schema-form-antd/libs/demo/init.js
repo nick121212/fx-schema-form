@@ -10,6 +10,8 @@ import { ConditionHoc } from "./hoc/condition";
 import { GeoPositionField } from "./field/geo";
 import templates from "../templates";
 import widgets from "../widgets";
+// import ajvAsync from "ajv-async";
+// console.log(ajvAsync);
 hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
@@ -28,11 +30,29 @@ for (var key in templates) {
 }
 var curAjv = new Ajv({
     allErrors: true,
+    removeAdditional: false,
     jsonPointers: true,
-    // verbose: true,
+    extendRefs: true,
+    inlineRefs: true,
+    format: "full",
+    multipleOfPrecision: 12,
+    transpile: "nodent",
+    loopRequired: Infinity,
+    sourceCode: true,
+    coerceTypes: true,
+    missingRefs: true,
+    // inlineRefs: false,
+    // v5: true,
+    async: "es7",
     useDefaults: true,
     $data: true,
-    errorDataPath: "property"
+    errorDataPath: "property",
+    loadSchema: function (uri) {
+        console.log(uri);
+        return fetch(uri).then(function (res) {
+            return res.text();
+        });
+    }
 });
 var schemaFormOptions = {
     ajv: curAjv
@@ -91,7 +111,7 @@ var globalOptions = {
         "ui:temp": ["row", "col", "card"]
     }
 };
-curAjv.addSchema(schema, "test");
+curAjv.addSchema(schema);
 curAjv.addSchema(normal);
 curAjv.addSchema(flow);
 curAjv.addKeyword("idExists", {
@@ -108,5 +128,40 @@ curAjv.addKeyword("idExists", {
         });
     })
 });
+// let defaultSchema = {
+//     "$async": true,
+//     type: "object",
+//     required: [],
+//     properties: {
+//         array1: {
+//             $ref: "test#/properties/array1"
+//         }
+//     }
+// };
+// window.addEventListener("unhandledrejection", event => {
+//     console.log(event);
+// });
+// curAjv.compileAsync(schema, true, async (err, validate) => {
+//     try {
+//         // console.log(validate.source.code);
+//         await validate({
+//             name: "dlkjkxfa",
+//             array1: [{
+//                 test: "nick",
+//                 children: [{
+//                     test: "nick3",
+//                     children: [{
+//                         children: [{
+//                             test: "nick",
+//                             children: [{}]
+//                         }]
+//                     }]
+//                 }]
+//             }]
+//         }, "/", {});
+//     } catch (e) {
+//         console.log("dfadsfads", e);
+//     }
+// });
 export { curAjv as ajv, schemaFormOptions, globalOptions };
 //# sourceMappingURL=init.js.map

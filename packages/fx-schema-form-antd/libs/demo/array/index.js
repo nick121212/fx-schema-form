@@ -26,7 +26,12 @@ var settings = new FormExampleReducer({
 });
 var reducer = createForms.createOne("array", {
     array1: [{
-            test: "array_test", children: [{ test: "array_item_test" }]
+            test: "nick", children: [{
+                    test: "nick",
+                    children: [{
+                            test: "nick", children: [{}]
+                        }]
+                }]
         }]
 }, ajv, defaultSchema);
 var nextKey = "array";
@@ -37,20 +42,29 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
     }
     ArraySchemaFormComponent.prototype.doSubmit = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var metaData, _a, _b, _c;
+            var metaData, _a, _b, _c, e_1;
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
                         metaData = SchemaFormCreate.metas.array;
+                        _d.label = 1;
+                    case 1:
+                        _d.trys.push([1, 3, , 4]);
                         reducer.actions.updateMetaState({ isLoading: true, isValid: false });
                         _b = (_a = reducer.actions).updateMetaState;
                         _c = {
                             isLoading: false
                         };
                         return [4 /*yield*/, metaData.validateAll(this.props.data)];
-                    case 1:
+                    case 2:
                         _b.apply(_a, [(_c.meta = _d.sent(),
                                 _c)]);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _d.sent();
+                        console.log("dfdfdfdf", e_1);
+                        return [3 /*break*/, 4];
+                    case 4:
                         if (this.props.isValid) {
                             alert("提交表单");
                         }

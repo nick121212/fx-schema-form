@@ -29,7 +29,14 @@ let settings = new FormExampleReducer({
 });
 let reducer: FormReducer<any> = createForms.createOne("array", {
     array1: [{
-        test: "array_test", children: [{ test: "array_item_test" }]
+        test: "nick", children: [{
+            test: "nick",
+            children: [{
+                test: "nick", children: [{
+
+                }]
+            }]
+        }]
     }]
 }, ajv, defaultSchema);
 let nextKey = "array";
@@ -58,11 +65,15 @@ export class ArraySchemaFormComponent extends React.Component<any> {
     private async doSubmit(): Promise<void> {
         let metaData = SchemaFormCreate.metas.array;
 
-        reducer.actions.updateMetaState({ isLoading: true, isValid: false });
-        reducer.actions.updateMetaState({
-            isLoading: false,
-            meta: await metaData.validateAll(this.props.data)
-        });
+        try {
+            reducer.actions.updateMetaState({ isLoading: true, isValid: false });
+            reducer.actions.updateMetaState({
+                isLoading: false,
+                meta: await metaData.validateAll(this.props.data)
+            });
+        } catch (e) {
+            console.log("dfdfdfdf", e);
+        }
         if (this.props.isValid) {
             alert("提交表单");
         }
