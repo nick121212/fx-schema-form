@@ -27,7 +27,6 @@ module.exports = {
         // historyApiFall:"",
         hot: true,
         inline: true,
-        // contentBase: './out',
         port: 8083,
         host: "127.0.0.1",
         stats: { colors: true },
