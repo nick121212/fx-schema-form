@@ -36,13 +36,25 @@ export declare const getActions: (state: any, props: SchemaFormItemBaseProps) =>
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
+export declare const mapFormDataToProps: Reselect.OutputParametricSelector<any, SchemaFormItemBaseProps, {
+    formData: any;
+}, (res: any) => {
+    formData: any;
+}>;
+/**
+ * 获取单个字段的信息
+ * meta            额外的信息
+ * formData        当前表单的所有数据
+ * formItemData    当前字段的数据
+ */
 export declare const mapMetaStateToProps: Reselect.OutputParametricSelector<any, SchemaFormItemBaseProps, {
     meta: any;
-    formData: any;
-    formItemData: any;
-}, (res1: any, res2: any, res3: any) => {
+}, (res: any) => {
     meta: any;
-    formData: any;
+}>;
+export declare const mapFormItemDataProps: Reselect.OutputParametricSelector<any, SchemaFormItemBaseProps, {
+    formItemData: any;
+}, (res: any) => {
     formItemData: any;
 }>;
 /**
@@ -50,8 +62,6 @@ export declare const mapMetaStateToProps: Reselect.OutputParametricSelector<any,
  */
 export declare const mapActionsStateToProps: Reselect.OutputParametricSelector<any, SchemaFormItemBaseProps, {
     actions: any;
-    metaState: any;
-}, (res1: any, res2: any) => {
+}, (res: any) => {
     actions: any;
-    metaState: any;
 }>;

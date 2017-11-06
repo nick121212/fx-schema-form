@@ -54,14 +54,15 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormBasePro
  */
 export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocProps, any> => {
     @(compose<MergeHocProps, any>(
-        connect(mapActionsStateToProps),
+        onlyUpdateForKeys(["schema"]),
         connect(null, mapDispatchToProps),
-        onlyUpdateForKeys(["schema", "uiSchema", "metaState"])
     ) as any)
-    class Hoc extends React.Component<MergeHocProps, any> {
+    class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
         public render(): JSX.Element {
-            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, actions, formData } = this.props, mergeSchemaList;
+            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, formData } = this.props, mergeSchemaList;
             let formDefaultData = {};
+
+            console.log("merge render -----");
 
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
@@ -91,5 +92,5 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
         }
     }
 
-    return Hoc;
+    return MergeComponentHoc;
 };

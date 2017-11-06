@@ -18,7 +18,7 @@ export interface ThemeHocOutProps {
  * currentTheme 当前的命名空间
  */
 export const ThemeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps, any> => {
-    class Hoc extends React.Component<SchemaFormItemBaseProps, any> {
+    class ThemeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps, any> {
         public render(): JSX.Element {
             const { mergeSchema } = this.props;
             const { uiSchema = { theme: "", field: "" } } = mergeSchema;
@@ -34,5 +34,5 @@ export const ThemeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schem
         }
     }
 
-    return Hoc;
+    return ThemeComponentHoc;
 };

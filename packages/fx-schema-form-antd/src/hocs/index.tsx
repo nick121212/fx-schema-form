@@ -9,6 +9,7 @@ import { ThemeHoc, ThemeHocOutProps } from "./item/theme";
 import { ValidateHoc, ValidateHocOutProps } from "./item/validate";
 import { ArrayHoc, ArrayHocOutProps } from "./item/array";
 import { MakeHoc, MakeHocOutProps } from "./item/make";
+import { ConditionHoc, ConditionHocOutProps } from "./item/condition";
 
 const hocFactory = new BaseFactory<ComponentEnhancer<any, any>>();
 
@@ -20,6 +21,7 @@ const hocs = {
     validate: ValidateHoc.bind(ValidateHoc, hocFactory),
     array: ArrayHoc.bind(ArrayHoc, hocFactory),
     make: MakeHoc.bind(MakeHoc, hocFactory),
+    condition: ConditionHoc.bind(ConditionHoc, hocFactory)
 };
 
 for (let key in hocs) {

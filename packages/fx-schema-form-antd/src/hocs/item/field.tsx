@@ -22,11 +22,7 @@ export interface FieldHocOutProps {
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
 export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps, any> => {
-    class Hoc extends React.Component<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
-        public shouldComponentUpdate() {
-            return false;
-        }
-
+    class FieldComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
         public render(): JSX.Element | null {
             const { mergeSchema, currentTheme } = this.props;
             const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
@@ -62,7 +58,7 @@ export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schem
             if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
                 WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
             } else {
-                console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
+                // console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
             }
 
             return <Component {...this.props}
@@ -71,5 +67,5 @@ export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schem
         }
     }
 
-    return Hoc;
+    return FieldComponentHoc;
 };

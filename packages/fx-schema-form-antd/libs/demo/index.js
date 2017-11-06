@@ -3,9 +3,13 @@ import ReactDom from "react-dom";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
 import * as immutable from "immutable";
+import ReactPerfTool from "react-perf-tool";
+import Perf from "react-addons-perf";
+// Import styles if they don"t get loaded already
 import { Provider } from "react-redux";
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import "./index.less";
+import "react-perf-tool/lib/styles.css";
 import { settings as arraySettings, reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
 import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";
 import { reducer as objectReducer, ObjectSchemaFormComponent } from "./object";
@@ -19,11 +23,12 @@ var store = createStore(combineReducers({
     "custom.hoc": cushocReducer.reducer
 }), immutable.Map());
 store.subscribe(function () {
-    console.log(store.getState());
+    // console.log(store.getState());
 });
 ReactDom.render(React.createElement(Provider, { store: store },
     React.createElement(Router, null,
         React.createElement("div", null,
+            React.createElement(ReactPerfTool, { perf: Perf }),
             React.createElement(Menu, { mode: "horizontal", theme: "dark" },
                 React.createElement(Menu.Item, { key: "home" },
                     React.createElement(Link, { to: "/" },

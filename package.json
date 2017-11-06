@@ -23,9 +23,5 @@
   "license": "ISC",
   "devDependencies": {
     "lerna": "^2.0.0-rc.5"
-  },
-  "dependencies": {
-    "immutable": "^3.8.2",
-    "redux-immutable": "^4.0.0"
   }
 }

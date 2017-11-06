@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 import ReactCodeMirror from "react-codemirror";
 import isEqual from "lodash.isequal";
+import Immutable from "immutable";
 import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
 import { ajv, globalOptions } from "../init";
 import { FormExampleReducer } from "../reducer/schema";
@@ -16,7 +17,7 @@ var defaultSchema = {
     required: [],
     properties: {
         array1: {
-            $ref: "test#/properties/array1"
+            $ref: "array"
         }
     }
 };
@@ -24,16 +25,17 @@ var settings = new FormExampleReducer({
     schema: cloneDeep(defaultSchema),
     uiSchema: ["*"]
 });
-var reducer = createForms.createOne("array", {
-    array1: [{
-            test: "nick", children: [{
-                    test: "nick",
-                    children: [{
-                            test: "nick", children: [{}]
-                        }]
-                }]
-        }]
-}, ajv, defaultSchema);
+var reducer = createForms.createOne("array", {}, ajv, defaultSchema, function (state) {
+    return {
+        originMeta: state.get("meta").toJS(),
+        originData: state.get("data").toJS()
+    };
+}, function (state, data) {
+    if (Immutable.Map.isMap(state)) {
+        return state.merge(data);
+    }
+    return Immutable.fromJS(data);
+});
 var nextKey = "array";
 var ArraySchemaFormComponent = /** @class */ (function (_super) {
     tslib_1.__extends(ArraySchemaFormComponent, _super);
@@ -81,7 +83,7 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
         return true;
     };
     ArraySchemaFormComponent.prototype.render = function () {
-        var _a = this.props, isLoading = _a.isLoading, schema = _a.schema, uiSchema = _a.uiSchema, data = _a.data, meta = _a.meta;
+        var _a = this.props, isLoading = _a.isLoading, schema = _a.schema, uiSchema = _a.uiSchema, data = _a.data, meta = _a.meta, schemaForm = _a.schemaForm;
         var options = {
             lineNumbers: true,
             mode: "javascript",
@@ -102,8 +104,8 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
                     React.createElement(Col, { span: 16 },
                         React.createElement(SchemaForm, { schemaKey: "array", schemaFormOptions: {
                                 ajv: ajv
-                            }, key: nextKey, getCurrentState: function (state, props) {
-                                return state.get("array");
+                            }, key: "dddd", getCurrentState: function (state, props) {
+                                return state.get("array").toJS();
                             }, schema: schema, uiSchema: uiSchema, RootComponent: Form, globalOptions: globalOptions },
                             React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
                                 React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4")))),
@@ -112,13 +114,14 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
     };
     ArraySchemaFormComponent = tslib_1.__decorate([
         connect(function (state, props) {
-            var _a = state.get("array"), meta = _a.meta, data = _a.data;
-            var _b = state.get("arraySetting"), schema = _b.schema, uiSchema = _b.uiSchema;
+            var schemaForm = state.get("array").toJS();
+            var _a = state.get("arraySetting"), schema = _a.schema, uiSchema = _a.uiSchema;
             return {
-                isValid: meta.isValid,
-                isLoading: meta.isLoading,
-                meta: meta,
-                data: data,
+                isValid: schemaForm.meta.isValid,
+                isLoading: schemaForm.meta.isLoading,
+                meta: schemaForm.meta,
+                data: schemaForm.data,
+                schemaForm: schemaForm,
                 schema: schema,
                 uiSchema: uiSchema
             };

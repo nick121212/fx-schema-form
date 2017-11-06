@@ -2,9 +2,17 @@ import { createAction, createReducer } from "redux-act";
 import jpp from "json-pointer";
 import cloneDeep from "lodash.clonedeep";
 var FormReducer = /** @class */ (function () {
-    function FormReducer(initialState, meta) {
+    /**
+     * 构造
+     * @param initialState 初始化状态
+     * @param meta         当前的meta类
+     * @param updateState  更改数据的方法
+     */
+    function FormReducer(initialState, meta, getOriginState, updateState) {
         this.initialState = initialState;
         this.meta = meta;
+        this.getOriginState = getOriginState;
+        this.updateState = updateState;
         /**
          * 单个元素的值变化时候调用
          */
@@ -77,14 +85,25 @@ var FormReducer = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * 更新全部数据
+     * @param state state
+     * @param data  data
+     */
     FormReducer.prototype.updateDataHandle = function (state, data) {
-        return Object.assign({}, state, { data: data });
+        if (this.updateState) {
+            return this.updateState(state, { data: data, meta: { map: {}, meta: {} } });
+        }
+        return Object.assign({}, state, { data: data, meta: { map: {}, meta: {} } });
     };
     /**
     * 获取当前state的信息
     * @param state 当前的state
     */
     FormReducer.prototype.getOrigin = function (state) {
+        if (this.getOriginState) {
+            return this.getOriginState(state);
+        }
         var originData = cloneDeep(state.data);
         var originMeta = cloneDeep(state.meta);
         return { originData: originData, originMeta: originMeta };
@@ -106,6 +125,9 @@ var FormReducer = /** @class */ (function () {
         if (isValid !== undefined) {
             originMeta.isValid = isValid;
         }
+        if (this.updateState) {
+            return this.updateState(state, { meta: originMeta });
+        }
         return Object.assign({}, state, { meta: originMeta });
     };
     /**
@@ -119,6 +141,9 @@ var FormReducer = /** @class */ (function () {
         var normalKey = this.meta.getKey(keys).normalKey;
         jpp(originData).set(normalKey, data);
         this.meta.setMeta(keys, meta);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.updateMetaHandle = function (state, _a) {
@@ -127,6 +152,9 @@ var FormReducer = /** @class */ (function () {
         var normalKey = this.meta.getKey(keys).normalKey;
         var curMeta = this.meta.getMeta(keys, false) || {};
         this.meta.setMeta(keys, meta);
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
         return Object.assign({}, state, { meta: this.meta.data });
     };
     FormReducer.prototype.toggleItemHandle = function (state, _a) {
@@ -134,6 +162,9 @@ var FormReducer = /** @class */ (function () {
         var normalKey = this.meta.getKey(keys).normalKey;
         var curMeta = this.meta.getMeta(keys, false) || {};
         this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
         return Object.assign({}, state, { meta: this.meta.data });
     };
     FormReducer.prototype.addItemHandle = function (state, _a) {
@@ -142,6 +173,9 @@ var FormReducer = /** @class */ (function () {
         var normalKey = this.meta.getKey(keys).normalKey;
         var curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
         jpp(originData).set(normalKey, curData.concat([data]));
+        if (this.updateState) {
+            return this.updateState(state, { data: originData });
+        }
         return Object.assign({}, state, { data: originData });
     };
     FormReducer.prototype.removeItemHandle = function (state, _a) {
@@ -152,6 +186,9 @@ var FormReducer = /** @class */ (function () {
             jpp(originData).remove(normalKey);
         }
         this.meta.removeMeta(keys.concat([index.toString()]));
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.switchItemHandle = function (state, _a) {
@@ -162,6 +199,9 @@ var FormReducer = /** @class */ (function () {
         _b = [curData[switchIndex], curData[curIndex]], curData[curIndex] = _b[0], curData[switchIndex] = _b[1];
         jpp(originData).set(normalKey, curData);
         this.meta.switchMeta(keys, curIndex, switchIndex);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
         var _b;
     };

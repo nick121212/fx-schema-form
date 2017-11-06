@@ -1,45 +1,22 @@
 import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle } from "recompose";
-import pick from "recompose/utils/pick";
+import { pick } from "recompose/utils/pick";
 import isEqual from "lodash.isequal";
+import { connect } from "react-redux";
 
 import { ThemeHocOutProps } from "./theme";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { MakeHocOutProps } from "./make";
+import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 
 const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps & MakeHocOutProps, any>(
-    lifecycle({
-        shouldComponentUpdate: function (nextProps: SchemaFormItemBaseProps & MakeHocOutProps) {
-            // let { otherEqualKeys } = this.props;
-            let opts = this.props.getHocOptions();
-            let metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
-            let formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
-            let metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-            let rtn = !formItemDataEqual || !metaEqual;
-            let tempOpts = opts.temp || {};
-
-            if (tempOpts.equalKeys && !rtn) {
-                let { formData = {} } = nextProps;
-                let { formData: formData1 = {} } = this.props;
-
-                rtn = tempOpts.equalKeys.reduce((prev: boolean, next: string) => {
-                    return prev && isEqual(formData[next], formData[next]);
-                }, rtn);
-            }
-
-            if (!__PROD__) {
-                console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
-                console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
-                console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-                console.log("shouldUpdate", formItemDataEqual, metaEqual);
-                console.groupEnd();
-            }
-
-            return rtn;
-        }
-    })
+    connect(mapMetaStateToProps),
+    shouldUpdate((curProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps) => {
+        return !isEqual(curProps.meta, nextProps.meta);
+    }),
+    onlyUpdateForKeys(["meta"])
 );
 
 /**
@@ -54,7 +31,7 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
     * @param uiSchema 合并后的数据
     */
     @(metaConnect as any)
-    class Hoc extends React.Component<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
+    class TempComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
         private tempField = "ui:temp";
 
         public render(): JSX.Element {
@@ -62,6 +39,9 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
             const { uiSchema = { options: {} }, keys } = mergeSchema;
             const TempComponents = this.getTemplates();
             const uiSchemaOptions = uiSchema.options || {};
+            const ComponentWithHoc = compose<any, any>(
+                connect(mapFormItemDataProps)
+            )(Component);
             let index = 0;
 
             return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
@@ -73,7 +53,7 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
                     {...this.props}>
                     {prev}
                 </Temp>;
-            }, <Component key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}></Component>);
+            }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props} />);
         }
 
         /**
@@ -112,5 +92,5 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
         }
     }
 
-    return Hoc;
+    return TempComponentHoc;
 };

@@ -1,12 +1,13 @@
 
 import React from "react";
+import { branch, renderComponent, shouldUpdate, compose } from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { RC, NsFactory } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { ValidateHocOutProps } from "./validate";
-import { mapMetaStateToProps } from "../select";
+import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 import { MakeHocOutProps } from "./make";
 
 export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps, MakeHocOutProps {
@@ -14,7 +15,6 @@ export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOu
     removeItem?: (data: number) => void;
     addItem?: (data: any) => void;
     switchItem?: (data: any) => void;
-
     createItemChildButtons?: (index: number, maxLength: number) => JSX.Element;
 }
 
@@ -25,30 +25,18 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
     // 返回validae方法，这里更新字段的值
     return {
         toggleItem: (data: boolean) => {
-            if (!actions.toggleItem) {
-                console.error("没有找到的action！");
-            }
             actions.toggleItem({ keys });
         },
         removeItem: (data: number) => {
-            if (!actions.removeItem) {
-                console.error("没有找到的action！");
-            }
             actions.removeItem({ keys, index: data });
         },
         addItem: (data: any) => {
-            if (!actions.addItem) {
-                console.error("没有找到的action！");
-            }
             actions.addItem({ keys, data });
         },
         switchItem: (data: {
             curIndex: number;
             switchIndex: number;
         }) => {
-            if (!actions.switchItem) {
-                console.error("没有找到的action！");
-            }
             actions.switchItem({ keys, ...data });
         }
     };
@@ -62,8 +50,9 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
  * arrayItems
  */
 export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<ArrayHocOutProps, any> => {
-    @(connect(mapMetaStateToProps, mapDispatchToProps) as any)
-    class Hoc extends React.Component<ArrayHocOutProps, any> {
+
+    @(compose<ArrayHocOutProps, any>(connect(mapFormItemDataProps, mapDispatchToProps), connect(mapMetaStateToProps)) as any)
+    class ArrayComponentHoc extends React.PureComponent<ArrayHocOutProps, any> {
         public render(): JSX.Element {
             const { mergeSchema, getHocOptions } = this.props;
             const { type } = mergeSchema;
@@ -144,5 +133,27 @@ export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Array
         }
     }
 
-    return Hoc;
+    @connect(mapFormItemDataProps)
+    class PureComponent extends React.PureComponent<any> {
+        public render() {
+            return <Component {...this.props} />;
+        }
+    }
+
+    const spinnerWhileLoading = isLoading =>
+        branch(
+            isLoading,
+            renderComponent(PureComponent)
+        );
+
+    const enhance = spinnerWhileLoading(
+        props => {
+            const { mergeSchema, getHocOptions } = props;
+            const { type } = mergeSchema;
+
+            return type !== "array";
+        }
+    );
+
+    return enhance(ArrayComponentHoc) as any;
 };

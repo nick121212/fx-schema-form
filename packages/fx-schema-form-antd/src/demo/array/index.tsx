@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 import ReactCodeMirror from "react-codemirror";
 import isEqual from "lodash.isequal";
+import Immutable from "immutable";
 
 import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer, SchemaFormCreate } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
@@ -18,7 +19,7 @@ let defaultSchema = {
     required: [],
     properties: {
         array1: {
-            $ref: "test#/properties/array1"
+            $ref: "array"
         }
     }
 };
@@ -28,28 +29,31 @@ let settings = new FormExampleReducer({
     uiSchema: ["*"]
 });
 let reducer: FormReducer<any> = createForms.createOne("array", {
-    array1: [{
-        test: "nick", children: [{
-            test: "nick",
-            children: [{
-                test: "nick", children: [{
 
-                }]
-            }]
-        }]
-    }]
-}, ajv, defaultSchema);
+}, ajv, defaultSchema, (state: any) => {
+    return {
+        originMeta: state.get("meta").toJS(),
+        originData: state.get("data").toJS()
+    };
+}, (state: any, data: any) => {
+    if (Immutable.Map.isMap(state)) {
+        return state.merge(data);
+    }
+
+    return Immutable.fromJS(data);
+});
 let nextKey = "array";
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
-    let { meta, data } = state.get("array");
+    let schemaForm = state.get("array").toJS();
     let { schema, uiSchema } = state.get("arraySetting");
 
     return {
-        isValid: meta.isValid,
-        isLoading: meta.isLoading,
-        meta: meta,
-        data,
+        isValid: schemaForm.meta.isValid,
+        isLoading: schemaForm.meta.isLoading,
+        meta: schemaForm.meta,
+        data: schemaForm.data,
+        schemaForm,
         schema,
         uiSchema
     };
@@ -90,7 +94,7 @@ export class ArraySchemaFormComponent extends React.Component<any> {
 
 
     public render(): JSX.Element {
-        const { isLoading, schema, uiSchema, data, meta } = this.props;
+        const { isLoading, schema, uiSchema, data, meta, schemaForm } = this.props;
         const options = {
             lineNumbers: true,
             mode: "javascript",
@@ -123,9 +127,9 @@ export class ArraySchemaFormComponent extends React.Component<any> {
                                 schemaFormOptions={{
                                     ajv
                                 }}
-                                key={nextKey}
+                                key={"dddd"}
                                 getCurrentState={(state, props) => {
-                                    return state.get("array");
+                                    return state.get("array").toJS();
                                 }}
                                 schema={schema}
                                 uiSchema={uiSchema}

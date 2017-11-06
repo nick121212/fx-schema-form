@@ -1,18 +1,18 @@
 import React from "react";
 import Ajv from "ajv";
 import { Button, Popover, Popconfirm } from "antd";
-import { hocFactory, defaultTheme } from "../index";
+import { defaultTheme } from "../index";
 import { schema } from "./schema/normal";
 import normal from "./schema/normal1";
 import flow from "./schema/flow";
+import array from "./schema/array";
 import { AntdInputNumberWidget } from "./widget/number";
-import { ConditionHoc } from "./hoc/condition";
 import { GeoPositionField } from "./field/geo";
 import templates from "../templates";
 import widgets from "../widgets";
 // import ajvAsync from "ajv-async";
 // console.log(ajvAsync);
-hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
+// hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
@@ -111,6 +111,7 @@ var globalOptions = {
         "ui:temp": ["row", "col", "card"]
     }
 };
+curAjv.addSchema(array);
 curAjv.addSchema(schema);
 curAjv.addSchema(normal);
 curAjv.addSchema(flow);
@@ -124,7 +125,7 @@ curAjv.addKeyword("idExists", {
             }
             setTimeout(function () {
                 resolve(data === "nick");
-            }, 1000);
+            }, 200);
         });
     })
 });

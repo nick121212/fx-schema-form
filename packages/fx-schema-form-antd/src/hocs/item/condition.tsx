@@ -3,13 +3,14 @@ import React from "react";
 import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 import jpp from "json-pointer";
+import { connect } from "react-redux";
 
 import { ThemeHocOutProps } from "./theme";
 import { MakeHocOutProps } from "./make";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { ValidateHocOutProps } from "./validate";
-import { mapMetaStateToProps } from "../select";
+import { mapMetaStateToProps, mapFormDataToProps } from "../select";
 
 export interface ConditionHocOutProps {
 
@@ -31,7 +32,8 @@ export interface ConditionSettings {
  * @param Component 需要包装的组件
  */
 export const ConditionHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-    class Hoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+    @connect(mapFormDataToProps)
+    class ConditionComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
         private fieldKey = "ui:condition";
 
         /**
@@ -64,5 +66,5 @@ export const ConditionHoc = (hocFactory: BaseFactory<any>, Component: any): RC<S
         }
     }
 
-    return Hoc;
+    return ConditionComponentHoc;
 };

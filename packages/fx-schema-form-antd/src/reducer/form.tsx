@@ -55,7 +55,17 @@ export class FormReducer<T> {
      */
     private updateData: SimpleActionCreator<{ data: any }> = createAction("更改data的值");
 
-    constructor(private initialState: any, private meta: any) { }
+    /**
+     * 构造
+     * @param initialState 初始化状态
+     * @param meta         当前的meta类
+     * @param updateState  更改数据的方法
+     */
+    constructor(
+        private initialState: any,
+        private meta: any,
+        private getOriginState?: (state: any) => any,
+        private updateState?: (state: any, data: any) => any) { }
 
     /**
      * 获取当前的actions
@@ -89,8 +99,17 @@ export class FormReducer<T> {
         }, this.initialState);
     }
 
+    /**
+     * 更新全部数据
+     * @param state state
+     * @param data  data
+     */
     private updateDataHandle(state: SchemaFormState<any>, data: any) {
-        return Object.assign({}, state, { data });
+        if (this.updateState) {
+            return this.updateState(state, { data, meta: { map: {}, meta: {} } });
+        }
+
+        return Object.assign({}, state, { data, meta: { map: {}, meta: {} } });
     }
 
     /**
@@ -98,6 +117,10 @@ export class FormReducer<T> {
     * @param state 当前的state
     */
     private getOrigin(state: SchemaFormState<any>): { originData: any; originMeta: any } {
+        if (this.getOriginState) {
+            return this.getOriginState(state);
+        }
+
         let originData = cloneDeep(state.data);
         let originMeta = cloneDeep(state.meta);
 
@@ -124,6 +147,10 @@ export class FormReducer<T> {
             originMeta.isValid = isValid;
         }
 
+        if (this.updateState) {
+            return this.updateState(state, { meta: originMeta });
+        }
+
         return Object.assign({}, state, { meta: originMeta });
     }
 
@@ -140,34 +167,50 @@ export class FormReducer<T> {
         jpp(originData).set(normalKey, data);
         this.meta.setMeta(keys, meta);
 
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
+
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
     }
 
     private updateMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
         let { originData } = this.getOrigin(state);
-        let { normalKey } =  this.meta.getKey(keys);
-        let curMeta =  this.meta.getMeta(keys, false) || {};
+        let { normalKey } = this.meta.getKey(keys);
+        let curMeta = this.meta.getMeta(keys, false) || {};
 
         this.meta.setMeta(keys, meta);
 
-        return Object.assign({}, state, { meta:  this.meta.data });
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
+
+        return Object.assign({}, state, { meta: this.meta.data });
     }
 
     private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
-        let { normalKey } =  this.meta.getKey(keys);
-        let curMeta =  this.meta.getMeta(keys, false) || {};
+        let { normalKey } = this.meta.getKey(keys);
+        let curMeta = this.meta.getMeta(keys, false) || {};
 
         this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
 
-        return Object.assign({}, state, { meta:  this.meta.data });
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
+
+        return Object.assign({}, state, { meta: this.meta.data });
     }
 
     private addItemHandle(state: SchemaFormState<T>, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
         let { originData } = this.getOrigin(state);
-        let { normalKey } =  this.meta.getKey(keys);
+        let { normalKey } = this.meta.getKey(keys);
         let curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
 
         jpp(originData).set(normalKey, [...curData, data]);
+
+        if (this.updateState) {
+            return this.updateState(state, { data: originData });
+        }
 
         return Object.assign({}, state, { data: originData });
     }
@@ -182,6 +225,10 @@ export class FormReducer<T> {
 
         this.meta.removeMeta([...keys, index.toString()]);
 
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
+
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
     }
 
@@ -195,6 +242,10 @@ export class FormReducer<T> {
 
         jpp(originData).set(normalKey, curData);
         this.meta.switchMeta(keys, curIndex, switchIndex);
+
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
 
         return Object.assign({}, state, { data: originData, meta: this.meta.data });
     }

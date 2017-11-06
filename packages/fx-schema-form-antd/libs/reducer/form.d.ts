@@ -36,6 +36,8 @@ export interface Actions {
 export declare class FormReducer<T> {
     private initialState;
     private meta;
+    private getOriginState;
+    private updateState;
     /**
      * 单个元素的值变化时候调用
      */
@@ -68,7 +70,13 @@ export declare class FormReducer<T> {
      * 更改meta的状态
      */
     private updateData;
-    constructor(initialState: any, meta: any);
+    /**
+     * 构造
+     * @param initialState 初始化状态
+     * @param meta         当前的meta类
+     * @param updateState  更改数据的方法
+     */
+    constructor(initialState: any, meta: any, getOriginState?: (state: any) => any, updateState?: (state: any, data: any) => any);
     /**
      * 获取当前的actions
      */
@@ -77,6 +85,11 @@ export declare class FormReducer<T> {
      * 返回当前的reducer
      */
     readonly reducer: Reducer<any>;
+    /**
+     * 更新全部数据
+     * @param state state
+     * @param data  data
+     */
     private updateDataHandle(state, data);
     /**
     * 获取当前state的信息

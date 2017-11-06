@@ -50,9 +50,6 @@ export var getMetaData = function (state, props) {
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
     var metaData = SchemaFormCreate.metas[schemaKey];
     var meta = getCurrentState(state, props).meta;
-    // if (meta) {
-    //     metaData.data = meta;
-    // }
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
 /**
@@ -74,13 +71,25 @@ export var getActions = function (state, props) {
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
-export var mapMetaStateToProps = createSelector([getMetaData, getData, getAllData], function (meta, formItemData, formData) {
-    return { meta: meta, formData: formData, formItemData: formItemData };
+export var mapFormDataToProps = createSelector([getAllData], function (formData) {
+    return { formData: formData };
+});
+/**
+ * 获取单个字段的信息
+ * meta            额外的信息
+ * formData        当前表单的所有数据
+ * formItemData    当前字段的数据
+ */
+export var mapMetaStateToProps = createSelector([getMetaData], function (meta) {
+    return { meta: meta };
+});
+export var mapFormItemDataProps = createSelector([getData], function (formItemData) {
+    return { formItemData: formItemData };
 });
 /**
  * 返回actions
  */
-export var mapActionsStateToProps = createSelector([getActions, getMetaStateData], function (actions, metaState) {
-    return { actions: actions, metaState: metaState };
+export var mapActionsStateToProps = createSelector([getActions], function (actions) {
+    return { actions: actions };
 });
 //# sourceMappingURL=select.js.map

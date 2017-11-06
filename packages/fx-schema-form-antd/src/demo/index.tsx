@@ -3,7 +3,10 @@ import ReactDom from "react-dom";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
 import * as immutable from "immutable";
+import ReactPerfTool from "react-perf-tool";
+import Perf from "react-addons-perf";
 
+// Import styles if they don"t get loaded already
 import { Provider } from "react-redux";
 import {
     HashRouter as Router,
@@ -12,6 +15,8 @@ import {
 } from "react-router-dom";
 
 import "./index.less";
+
+import "react-perf-tool/lib/styles.css";
 
 import { ajv, schemaFormOptions } from "./init";
 import { settings as arraySettings, reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
@@ -31,13 +36,14 @@ let store = createStore<any>(combineReducers({
 }), immutable.Map());
 
 store.subscribe(() => {
-    console.log(store.getState());
+    // console.log(store.getState());
 });
 
 ReactDom.render(
     <Provider store={store}>
         <Router>
             <div>
+                <ReactPerfTool perf={Perf} />
                 <Menu mode="horizontal" theme="dark">
                     <Menu.Item key="home">
                         <Link to="/"><Icon type="mail" />主页</Link>

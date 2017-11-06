@@ -1,34 +1,12 @@
 import * as tslib_1 from "tslib";
 import React from "react";
-import { compose, lifecycle } from "recompose";
-import pick from "recompose/utils/pick";
+import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import isEqual from "lodash.isequal";
-var metaConnect = compose(lifecycle({
-    shouldComponentUpdate: function (nextProps) {
-        // let { otherEqualKeys } = this.props;
-        var opts = this.props.getHocOptions();
-        var metaKeys = ["isShow", "isValid", "errorText", "isLoading"];
-        var formItemDataEqual = isEqual(nextProps.formItemData, this.props.formItemData);
-        var metaEqual = isEqual(pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-        var rtn = !formItemDataEqual || !metaEqual;
-        var tempOpts = opts.temp || {};
-        if (tempOpts.equalKeys && !rtn) {
-            var _a = nextProps.formData, formData_1 = _a === void 0 ? {} : _a;
-            var _b = this.props.formData, formData1 = _b === void 0 ? {} : _b;
-            rtn = tempOpts.equalKeys.reduce(function (prev, next) {
-                return prev && isEqual(formData_1[next], formData_1[next]);
-            }, rtn);
-        }
-        if (!__PROD__) {
-            console.groupCollapsed(nextProps.mergeSchema.keys + "---temp中比较formItemData和Meta的值得变化;" + rtn);
-            console.log("formItemData", formItemDataEqual, nextProps.formItemData, this.props.formItemData);
-            console.log("meta", metaEqual, pick(nextProps.meta, metaKeys), pick(this.props.meta, metaKeys));
-            console.log("shouldUpdate", formItemDataEqual, metaEqual);
-            console.groupEnd();
-        }
-        return rtn;
-    }
-}));
+import { connect } from "react-redux";
+import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
+var metaConnect = compose(connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
+    return !isEqual(curProps.meta, nextProps.meta);
+}), onlyUpdateForKeys(["meta"]));
 /**
  * 包装Template的组件HOC
  * @param hocFactory  hoc的工厂方法
@@ -39,29 +17,30 @@ export var TempHoc = function (hocFactory, Component) {
     * 获取模板的components
     * @param uiSchema 合并后的数据
     */
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var TempComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(TempComponentHoc, _super);
+        function TempComponentHoc() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.tempField = "ui:temp";
             return _this;
         }
-        Hoc.prototype.render = function () {
+        TempComponentHoc.prototype.render = function () {
             var _this = this;
             var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
             var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
             var TempComponents = this.getTemplates();
             var uiSchemaOptions = uiSchema.options || {};
+            var ComponentWithHoc = compose(connect(mapFormItemDataProps))(Component);
             var index = 0;
             return TempComponents.reduce(function (prev, _a) {
                 var key = _a.key, Temp = _a.Temp;
                 return React.createElement(Temp, tslib_1.__assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, _this.props), prev);
-            }, React.createElement(Component, tslib_1.__assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
+            }, React.createElement(ComponentWithHoc, tslib_1.__assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
         };
         /**
         * 获取模板的components
         */
-        Hoc.prototype.getTemplates = function () {
+        TempComponentHoc.prototype.getTemplates = function () {
             var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
             var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
             var typeDefaultOptions = globalOptions[type] || {};
@@ -91,11 +70,11 @@ export var TempHoc = function (hocFactory, Component) {
             }
             return TempComponent;
         };
-        Hoc = tslib_1.__decorate([
+        TempComponentHoc = tslib_1.__decorate([
             metaConnect
-        ], Hoc);
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        ], TempComponentHoc);
+        return TempComponentHoc;
+    }(React.PureComponent));
+    return TempComponentHoc;
 };
 //# sourceMappingURL=temp.js.map

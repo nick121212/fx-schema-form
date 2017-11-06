@@ -7,4 +7,4 @@
 /packages/**/tsconfig.json
 /packages/**/tslint.json
 /packages/**/webpack.config.js
-.src
+/packages/**/src

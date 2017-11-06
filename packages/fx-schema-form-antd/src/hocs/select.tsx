@@ -69,10 +69,6 @@ export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaF
     const metaData = SchemaFormCreate.metas[schemaKey];
     const { meta } = getCurrentState(state, props);
 
-    // if (meta) {
-    //     metaData.data = meta;
-    // }
-
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
 
@@ -98,10 +94,30 @@ export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
+export const mapFormDataToProps = createSelector(
+    [getAllData],
+    (formData: any) => {
+        return { formData };
+    }
+);
+
+/**
+ * 获取单个字段的信息
+ * meta            额外的信息
+ * formData        当前表单的所有数据
+ * formItemData    当前字段的数据
+ */
 export const mapMetaStateToProps = createSelector(
-    [getMetaData, getData, getAllData],
-    (meta: any, formItemData: any, formData: any) => {
-        return { meta, formData, formItemData };
+    [getMetaData],
+    (meta: any) => {
+        return { meta };
+    }
+);
+
+export const mapFormItemDataProps = createSelector(
+    [getData],
+    (formItemData: any) => {
+        return { formItemData };
     }
 );
 
@@ -109,8 +125,8 @@ export const mapMetaStateToProps = createSelector(
  * 返回actions
  */
 export const mapActionsStateToProps = createSelector(
-    [getActions, getMetaStateData],
-    (actions: any, metaState: any) => {
-        return { actions, metaState };
+    [getActions],
+    (actions: any) => {
+        return { actions };
     }
 );

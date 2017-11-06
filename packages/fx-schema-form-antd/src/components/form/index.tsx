@@ -17,7 +17,7 @@ export interface SchemaFormProps extends SchemaFormBaseProps {
  * SchemaForm组件
  * 通过schema和uiSchea生成表单元素
  */
-class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutProps, any> {
+class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHocOutProps, any> {
     /**
      * render
      */
@@ -40,6 +40,8 @@ class SchemaFormComponent extends React.Component<SchemaFormProps & MergeHocOutP
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
+
+        console.log("form render----------------");
 
         return (
             <RootComponentHock>

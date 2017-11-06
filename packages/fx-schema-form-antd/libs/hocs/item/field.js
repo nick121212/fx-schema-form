@@ -8,15 +8,12 @@ import React from "react";
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
 export var FieldHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var FieldComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(FieldComponentHoc, _super);
+        function FieldComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Hoc.prototype.shouldComponentUpdate = function () {
-            return false;
-        };
-        Hoc.prototype.render = function () {
+        FieldComponentHoc.prototype.render = function () {
             var _a = this.props, mergeSchema = _a.mergeSchema, currentTheme = _a.currentTheme;
             var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { theme: "", field: "", widget: "" } : _b;
             var FieldComponent, WidgetComponent;
@@ -46,12 +43,12 @@ export var FieldHoc = function (hocFactory, Component) {
                 WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
             }
             else {
-                console.warn("\u627E\u4E0D\u5230widget\uFF1A" + (uiSchema.widget || mergeSchema.type), mergeSchema);
+                // console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
             }
             return React.createElement(Component, tslib_1.__assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
         };
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        return FieldComponentHoc;
+    }(React.PureComponent));
+    return FieldComponentHoc;
 };
 //# sourceMappingURL=field.js.map

@@ -20,7 +20,7 @@ export interface MakeHocOutProps {
  *  3. HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
  */
 export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-    class Hoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+    class MakeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
         private fieldKey = "ui:item.hoc";
 
         public shouldComponentUpdate() {
@@ -38,8 +38,6 @@ export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
             let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
                 (...hocs.map(hoc => hocFactory.get(hoc)))(Component);
 
-            // console.log("make render");
-
             return <ComponentWithHocs getHocOptions={this.getHocOptions.bind(this)} {...this.props} />;
         }
 
@@ -53,5 +51,5 @@ export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
         }
     }
 
-    return Hoc;
+    return MakeComponentHoc;
 };

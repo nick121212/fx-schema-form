@@ -22,6 +22,7 @@ var SchemaFormComponent = /** @class */ (function (_super) {
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
+        console.log("form render----------------");
         return (React.createElement(RootComponentHock, null,
             mergeSchemaList.map(function (mergeSchema, idx) {
                 var find = false;
@@ -41,6 +42,6 @@ var SchemaFormComponent = /** @class */ (function (_super) {
             children));
     };
     return SchemaFormComponent;
-}(React.Component));
+}(React.PureComponent));
 export var SchemaForm = hoc(SchemaFormComponent);
 //# sourceMappingURL=index.js.map

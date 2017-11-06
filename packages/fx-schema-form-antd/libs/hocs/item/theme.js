@@ -9,12 +9,12 @@ import { nsFactory } from "../../index";
  * currentTheme 当前的命名空间
  */
 export var ThemeHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var ThemeComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(ThemeComponentHoc, _super);
+        function ThemeComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Hoc.prototype.render = function () {
+        ThemeComponentHoc.prototype.render = function () {
             var mergeSchema = this.props.mergeSchema;
             var _a = mergeSchema.uiSchema, uiSchema = _a === void 0 ? { theme: "", field: "" } : _a;
             var theme;
@@ -26,8 +26,8 @@ export var ThemeHoc = function (hocFactory, Component) {
             }
             return React.createElement(Component, tslib_1.__assign({ currentTheme: theme }, this.props));
         };
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        return ThemeComponentHoc;
+    }(React.PureComponent));
+    return ThemeComponentHoc;
 };
 //# sourceMappingURL=theme.js.map

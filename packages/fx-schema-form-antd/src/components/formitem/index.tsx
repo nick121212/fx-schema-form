@@ -17,7 +17,7 @@ export interface SchemaFormItemProps
  * SchemaFormItem组件
  * 找到对应的field组件，渲染
  */
-class SchemaFormItemComponent extends React.Component<SchemaFormItemProps, any> {
+class SchemaFormItemComponent extends React.PureComponent<SchemaFormItemProps, any> {
     public render(): JSX.Element | null {
         const { FieldComponent, mergeSchema } = this.props;
         const { uiSchema = {} } = mergeSchema;

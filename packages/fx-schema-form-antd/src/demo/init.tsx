@@ -6,6 +6,8 @@ import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
 import { schema } from "./schema/normal";
 import normal from "./schema/normal1";
 import flow from "./schema/flow";
+import array from "./schema/array";
+
 
 import { AntdInputNumberWidget } from "./widget/number";
 import { ConditionHoc } from "./hoc/condition";
@@ -18,7 +20,7 @@ import widgets from "../widgets";
 
 // console.log(ajvAsync);
 
-hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
+// hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 
@@ -142,7 +144,7 @@ const globalOptions = {
         "ui:temp": ["row", "col", "card"]
     }
 };
-
+curAjv.addSchema(array);
 curAjv.addSchema(schema);
 curAjv.addSchema(normal);
 curAjv.addSchema(flow);
@@ -156,7 +158,7 @@ curAjv.addKeyword("idExists", {
             }
             setTimeout(() => {
                 resolve(data === "nick");
-            }, 1000);
+            }, 200);
         });
     }) as SchemaValidateFunction
 });

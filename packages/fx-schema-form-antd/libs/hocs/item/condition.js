@@ -1,6 +1,8 @@
 import * as tslib_1 from "tslib";
 import React from "react";
 import jpp from "json-pointer";
+import { connect } from "react-redux";
+import { mapFormDataToProps } from "../select";
 /**
  * condition hoc
  * 用于组件的显示隐藏
@@ -10,9 +12,9 @@ import jpp from "json-pointer";
  * @param Component 需要包装的组件
  */
 export var ConditionHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var ConditionComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(ConditionComponentHoc, _super);
+        function ConditionComponentHoc() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.fieldKey = "ui:condition";
             return _this;
@@ -20,7 +22,7 @@ export var ConditionHoc = function (hocFactory, Component) {
         /**
          * render
          */
-        Hoc.prototype.render = function () {
+        ConditionComponentHoc.prototype.render = function () {
             var _a = this.props, getHocOptions = _a.getHocOptions, formData = _a.formData, formDefaultData = _a.formDefaultData;
             var hocOptions = getHocOptions();
             var conditionHocOptions = hocOptions.condition;
@@ -43,8 +45,11 @@ export var ConditionHoc = function (hocFactory, Component) {
             }
             return React.createElement(Component, tslib_1.__assign({}, this.props));
         };
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        ConditionComponentHoc = tslib_1.__decorate([
+            connect(mapFormDataToProps)
+        ], ConditionComponentHoc);
+        return ConditionComponentHoc;
+    }(React.PureComponent));
+    return ConditionComponentHoc;
 };
 //# sourceMappingURL=condition.js.map

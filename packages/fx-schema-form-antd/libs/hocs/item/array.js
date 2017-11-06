@@ -1,34 +1,23 @@
 import * as tslib_1 from "tslib";
 import React from "react";
+import { branch, renderComponent, compose } from "recompose";
 import { connect } from "react-redux";
-import { mapMetaStateToProps } from "../select";
+import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 var mapDispatchToProps = function (dispatch, ownProps) {
     var mergeSchema = ownProps.mergeSchema, actions = ownProps.actions, schemaFormOptions = ownProps.schemaFormOptions;
     var keys = mergeSchema.keys;
     // 返回validae方法，这里更新字段的值
     return {
         toggleItem: function (data) {
-            if (!actions.toggleItem) {
-                console.error("没有找到的action！");
-            }
             actions.toggleItem({ keys: keys });
         },
         removeItem: function (data) {
-            if (!actions.removeItem) {
-                console.error("没有找到的action！");
-            }
             actions.removeItem({ keys: keys, index: data });
         },
         addItem: function (data) {
-            if (!actions.addItem) {
-                console.error("没有找到的action！");
-            }
             actions.addItem({ keys: keys, data: data });
         },
         switchItem: function (data) {
-            if (!actions.switchItem) {
-                console.error("没有找到的action！");
-            }
             actions.switchItem(tslib_1.__assign({ keys: keys }, data));
         }
     };
@@ -41,12 +30,12 @@ var mapDispatchToProps = function (dispatch, ownProps) {
  * arrayItems
  */
 export var ArrayHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var ArrayComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(ArrayComponentHoc, _super);
+        function ArrayComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Hoc.prototype.render = function () {
+        ArrayComponentHoc.prototype.render = function () {
             var _a = this.props, mergeSchema = _a.mergeSchema, getHocOptions = _a.getHocOptions;
             var type = mergeSchema.type;
             var hocOptions = getHocOptions();
@@ -67,7 +56,7 @@ export var ArrayHoc = function (hocFactory, Component) {
          * 移除一个数据项
          * @param index 数组索引
          */
-        Hoc.prototype.removeItem = function (index) {
+        ArrayComponentHoc.prototype.removeItem = function (index) {
             var _a = this.props, _b = _a.formItemData, formItemData = _b === void 0 ? [] : _b, mergeSchema = _a.mergeSchema, removeItem = _a.removeItem, arrayIndex = _a.arrayIndex;
             var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
             if (type === "array" && index !== undefined) {
@@ -79,7 +68,7 @@ export var ArrayHoc = function (hocFactory, Component) {
          * @param curIndex     当前的位置
          * @param switchIndex  移动到的位置
          */
-        Hoc.prototype.switchItem = function (curIndex, switchIndex) {
+        ArrayComponentHoc.prototype.switchItem = function (curIndex, switchIndex) {
             var _a = this.props, _b = _a.formItemData, formItemData = _b === void 0 ? [] : _b, mergeSchema = _a.mergeSchema, switchItem = _a.switchItem, arrayIndex = _a.arrayIndex;
             var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
             if (type === "array" && curIndex !== undefined && switchIndex !== undefined) {
@@ -95,14 +84,14 @@ export var ArrayHoc = function (hocFactory, Component) {
         /**
          * 显示隐藏数组中的item元素
          */
-        Hoc.prototype.toggleItem = function () {
+        ArrayComponentHoc.prototype.toggleItem = function () {
             var toggleItem = this.props.toggleItem;
             toggleItem();
         };
         /**
          * 添加一个项目
          */
-        Hoc.prototype.addItem = function () {
+        ArrayComponentHoc.prototype.addItem = function () {
             var _a = this.props, mergeSchema = _a.mergeSchema, validate = _a.validate, addItem = _a.addItem;
             if (mergeSchema.items.type === "object") {
                 addItem({});
@@ -111,11 +100,32 @@ export var ArrayHoc = function (hocFactory, Component) {
                 addItem(undefined);
             }
         };
-        Hoc = tslib_1.__decorate([
-            connect(mapMetaStateToProps, mapDispatchToProps)
-        ], Hoc);
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        ArrayComponentHoc = tslib_1.__decorate([
+            compose(connect(mapFormItemDataProps, mapDispatchToProps), connect(mapMetaStateToProps))
+        ], ArrayComponentHoc);
+        return ArrayComponentHoc;
+    }(React.PureComponent));
+    var PureComponent = /** @class */ (function (_super) {
+        tslib_1.__extends(PureComponent, _super);
+        function PureComponent() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PureComponent.prototype.render = function () {
+            return React.createElement(Component, tslib_1.__assign({}, this.props));
+        };
+        PureComponent = tslib_1.__decorate([
+            connect(mapFormItemDataProps)
+        ], PureComponent);
+        return PureComponent;
+    }(React.PureComponent));
+    var spinnerWhileLoading = function (isLoading) {
+        return branch(isLoading, renderComponent(PureComponent));
+    };
+    var enhance = spinnerWhileLoading(function (props) {
+        var mergeSchema = props.mergeSchema, getHocOptions = props.getHocOptions;
+        var type = mergeSchema.type;
+        return type !== "array";
+    });
+    return enhance(ArrayComponentHoc);
 };
 //# sourceMappingURL=array.js.map

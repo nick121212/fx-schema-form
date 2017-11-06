@@ -1,6 +1,5 @@
 export const schema = {
     $async: true,
-    async: true,
     id: "test",
     type: "object",
     title: "测试SCHEMA",
@@ -26,28 +25,9 @@ export const schema = {
         array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
         array1: {
             $async: true,
-            async: true,
             type: "array",
             title: "测试无限极数组类型",
-            items: {
-                $async: true,
-                async: true,
-                type: "object",
-                required: ["test"],
-                properties: {
-                    test: {
-                        type: "string",
-                        title: "无限极测试数据",
-                        description: "这个字段需要通过远程验证，输入nick试试",
-                        minLength: 3,
-                        idExists: { "table": "posts" },
-                    },
-                    children: {
-                        "async": true,
-                        $ref: "test#/properties/array1"
-                    }
-                }
-            }
+            $ref: "array"
         },
         null: { type: "null", "title": "测试null类型", default: null },
         muti: {

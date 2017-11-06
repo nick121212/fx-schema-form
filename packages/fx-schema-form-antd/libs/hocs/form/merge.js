@@ -3,7 +3,6 @@ import React from "react";
 import { schemaMerge } from "fx-schema-form-core";
 import { connect } from "react-redux";
 import { compose, onlyUpdateForKeys } from "recompose";
-import { mapActionsStateToProps } from "../select";
 /**
  * 使得actions可以直接调用，绑定到dispatch
  * @param dispatch dispatch
@@ -31,14 +30,15 @@ var mapDispatchToProps = function (dispatch, ownProps) {
  * mergeSchemaList    合并之后的数据
  */
 export var MergeHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var MergeComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(MergeComponentHoc, _super);
+        function MergeComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Hoc.prototype.render = function () {
-            var _a = this.props, schema = _a.schema, uiSchema = _a.uiSchema, parentKeys = _a.parentKeys, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey, actions = _a.actions, formData = _a.formData, mergeSchemaList;
+        MergeComponentHoc.prototype.render = function () {
+            var _a = this.props, schema = _a.schema, uiSchema = _a.uiSchema, parentKeys = _a.parentKeys, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey, formData = _a.formData, mergeSchemaList;
             var formDefaultData = {};
+            console.log("merge render -----");
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
             }
@@ -57,11 +57,11 @@ export var MergeHoc = function (hocFactory, Component) {
             mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
             return (React.createElement(Component, tslib_1.__assign({ schemaFormOptions: schemaFormOptions || {}, schemaKey: schemaKey, mergeSchemaList: mergeSchemaList }, this.props)));
         };
-        Hoc = tslib_1.__decorate([
-            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), onlyUpdateForKeys(["schema", "uiSchema", "metaState"]))
-        ], Hoc);
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        MergeComponentHoc = tslib_1.__decorate([
+            compose(onlyUpdateForKeys(["schema"]), connect(null, mapDispatchToProps))
+        ], MergeComponentHoc);
+        return MergeComponentHoc;
+    }(React.PureComponent));
+    return MergeComponentHoc;
 };
 //# sourceMappingURL=merge.js.map

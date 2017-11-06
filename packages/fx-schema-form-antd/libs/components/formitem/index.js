@@ -20,6 +20,6 @@ var SchemaFormItemComponent = /** @class */ (function (_super) {
         return React.createElement(FieldComponent, tslib_1.__assign({}, this.props));
     };
     return SchemaFormItemComponent;
-}(React.Component));
+}(React.PureComponent));
 export var SchemaFormItem = hoc(SchemaFormItemComponent);
 //# sourceMappingURL=index.js.map

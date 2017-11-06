@@ -1,7 +1,7 @@
 import * as tslib_1 from "tslib";
 import React from "react";
 import { connect } from "react-redux";
-import { compose, shouldUpdate, pure } from "recompose";
+import { compose, pure } from "recompose";
 import { mapActionsStateToProps } from "../select";
 /**
  * 处理actions,这里吧actions添加到dispatch
@@ -23,15 +23,9 @@ var mapDispatchToProps = function (dispatch, ownProps) {
     // 返回validae方法，这里更新字段的值
     return {
         updateItemData: function (data) {
-            if (!actions.updateItem) {
-                console.error("没有更新的action！");
-            }
             actions.updateItem({ keys: keys, data: data, meta: {} });
         },
         validate: function (data) {
-            if (!actions.updateItem) {
-                console.error("没有更新的action！");
-            }
             // 验证操作
             var result = {
                 dirty: true,
@@ -39,11 +33,15 @@ var mapDispatchToProps = function (dispatch, ownProps) {
                 isLoading: false,
                 errorText: ""
             };
-            actions.updateItemMeta({ keys: keys, meta: { isLoading: true, isValid: false, errorText: false } });
+            var timeId = setTimeout(function () {
+                actions.updateItemMeta({ keys: keys, meta: { isLoading: true, isValid: false, errorText: false } });
+            }, 50);
             validate(data).then(function () {
+                clearTimeout(timeId);
                 result.isValid = true;
                 actions.updateItemMeta({ keys: keys, meta: result });
             }).catch(function (err) {
+                clearTimeout(timeId);
                 result.errorText = err.errors ?
                     schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
                     : err.message;
@@ -60,19 +58,19 @@ var mapDispatchToProps = function (dispatch, ownProps) {
  * currentTheme 当前的命名空间
  */
 export var ValidateHoc = function (hocFactory, Component) {
-    var Hoc = /** @class */ (function (_super) {
-        tslib_1.__extends(Hoc, _super);
-        function Hoc() {
+    var ValidateComponentHoc = /** @class */ (function (_super) {
+        tslib_1.__extends(ValidateComponentHoc, _super);
+        function ValidateComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        Hoc.prototype.render = function () {
-            var ComponentWithHoc = compose(shouldUpdate(function (props, nextProps) {
-                return false;
-            }), connect(mapActionsStateToProps), connect(null, mapDispatchToProps), pure)(Component);
-            return React.createElement(ComponentWithHoc, tslib_1.__assign({}, this.props));
+        ValidateComponentHoc.prototype.render = function () {
+            return React.createElement(Component, tslib_1.__assign({}, this.props));
         };
-        return Hoc;
-    }(React.Component));
-    return Hoc;
+        ValidateComponentHoc = tslib_1.__decorate([
+            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), pure)
+        ], ValidateComponentHoc);
+        return ValidateComponentHoc;
+    }(React.PureComponent));
+    return ValidateComponentHoc;
 };
 //# sourceMappingURL=validate.js.map
