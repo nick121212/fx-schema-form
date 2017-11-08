@@ -1,8 +1,10 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { connect } from "react-redux";
-import { compose, pure } from "recompose";
-import { mapActionsStateToProps } from "../select";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var react_redux_1 = require("react-redux");
+var recompose_1 = require("recompose");
+var select_1 = require("../select");
 /**
  * 处理actions,这里吧actions添加到dispatch
  * @param dispatch 方法
@@ -57,20 +59,20 @@ var mapDispatchToProps = function (dispatch, ownProps) {
  * 加入属性
  * currentTheme 当前的命名空间
  */
-export var ValidateHoc = function (hocFactory, Component) {
+exports.ValidateHoc = function (hocFactory, Component) {
     var ValidateComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(ValidateComponentHoc, _super);
         function ValidateComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ValidateComponentHoc.prototype.render = function () {
-            return React.createElement(Component, tslib_1.__assign({}, this.props));
+            return react_1.default.createElement(Component, tslib_1.__assign({}, this.props));
         };
         ValidateComponentHoc = tslib_1.__decorate([
-            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), pure)
+            recompose_1.compose(react_redux_1.connect(select_1.mapActionsStateToProps), react_redux_1.connect(null, mapDispatchToProps), recompose_1.shouldUpdate(function () { return false; }))
         ], ValidateComponentHoc);
         return ValidateComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return ValidateComponentHoc;
 };
 //# sourceMappingURL=validate.js.map

@@ -1,4 +1,5 @@
 /// <reference types="react" />
+import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
@@ -9,7 +10,8 @@ export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOu
     removeItem?: (data: number) => void;
     addItem?: (data: any) => void;
     switchItem?: (data: any) => void;
-    createItemChildButtons?: (index: number, maxLength: number) => JSX.Element;
+    ItemButtons?: new () => React.PureComponent<any>;
+    ItemChildButtons?: new () => React.PureComponent<any>;
 }
 /**
  * 包装array的组件HOC

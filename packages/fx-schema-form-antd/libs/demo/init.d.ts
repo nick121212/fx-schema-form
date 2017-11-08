@@ -1,9 +1,16 @@
 /// <reference types="react" />
+import React from "react";
 import Ajv from "ajv";
 declare const curAjv: Ajv.Ajv;
 declare const schemaFormOptions: {
     ajv: Ajv.Ajv;
 };
+export declare class ItemButtons extends React.PureComponent<any, any> {
+    render(): JSX.Element;
+}
+export declare class ItemChildButtons extends React.PureComponent<any, any> {
+    render(): JSX.Element;
+}
 declare const globalOptions: {
     "ui:temp": string[];
     "boolean": {
@@ -11,26 +18,26 @@ declare const globalOptions: {
     };
     "hoc": {
         "array": {
-            createItemButtons: (props: any) => JSX.Element;
-            createItemChildButtons: (props: any, idx: number, maxLength: number) => JSX.Element;
+            ItemChildButtons: typeof ItemChildButtons;
+            ItemButtons: typeof ItemButtons;
         };
     };
     "formItem": {
         "hasFeedback": boolean;
-        "labelCol": {
-            "xs": {
-                "span": number;
+        labelCol: {
+            xs: {
+                span: number;
             };
-            "sm": {
-                "span": number;
+            sm: {
+                span: number;
             };
         };
-        "wrapperCol": {
-            "xs": {
-                "span": number;
+        wrapperCol: {
+            xs: {
+                span: number;
             };
-            "sm": {
-                "span": number;
+            sm: {
+                span: number;
             };
         };
     };

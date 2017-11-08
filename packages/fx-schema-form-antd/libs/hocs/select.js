@@ -1,6 +1,8 @@
-import * as jpp from "json-pointer";
-import { createSelector } from "reselect";
-import { SchemaFormCreate } from "../libs/create";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var jpp = require("json-pointer");
+var reselect_1 = require("reselect");
+var create_1 = require("../libs/create");
 var getCurrentState = function (state, props) {
     if (props.getCurrentState) {
         return props.getCurrentState(state, props);
@@ -12,7 +14,7 @@ var getCurrentState = function (state, props) {
  * @param state state
  * @param props 属性
  */
-export var getAllData = function (state, props) {
+exports.getAllData = function (state, props) {
     var _a = getCurrentState(state, props).data, data = _a === void 0 ? {} : _a;
     return data;
 };
@@ -21,7 +23,7 @@ export var getAllData = function (state, props) {
  * @param state 全局state
  * @param props 当前component的props
  */
-export var getData = function (state, props) {
+exports.getData = function (state, props) {
     var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
     var _b = getCurrentState(state, props).data, data = _b === void 0 ? {} : _b;
@@ -32,7 +34,7 @@ export var getData = function (state, props) {
  * @param state 全局state
  * @param props 当前component的props
  */
-export var getMetaStateData = function (state, props) {
+exports.getMetaStateData = function (state, props) {
     var schemaKey = props.schemaKey;
     var meta = getCurrentState(state, props).meta;
     return {
@@ -45,10 +47,10 @@ export var getMetaStateData = function (state, props) {
  * @param state 全局state
  * @param props 当前component的props
  */
-export var getMetaData = function (state, props) {
+exports.getMetaData = function (state, props) {
     var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
     var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
-    var metaData = SchemaFormCreate.metas[schemaKey];
+    var metaData = create_1.SchemaFormCreate.metas[schemaKey];
     var meta = getCurrentState(state, props).meta;
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
@@ -57,9 +59,9 @@ export var getMetaData = function (state, props) {
  * @param state 全局state
  * @param props 当前component的props
  */
-export var getActions = function (state, props) {
+exports.getActions = function (state, props) {
     var schemaKey = props.schemaKey;
-    var metaData = SchemaFormCreate.metas[schemaKey];
+    var metaData = create_1.SchemaFormCreate.metas[schemaKey];
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
         metaData.init(props.schemaFormOptions, props.schemaKey);
     }
@@ -71,7 +73,7 @@ export var getActions = function (state, props) {
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
-export var mapFormDataToProps = createSelector([getAllData], function (formData) {
+exports.mapFormDataToProps = reselect_1.createSelector([exports.getAllData], function (formData) {
     return { formData: formData };
 });
 /**
@@ -80,16 +82,16 @@ export var mapFormDataToProps = createSelector([getAllData], function (formData)
  * formData        当前表单的所有数据
  * formItemData    当前字段的数据
  */
-export var mapMetaStateToProps = createSelector([getMetaData], function (meta) {
+exports.mapMetaStateToProps = reselect_1.createSelector([exports.getMetaData], function (meta) {
     return { meta: meta };
 });
-export var mapFormItemDataProps = createSelector([getData], function (formItemData) {
+exports.mapFormItemDataProps = reselect_1.createSelector([exports.getData], function (formItemData) {
     return { formItemData: formItemData };
 });
 /**
  * 返回actions
  */
-export var mapActionsStateToProps = createSelector([getActions], function (actions) {
+exports.mapActionsStateToProps = reselect_1.createSelector([exports.getActions], function (actions) {
     return { actions: actions };
 });
 //# sourceMappingURL=select.js.map

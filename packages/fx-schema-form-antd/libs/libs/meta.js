@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import uuid from "uuid";
-import jpp from "json-pointer";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var uuid_1 = require("uuid");
+var json_pointer_1 = require("json-pointer");
 /**
  * Meta的数据操作类
  */
@@ -38,7 +40,6 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.validateAll = function (data) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var key, element, schema, validate, err_1;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
@@ -60,23 +61,19 @@ var MetaData = /** @class */ (function () {
                         validate = this.schemaFormOptions.ajv.compile(schema);
                         // this.schemaFormOptions.ajv.removeSchema
                         // 调用验证方法
-                        return [4 /*yield*/, validate(data)
-                                .then(function () {
-                                _this.data.isValid = true;
-                            }).catch(function (err) {
-                                _this.data.isValid = false;
-                                if (err.errors && err.errors.length) {
-                                    _this.setErrors(err.errors);
-                                }
-                            })];
+                        return [4 /*yield*/, validate(data)];
                     case 2:
                         // this.schemaFormOptions.ajv.removeSchema
                         // 调用验证方法
                         _a.sent();
+                        this.data.isValid = true;
                         return [3 /*break*/, 4];
                     case 3:
                         err_1 = _a.sent();
-                        console.log("dfkljalkdsjfkla", err_1);
+                        this.data.isValid = false;
+                        if (err_1.errors && err_1.errors.length) {
+                            this.setErrors(err_1.errors);
+                        }
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, this.data];
                 }
@@ -91,7 +88,7 @@ var MetaData = /** @class */ (function () {
         var _this = this;
         this.data.isValid = false;
         errors.forEach(function (error) {
-            var keys = jpp.parse(error.dataPath);
+            var keys = json_pointer_1.default.parse(error.dataPath);
             var meta = _this.getMeta(keys);
             _this.setMeta(keys, {
                 dirty: true,
@@ -107,8 +104,8 @@ var MetaData = /** @class */ (function () {
      * @param keys    当前字段的Keys
      */
     MetaData.prototype.getKey = function (keys) {
-        var key = jpp.compile(keys);
-        var escapeKey = jpp.escape(key);
+        var key = json_pointer_1.default.compile(keys);
+        var escapeKey = json_pointer_1.default.escape(key);
         return {
             schemaKey: keys.map(function (k) {
                 if (!Number.isNaN(Number(k))) {
@@ -143,8 +140,8 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.getUuid = function (_a) {
         var normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
-        var jMap = jpp(this.data.map);
-        var jMeta = jpp(this.data.meta), curMeta, curUuid;
+        var jMap = json_pointer_1.default(this.data.map);
+        var jMeta = json_pointer_1.default(this.data.meta), curMeta, curUuid;
         if (this.schemaFormOptions.map.has(schemaKey)) {
             var schema = this.schemaFormOptions.map.get(schemaKey);
             if (["array", "object"].indexOf(schema.type) >= 0) {
@@ -160,7 +157,7 @@ var MetaData = /** @class */ (function () {
             curUuid = curMeta;
         }
         if (typeof curMeta !== "string" || !curMeta) {
-            curUuid = "/" + jpp.escape("/" + uuid());
+            curUuid = "/" + json_pointer_1.default.escape("/" + uuid_1.default());
         }
         return curUuid;
     };
@@ -183,12 +180,12 @@ var MetaData = /** @class */ (function () {
      */
     MetaData.prototype.switchMeta = function (keys, curIndex, switchIndex) {
         var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, schemaKey = _a.schemaKey, originEscapeKey = _a.originEscapeKey;
-        if (!jpp(this.data.meta).has(normalKey)) {
+        if (!json_pointer_1.default(this.data.meta).has(normalKey)) {
             return;
         }
-        var curMeta = jpp(this.data.meta).get(normalKey);
+        var curMeta = json_pointer_1.default(this.data.meta).get(normalKey);
         _b = [curMeta[switchIndex], curMeta[curIndex]], curMeta[curIndex] = _b[0], curMeta[switchIndex] = _b[1];
-        jpp(this.data.meta).set(normalKey, curMeta);
+        json_pointer_1.default(this.data.meta).set(normalKey, curMeta);
         var _b;
     };
     /**
@@ -199,14 +196,14 @@ var MetaData = /** @class */ (function () {
      * @param keys keys
      */
     MetaData.prototype.removeMeta = function (keys) {
-        var jMap = jpp(this.data.map), jMeta = jpp(this.data.meta);
+        var jMap = json_pointer_1.default(this.data.map), jMeta = json_pointer_1.default(this.data.meta);
         var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
         var curUuid = this.getUuid({ normalKey: normalKey, escapeKey: escapeKey, originEscapeKey: originEscapeKey, schemaKey: schemaKey });
         var regexp = new RegExp("^" + originEscapeKey, "ig");
         // 遍历map，清除map中是${originEscapeKey}开头的key
         for (var key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
-                var mapKeys = this.getKey(jpp.parse(key));
+                var mapKeys = this.getKey(json_pointer_1.default.parse(key));
                 if (regexp.test(mapKeys.originEscapeKey)) {
                     jMap.remove(mapKeys.escapeKey);
                 }
@@ -214,7 +211,7 @@ var MetaData = /** @class */ (function () {
         }
         // 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
         if (jMeta.has(normalKey) && jMeta.get(normalKey)) {
-            var metaDict = jpp.dict(jMeta.get(normalKey));
+            var metaDict = json_pointer_1.default.dict(jMeta.get(normalKey));
             jMeta.remove(normalKey);
             // 遍历子元素，并且清除数据
             for (var key in metaDict) {
@@ -236,8 +233,8 @@ var MetaData = /** @class */ (function () {
      * @param curUuid uuid
      */
     MetaData.prototype.getCurMetaData = function (curUuid) {
-        if (jpp(this.data.map).has("" + curUuid)) {
-            return jpp(this.data.map).get("" + curUuid);
+        if (json_pointer_1.default(this.data.map).has("" + curUuid)) {
+            return json_pointer_1.default(this.data.map).get("" + curUuid);
         }
         return { isShow: true };
     };
@@ -247,7 +244,7 @@ var MetaData = /** @class */ (function () {
      * @param meta    meta数据
      */
     MetaData.prototype.setCurMetaData = function (curUuid, meta) {
-        jpp(this.data.map).set("" + curUuid, meta);
+        json_pointer_1.default(this.data.map).set("" + curUuid, meta);
     };
     /**
      * 设置当前meta的uuid
@@ -255,10 +252,10 @@ var MetaData = /** @class */ (function () {
      * @param curUuid uuid
      */
     MetaData.prototype.setCurMetaUuid = function (key, curUuid) {
-        var jMeta = jpp(this.data.meta);
+        var jMeta = json_pointer_1.default(this.data.meta);
         jMeta.set(key, curUuid);
     };
     return MetaData;
 }());
-export { MetaData };
+exports.MetaData = MetaData;
 //# sourceMappingURL=meta.js.map

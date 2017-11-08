@@ -47,6 +47,12 @@ export class UiMerge {
             // delete uiSchema.$ref;
 
             return uiSchema;
+        } else {
+            if (keyProp.constructor === Object) {
+                if (keyProp.uiSchema) {
+                    return keyProp;
+                }
+            }
         }
     }
 

@@ -1,34 +1,46 @@
-import React from "react";
-import Ajv from "ajv";
-import { Button, Popover, Popconfirm } from "antd";
-import { defaultTheme } from "../index";
-import { schema } from "./schema/normal";
-import normal from "./schema/normal1";
-import flow from "./schema/flow";
-import array from "./schema/array";
-import { AntdInputNumberWidget } from "./widget/number";
-import { GeoPositionField } from "./field/geo";
-import templates from "../templates";
-import widgets from "../widgets";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var ajv_1 = require("ajv");
+var antd_1 = require("antd");
+var index_1 = require("../index");
+var normal_1 = require("./schema/normal");
+var normal1_1 = require("./schema/normal1");
+var flow_1 = require("./schema/flow");
+var array_1 = require("./schema/array");
+var number_1 = require("./widget/number");
+var geo_1 = require("./field/geo");
+var grid_1 = require("./field/grid");
+var templates_1 = require("../templates");
+var templates_2 = require("./templates");
+var widgets_1 = require("../widgets");
 // import ajvAsync from "ajv-async";
 // console.log(ajvAsync);
 // hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
-defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
-defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
-defaultTheme.fieldFactory.add("geo", GeoPositionField);
-for (var key in widgets) {
-    if (widgets.hasOwnProperty(key)) {
-        var widget = widgets[key];
-        defaultTheme.widgetFactory.add(key, widget);
+index_1.defaultTheme.widgetFactory.add("number", number_1.AntdInputNumberWidget);
+index_1.defaultTheme.widgetFactory.add("integer", number_1.AntdInputNumberWidget);
+index_1.defaultTheme.fieldFactory.add("geo", geo_1.GeoPositionField);
+index_1.defaultTheme.fieldFactory.add("gridcol", grid_1.GridColField);
+for (var key in widgets_1.default) {
+    if (widgets_1.default.hasOwnProperty(key)) {
+        var widget = widgets_1.default[key];
+        index_1.defaultTheme.widgetFactory.add(key, widget);
     }
 }
-for (var key in templates) {
-    if (templates.hasOwnProperty(key)) {
-        var template = templates[key];
-        defaultTheme.tempFactory.add(key, template);
+for (var key in templates_1.default) {
+    if (templates_1.default.hasOwnProperty(key)) {
+        var template = templates_1.default[key];
+        index_1.defaultTheme.tempFactory.add(key, template);
     }
 }
-var curAjv = new Ajv({
+for (var key in templates_2.default) {
+    if (templates_2.default.hasOwnProperty(key)) {
+        var template = templates_2.default[key];
+        index_1.defaultTheme.tempFactory.add(key, template);
+    }
+}
+var curAjv = new ajv_1.default({
     allErrors: true,
     removeAdditional: false,
     jsonPointers: true,
@@ -54,9 +66,46 @@ var curAjv = new Ajv({
         });
     }
 });
+exports.ajv = curAjv;
 var schemaFormOptions = {
     ajv: curAjv
 };
+exports.schemaFormOptions = schemaFormOptions;
+var ItemButtons = /** @class */ (function (_super) {
+    tslib_1.__extends(ItemButtons, _super);
+    function ItemButtons() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ItemButtons.prototype.render = function () {
+        var _this = this;
+        var _a = this.props.meta.isShow, isShow = _a === void 0 ? true : _a;
+        return (react_1.default.createElement("div", null,
+            react_1.default.createElement(antd_1.Button, { style: { marginRight: 5 }, type: "primary", shape: "circle", icon: "plus", ghost: true, onClick: function () { _this.props.addItem(); } }),
+            react_1.default.createElement(antd_1.Button, { type: !isShow ? "dashed" : "primary", shape: "circle", icon: isShow ? "shrink" : "arrows-alt", onClick: function () { _this.props.toggleItem(); } })));
+    };
+    return ItemButtons;
+}(react_1.default.PureComponent));
+exports.ItemButtons = ItemButtons;
+var ItemChildButtons = /** @class */ (function (_super) {
+    tslib_1.__extends(ItemChildButtons, _super);
+    function ItemChildButtons() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ItemChildButtons.prototype.render = function () {
+        var _a = this.props, index = _a.index, removeItem = _a.removeItem, switchItem = _a.switchItem;
+        var _b = this.props.meta.isShow, isShow = _b === void 0 ? true : _b;
+        return (react_1.default.createElement(antd_1.Popover, { placement: "topLeft", title: null, content: (react_1.default.createElement("div", null,
+                react_1.default.createElement(antd_1.Popconfirm, { style: { marginRight: 5 }, title: "Are you sure？", onConfirm: function () {
+                        removeItem(index);
+                    }, okText: "Yes", cancelText: "No" },
+                    react_1.default.createElement(antd_1.Button, { ghost: true, type: "danger", shape: "circle", icon: "delete" })),
+                react_1.default.createElement(antd_1.Button, { style: { marginRight: 5 }, ghost: false, type: "dashed", shape: "circle", icon: "packup", onClick: function () { switchItem(index, index - 1); } }),
+                react_1.default.createElement(antd_1.Button, { ghost: false, type: "dashed", shape: "circle", icon: "unfold", onClick: function () { switchItem(index, index + 1); } }))), trigger: "hover" },
+            react_1.default.createElement(antd_1.Button, { icon: "switch", shape: "circle" })));
+    };
+    return ItemChildButtons;
+}(react_1.default.PureComponent));
+exports.ItemChildButtons = ItemChildButtons;
 var globalOptions = {
     "ui:temp": ["formItem"],
     "boolean": {
@@ -64,33 +113,19 @@ var globalOptions = {
     },
     "hoc": {
         "array": {
-            createItemButtons: function (props) {
-                var _a = props.meta.isShow, isShow = _a === void 0 ? true : _a;
-                return (React.createElement("div", null,
-                    React.createElement(Button, { style: { marginRight: 5 }, type: "primary", shape: "circle", icon: "plus", ghost: true, onClick: function () { props.addItem(); } }),
-                    React.createElement(Button, { type: !isShow ? "dashed" : "primary", shape: "circle", icon: isShow ? "shrink" : "arrows-alt", onClick: function () { props.toggleItem(); } })));
-            },
-            createItemChildButtons: function (props, idx, maxLength) {
-                return (React.createElement(Popover, { placement: "topLeft", title: null, content: (React.createElement("div", null,
-                        React.createElement(Popconfirm, { style: { marginRight: 5 }, title: "Are you sure？", onConfirm: function () {
-                                props.removeItem(idx);
-                            }, okText: "Yes", cancelText: "No" },
-                            React.createElement(Button, { ghost: true, type: "danger", shape: "circle", icon: "delete" })),
-                        React.createElement(Button, { style: { marginRight: 5 }, ghost: false, type: "dashed", shape: "circle", icon: "packup", onClick: function () { props.switchItem(idx, idx - 1); } }),
-                        React.createElement(Button, { ghost: false, type: "dashed", shape: "circle", icon: "unfold", onClick: function () { props.switchItem(idx, idx + 1); } }))), trigger: "hover" },
-                    React.createElement(Button, { icon: "switch", shape: "circle" })));
-            }
+            ItemChildButtons: ItemChildButtons,
+            ItemButtons: ItemButtons
         }
     },
     "formItem": {
         "hasFeedback": true,
-        "labelCol": {
-            "xs": { "span": 24 },
-            "sm": { "span": 3 },
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 8 },
         },
-        "wrapperCol": {
-            "xs": { "span": 24 },
-            "sm": { "span": 19 },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 16 },
         },
     },
     "row": {
@@ -111,10 +146,11 @@ var globalOptions = {
         "ui:temp": ["row", "col", "card"]
     }
 };
-curAjv.addSchema(array);
-curAjv.addSchema(schema);
-curAjv.addSchema(normal);
-curAjv.addSchema(flow);
+exports.globalOptions = globalOptions;
+curAjv.addSchema(array_1.default);
+curAjv.addSchema(normal_1.schema);
+curAjv.addSchema(normal1_1.default);
+curAjv.addSchema(flow_1.default);
 curAjv.addKeyword("idExists", {
     async: true,
     type: "string",
@@ -129,40 +165,4 @@ curAjv.addKeyword("idExists", {
         });
     })
 });
-// let defaultSchema = {
-//     "$async": true,
-//     type: "object",
-//     required: [],
-//     properties: {
-//         array1: {
-//             $ref: "test#/properties/array1"
-//         }
-//     }
-// };
-// window.addEventListener("unhandledrejection", event => {
-//     console.log(event);
-// });
-// curAjv.compileAsync(schema, true, async (err, validate) => {
-//     try {
-//         // console.log(validate.source.code);
-//         await validate({
-//             name: "dlkjkxfa",
-//             array1: [{
-//                 test: "nick",
-//                 children: [{
-//                     test: "nick3",
-//                     children: [{
-//                         children: [{
-//                             test: "nick",
-//                             children: [{}]
-//                         }]
-//                     }]
-//                 }]
-//             }]
-//         }, "/", {});
-//     } catch (e) {
-//         console.log("dfadsfads", e);
-//     }
-// });
-export { curAjv as ajv, schemaFormOptions, globalOptions };
 //# sourceMappingURL=init.js.map

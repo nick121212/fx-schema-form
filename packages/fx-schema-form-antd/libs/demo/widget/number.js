@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { InputNumber } from "antd";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var antd_1 = require("antd");
 var AntdInputNumberWidget = /** @class */ (function (_super) {
     tslib_1.__extends(AntdInputNumberWidget, _super);
     function AntdInputNumberWidget() {
@@ -23,12 +25,12 @@ var AntdInputNumberWidget = /** @class */ (function (_super) {
         var _c = (globalOptions.widget || {}).input, inputDefault = _c === void 0 ? {} : _c;
         var _d = mergeSchema.uiSchema, uiSchema = _d === void 0 ? {} : _d, keys = mergeSchema.keys;
         var _e = uiSchema.readonly, readonly = _e === void 0 ? false : _e;
-        return (React.createElement(InputNumber, tslib_1.__assign({ onChange: function (val) {
+        return (react_1.default.createElement(antd_1.InputNumber, tslib_1.__assign({ onChange: function (val) {
                 updateItemData(val);
                 validate(val);
             }, style: { width: "100%" }, disabled: readonly, placeholder: mergeSchema.title }, input, inputDefault, this.setDefaultProps())));
     };
     return AntdInputNumberWidget;
-}(React.Component));
-export { AntdInputNumberWidget };
+}(react_1.default.Component));
+exports.AntdInputNumberWidget = AntdInputNumberWidget;
 //# sourceMappingURL=number.js.map

@@ -13,10 +13,10 @@ import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 
 const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps & MakeHocOutProps, any>(
     connect(mapMetaStateToProps),
+    onlyUpdateForKeys(["meta"]),
     shouldUpdate((curProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps) => {
         return !isEqual(curProps.meta, nextProps.meta);
-    }),
-    onlyUpdateForKeys(["meta"])
+    })
 );
 
 /**
@@ -30,7 +30,7 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
     * 获取模板的components
     * @param uiSchema 合并后的数据
     */
-    @(metaConnect as any)
+    @(compose<any, any>(shouldUpdate(() => false)) as any)
     class TempComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
         private tempField = "ui:temp";
 
@@ -45,14 +45,15 @@ export const TempHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
             let index = 0;
 
             return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
-                return <Temp
+                let TempWithHoc = metaConnect(Temp);
+
+                return <TempWithHoc
                     globalOptions={globalOptions}
                     tempKey={key}
                     uiSchemaOptions={uiSchemaOptions}
                     key={keys.join(".") + key + index++}
-                    {...this.props}>
-                    {prev}
-                </Temp>;
+                    {...this.props}
+                    children={prev} />;
             }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props} />);
         }
 

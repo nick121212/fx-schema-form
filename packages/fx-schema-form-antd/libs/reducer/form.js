@@ -1,6 +1,8 @@
-import { createAction, createReducer } from "redux-act";
-import jpp from "json-pointer";
-import cloneDeep from "lodash.clonedeep";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var redux_act_1 = require("redux-act");
+var json_pointer_1 = require("json-pointer");
+var lodash_clonedeep_1 = require("lodash.clonedeep");
 var FormReducer = /** @class */ (function () {
     /**
      * 构造
@@ -16,35 +18,35 @@ var FormReducer = /** @class */ (function () {
         /**
          * 单个元素的值变化时候调用
          */
-        this.updateItem = createAction("更新表单值");
+        this.updateItem = redux_act_1.createAction("更新表单值");
         /**
          * 显示/隐藏元素
          */
-        this.toggleItem = createAction("显示/隐藏元素");
+        this.toggleItem = redux_act_1.createAction("显示/隐藏元素");
         /**
          * 删除元素
          */
-        this.removeItem = createAction("删除元素");
+        this.removeItem = redux_act_1.createAction("删除元素");
         /**
          * 添加元素
          */
-        this.addItem = createAction("添加元素");
+        this.addItem = redux_act_1.createAction("添加元素");
         /**
          * 元素移位
          */
-        this.switchItem = createAction("元素移位");
+        this.switchItem = redux_act_1.createAction("元素移位");
         /**
          * 初始化元素的meta信息
          */
-        this.updateItemMeta = createAction("更新元素的meta信息");
+        this.updateItemMeta = redux_act_1.createAction("更新元素的meta信息");
         /**
          * 更改meta的状态
          */
-        this.updateMetaState = createAction("更改meta的状态");
+        this.updateMetaState = redux_act_1.createAction("更改meta的状态");
         /**
          * 更改meta的状态
          */
-        this.updateData = createAction("更改data的值");
+        this.updateData = redux_act_1.createAction("更改data的值");
     }
     Object.defineProperty(FormReducer.prototype, "actions", {
         /**
@@ -70,7 +72,7 @@ var FormReducer = /** @class */ (function () {
          * 返回当前的reducer
          */
         get: function () {
-            return createReducer((_a = {},
+            return redux_act_1.createReducer((_a = {},
                 _a[this.updateItem] = this.updateItemHandle.bind(this),
                 _a[this.toggleItem] = this.toggleItemHandle.bind(this),
                 _a[this.addItem] = this.addItemHandle.bind(this),
@@ -104,8 +106,8 @@ var FormReducer = /** @class */ (function () {
         if (this.getOriginState) {
             return this.getOriginState(state);
         }
-        var originData = cloneDeep(state.data);
-        var originMeta = cloneDeep(state.meta);
+        var originData = lodash_clonedeep_1.default(state.data);
+        var originMeta = lodash_clonedeep_1.default(state.meta);
         return { originData: originData, originMeta: originMeta };
     };
     /**
@@ -139,7 +141,7 @@ var FormReducer = /** @class */ (function () {
         var keys = _a.keys, data = _a.data, meta = _a.meta;
         var originData = this.getOrigin(state).originData;
         var normalKey = this.meta.getKey(keys).normalKey;
-        jpp(originData).set(normalKey, data);
+        json_pointer_1.default(originData).set(normalKey, data);
         this.meta.setMeta(keys, meta);
         if (this.updateState) {
             return this.updateState(state, { data: originData, meta: this.meta.data });
@@ -171,8 +173,8 @@ var FormReducer = /** @class */ (function () {
         var keys = _a.keys, data = _a.data;
         var originData = this.getOrigin(state).originData;
         var normalKey = this.meta.getKey(keys).normalKey;
-        var curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
-        jpp(originData).set(normalKey, curData.concat([data]));
+        var curData = json_pointer_1.default(originData).has(normalKey) ? json_pointer_1.default(originData).get(normalKey) : [];
+        json_pointer_1.default(originData).set(normalKey, curData.concat([data]));
         if (this.updateState) {
             return this.updateState(state, { data: originData });
         }
@@ -182,8 +184,8 @@ var FormReducer = /** @class */ (function () {
         var keys = _a.keys, index = _a.index;
         var originData = this.getOrigin(state).originData;
         var normalKey = this.meta.getKey(keys.concat([index.toString()])).normalKey;
-        if (originData && jpp(originData).has(normalKey)) {
-            jpp(originData).remove(normalKey);
+        if (originData && json_pointer_1.default(originData).has(normalKey)) {
+            json_pointer_1.default(originData).remove(normalKey);
         }
         this.meta.removeMeta(keys.concat([index.toString()]));
         if (this.updateState) {
@@ -195,9 +197,9 @@ var FormReducer = /** @class */ (function () {
         var keys = _a.keys, curIndex = _a.curIndex, switchIndex = _a.switchIndex;
         var originData = this.getOrigin(state).originData;
         var normalKey = this.meta.getKey(keys).normalKey;
-        var curData = jpp(originData).get(normalKey);
+        var curData = json_pointer_1.default(originData).get(normalKey);
         _b = [curData[switchIndex], curData[curIndex]], curData[curIndex] = _b[0], curData[switchIndex] = _b[1];
-        jpp(originData).set(normalKey, curData);
+        json_pointer_1.default(originData).set(normalKey, curData);
         this.meta.switchMeta(keys, curIndex, switchIndex);
         if (this.updateState) {
             return this.updateState(state, { data: originData, meta: this.meta.data });
@@ -207,5 +209,5 @@ var FormReducer = /** @class */ (function () {
     };
     return FormReducer;
 }());
-export { FormReducer };
+exports.FormReducer = FormReducer;
 //# sourceMappingURL=form.js.map

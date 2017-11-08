@@ -1,4 +1,6 @@
-export var schema = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.schema = {
     $async: true,
     id: "test",
     type: "object",

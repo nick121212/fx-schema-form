@@ -1,11 +1,13 @@
-import { createAction, createReducer } from "redux-act";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var redux_act_1 = require("redux-act");
 var FormExampleReducer = /** @class */ (function () {
     function FormExampleReducer(initialState) {
         this.initialState = initialState;
         /**
          * 更改meta的状态
          */
-        this.updateData = createAction("更改data的值");
+        this.updateData = redux_act_1.createAction("更改data的值");
     }
     Object.defineProperty(FormExampleReducer.prototype, "actions", {
         /**
@@ -24,7 +26,7 @@ var FormExampleReducer = /** @class */ (function () {
          * 返回当前的reducer
          */
         get: function () {
-            return createReducer((_a = {},
+            return redux_act_1.createReducer((_a = {},
                 _a[this.updateData] = this.updateDataHandle.bind(this),
                 _a), this.initialState);
             var _a;
@@ -43,5 +45,5 @@ var FormExampleReducer = /** @class */ (function () {
     };
     return FormExampleReducer;
 }());
-export { FormExampleReducer };
+exports.FormExampleReducer = FormExampleReducer;
 //# sourceMappingURL=schema.js.map

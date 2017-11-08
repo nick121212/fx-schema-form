@@ -25,8 +25,9 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
         const { children,
             mergeSchemaList,
             schemaKey,
-            arrayItems,
+            ItemButtons,
             arrayIndex,
+            arrayLevel,
             globalOptions,
             RootComponent,
             schemaFormOptions,
@@ -41,33 +42,19 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             RootComponentHock = SchemaFormBlock;
         }
 
-        console.log("form render----------------");
-
         return (
             <RootComponentHock>
                 {
                     mergeSchemaList.map((mergeSchema: any, idx: number) => {
-                        let find = false;
+                        mergeSchema.keys = this.mergeKeys(mergeSchema);
 
-                        if (typeof arrayIndex === "number") {
-                            mergeSchema.keys = mergeSchema.keys.map((key: string) => {
-                                if (find) {
-                                    return key;
-                                }
-
-                                if (key === "-") {
-                                    return arrayIndex;
-                                }
-
-                                return key;
-                            });
-                        }
                         return <SchemaFormItem
                             key={`${schemaKey}-${idx.toString()}}`}
                             getCurrentState={getCurrentState}
                             schemaKey={schemaKey}
                             arrayIndex={arrayIndex}
-                            arrayItems={arrayItems}
+                            arrayLevel={arrayLevel}
+                            ItemButtons={ItemButtons}
                             formDefaultData={formDefaultData}
                             mergeSchemaList={mergeSchemaList}
                             mergeSchema={mergeSchema}
@@ -79,6 +66,23 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
                 {children}
             </RootComponentHock>
         );
+    }
+
+    /**
+     * 合并keys，把-替换成数组索引
+     */
+    private mergeKeys(mergeSchema: any) {
+        const { arrayLevel = [] } = this.props;
+        let arrayLevelCopy = arrayLevel.concat([]);
+
+        mergeSchema.originKeys = mergeSchema.keys.concat([]);
+        return mergeSchema.keys.map((key: string) => {
+            if (key === "-") {
+                return arrayLevelCopy.shift();
+            }
+
+            return key;
+        });
     }
 }
 

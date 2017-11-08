@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { nsFactory } from "../../index";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var index_1 = require("../../index");
 /**
  * 包装theme的组件HOC
  * @param hocFactory  hoc的工厂方法
@@ -8,7 +10,7 @@ import { nsFactory } from "../../index";
  * 加入属性
  * currentTheme 当前的命名空间
  */
-export var ThemeHoc = function (hocFactory, Component) {
+exports.ThemeHoc = function (hocFactory, Component) {
     var ThemeComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(ThemeComponentHoc, _super);
         function ThemeComponentHoc() {
@@ -18,16 +20,16 @@ export var ThemeHoc = function (hocFactory, Component) {
             var mergeSchema = this.props.mergeSchema;
             var _a = mergeSchema.uiSchema, uiSchema = _a === void 0 ? { theme: "", field: "" } : _a;
             var theme;
-            if (nsFactory.has(uiSchema.theme || "default")) {
-                theme = nsFactory.get(uiSchema.theme || "default");
+            if (index_1.nsFactory.has(uiSchema.theme || "default")) {
+                theme = index_1.nsFactory.get(uiSchema.theme || "default");
             }
             else {
                 throw new Error("\u6CA1\u6709\u627E\u5230" + (uiSchema.theme || "default") + "\u7684\u6837\u5F0F\uFF01");
             }
-            return React.createElement(Component, tslib_1.__assign({ currentTheme: theme }, this.props));
+            return react_1.default.createElement(Component, tslib_1.__assign({ currentTheme: theme }, this.props));
         };
         return ThemeComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return ThemeComponentHoc;
 };
 //# sourceMappingURL=theme.js.map

@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { Switch } from "antd";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var antd_1 = require("antd");
 var AntdSwitchWidget = /** @class */ (function (_super) {
     tslib_1.__extends(AntdSwitchWidget, _super);
     function AntdSwitchWidget() {
@@ -23,12 +25,12 @@ var AntdSwitchWidget = /** @class */ (function (_super) {
         var _c = (globalOptions.widget || {}).switch, switchDefault = _c === void 0 ? {} : _c;
         var _d = mergeSchema.uiSchema, uiSchema = _d === void 0 ? {} : _d, keys = mergeSchema.keys;
         var _e = uiSchema.readonly, readonly = _e === void 0 ? false : _e;
-        return (React.createElement(Switch, tslib_1.__assign({ onChange: function (checked) {
+        return (react_1.default.createElement(antd_1.Switch, tslib_1.__assign({ onChange: function (checked) {
                 updateItemData(checked);
                 validate(checked);
             }, disabled: readonly }, switchDefault, switcho, this.setDefaultProps())));
     };
     return AntdSwitchWidget;
-}(React.Component));
-export { AntdSwitchWidget };
+}(react_1.default.Component));
+exports.AntdSwitchWidget = AntdSwitchWidget;
 //# sourceMappingURL=switch.js.map

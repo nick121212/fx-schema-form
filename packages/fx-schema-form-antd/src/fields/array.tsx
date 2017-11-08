@@ -19,7 +19,7 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
      */
     private renderItem(idx: number, maxLen: number): JSX.Element {
         const { mergeSchema, schemaKey, globalOptions, schemaFormOptions,
-            getCurrentState, arrayItems, createItemChildButtons } = this.props;
+            getCurrentState, ItemChildButtons, arrayLevel = [] } = this.props;
         const { uiSchema, keys } = mergeSchema;
 
         return (
@@ -28,8 +28,9 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
                 schema={mergeSchema}
                 getCurrentState={getCurrentState}
                 arrayIndex={idx}
-                arrayItems={createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null}
-                parentKeys={mergeSchema.keys}
+                arrayLevel={arrayLevel.concat([idx])}
+                ItemButtons={() => <ItemChildButtons {...this.props} index={idx} />}
+                parentKeys={mergeSchema.originKeys}
                 RootComponent={null}
                 schemaKey={schemaKey}
                 uiSchema={uiSchema.items}
@@ -53,6 +54,6 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
             return this.renderItem(idx, formItemData.length);
         });
 
-        return <div>{child || null}</div>;
+        return <div style={{ width: "100%" }}>{child || null}</div >;
     }
 }

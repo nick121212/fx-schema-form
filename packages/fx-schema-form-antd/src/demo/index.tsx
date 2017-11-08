@@ -36,14 +36,16 @@ let store = createStore<any>(combineReducers({
 }), immutable.Map());
 
 store.subscribe(() => {
-    // console.log(store.getState());
+    console.log(store.getState().toJS().object);
 });
 
 ReactDom.render(
     <Provider store={store}>
         <Router>
             <div>
-                <ReactPerfTool perf={Perf} />
+                <div style={{ display: "none" }}>
+                    <ReactPerfTool perf={Perf} />
+                </div>
                 <Menu mode="horizontal" theme="dark">
                     <Menu.Item key="home">
                         <Link to="/"><Icon type="mail" />主页</Link>

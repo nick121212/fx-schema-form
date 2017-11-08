@@ -12,8 +12,11 @@ import array from "./schema/array";
 import { AntdInputNumberWidget } from "./widget/number";
 import { ConditionHoc } from "./hoc/condition";
 import { GeoPositionField } from "./field/geo";
+import { GridColField } from "./field/grid";
+
 
 import templates from "../templates";
+import templates1 from "./templates";
 import widgets from "../widgets";
 
 // import ajvAsync from "ajv-async";
@@ -23,8 +26,9 @@ import widgets from "../widgets";
 // hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
-
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
+defaultTheme.fieldFactory.add("gridcol", GridColField);
+
 
 for (let key in widgets) {
     if (widgets.hasOwnProperty(key)) {
@@ -38,6 +42,14 @@ for (let key in templates) {
         defaultTheme.tempFactory.add(key, template);
     }
 }
+
+for (let key in templates1) {
+    if (templates1.hasOwnProperty(key)) {
+        let template = templates1[key];
+        defaultTheme.tempFactory.add(key, template);
+    }
+}
+
 
 const curAjv = new Ajv({
     allErrors: true,
@@ -70,6 +82,52 @@ const schemaFormOptions = {
     ajv: curAjv
 };
 
+export class ItemButtons extends React.PureComponent<any, any> {
+    public render() {
+        const { isShow = true } = this.props.meta;
+
+        return (
+            <div>
+                <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true}
+                    onClick={() => { this.props.addItem(); }}></Button>
+                <Button type={!isShow ? "dashed" : "primary"}
+                    shape="circle" icon={isShow ? "shrink" : "arrows-alt"}
+                    onClick={() => { this.props.toggleItem(); }}></Button>
+            </div>
+        );
+    }
+}
+
+export class ItemChildButtons extends React.PureComponent<any, any> {
+    public render() {
+        const { index, removeItem, switchItem } = this.props;
+        const { isShow = true } = this.props.meta;
+
+        return (
+            <Popover placement="topLeft" title={null} content={(
+                <div>
+                    <Popconfirm
+                        style={{ marginRight: 5 }}
+                        title="Are you sure？"
+                        onConfirm={() => {
+                            removeItem(index);
+                        }}
+                        okText="Yes"
+                        cancelText="No">
+                        <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
+                    </Popconfirm>
+                    <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup"
+                        onClick={() => { switchItem(index, index - 1); }}></Button>
+                    <Button ghost={false} type="dashed" shape="circle" icon="unfold"
+                        onClick={() => { switchItem(index, index + 1); }}></Button>
+                </div>
+            )} trigger="hover">
+                <Button icon="switch" shape="circle"></Button>
+            </Popover>
+        );
+    }
+}
+
 const globalOptions = {
     "ui:temp": ["formItem"],
     "boolean": {
@@ -77,53 +135,19 @@ const globalOptions = {
     },
     "hoc": {
         "array": {
-            createItemButtons: (props: any) => {
-                const { isShow = true } = props.meta;
-                return (
-                    <div>
-                        <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true}
-                            onClick={() => { props.addItem(); }}></Button>
-                        <Button type={!isShow ? "dashed" : "primary"}
-                            shape="circle" icon={isShow ? "shrink" : "arrows-alt"}
-                            onClick={() => { props.toggleItem(); }}></Button>
-                    </div>
-                );
-            },
-            createItemChildButtons: (props: any, idx: number, maxLength: number) => {
-                return (
-                    <Popover placement="topLeft" title={null} content={(
-                        <div>
-                            <Popconfirm
-                                style={{ marginRight: 5 }}
-                                title="Are you sure？"
-                                onConfirm={() => {
-                                    props.removeItem(idx);
-                                }}
-                                okText="Yes"
-                                cancelText="No">
-                                <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
-                            </Popconfirm>
-                            <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup"
-                                onClick={() => { props.switchItem(idx, idx - 1); }}></Button>
-                            <Button ghost={false} type="dashed" shape="circle" icon="unfold"
-                                onClick={() => { props.switchItem(idx, idx + 1); }}></Button>
-                        </div>
-                    )} trigger="hover">
-                        <Button icon="switch" shape="circle"></Button>
-                    </Popover>
-                );
-            }
+            ItemChildButtons: ItemChildButtons,
+            ItemButtons: ItemButtons
         }
     },
     "formItem": {
         "hasFeedback": true,
-        "labelCol": {
-            "xs": { "span": 24 },
-            "sm": { "span": 3 },
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 8 },
         },
-        "wrapperCol": {
-            "xs": { "span": 24 },
-            "sm": { "span": 19 },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 16 },
         },
     },
     "row": {

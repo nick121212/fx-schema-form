@@ -1,5 +1,7 @@
-import { FormReducer } from "../reducer/form";
-import { MetaData } from "./meta";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var form_1 = require("../reducer/form");
+var meta_1 = require("./meta");
 var SchemaFormCreate = /** @class */ (function () {
     function SchemaFormCreate() {
     }
@@ -12,9 +14,9 @@ var SchemaFormCreate = /** @class */ (function () {
      * @param updateState     更新state的方法
      */
     SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema, getOriginState, updateState) {
-        var meta = new MetaData();
+        var meta = new meta_1.MetaData();
         var defaultValue = curJjv.validate(schema, data).catch(function () { return 1; });
-        var reducer = new FormReducer(updateState ? updateState({}, {
+        var reducer = new form_1.FormReducer(updateState ? updateState({}, {
             data: data,
             meta: meta.data
         }) : {
@@ -28,6 +30,6 @@ var SchemaFormCreate = /** @class */ (function () {
     SchemaFormCreate.metas = {};
     return SchemaFormCreate;
 }());
-export { SchemaFormCreate };
-export default new SchemaFormCreate();
+exports.SchemaFormCreate = SchemaFormCreate;
+exports.default = new SchemaFormCreate();
 //# sourceMappingURL=create.js.map

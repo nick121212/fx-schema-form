@@ -79,7 +79,7 @@ export const ValidateHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Sc
     @(compose<SchemaFormItemBaseProps, any>(
         connect(mapActionsStateToProps),
         connect(null, mapDispatchToProps),
-        pure
+        shouldUpdate(() => false)
     ) as any)
     class ValidateComponentHoc extends React.PureComponent<SchemaFormItemBaseProps, any> {
         public render(): JSX.Element {

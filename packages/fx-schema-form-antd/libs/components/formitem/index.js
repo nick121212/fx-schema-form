@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { hoc } from "./container";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var container_1 = require("./container");
 /**
  * SchemaFormItem组件
  * 找到对应的field组件，渲染
@@ -17,9 +19,9 @@ var SchemaFormItemComponent = /** @class */ (function (_super) {
             console.log(mergeSchema, "没有找到匹配的field");
             return null;
         }
-        return React.createElement(FieldComponent, tslib_1.__assign({}, this.props));
+        return react_1.default.createElement(FieldComponent, tslib_1.__assign({}, this.props));
     };
     return SchemaFormItemComponent;
-}(React.PureComponent));
-export var SchemaFormItem = hoc(SchemaFormItemComponent);
+}(react_1.default.PureComponent));
+exports.SchemaFormItem = container_1.hoc(SchemaFormItemComponent);
 //# sourceMappingURL=index.js.map

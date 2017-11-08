@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { compose } from "recompose";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var recompose_1 = require("recompose");
 /**
  * 包装Field的组件HOC
  * @param hocFactory  hoc的工厂方法
@@ -9,7 +11,7 @@ import { compose } from "recompose";
  *  2. 加入属性WidgetComponent  schema对应的widgetcomponent
  *  3. HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
  */
-export var MakeHoc = function (hocFactory, Component) {
+exports.MakeHoc = function (hocFactory, Component) {
     var MakeComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(MakeComponentHoc, _super);
         function MakeComponentHoc() {
@@ -27,8 +29,8 @@ export var MakeHoc = function (hocFactory, Component) {
             var hocs = uiSchema[this.fieldKey] ||
                 typeDefaultOptions[this.fieldKey] ||
                 globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
-            var ComponentWithHocs = compose.apply(void 0, hocs.map(function (hoc) { return hocFactory.get(hoc); }))(Component);
-            return React.createElement(ComponentWithHocs, tslib_1.__assign({ getHocOptions: this.getHocOptions.bind(this) }, this.props));
+            var ComponentWithHocs = recompose_1.compose.apply(void 0, hocs.map(function (hoc) { return hocFactory.get(hoc); }))(Component);
+            return react_1.default.createElement(ComponentWithHocs, tslib_1.__assign({ getHocOptions: this.getHocOptions.bind(this) }, this.props));
         };
         MakeComponentHoc.prototype.getHocOptions = function () {
             var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
@@ -38,7 +40,7 @@ export var MakeHoc = function (hocFactory, Component) {
             return hocOptions;
         };
         return MakeComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return MakeComponentHoc;
 };
 //# sourceMappingURL=make.js.map

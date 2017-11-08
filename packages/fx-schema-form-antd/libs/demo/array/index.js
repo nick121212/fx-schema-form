@@ -1,16 +1,18 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { Form, Button, Collapse, Row, Col } from "antd";
-import { connect } from "react-redux";
-import cloneDeep from "lodash.clonedeep";
-import ReactCodeMirror from "react-codemirror";
-import isEqual from "lodash.isequal";
-import Immutable from "immutable";
-import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
-import { ajv, globalOptions } from "../init";
-import { FormExampleReducer } from "../reducer/schema";
-import { FormExampleCompnent } from "../components/form.example";
-var Panel = Collapse.Panel;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var antd_1 = require("antd");
+var react_redux_1 = require("react-redux");
+var lodash_clonedeep_1 = require("lodash.clonedeep");
+var react_codemirror_1 = require("react-codemirror");
+var lodash_isequal_1 = require("lodash.isequal");
+var immutable_1 = require("immutable");
+var index_1 = require("../../index");
+var init_1 = require("../init");
+var schema_1 = require("../reducer/schema");
+var form_example_1 = require("../components/form.example");
+var Panel = antd_1.Collapse.Panel;
 var defaultSchema = {
     "$async": true,
     type: "object",
@@ -21,21 +23,23 @@ var defaultSchema = {
         }
     }
 };
-var settings = new FormExampleReducer({
-    schema: cloneDeep(defaultSchema),
+var settings = new schema_1.FormExampleReducer({
+    schema: lodash_clonedeep_1.default(defaultSchema),
     uiSchema: ["*"]
 });
-var reducer = createForms.createOne("array", {}, ajv, defaultSchema, function (state) {
+exports.settings = settings;
+var reducer = index_1.createForms.createOne("array", {}, init_1.ajv, defaultSchema, function (state) {
     return {
         originMeta: state.get("meta").toJS(),
         originData: state.get("data").toJS()
     };
 }, function (state, data) {
-    if (Immutable.Map.isMap(state)) {
+    if (immutable_1.default.Map.isMap(state)) {
         return state.merge(data);
     }
-    return Immutable.fromJS(data);
+    return immutable_1.default.fromJS(data);
 });
+exports.reducer = reducer;
 var nextKey = "array";
 var ArraySchemaFormComponent = /** @class */ (function (_super) {
     tslib_1.__extends(ArraySchemaFormComponent, _super);
@@ -48,7 +52,7 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
             return tslib_1.__generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        metaData = SchemaFormCreate.metas.array;
+                        metaData = index_1.SchemaFormCreate.metas.array;
                         _d.label = 1;
                     case 1:
                         _d.trys.push([1, 3, , 4]);
@@ -76,9 +80,9 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
         });
     };
     ArraySchemaFormComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
-        if (!isEqual(this.props.schema, nextProps.schema) || !isEqual(this.props.uiSchema, nextProps.uiSchema)) {
+        if (!lodash_isequal_1.default(this.props.schema, nextProps.schema) || !lodash_isequal_1.default(this.props.uiSchema, nextProps.uiSchema)) {
             nextKey = "" + Date.now();
-            ajv.removeSchema("array");
+            init_1.ajv.removeSchema("array");
         }
         return true;
     };
@@ -92,28 +96,28 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
             indentWithTabs: true,
             readOnly: true
         };
-        return (React.createElement(Collapse, { bordered: false, defaultActiveKey: ["1", "2"] },
-            React.createElement(Panel, { header: "meta 和 data", key: "2" },
-                React.createElement(Row, null,
-                    React.createElement(Col, { span: 12 },
-                        React.createElement(ReactCodeMirror, { key: Date.now(), value: this.props.meta ? JSON.stringify(this.props.meta || {}, null, 4) : "", options: options })),
-                    React.createElement(Col, { span: 12 },
-                        React.createElement(ReactCodeMirror, { key: Date.now(), value: data ? JSON.stringify(data || {}, null, 4) : "", options: options })))),
-            React.createElement(Panel, { header: "生成的表单", key: "1" },
-                React.createElement(Row, null,
-                    React.createElement(Col, { span: 16 },
-                        React.createElement(SchemaForm, { schemaKey: "array", schemaFormOptions: {
-                                ajv: ajv
+        return (react_1.default.createElement(antd_1.Collapse, { bordered: false, defaultActiveKey: ["1", "2"] },
+            react_1.default.createElement(Panel, { header: "meta 和 data", key: "2" },
+                react_1.default.createElement(antd_1.Row, null,
+                    react_1.default.createElement(antd_1.Col, { span: 12 },
+                        react_1.default.createElement(react_codemirror_1.default, { key: Date.now(), value: this.props.meta ? JSON.stringify(this.props.meta || {}, null, 4) : "", options: options })),
+                    react_1.default.createElement(antd_1.Col, { span: 12 },
+                        react_1.default.createElement(react_codemirror_1.default, { key: Date.now(), value: data ? JSON.stringify(data || {}, null, 4) : "", options: options })))),
+            react_1.default.createElement(Panel, { header: "生成的表单", key: "1" },
+                react_1.default.createElement(antd_1.Row, null,
+                    react_1.default.createElement(antd_1.Col, { span: 16 },
+                        react_1.default.createElement(index_1.SchemaForm, { schemaKey: "array", schemaFormOptions: {
+                                ajv: init_1.ajv
                             }, key: "dddd", getCurrentState: function (state, props) {
                                 return state.get("array").toJS();
-                            }, schema: schema, uiSchema: uiSchema, RootComponent: Form, globalOptions: globalOptions },
-                            React.createElement(Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
-                                React.createElement(Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4")))),
-                    React.createElement(Col, { span: 8 },
-                        React.createElement(FormExampleCompnent, { schema: JSON.stringify(schema, null, 4), data: JSON.stringify(data, null, 4), uiSchema: JSON.stringify(uiSchema, null, 4), onChangeData: reducer.actions.updateData.bind(reducer), onChange: settings.actions.updateData.bind(settings) }))))));
+                            }, schema: schema, uiSchema: uiSchema, RootComponent: antd_1.Form, globalOptions: init_1.globalOptions },
+                            react_1.default.createElement(antd_1.Form.Item, { labelCol: { xs: 6, offset: 12 }, wrapperCol: { xs: 6, offset: 12 } },
+                                react_1.default.createElement(antd_1.Button, { type: "primary", loading: isLoading, onClick: this.doSubmit.bind(this) }, "\u63D0\u4EA4")))),
+                    react_1.default.createElement(antd_1.Col, { span: 8 },
+                        react_1.default.createElement(form_example_1.FormExampleCompnent, { schema: JSON.stringify(schema, null, 4), data: JSON.stringify(data, null, 4), uiSchema: JSON.stringify(uiSchema, null, 4), onChangeData: reducer.actions.updateData.bind(reducer), onChange: settings.actions.updateData.bind(settings) }))))));
     };
     ArraySchemaFormComponent = tslib_1.__decorate([
-        connect(function (state, props) {
+        react_redux_1.connect(function (state, props) {
             var schemaForm = state.get("array").toJS();
             var _a = state.get("arraySetting"), schema = _a.schema, uiSchema = _a.uiSchema;
             return {
@@ -133,7 +137,6 @@ var ArraySchemaFormComponent = /** @class */ (function (_super) {
         })
     ], ArraySchemaFormComponent);
     return ArraySchemaFormComponent;
-}(React.Component));
-export { ArraySchemaFormComponent };
-export { reducer, settings };
+}(react_1.default.Component));
+exports.ArraySchemaFormComponent = ArraySchemaFormComponent;
 //# sourceMappingURL=index.js.map

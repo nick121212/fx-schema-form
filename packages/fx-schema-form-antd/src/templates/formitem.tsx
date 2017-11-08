@@ -10,7 +10,7 @@ export interface AntdFormItemTempProps extends SchemaFormItemProps {
 
 export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any> {
     public render(): JSX.Element {
-        const { children, arrayIndex, arrayItems, mergeSchema, globalOptions = {}, tempKey, uiSchemaOptions,
+        const { children, arrayIndex, ItemButtons, mergeSchema, globalOptions = {}, tempKey, uiSchemaOptions,
             meta = { dirty: false, isValid: true, isLoading: false }
         } = this.props;
         const tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
@@ -37,7 +37,7 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
                 {...tempOptions}>
                 <Row type="flex">
                     <Col span={20}>{children}</Col>
-                    <Col offset={1} span={3}>{arrayItems && arrayItems()}</Col>
+                    <Col offset={1} span={3}>{ItemButtons && <ItemButtons />}</Col>
                 </Row>
             </Form.Item>
         );

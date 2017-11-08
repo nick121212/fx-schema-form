@@ -82,17 +82,13 @@ export class MetaData {
 
             // this.schemaFormOptions.ajv.removeSchema
             // 调用验证方法
-            await validate(data)
-                .then(() => {
-                    this.data.isValid = true;
-                }).catch((err: any) => {
-                    this.data.isValid = false;
-                    if (err.errors && err.errors.length) {
-                        this.setErrors(err.errors);
-                    }
-                });
+            await validate(data);
+            this.data.isValid = true;
         } catch (err) {
-            console.log("dfkljalkdsjfkla", err);
+            this.data.isValid = false;
+            if (err.errors && err.errors.length) {
+                this.setErrors(err.errors);
+            }
         }
 
         return this.data;

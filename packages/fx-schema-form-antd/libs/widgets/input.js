@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { Input } from "antd";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var antd_1 = require("antd");
 var AntdInputWidget = /** @class */ (function (_super) {
     tslib_1.__extends(AntdInputWidget, _super);
     function AntdInputWidget() {
@@ -24,13 +26,13 @@ var AntdInputWidget = /** @class */ (function (_super) {
         var _c = (globalOptions.widget || {}).input, inputDefault = _c === void 0 ? {} : _c;
         var _d = mergeSchema.uiSchema, uiSchema = _d === void 0 ? {} : _d, keys = mergeSchema.keys;
         var _e = uiSchema.readonly, readonly = _e === void 0 ? false : _e;
-        return (React.createElement(Input, tslib_1.__assign({ onBlur: function () {
+        return (react_1.default.createElement(antd_1.Input, tslib_1.__assign({ onBlur: function () {
                 validate(formItemData);
             }, onChange: function (e) {
                 updateItemData(e.currentTarget.value);
             }, disabled: readonly, placeholder: mergeSchema.title }, input, inputDefault, this.setDefaultProps())));
     };
     return AntdInputWidget;
-}(React.Component));
-export { AntdInputWidget };
+}(react_1.default.Component));
+exports.AntdInputWidget = AntdInputWidget;
 //# sourceMappingURL=input.js.map

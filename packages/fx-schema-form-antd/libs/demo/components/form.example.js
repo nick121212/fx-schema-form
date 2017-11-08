@@ -1,8 +1,10 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import ReactCodeMirror from "react-codemirror";
-import "codemirror/mode/javascript/javascript";
-import { Row, Col, Card } from "antd";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var react_codemirror_1 = require("react-codemirror");
+require("codemirror/mode/javascript/javascript");
+var antd_1 = require("antd");
 var FormExampleCompnent = /** @class */ (function (_super) {
     tslib_1.__extends(FormExampleCompnent, _super);
     function FormExampleCompnent() {
@@ -27,15 +29,15 @@ var FormExampleCompnent = /** @class */ (function (_super) {
             indentWithTabs: true
         };
         var style = {};
-        return (React.createElement(Card, { noHovering: true, bodyStyle: { padding: 0 }, title: "更改更新表单", bordered: false },
-            React.createElement(Row, null,
-                React.createElement(Col, { style: style },
-                    React.createElement(ReactCodeMirror, { value: schema, onChange: this.updateSchema.bind(this), options: options })),
-                React.createElement(Col, null,
-                    React.createElement(ReactCodeMirror, { value: uiSchema, onChange: this.updateUiSchema.bind(this), options: options })))));
+        return (react_1.default.createElement(antd_1.Card, { noHovering: true, bodyStyle: { padding: 0 }, title: "更改更新表单", bordered: false },
+            react_1.default.createElement(antd_1.Row, null,
+                react_1.default.createElement(antd_1.Col, { style: style },
+                    react_1.default.createElement(react_codemirror_1.default, { value: schema, onChange: this.updateSchema.bind(this), options: options })),
+                react_1.default.createElement(antd_1.Col, null,
+                    react_1.default.createElement(react_codemirror_1.default, { value: uiSchema, onChange: this.updateUiSchema.bind(this), options: options })))));
         // return <ReactCodeMirror value={JSON.stringify(schema, null, 4)} onChange={this.updateCode} options={options} />;
     };
     return FormExampleCompnent;
-}(React.Component));
-export { FormExampleCompnent };
+}(react_1.default.Component));
+exports.FormExampleCompnent = FormExampleCompnent;
 //# sourceMappingURL=form.example.js.map

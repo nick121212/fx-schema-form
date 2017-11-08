@@ -1,18 +1,20 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
-import isEqual from "lodash.isequal";
-import { connect } from "react-redux";
-import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
-var metaConnect = compose(connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
-    return !isEqual(curProps.meta, nextProps.meta);
-}), onlyUpdateForKeys(["meta"]));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var recompose_1 = require("recompose");
+var lodash_isequal_1 = require("lodash.isequal");
+var react_redux_1 = require("react-redux");
+var select_1 = require("../select");
+var metaConnect = recompose_1.compose(react_redux_1.connect(select_1.mapMetaStateToProps), recompose_1.onlyUpdateForKeys(["meta"]), recompose_1.shouldUpdate(function (curProps, nextProps) {
+    return !lodash_isequal_1.default(curProps.meta, nextProps.meta);
+}));
 /**
  * 包装Template的组件HOC
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export var TempHoc = function (hocFactory, Component) {
+exports.TempHoc = function (hocFactory, Component) {
     /**
     * 获取模板的components
     * @param uiSchema 合并后的数据
@@ -30,12 +32,13 @@ export var TempHoc = function (hocFactory, Component) {
             var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
             var TempComponents = this.getTemplates();
             var uiSchemaOptions = uiSchema.options || {};
-            var ComponentWithHoc = compose(connect(mapFormItemDataProps))(Component);
+            var ComponentWithHoc = recompose_1.compose(react_redux_1.connect(select_1.mapFormItemDataProps))(Component);
             var index = 0;
             return TempComponents.reduce(function (prev, _a) {
                 var key = _a.key, Temp = _a.Temp;
-                return React.createElement(Temp, tslib_1.__assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, _this.props), prev);
-            }, React.createElement(ComponentWithHoc, tslib_1.__assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
+                var TempWithHoc = metaConnect(Temp);
+                return react_1.default.createElement(TempWithHoc, tslib_1.__assign({ globalOptions: globalOptions, tempKey: key, uiSchemaOptions: uiSchemaOptions, key: keys.join(".") + key + index++ }, _this.props, { children: prev }));
+            }, react_1.default.createElement(ComponentWithHoc, tslib_1.__assign({ key: keys.join("."), uiSchemaOptions: uiSchemaOptions }, this.props)));
         };
         /**
         * 获取模板的components
@@ -71,10 +74,10 @@ export var TempHoc = function (hocFactory, Component) {
             return TempComponent;
         };
         TempComponentHoc = tslib_1.__decorate([
-            metaConnect
+            recompose_1.compose(recompose_1.shouldUpdate(function () { return false; }))
         ], TempComponentHoc);
         return TempComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return TempComponentHoc;
 };
 //# sourceMappingURL=temp.js.map

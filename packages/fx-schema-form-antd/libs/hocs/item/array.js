@@ -1,27 +1,71 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { branch, renderComponent, compose } from "recompose";
-import { connect } from "react-redux";
-import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
-var mapDispatchToProps = function (dispatch, ownProps) {
-    var mergeSchema = ownProps.mergeSchema, actions = ownProps.actions, schemaFormOptions = ownProps.schemaFormOptions;
-    var keys = mergeSchema.keys;
-    // 返回validae方法，这里更新字段的值
-    return {
-        toggleItem: function (data) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var recompose_1 = require("recompose");
+var react_redux_1 = require("react-redux");
+var select_1 = require("../select");
+var handlers = recompose_1.withHandlers({
+    /**
+     * 移除一个数据项
+     * @param index 数组索引
+     */
+    removeItem: function (props) {
+        return function (index) {
+            var _a = props.formItemData, formItemData = _a === void 0 ? [] : _a, mergeSchema = props.mergeSchema, arrayIndex = props.arrayIndex, actions = props.actions;
+            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
+            if (type === "array" && index !== undefined) {
+                actions.removeItem({ keys: keys, index: index });
+            }
+        };
+    },
+    /**
+     * 元素交换位置
+     * @param curIndex     当前的位置
+     * @param switchIndex  移动到的位置
+     */
+    switchItem: function (props) {
+        return function (curIndex, switchIndex) {
+            var _a = props.formItemData, formItemData = _a === void 0 ? [] : _a, mergeSchema = props.mergeSchema, arrayIndex = props.arrayIndex, actions = props.actions;
+            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
+            if (type === "array" && curIndex !== undefined && switchIndex !== undefined) {
+                if (switchIndex < 0 || formItemData.length < switchIndex + 1) {
+                    return;
+                }
+                actions.switchItem({
+                    keys: keys,
+                    curIndex: curIndex,
+                    switchIndex: switchIndex
+                });
+            }
+        };
+    },
+    /**
+     * 显示隐藏数组中的item元素
+     */
+    toggleItem: function (props) {
+        return function () {
+            var mergeSchema = props.mergeSchema, actions = props.actions, schemaFormOptions = props.schemaFormOptions;
+            var keys = mergeSchema.keys;
             actions.toggleItem({ keys: keys });
-        },
-        removeItem: function (data) {
-            actions.removeItem({ keys: keys, index: data });
-        },
-        addItem: function (data) {
-            actions.addItem({ keys: keys, data: data });
-        },
-        switchItem: function (data) {
-            actions.switchItem(tslib_1.__assign({ keys: keys }, data));
-        }
-    };
-};
+        };
+    },
+    /**
+     * 添加一个项目
+     */
+    addItem: function (props) {
+        return function () {
+            var mergeSchema = props.mergeSchema, actions = props.actions;
+            var keys = mergeSchema.keys;
+            if (mergeSchema.items.type === "object") {
+                actions.addItem({ keys: keys, data: {} });
+            }
+            else {
+                actions.addItem({ keys: keys, data: undefined });
+            }
+        };
+    }
+});
 /**
  * 包装array的组件HOC
  * @param hocFactory  hoc的工厂方法
@@ -29,97 +73,51 @@ var mapDispatchToProps = function (dispatch, ownProps) {
  * 加入属性
  * arrayItems
  */
-export var ArrayHoc = function (hocFactory, Component) {
+exports.ArrayHoc = function (hocFactory, Component) {
     var ArrayComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(ArrayComponentHoc, _super);
         function ArrayComponentHoc() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ArrayComponentHoc.prototype.render = function () {
+            var _this = this;
             var _a = this.props, mergeSchema = _a.mergeSchema, getHocOptions = _a.getHocOptions;
             var type = mergeSchema.type;
             var hocOptions = getHocOptions();
             var arrayHocOptions = hocOptions.array;
-            var _b = arrayHocOptions || {}, _c = _b.createItemButtons, createItemButtons = _c === void 0 ? function (props) { return null; } : _c, _d = _b.createItemChildButtons, createItemChildButtons = _d === void 0 ? function (props) { return null; } : _d;
-            var newProps = Object.assign({}, this.props, {
-                removeItem: this.removeItem.bind(this),
-                addItem: this.addItem.bind(this),
-                toggleItem: this.toggleItem.bind(this),
-                switchItem: this.switchItem.bind(this)
-            });
+            var _b = arrayHocOptions || {}, _c = _b.ItemChildButtons, ItemChildButtons = _c === void 0 ? null : _c, _d = _b.ItemButtons, ItemButtons = _d === void 0 ? null : _d;
+            var ItemChildButtonsWithHoc, ItemButtonsWithHoc;
+            if (ItemChildButtons) {
+                ItemChildButtonsWithHoc = recompose_1.compose(handlers, react_redux_1.connect(select_1.mapMetaStateToProps))(ItemChildButtons);
+            }
+            if (ItemButtons) {
+                ItemButtonsWithHoc = recompose_1.compose(handlers, react_redux_1.connect(select_1.mapMetaStateToProps))(ItemButtons);
+            }
             if (type === "array") {
-                return React.createElement(Component, tslib_1.__assign({}, newProps, { arrayItems: createItemButtons(newProps), createItemChildButtons: createItemChildButtons.bind(this, newProps) }));
+                return react_1.default.createElement(Component, tslib_1.__assign({}, this.props, { ItemButtons: ItemButtonsWithHoc ? function () { return react_1.default.createElement(ItemButtonsWithHoc, tslib_1.__assign({}, _this.props)); } : function () { return react_1.default.createElement("span", null); }, ItemChildButtons: ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return react_1.default.createElement("span", null); } }));
             }
-            return React.createElement(Component, tslib_1.__assign({}, this.props));
-        };
-        /**
-         * 移除一个数据项
-         * @param index 数组索引
-         */
-        ArrayComponentHoc.prototype.removeItem = function (index) {
-            var _a = this.props, _b = _a.formItemData, formItemData = _b === void 0 ? [] : _b, mergeSchema = _a.mergeSchema, removeItem = _a.removeItem, arrayIndex = _a.arrayIndex;
-            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
-            if (type === "array" && index !== undefined) {
-                removeItem(index);
-            }
-        };
-        /**
-         * 元素交换位置
-         * @param curIndex     当前的位置
-         * @param switchIndex  移动到的位置
-         */
-        ArrayComponentHoc.prototype.switchItem = function (curIndex, switchIndex) {
-            var _a = this.props, _b = _a.formItemData, formItemData = _b === void 0 ? [] : _b, mergeSchema = _a.mergeSchema, switchItem = _a.switchItem, arrayIndex = _a.arrayIndex;
-            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
-            if (type === "array" && curIndex !== undefined && switchIndex !== undefined) {
-                if (switchIndex < 0 || formItemData.length < switchIndex + 1) {
-                    return;
-                }
-                switchItem({
-                    curIndex: curIndex,
-                    switchIndex: switchIndex
-                });
-            }
-        };
-        /**
-         * 显示隐藏数组中的item元素
-         */
-        ArrayComponentHoc.prototype.toggleItem = function () {
-            var toggleItem = this.props.toggleItem;
-            toggleItem();
-        };
-        /**
-         * 添加一个项目
-         */
-        ArrayComponentHoc.prototype.addItem = function () {
-            var _a = this.props, mergeSchema = _a.mergeSchema, validate = _a.validate, addItem = _a.addItem;
-            if (mergeSchema.items.type === "object") {
-                addItem({});
-            }
-            else {
-                addItem(undefined);
-            }
+            return react_1.default.createElement(Component, tslib_1.__assign({}, this.props));
         };
         ArrayComponentHoc = tslib_1.__decorate([
-            compose(connect(mapFormItemDataProps, mapDispatchToProps), connect(mapMetaStateToProps))
+            recompose_1.compose(handlers)
         ], ArrayComponentHoc);
         return ArrayComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     var PureComponent = /** @class */ (function (_super) {
         tslib_1.__extends(PureComponent, _super);
         function PureComponent() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         PureComponent.prototype.render = function () {
-            return React.createElement(Component, tslib_1.__assign({}, this.props));
+            return react_1.default.createElement(Component, tslib_1.__assign({}, this.props));
         };
         PureComponent = tslib_1.__decorate([
-            connect(mapFormItemDataProps)
+            recompose_1.compose(handlers, react_redux_1.connect(select_1.mapFormItemDataProps))
         ], PureComponent);
         return PureComponent;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     var spinnerWhileLoading = function (isLoading) {
-        return branch(isLoading, renderComponent(PureComponent));
+        return recompose_1.branch(isLoading, recompose_1.renderComponent(PureComponent));
     };
     var enhance = spinnerWhileLoading(function (props) {
         var mergeSchema = props.mergeSchema, getHocOptions = props.getHocOptions;

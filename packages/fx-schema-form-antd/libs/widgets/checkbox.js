@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { Checkbox } from "antd";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var antd_1 = require("antd");
 var AntdCheckboxWidget = /** @class */ (function (_super) {
     tslib_1.__extends(AntdCheckboxWidget, _super);
     function AntdCheckboxWidget() {
@@ -23,12 +25,12 @@ var AntdCheckboxWidget = /** @class */ (function (_super) {
         var _c = (globalOptions.widget || {}).checkbox, checkboxDefault = _c === void 0 ? {} : _c;
         var _d = mergeSchema.uiSchema, uiSchema = _d === void 0 ? {} : _d, keys = mergeSchema.keys;
         var _e = uiSchema.readonly, readonly = _e === void 0 ? false : _e;
-        return (React.createElement(Checkbox, tslib_1.__assign({ onChange: function (e) {
+        return (react_1.default.createElement(antd_1.Checkbox, tslib_1.__assign({ onChange: function (e) {
                 updateItemData(e.target.checked);
                 validate(e.target.checked);
             }, disabled: readonly }, checkbox, checkboxDefault, this.setDefaultProps())));
     };
     return AntdCheckboxWidget;
-}(React.Component));
-export { AntdCheckboxWidget };
+}(react_1.default.Component));
+exports.AntdCheckboxWidget = AntdCheckboxWidget;
 //# sourceMappingURL=checkbox.js.map

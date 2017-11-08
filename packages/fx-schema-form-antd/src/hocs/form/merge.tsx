@@ -59,27 +59,28 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
     ) as any)
     class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
         public render(): JSX.Element {
-            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey, formData } = this.props, mergeSchemaList;
-            let formDefaultData = {};
-
-            console.log("merge render -----");
+            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey } = this.props, mergeSchemaList;
+            let formDefaultData = {}, mergeSchema = schema;
 
             if (!schemaKey) {
                 schemaKey = (Date.now() + Math.random()).toString();
             }
             // 设置默认值
             schemaFormOptions = schemaFormOptions || {
-                avjOptions: {
-                    allErrors: true,
-                    jsonPointers: true,
-                    verbose: true,
-                    useDefaults: true,
-                    errorDataPath: "property"
-                }
+                avjOptions: {}
             };
-            schemaFormOptions.parentKeys = parentKeys || [];
+
+            // 判断schema的keys是否有值，为空则标志，这只是一个容器组件
+            if (parentKeys && !parentKeys.length) {
+                schemaFormOptions.parentKeys = schemaFormOptions.parentKeys || [];
+                if (schemaFormOptions.map.has(schemaFormOptions.parentKeys.join("/"))) {
+                    mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
+                }
+            } else {
+                schemaFormOptions.parentKeys = parentKeys;
+            }
             // 合并schema和uiSchema
-            mergeSchemaList = schemaMerge.merge(schemaKey, schema, uiSchema, schemaFormOptions);
+            mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);
 
             return (
                 <Component

@@ -1,6 +1,8 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import { SchemaForm } from "../index";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var index_1 = require("../index");
 /**
  * 数组字段的生成规则
  */
@@ -14,9 +16,10 @@ var ArrayField = /** @class */ (function (_super) {
      * @param idx 数组的索引
      */
     ArrayField.prototype.renderItem = function (idx, maxLen) {
-        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, getCurrentState = _a.getCurrentState, arrayItems = _a.arrayItems, createItemChildButtons = _a.createItemChildButtons;
+        var _this = this;
+        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, getCurrentState = _a.getCurrentState, ItemChildButtons = _a.ItemChildButtons, _b = _a.arrayLevel, arrayLevel = _b === void 0 ? [] : _b;
         var uiSchema = mergeSchema.uiSchema, keys = mergeSchema.keys;
-        return (React.createElement(SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, getCurrentState: getCurrentState, arrayIndex: idx, arrayItems: createItemChildButtons ? createItemChildButtons.bind(null, idx, maxLen) : null, parentKeys: mergeSchema.keys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
+        return (react_1.default.createElement(index_1.SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, getCurrentState: getCurrentState, arrayIndex: idx, arrayLevel: arrayLevel.concat([idx]), ItemButtons: function () { return react_1.default.createElement(ItemChildButtons, tslib_1.__assign({}, _this.props, { index: idx })); }, parentKeys: mergeSchema.originKeys, RootComponent: null, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
     };
     /**
      * 渲染页面
@@ -29,9 +32,9 @@ var ArrayField = /** @class */ (function (_super) {
         child = formItemData && formItemData.map(function (data, idx) {
             return _this.renderItem(idx, formItemData.length);
         });
-        return React.createElement("div", null, child || null);
+        return react_1.default.createElement("div", { style: { width: "100%" } }, child || null);
     };
     return ArrayField;
-}(React.Component));
-export { ArrayField };
+}(react_1.default.Component));
+exports.ArrayField = ArrayField;
 //# sourceMappingURL=array.js.map

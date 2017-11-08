@@ -10,16 +10,19 @@ export interface ObjectFieldProps extends SchemaFormItemProps {
 
 export class ObjectField extends React.Component<ObjectFieldProps, any> {
     public render(): JSX.Element {
-        const { mergeSchema, currentTheme, WidgetComponent, getCurrentState, globalOptions, schemaFormOptions, schemaKey } = this.props;
+        const { mergeSchema, currentTheme, WidgetComponent, arrayIndex, ItemButtons, arrayLevel,
+            getCurrentState, globalOptions, schemaFormOptions, schemaKey } = this.props;
         const { uiSchema } = mergeSchema;
 
         return (
             <SchemaForm
+                arrayIndex={arrayIndex}
                 schemaFormOptions={schemaFormOptions}
                 getCurrentState={getCurrentState}
                 schemaKey={schemaKey}
+                arrayLevel={arrayLevel}
                 schema={mergeSchema}
-                parentKeys={mergeSchema.keys}
+                parentKeys={mergeSchema.originKeys}
                 RootComponent={uiSchema.root}
                 uiSchema={uiSchema.items || ["*"]}
                 globalOptions={globalOptions}>

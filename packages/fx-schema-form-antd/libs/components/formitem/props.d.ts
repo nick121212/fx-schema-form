@@ -1,4 +1,3 @@
-/// <reference types="react" />
 export interface SchemaFormItemBaseProps {
     mergeSchema: any;
     schemaKey: string;
@@ -10,8 +9,7 @@ export interface SchemaFormItemBaseProps {
         data: any;
     }) => void;
     arrayIndex?: number;
-    arrayItems?: any;
-    arrayItemItems?: Array<JSX.Element>;
+    arrayLevel?: number[];
     formDefaultData?: any;
     formData?: any;
     formItemData?: any;

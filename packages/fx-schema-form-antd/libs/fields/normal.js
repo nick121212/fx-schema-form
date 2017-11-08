@@ -1,5 +1,7 @@
-import * as tslib_1 from "tslib";
-import React from "react";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
 var NormalField = /** @class */ (function (_super) {
     tslib_1.__extends(NormalField, _super);
     function NormalField() {
@@ -7,9 +9,9 @@ var NormalField = /** @class */ (function (_super) {
     }
     NormalField.prototype.render = function () {
         var _a = this.props, mergeSchema = _a.mergeSchema, currentTheme = _a.currentTheme, WidgetComponent = _a.WidgetComponent;
-        return (React.createElement(WidgetComponent, tslib_1.__assign({ key: mergeSchema.keys.join(".") }, this.props)));
+        return (react_1.default.createElement(WidgetComponent, tslib_1.__assign({ key: mergeSchema.keys.join(".") }, this.props)));
     };
     return NormalField;
-}(React.Component));
-export { NormalField };
+}(react_1.default.Component));
+exports.NormalField = NormalField;
 //# sourceMappingURL=normal.js.map

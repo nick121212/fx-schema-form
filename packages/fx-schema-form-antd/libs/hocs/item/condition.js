@@ -1,8 +1,10 @@
-import * as tslib_1 from "tslib";
-import React from "react";
-import jpp from "json-pointer";
-import { connect } from "react-redux";
-import { mapFormDataToProps } from "../select";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
+var json_pointer_1 = require("json-pointer");
+var react_redux_1 = require("react-redux");
+var select_1 = require("../select");
 /**
  * condition hoc
  * 用于组件的显示隐藏
@@ -11,7 +13,7 @@ import { mapFormDataToProps } from "../select";
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export var ConditionHoc = function (hocFactory, Component) {
+exports.ConditionHoc = function (hocFactory, Component) {
     var ConditionComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(ConditionComponentHoc, _super);
         function ConditionComponentHoc() {
@@ -27,7 +29,7 @@ export var ConditionHoc = function (hocFactory, Component) {
             var hocOptions = getHocOptions();
             var conditionHocOptions = hocOptions.condition;
             var fields = conditionHocOptions.fields;
-            var isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
+            var isShow = true, jFormData = json_pointer_1.default(Object.assign({}, formDefaultData, formData));
             if (fields && fields.length) {
                 isShow = fields.reduce(function (prev, _a) {
                     var key = _a.key, val = _a.val;
@@ -43,13 +45,13 @@ export var ConditionHoc = function (hocFactory, Component) {
             if (!isShow) {
                 return null;
             }
-            return React.createElement(Component, tslib_1.__assign({}, this.props));
+            return react_1.default.createElement(Component, tslib_1.__assign({}, this.props));
         };
         ConditionComponentHoc = tslib_1.__decorate([
-            connect(mapFormDataToProps)
+            react_redux_1.connect(select_1.mapFormDataToProps)
         ], ConditionComponentHoc);
         return ConditionComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return ConditionComponentHoc;
 };
 //# sourceMappingURL=condition.js.map

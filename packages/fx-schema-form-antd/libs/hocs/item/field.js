@@ -1,5 +1,7 @@
-import * as tslib_1 from "tslib";
-import React from "react";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var react_1 = require("react");
 /**
  * 包装Field的组件HOC
  * @param hocFactory  hoc的工厂方法
@@ -7,7 +9,7 @@ import React from "react";
  * 加入属性FieldComponent   schema对应的fieldcomponent
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
-export var FieldHoc = function (hocFactory, Component) {
+exports.FieldHoc = function (hocFactory, Component) {
     var FieldComponentHoc = /** @class */ (function (_super) {
         tslib_1.__extends(FieldComponentHoc, _super);
         function FieldComponentHoc() {
@@ -45,10 +47,10 @@ export var FieldHoc = function (hocFactory, Component) {
             else {
                 // console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
             }
-            return React.createElement(Component, tslib_1.__assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
+            return react_1.default.createElement(Component, tslib_1.__assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
         };
         return FieldComponentHoc;
-    }(React.PureComponent));
+    }(react_1.default.PureComponent));
     return FieldComponentHoc;
 };
 //# sourceMappingURL=field.js.map

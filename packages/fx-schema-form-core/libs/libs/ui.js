@@ -30,15 +30,20 @@ var UiMerge = (function () {
             if (uiSchema.uiSchema.items) {
                 uiSchema.uiSchema.items = this.merge(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
             }
-            delete uiSchema.$ref;
             return uiSchema;
+        }
+        else {
+            if (keyProp.constructor === Object) {
+                if (keyProp.uiSchema) {
+                    return keyProp;
+                }
+            }
         }
     };
     UiMerge.prototype.mergeObject = function (keyProp, map, parentKeys, keys) {
         var keyPath = parentKeys.concat([keyProp]);
         if (map.has(keyPath.join("/")) && !keys[keyProp]) {
             var uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
-            delete uiSchema.$ref;
             return uiSchema;
         }
     };
@@ -55,7 +60,6 @@ var UiMerge = (function () {
             var keyPath = parentKeys.concat([keyProps]);
             if (map.has(keyPath.join("/")) && !keyPath[keyProps]) {
                 var uiSchema = Object.assign({ uiSchema: {} }, map.get(keyPath.join("/")));
-                delete uiSchema.$ref;
                 return uiSchema;
             }
         }

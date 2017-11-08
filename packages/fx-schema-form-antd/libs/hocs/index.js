@@ -1,22 +1,25 @@
-import { BaseFactory } from "fx-schema-form-core";
-import { MergeHoc } from "./form/merge";
-import { TempHoc } from "./item/temp";
-import { FieldHoc } from "./item/field";
-import { ThemeHoc } from "./item/theme";
-import { ValidateHoc } from "./item/validate";
-import { ArrayHoc } from "./item/array";
-import { MakeHoc } from "./item/make";
-import { ConditionHoc } from "./item/condition";
-var hocFactory = new BaseFactory();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fx_schema_form_core_1 = require("fx-schema-form-core");
+var merge_1 = require("./form/merge");
+var temp_1 = require("./item/temp");
+var field_1 = require("./item/field");
+var theme_1 = require("./item/theme");
+var validate_1 = require("./item/validate");
+var array_1 = require("./item/array");
+var make_1 = require("./item/make");
+var condition_1 = require("./item/condition");
+var hocFactory = new fx_schema_form_core_1.BaseFactory();
+exports.hocFactory = hocFactory;
 var hocs = {
-    merge: MergeHoc.bind(MergeHoc, hocFactory),
-    temp: TempHoc.bind(TempHoc, hocFactory),
-    field: FieldHoc.bind(FieldHoc, hocFactory),
-    theme: ThemeHoc.bind(ThemeHoc, hocFactory),
-    validate: ValidateHoc.bind(ValidateHoc, hocFactory),
-    array: ArrayHoc.bind(ArrayHoc, hocFactory),
-    make: MakeHoc.bind(MakeHoc, hocFactory),
-    condition: ConditionHoc.bind(ConditionHoc, hocFactory)
+    merge: merge_1.MergeHoc.bind(merge_1.MergeHoc, hocFactory),
+    temp: temp_1.TempHoc.bind(temp_1.TempHoc, hocFactory),
+    field: field_1.FieldHoc.bind(field_1.FieldHoc, hocFactory),
+    theme: theme_1.ThemeHoc.bind(theme_1.ThemeHoc, hocFactory),
+    validate: validate_1.ValidateHoc.bind(validate_1.ValidateHoc, hocFactory),
+    array: array_1.ArrayHoc.bind(array_1.ArrayHoc, hocFactory),
+    make: make_1.MakeHoc.bind(make_1.MakeHoc, hocFactory),
+    condition: condition_1.ConditionHoc.bind(condition_1.ConditionHoc, hocFactory)
 };
 for (var key in hocs) {
     if (hocs.hasOwnProperty(key)) {
@@ -25,5 +28,4 @@ for (var key in hocs) {
         hocFactory.lock(key);
     }
 }
-export { hocFactory };
 //# sourceMappingURL=index.js.map
