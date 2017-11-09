@@ -79,6 +79,9 @@ schema = {
                                 push: {
                                     type: "number",
                                     default: 0
+                                },
+                                containerType: {
+                                    type: "string",
                                 }
                             }
                         }
@@ -198,6 +201,10 @@ let reducer: FormReducer<any> = createForms.createOne("object", {
     }, {
         "elements": [{
             "image": "http://git.huginn.cn/static/images/huginn_logo.png", "span": 24, "offset": 0, "push": 0
+        }, {
+            "image": "http://git.huginn.cn/static/images/huginn_logo.png", "span": 24, "offset": 0, "push": 0
+        }, {
+            "image": "http://git.huginn.cn/static/images/huginn_logo.png", "span": 24, "offset": 0, "push": 0
         }]
     }, {
         "elements": [{
@@ -264,7 +271,7 @@ export class ObjectSchemaFormComponent extends React.Component<any> {
                         position: "fixed",
                         right: 0,
                         width: 320,
-                        overflow:"auto",
+                        overflow: "auto",
                         bottom: 0,
                         top: 0
                     }}>

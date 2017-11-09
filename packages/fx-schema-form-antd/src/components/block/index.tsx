@@ -3,7 +3,7 @@ import React from "react";
 /**
  * block组建
  */
-export class SchemaFormBlock extends React.Component<any, any> {
+export class SchemaFormBlock extends React.PureComponent<any, any> {
     public render(): JSX.Element {
         return (
             <div>

@@ -13,11 +13,4 @@ export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOu
     ItemButtons?: new () => React.PureComponent<any>;
     ItemChildButtons?: new () => React.PureComponent<any>;
 }
-/**
- * 包装array的组件HOC
- * @param hocFactory  hoc的工厂方法
- * @param Component   需要包装的组件
- * 加入属性
- * arrayItems
- */
 export declare const ArrayHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<ArrayHocOutProps, any>;

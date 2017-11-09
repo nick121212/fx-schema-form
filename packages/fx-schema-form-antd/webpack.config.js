@@ -71,7 +71,7 @@ module.exports = {
         }, {
             test: /\.ts(x?)$/,
             exclude: /node_modules/,
-            loader: 'awesome-typescript-loader',
+            loader: 'babel-loader!awesome-typescript-loader',
         }, {
             test: /\.js$/,
             loader: 'babel-loader',
@@ -147,7 +147,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.less', '.tsx']
     },
     externals: !(__PROD__) ? [{}] : [{
-        "react": true,
+        "react": "React",
         "react-dom": true,
         "recompose": true,
         "antd": true,

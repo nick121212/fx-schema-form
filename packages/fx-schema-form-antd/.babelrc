@@ -1,6 +1,6 @@
 {
     "presets": [
-        "es2015"
+       
     ],
     "env": {
         "plugins": [
@@ -16,9 +16,6 @@
         ],
         "production": {
             "plugins": [
-                "add-module-exports"
-                // "transform-react-jsx",
-                // "transform-runtime"
             ]
         },
         "comments": false

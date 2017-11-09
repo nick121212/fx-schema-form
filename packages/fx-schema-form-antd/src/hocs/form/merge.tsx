@@ -77,7 +77,7 @@ export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocP
                     mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
                 }
             } else {
-                schemaFormOptions.parentKeys = parentKeys;
+                schemaFormOptions.parentKeys = parentKeys || [];
             }
             // 合并schema和uiSchema
             mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);

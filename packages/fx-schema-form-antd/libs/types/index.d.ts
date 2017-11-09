@@ -9,9 +9,6 @@ export interface SchemaFormNs<F, T, W> {
     widgetFactory: BaseFactory<W>;
     hocFactory?: BaseFactory<ComponentEnhancer<any, any>>;
 }
-/**
- * meta数据
- */
 export interface SchemaFormMeta {
     isShow?: boolean;
     dirty?: boolean;

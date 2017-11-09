@@ -1,1 +1,898 @@
-!function e(t,r){"object"==typeof exports&&"object"==typeof module?module.exports=r(require("json-pointer"),require("fx-schema-form-core"),require("react"),require("react-redux"),require("reselect"),require("recompose"),require("lodash.isequal"),require("uuid"),require("redux-act"),require("lodash.clonedeep")):"function"==typeof define&&define.amd?define("fx-schema-form-antd",["json-pointer","fx-schema-form-core","react","react-redux","reselect","recompose","lodash.isequal","uuid","redux-act","lodash.clonedeep"],r):"object"==typeof exports?exports["fx-schema-form-antd"]=r(require("json-pointer"),require("fx-schema-form-core"),require("react"),require("react-redux"),require("reselect"),require("recompose"),require("lodash.isequal"),require("uuid"),require("redux-act"),require("lodash.clonedeep")):t["fx-schema-form-antd"]=r(t["json-pointer"],t["fx-schema-form-core"],t.react,t["react-redux"],t.reselect,t.recompose,t["lodash.isequal"],t.uuid,t["redux-act"],t["lodash.clonedeep"])}(this,function(e,t,r,a,n,o,i,s,c,u){return function(e){function t(a){if(r[a])return r[a].exports;var n=r[a]={i:a,l:!1,exports:{}};return e[a].call(n.exports,n,n.exports,t),n.l=!0,n.exports}var r={};return t.m=e,t.c=r,t.d=function(e,r,a){t.o(e,r)||Object.defineProperty(e,r,{configurable:!1,enumerable:!0,get:a})},t.n=function(e){var r=e&&e.__esModule?function t(){return e.default}:function t(){return e};return t.d(r,"a",r),r},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/",t(t.s=11)}([function(e,t,r){"use strict";function a(e,t){function r(){this.constructor=e}_(e,t),e.prototype=null===t?Object.create(t):(r.prototype=t.prototype,new r)}function n(e,t){var r={};for(var a in e)Object.prototype.hasOwnProperty.call(e,a)&&t.indexOf(a)<0&&(r[a]=e[a]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols)for(var n=0,a=Object.getOwnPropertySymbols(e);n<a.length;n++)t.indexOf(a[n])<0&&(r[a[n]]=e[a[n]]);return r}function o(e,t,r,a){var n=arguments.length,o=n<3?t:null===a?a=Object.getOwnPropertyDescriptor(t,r):a,i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,r,a);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(o=(n<3?i(o):n>3?i(t,r,o):i(t,r))||o);return n>3&&o&&Object.defineProperty(t,r,o),o}function i(e,t){return function(r,a){t(r,a,e)}}function s(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)}function c(e,t,r,a){return new(r||(r=Promise))(function(n,o){function i(e){try{c(a.next(e))}catch(e){o(e)}}function s(e){try{c(a.throw(e))}catch(e){o(e)}}function c(e){e.done?n(e.value):new r(function(t){t(e.value)}).then(i,s)}c((a=a.apply(e,t||[])).next())})}function u(e,t){function r(e){return function(t){return a([e,t])}}function a(r){if(o)throw new TypeError("Generator is already executing.");for(;n;)try{if(o=1,i&&(s=i[2&r[0]?"return":r[0]?"throw":"next"])&&!(s=s.call(i,r[1])).done)return s;switch(i=0,s&&(r=[0,s.value]),r[0]){case 0:case 1:s=r;break;case 4:return n.label++,{value:r[1],done:!1};case 5:n.label++,i=r[1],r=[0];continue;case 7:r=n.ops.pop(),n.trys.pop();continue;default:if(s=n.trys,!(s=s.length>0&&s[s.length-1])&&(6===r[0]||2===r[0])){n=0;continue}if(3===r[0]&&(!s||r[1]>s[0]&&r[1]<s[3])){n.label=r[1];break}if(6===r[0]&&n.label<s[1]){n.label=s[1],s=r;break}if(s&&n.label<s[2]){n.label=s[2],n.ops.push(r);break}s[2]&&n.ops.pop(),n.trys.pop();continue}r=t.call(e,n)}catch(e){r=[6,e],i=0}finally{o=s=0}if(5&r[0])throw r[1];return{value:r[0]?r[1]:void 0,done:!0}}var n={label:0,sent:function(){if(1&s[0])throw s[1];return s[1]},trys:[],ops:[]},o,i,s,c;return c={next:r(0),throw:r(1),return:r(2)},"function"==typeof Symbol&&(c[Symbol.iterator]=function(){return this}),c}function p(e,t){for(var r in e)t.hasOwnProperty(r)||(t[r]=e[r])}function d(e){var t="function"==typeof Symbol&&e[Symbol.iterator],r=0;return t?t.call(e):{next:function(){return e&&r>=e.length&&(e=void 0),{value:e&&e[r++],done:!e}}}}function m(e,t){var r="function"==typeof Symbol&&e[Symbol.iterator];if(!r)return e;var a=r.call(e),n,o=[],i;try{for(;(void 0===t||t-- >0)&&!(n=a.next()).done;)o.push(n.value)}catch(e){i={error:e}}finally{try{n&&!n.done&&(r=a.return)&&r.call(a)}finally{if(i)throw i.error}}return o}function l(){for(var e=[],t=0;t<arguments.length;t++)e=e.concat(m(arguments[t]));return e}function f(e){return this instanceof f?(this.v=e,this):new f(e)}function h(e,t,r){function a(e){u[e]&&(p[e]=function(t){return new Promise(function(r,a){d.push([e,t,r,a])>1||n(e,t)})})}function n(e,t){try{o(u[e](t))}catch(e){c(d[0][3],e)}}function o(e){e.value instanceof f?Promise.resolve(e.value.v).then(i,s):c(d[0][2],e)}function i(e){n("next",e)}function s(e){n("throw",e)}function c(e,t){e(t),d.shift(),d.length&&n(d[0][0],d[0][1])}if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var u=r.apply(e,t||[]),p,d=[];return p={},a("next"),a("throw"),a("return"),p[Symbol.asyncIterator]=function(){return this},p}function y(e){function t(t,n){e[t]&&(r[t]=function(r){return(a=!a)?{value:f(e[t](r)),done:"return"===t}:n?n(r):r})}var r,a;return r={},t("next"),t("throw",function(e){throw e}),t("return"),r[Symbol.iterator]=function(){return this},r}function g(e){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var t=e[Symbol.asyncIterator];return t?t.call(e):"function"==typeof d?d(e):e[Symbol.iterator]()}function v(e,t){return Object.defineProperty?Object.defineProperty(e,"raw",{value:t}):e.raw=t,e}Object.defineProperty(t,"__esModule",{value:!0}),t.__extends=a,r.d(t,"__assign",function(){return b}),t.__rest=n,t.__decorate=o,t.__param=i,t.__metadata=s,t.__awaiter=c,t.__generator=u,t.__exportStar=p,t.__values=d,t.__read=m,t.__spread=l,t.__await=f,t.__asyncGenerator=h,t.__asyncDelegator=y,t.__asyncValues=g,t.__makeTemplateObject=v;var _=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var r in t)t.hasOwnProperty(r)&&(e[r]=t[r])},b=Object.assign||function e(t){for(var r,a=1,n=arguments.length;a<n;a++){r=arguments[a];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(t[o]=r[o])}return t}},function(e,t){e.exports=r},function(e,t){e.exports=o},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(12);t.SchemaForm=a.SchemaForm;var n=r(29);t.SchemaFormItem=n.SchemaFormItem;var o=r(10);t.FormReducer=o.FormReducer;var i=r(31);t.defaultTheme=i.defaultTheme,t.nsFactory=i.nsFactory;var s=r(9);t.createForms=s.default,t.SchemaFormCreate=s.SchemaFormCreate;var c=r(8);t.hocFactory=c.hocFactory;var u=r(5);u.default.set=function e(t,r,a){for(var n=Array.isArray(r)?r:u.default.parse(r),o=n[0],i=0,s=n.length;i<s-1;++i){var c=n[i];"-"===c&&Array.isArray(t)&&(c=t.length),o=n[i+1],c in t||(o.match(/^(\d+|-)$/)?t[c]=[]:t[c]={}),!t[c]&&o&&(t[c]=Number.isNaN(1*o)?{}:[]),t=t[c]}return"-"===o&&Array.isArray(t)&&(o=t.length),t[o]=a,this}},function(e,t){e.exports=a},function(t,r){t.exports=e},function(e,r){e.exports=t},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(5),n=r(17),o=r(9),i=function(e,t){return t.getCurrentState?t.getCurrentState(e,t):e[t.schemaKey]};t.getAllData=function(e,t){var r=i(e,t).data;return void 0===r?{}:r},t.getData=function(e,t){var r=t.schemaKey,n=t.mergeSchema,o=n.keys,s=void 0===o?[]:o,c=i(e,t).data,u=void 0===c?{}:c;return a.has(u,a.compile(s))?a.get(u,a.compile(s)):void 0},t.getMetaStateData=function(e,t){var r=t.schemaKey,a=i(e,t).meta;return{isLoading:a.isLoading,isValid:a.isValid}},t.getMetaData=function(e,t){var r=t.schemaKey,a=t.mergeSchema,n=a.keys,s=void 0===n?[]:n,c=o.SchemaFormCreate.metas[r],u=i(e,t).meta;return c.getMeta(s,"array"!==a.type)},t.getActions=function(e,t){var r=t.schemaKey,a=o.SchemaFormCreate.metas[r];return t.schemaFormOptions&&t.schemaFormOptions.ajv&&a.init(t.schemaFormOptions,t.schemaKey),a.actions},t.mapFormDataToProps=n.createSelector([t.getAllData],function(e){return{formData:e}}),t.mapMetaStateToProps=n.createSelector([t.getMetaData],function(e){return{meta:e}}),t.mapFormItemDataProps=n.createSelector([t.getData],function(e){return{formItemData:e}}),t.mapActionsStateToProps=n.createSelector([t.getActions],function(e){return{actions:e}})},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(6),n=r(14),o=r(15),i=r(22),s=r(23),c=r(24),u=r(25),p=r(26),d=r(27),m=new a.BaseFactory;t.hocFactory=m;var l={merge:n.MergeHoc.bind(n.MergeHoc,m),temp:o.TempHoc.bind(o.TempHoc,m),field:i.FieldHoc.bind(i.FieldHoc,m),theme:s.ThemeHoc.bind(s.ThemeHoc,m),validate:c.ValidateHoc.bind(c.ValidateHoc,m),array:u.ArrayHoc.bind(u.ArrayHoc,m),make:p.MakeHoc.bind(p.MakeHoc,m),condition:d.ConditionHoc.bind(d.ConditionHoc,m)};for(var f in l)if(l.hasOwnProperty(f)){var h=l[f];m.add(f,h),m.lock(f)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(10),n=r(20),o=function(){function e(){}return e.prototype.createOne=function(t,r,o,i,s,c){var u=new n.MetaData,p=o.validate(i,r).catch(function(){return 1}),d=new a.FormReducer(c?c({},{data:r,meta:u.data}):{data:r,meta:u.data},u,s,c);return u.actions=d.actions,e.metas[t]=u,d},e.metas={},e}();t.SchemaFormCreate=o,t.default=new o},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(18),n=r(5),o=r(19),i=function(){function e(e,t,r,n){this.initialState=e,this.meta=t,this.getOriginState=r,this.updateState=n,this.updateItem=a.createAction("更新表单值"),this.toggleItem=a.createAction("显示/隐藏元素"),this.removeItem=a.createAction("删除元素"),this.addItem=a.createAction("添加元素"),this.switchItem=a.createAction("元素移位"),this.updateItemMeta=a.createAction("更新元素的meta信息"),this.updateMetaState=a.createAction("更改meta的状态"),this.updateData=a.createAction("更改data的值")}return Object.defineProperty(e.prototype,"actions",{get:function(){return{updateItem:this.updateItem,toggleItem:this.toggleItem,removeItem:this.removeItem,addItem:this.addItem,switchItem:this.switchItem,updateMetaState:this.updateMetaState,updateItemMeta:this.updateItemMeta,updateData:this.updateData}},enumerable:!0,configurable:!0}),Object.defineProperty(e.prototype,"reducer",{get:function(){return a.createReducer((e={},e[this.updateItem]=this.updateItemHandle.bind(this),e[this.toggleItem]=this.toggleItemHandle.bind(this),e[this.addItem]=this.addItemHandle.bind(this),e[this.removeItem]=this.removeItemHandle.bind(this),e[this.switchItem]=this.switchItemHandle.bind(this),e[this.updateMetaState]=this.updateMetaStateHandle.bind(this),e[this.updateItemMeta]=this.updateMetaHandle.bind(this),e[this.updateData]=this.updateDataHandle.bind(this),e),this.initialState);var e},enumerable:!0,configurable:!0}),e.prototype.updateDataHandle=function(e,t){return this.updateState?this.updateState(e,{data:t,meta:{map:{},meta:{}}}):Object.assign({},e,{data:t,meta:{map:{},meta:{}}})},e.prototype.getOrigin=function(e){return this.getOriginState?this.getOriginState(e):{originData:o.default(e.data),originMeta:o.default(e.meta)}},e.prototype.updateMetaStateHandle=function(e,t){var r=t.isLoading,a=t.isValid,n=t.meta,o=this.getOrigin(e).originMeta;return n&&(o=n),void 0!==r&&(o.isLoading=r),void 0!==a&&(o.isValid=a),this.updateState?this.updateState(e,{meta:o}):Object.assign({},e,{meta:o})},e.prototype.updateItemHandle=function(e,t){var r=t.keys,a=t.data,o=t.meta,i=this.getOrigin(e).originData,s=this.meta.getKey(r).normalKey;return n.default(i).set(s,a),this.meta.setMeta(r,o),this.updateState?this.updateState(e,{data:i,meta:this.meta.data}):Object.assign({},e,{data:i,meta:this.meta.data})},e.prototype.updateMetaHandle=function(e,t){var r=t.keys,a=t.meta,n=this.getOrigin(e).originData,o=this.meta.getKey(r).normalKey,i=this.meta.getMeta(r,!1)||{};return this.meta.setMeta(r,a),this.updateState?this.updateState(e,{meta:this.meta.data}):Object.assign({},e,{meta:this.meta.data})},e.prototype.toggleItemHandle=function(e,t){var r=t.keys,a=this.meta.getKey(r).normalKey,n=this.meta.getMeta(r,!1)||{};return this.meta.setMeta(r,Object.assign({},n,{isShow:void 0!==n.isShow&&!n.isShow}),!1),this.updateState?this.updateState(e,{meta:this.meta.data}):Object.assign({},e,{meta:this.meta.data})},e.prototype.addItemHandle=function(e,t){var r=t.keys,a=t.data,o=this.getOrigin(e).originData,i=this.meta.getKey(r).normalKey,s=n.default(o).has(i)?n.default(o).get(i):[];return n.default(o).set(i,s.concat([a])),this.updateState?this.updateState(e,{data:o}):Object.assign({},e,{data:o})},e.prototype.removeItemHandle=function(e,t){var r=t.keys,a=t.index,o=this.getOrigin(e).originData,i=this.meta.getKey(r.concat([a.toString()])).normalKey;return o&&n.default(o).has(i)&&n.default(o).remove(i),this.meta.removeMeta(r.concat([a.toString()])),this.updateState?this.updateState(e,{data:o,meta:this.meta.data}):Object.assign({},e,{data:o,meta:this.meta.data})},e.prototype.switchItemHandle=function(e,t){var r=t.keys,a=t.curIndex,o=t.switchIndex,i=this.getOrigin(e).originData,s=this.meta.getKey(r).normalKey,c=n.default(i).get(s);return u=[c[o],c[a]],c[a]=u[0],c[o]=u[1],n.default(i).set(s,c),this.meta.switchMeta(r,a,o),this.updateState?this.updateState(e,{data:i,meta:this.meta.data}):Object.assign({},e,{data:i,meta:this.meta.data});var u},e}();t.FormReducer=i},function(e,t,r){e.exports=r(3)},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(13),i=r(3),s=r(28),c=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.render=function(){var e=this,t=this.props,r=t.children,a=t.mergeSchemaList,o=t.schemaKey,c=t.ItemButtons,u=t.arrayIndex,p=t.arrayLevel,d=t.globalOptions,m=t.RootComponent,l=t.schemaFormOptions,f=t.formDefaultData,h=t.getCurrentState,y=m;return y||(y=s.SchemaFormBlock),n.default.createElement(y,null,a.map(function(t,r){return t.keys=e.mergeKeys(t),n.default.createElement(i.SchemaFormItem,{key:o+"-"+r.toString()+"}",getCurrentState:h,schemaKey:o,arrayIndex:u,arrayLevel:p,ItemButtons:c,formDefaultData:f,mergeSchemaList:a,mergeSchema:t,schemaFormOptions:l,globalOptions:d})}),r)},t.prototype.mergeKeys=function(e){var t=this.props.arrayLevel,r=void 0===t?[]:t,a=r.concat([]);return e.originKeys=e.keys.concat([]),e.keys.map(function(e){return"-"===e?a.shift():e})},t}(n.default.PureComponent);t.SchemaForm=o.hoc(c)},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(2),n=r(8);t.hoc=a.compose(n.hocFactory.get("merge"))},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(6),i=r(4),s=r(2),c=function(e,t){var r=t.actions;for(var a in r)if(r.hasOwnProperty(a)){var n=r[a];n.assigned(e)||n.assignTo(e)}return{actions:r}};t.MergeHoc=function(e,t){return function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){var e=this.props,r=e.schema,i=e.uiSchema,s=e.parentKeys,c=e.schemaFormOptions,u=e.schemaKey,p,d={},m=r;return u||(u=(Date.now()+Math.random()).toString()),c=c||{avjOptions:{}},s&&!s.length?(c.parentKeys=c.parentKeys||[],c.map.has(c.parentKeys.join("/"))&&(m=c.map.get(c.parentKeys.join("/")))):c.parentKeys=s,p=o.schemaMerge.merge(u,m,i,c),n.default.createElement(t,a.__assign({schemaFormOptions:c||{},schemaKey:u,mergeSchemaList:p},this.props))},r=a.__decorate([s.compose(s.onlyUpdateForKeys(["schema"]),i.connect(null,c))],r)}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(2),i=r(16),s=r(4),c=r(7),u=o.compose(s.connect(c.mapMetaStateToProps),o.onlyUpdateForKeys(["meta"]),o.shouldUpdate(function(e,t){return!i.default(e.meta,t.meta)}));t.TempHoc=function(e,t){return function(e){function r(){var t=null!==e&&e.apply(this,arguments)||this;return t.tempField="ui:temp",t}return a.__extends(r,e),r.prototype.render=function(){var e=this,r=this.props,i=r.mergeSchema,p=r.globalOptions,d=i.uiSchema,m=void 0===d?{options:{}}:d,l=i.keys,f=this.getTemplates(),h=m.options||{},y=o.compose(s.connect(c.mapFormItemDataProps))(t),g=0;return f.reduce(function(t,r){var o=r.key,i=r.Temp,s=u(i);return n.default.createElement(s,a.__assign({globalOptions:p,tempKey:o,uiSchemaOptions:h,key:l.join(".")+o+g++},e.props,{children:t}))},n.default.createElement(y,a.__assign({key:l.join("."),uiSchemaOptions:h},this.props)))},r.prototype.getTemplates=function(){var e=this.props,t=e.mergeSchema,r=e.globalOptions,a=e.currentTheme,n=t.uiSchema,o=void 0===n?{options:{}}:n,i=t.keys,s=t.type,c=r[s]||{},u=o[this.tempField]||c[this.tempField]||r[this.tempField]||"default",p=[];return"string"==typeof u?p.push({key:u,Temp:a.tempFactory.get(u)}):[].concat(u).reverse().forEach(function(e,t){a.tempFactory.has(e||"default")?p.push({key:e,Temp:a.tempFactory.get(e||"default")}):console.error("不存在"+e+"的temp！")}),p},r=a.__decorate([o.compose(o.shouldUpdate(function(){return!1}))],r)}(n.default.PureComponent)}},function(e,t){e.exports=i},function(e,t){e.exports=n},function(e,t){e.exports=c},function(e,t){e.exports=u},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(21),o=r(5),i=function(){function e(){this.data={map:{},meta:{}},this.actions={},this.isInit=!1}return e.prototype.init=function(e,t){this.isInit||(this.isInit=!0,this.schemaFormOptions=e,this.curKey=t)},e.prototype.validateAll=function(e){return a.__awaiter(this,void 0,void 0,function(){var t,r,n,o,i;return a.__generator(this,function(a){switch(a.label){case 0:for(t in this.data.map)this.data.map.hasOwnProperty(t)&&(r=this.data.map[t],r.isValid=!0,r.dirty=!0);this.data.isLoading=!0,this.data.isValid=!1,a.label=1;case 1:return a.trys.push([1,3,,4]),n=this.schemaFormOptions.ajv.getSchema(this.curKey).schema,o=this.schemaFormOptions.ajv.compile(n),[4,o(e)];case 2:return a.sent(),this.data.isValid=!0,[3,4];case 3:return i=a.sent(),this.data.isValid=!1,i.errors&&i.errors.length&&this.setErrors(i.errors),[3,4];case 4:return[2,this.data]}})})},e.prototype.setErrors=function(e){var t=this;this.data.isValid=!1,e.forEach(function(e){var r=o.default.parse(e.dataPath),a=t.getMeta(r);t.setMeta(r,{dirty:!0,isLoading:!1,isValid:!1,errors:[],errorText:t.schemaFormOptions.ajv.errorsText([e],{separator:",",dataVar:""})})})},e.prototype.getKey=function(e){var t=o.default.compile(e),r=o.default.escape(t);return{schemaKey:e.map(function(e){return Number.isNaN(Number(e))?e:"-"}).join("/"),normalKey:t,originEscapeKey:r,escapeKey:"/"+r}},e.prototype.setMeta=function(e,t,r){void 0===r&&(r=!0);var a=this.getKey(e),n=a.normalKey,o=a.escapeKey,i=a.originEscapeKey,s=a.schemaKey,c=this.getUuid({normalKey:n,escapeKey:o,originEscapeKey:i,schemaKey:s}),u=this.getCurMetaData(c);c!==o&&this.setCurMetaUuid(n,c),this.setCurMetaData(c,Object.assign({},u,t))},e.prototype.getUuid=function(e){var t=e.normalKey,r=e.escapeKey,a=e.originEscapeKey,i=e.schemaKey,s=o.default(this.data.map),c=o.default(this.data.meta),u,p;if(this.schemaFormOptions.map.has(i)){if(["array","object"].indexOf(this.schemaFormOptions.map.get(i).type)>=0)return r}return s.has(r)?r:(c.has(t)&&(u=c.get(t),p=u),"string"==typeof u&&u||(p="/"+o.default.escape("/"+n.default())),p)},e.prototype.getMeta=function(e,t){void 0===t&&(t=!0);var r=this.getKey(e),a=r.normalKey,n=r.escapeKey,o=r.originEscapeKey,i=r.schemaKey,s=this.getUuid({normalKey:a,escapeKey:n,originEscapeKey:o,schemaKey:i});return this.getCurMetaData(s)},e.prototype.switchMeta=function(e,t,r){var a=this.getKey(e),n=a.normalKey,i=a.escapeKey,s=a.schemaKey,c=a.originEscapeKey;if(o.default(this.data.meta).has(n)){var u=o.default(this.data.meta).get(n);p=[u[r],u[t]],u[t]=p[0],u[r]=p[1],o.default(this.data.meta).set(n,u);var p}},e.prototype.removeMeta=function(e){var t=o.default(this.data.map),r=o.default(this.data.meta),a=this.getKey(e),n=a.normalKey,i=a.escapeKey,s=a.originEscapeKey,c=a.schemaKey,u=this.getUuid({normalKey:n,escapeKey:i,originEscapeKey:s,schemaKey:c}),p=new RegExp("^"+s,"ig");for(var d in this.data.map)if(this.data.map.hasOwnProperty(d)){var m=this.getKey(o.default.parse(d));p.test(m.originEscapeKey)&&t.remove(m.escapeKey)}if(r.has(n)&&r.get(n)){var l=o.default.dict(r.get(n));r.remove(n);for(var d in l)if(l.hasOwnProperty(d)){var f=l[d];t.has(f)&&t.remove(f)}}t.has(u)&&t.remove(u)},e.prototype.getCurMetaData=function(e){return o.default(this.data.map).has(""+e)?o.default(this.data.map).get(""+e):{isShow:!0}},e.prototype.setCurMetaData=function(e,t){o.default(this.data.map).set(""+e,t)},e.prototype.setCurMetaUuid=function(e,t){o.default(this.data.meta).set(e,t)},e}();t.MetaData=i},function(e,t){e.exports=s},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1);t.FieldHoc=function(e,t){return function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){var e=this.props,r=e.mergeSchema,o=e.currentTheme,i=r.uiSchema,s=void 0===i?{theme:"",field:"",widget:""}:i,c,u;"object"==typeof r.type&&(r.type=r.type[0]);var p=s.field||r.type;if("object"==typeof p&&p.length&&(p=p[0]),!o.fieldFactory.has(s.field||r.type))return console.error("找不到field："+(s.field||r.type)),null;c=o.fieldFactory.get(s.field||r.type);var d=s.widget||r.type;return"object"==typeof d&&d.length&&(d=d[0]),o.widgetFactory.has(s.widget||r.type)&&(u=o.widgetFactory.get(s.widget||r.type)),n.default.createElement(t,a.__assign({},this.props,{FieldComponent:c,WidgetComponent:u}))},r}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(3);t.ThemeHoc=function(e,t){return function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){var e=this.props.mergeSchema,r=e.uiSchema,i=void 0===r?{theme:"",field:""}:r,s;if(!o.nsFactory.has(i.theme||"default"))throw new Error("没有找到"+(i.theme||"default")+"的样式！");return s=o.nsFactory.get(i.theme||"default"),n.default.createElement(t,a.__assign({currentTheme:s},this.props))},r}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(4),i=r(2),s=r(7),c=function(e,t){var r=t.mergeSchema,a=t.actions,n=t.schemaFormOptions,o=t.schemaKey,i=t.formData,s=r.keys,c=n.ajv.compile(Object.assign({},r,{$async:!0,id:null}));for(var u in a)if(a.hasOwnProperty(u)){var p=a[u];p.assigned(e)||p.assignTo(e)}return{updateItemData:function(e){a.updateItem({keys:s,data:e,meta:{}})},validate:function(e){var t={dirty:!0,isValid:!1,isLoading:!1,errorText:""},r=setTimeout(function(){a.updateItemMeta({keys:s,meta:{isLoading:!0,isValid:!1,errorText:!1}})},50);c(e).then(function(){clearTimeout(r),t.isValid=!0,a.updateItemMeta({keys:s,meta:t})}).catch(function(e){clearTimeout(r),t.errorText=e.errors?n.ajv.errorsText(e.errors,{dataVar:"/"+s.join("/")}):e.message,a.updateItemMeta({keys:s,meta:t})})}}};t.ValidateHoc=function(e,t){return function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){return n.default.createElement(t,a.__assign({},this.props))},r=a.__decorate([i.compose(o.connect(s.mapActionsStateToProps),o.connect(null,c),i.shouldUpdate(function(){return!1}))],r)}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(2),i=r(4),s=r(7),c=o.withHandlers({removeItem:function(e){return function(t){var r=e.formItemData,a=void 0===r?[]:r,n=e.mergeSchema,o=e.arrayIndex,i=e.actions,s=n.uiSchema,c=n.type,u=n.keys;"array"===c&&void 0!==t&&i.removeItem({keys:u,index:t})}},switchItem:function(e){return function(t,r){var a=e.formItemData,n=void 0===a?[]:a,o=e.mergeSchema,i=e.arrayIndex,s=e.actions,c=o.uiSchema,u=o.type,p=o.keys;if("array"===u&&void 0!==t&&void 0!==r){if(r<0||n.length<r+1)return;s.switchItem({keys:p,curIndex:t,switchIndex:r})}}},toggleItem:function(e){return function(){var t=e.mergeSchema,r=e.actions,a=e.schemaFormOptions,n=t.keys;r.toggleItem({keys:n})}},addItem:function(e){return function(){var t=e.mergeSchema,r=e.actions,a=t.keys;"object"===t.items.type?r.addItem({keys:a,data:{}}):r.addItem({keys:a,data:void 0})}}});t.ArrayHoc=function(e,t){var r=function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){var e=this,r=this.props,u=r.mergeSchema,p=r.getHocOptions,d=u.type,m=p(),l=m.array,f=l||{},h=f.ItemChildButtons,y=void 0===h?null:h,g=f.ItemButtons,v=void 0===g?null:g,_,b;return y&&(_=o.compose(c,i.connect(s.mapMetaStateToProps))(y)),v&&(b=o.compose(c,i.connect(s.mapMetaStateToProps))(v)),"array"===d?n.default.createElement(t,a.__assign({},this.props,{ItemButtons:b?function(){return n.default.createElement(b,a.__assign({},e.props))}:function(){return n.default.createElement("span",null)},ItemChildButtons:_||function(){return n.default.createElement("span",null)}})):n.default.createElement(t,a.__assign({},this.props))},r=a.__decorate([o.compose(c)],r)}(n.default.PureComponent),u=function(e){function r(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(r,e),r.prototype.render=function(){return n.default.createElement(t,a.__assign({},this.props))},r=a.__decorate([o.compose(c,i.connect(s.mapFormItemDataProps))],r)}(n.default.PureComponent);return function(e){return o.branch(e,o.renderComponent(u))}(function(e){var t=e.mergeSchema,r=e.getHocOptions;return"array"!==t.type})(r)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(2);t.MakeHoc=function(e,t){return function(r){function i(){var e=null!==r&&r.apply(this,arguments)||this;return e.fieldKey="ui:item.hoc",e}return a.__extends(i,r),i.prototype.shouldComponentUpdate=function(){return!1},i.prototype.render=function(){var r=this.props,i=r.mergeSchema,s=r.globalOptions,c=i.uiSchema,u=void 0===c?{options:{}}:c,p=i.keys,d=i.type,m=s[d]||{},l=u[this.fieldKey]||m[this.fieldKey]||s[this.fieldKey]||["theme","field","validate","array","temp"],f=o.compose.apply(void 0,l.map(function(t){return e.get(t)}))(t);return n.default.createElement(f,a.__assign({getHocOptions:this.getHocOptions.bind(this)},this.props))},i.prototype.getHocOptions=function(){var e=this.props,t=e.mergeSchema,r=e.globalOptions,a=t.uiSchema,n=a.options||{};return Object.assign({},r.hoc||{},n.hoc||{})},i}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(5),i=r(4),s=r(7);t.ConditionHoc=function(e,t){return function(e){function r(){var t=null!==e&&e.apply(this,arguments)||this;return t.fieldKey="ui:condition",t}return a.__extends(r,e),r.prototype.render=function(){var e=this.props,r=e.getHocOptions,i=e.formData,s=e.formDefaultData,c=r(),u=c.condition,p=u.fields,d=!0,m=o.default(Object.assign({},s,i));return p&&p.length&&(d=p.reduce(function(e,t){var r=t.key,a=t.val;if(m.has(r)){var n=m.get(r);return e&&n===a}return e&&!1},d)),d?n.default.createElement(t,a.__assign({},this.props)):null},r=a.__decorate([i.connect(s.mapFormDataToProps)],r)}(n.default.PureComponent)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.render=function(){return n.default.createElement("div",null,this.props.children)},t}(n.default.Component);t.SchemaFormBlock=o},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(30),i=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.render=function(){var e=this.props,t=e.FieldComponent,r=e.mergeSchema,o=r.uiSchema,i=void 0===o?{}:o;return t?n.default.createElement(t,a.__assign({},this.props)):(console.log(r,"没有找到匹配的field"),null)},t}(n.default.PureComponent);t.SchemaFormItem=o.hoc(i)},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(2),n=r(8);t.hoc=a.compose(a.onlyUpdateForKeys(["formItemData","meta"]),n.hocFactory.get("make"))},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(6),n=r(32);t.nsFactory=n.nsFactory;var o=r(33),i={tempFactory:new a.BaseFactory,fieldFactory:new a.BaseFactory,widgetFactory:new a.BaseFactory};t.defaultTheme=i,n.nsFactory.add("default",i);for(var s in o.default)if(o.default.hasOwnProperty(s)){var c=o.default[s];i.fieldFactory.add(s,c),i.fieldFactory.lock(s)}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(6),o=function(e){function t(){return e.call(this)||this}return a.__extends(t,e),t}(n.BaseFactory);t.SchemaFormNsFactory=o,t.nsFactory=new o},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(34),n=r(35),o=r(36);t.default={string:a.NormalField,boolean:a.NormalField,number:a.NormalField,integer:a.NormalField,null:a.NormalField,object:n.ObjectField,array:o.ArrayField}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.render=function(){var e=this.props,t=e.mergeSchema,r=e.currentTheme,o=e.WidgetComponent;return n.default.createElement(o,a.__assign({key:t.keys.join(".")},this.props))},t}(n.default.Component);t.NormalField=o},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(3),i=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.render=function(){var e=this.props,t=e.mergeSchema,r=e.currentTheme,a=e.WidgetComponent,i=e.arrayIndex,s=e.ItemButtons,c=e.arrayLevel,u=e.getCurrentState,p=e.globalOptions,d=e.schemaFormOptions,m=e.schemaKey,l=t.uiSchema;return n.default.createElement(o.SchemaForm,{arrayIndex:i,schemaFormOptions:d,getCurrentState:u,schemaKey:m,arrayLevel:c,schema:t,parentKeys:t.originKeys,RootComponent:l.root,uiSchema:l.items||["*"],globalOptions:p})},t}(n.default.Component);t.ObjectField=i},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=r(0),n=r(1),o=r(3),i=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return a.__extends(t,e),t.prototype.renderItem=function(e,t){var r=this,i=this.props,s=i.mergeSchema,c=i.schemaKey,u=i.globalOptions,p=i.schemaFormOptions,d=i.getCurrentState,m=i.ItemChildButtons,l=i.arrayLevel,f=void 0===l?[]:l,h=s.uiSchema,y=s.keys;return n.default.createElement(o.SchemaForm,{key:y.join(".")+e,schema:s,getCurrentState:d,arrayIndex:e,arrayLevel:f.concat([e]),ItemButtons:function(){return n.default.createElement(m,a.__assign({},r.props,{index:e}))},parentKeys:s.originKeys,RootComponent:null,schemaKey:c,uiSchema:h.items,schemaFormOptions:p,globalOptions:u})},t.prototype.render=function(){var e=this,t=this.props,r=t.mergeSchema,a=t.currentTheme,o=t.WidgetComponent,i=t.schemaKey,s=t.globalOptions,c=t.schemaFormOptions,u=t.formItemData,p=t.meta,d=void 0===p?{dirty:!1,isValid:!0,isShow:!0}:p,m=r.uiSchema,l=r.title,f;return f=u&&u.map(function(t,r){return e.renderItem(r,u.length)}),n.default.createElement("div",{style:{width:"100%"}},f||null)},t}(n.default.Component);t.ArrayField=i}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("json-pointer"), require("fx-schema-form-core"), require("uuid"), require("redux-act"), require("lodash.clonedeep"));
+	else if(typeof define === 'function' && define.amd)
+		define("fx-schema-form-antd", ["json-pointer", "fx-schema-form-core", "uuid", "redux-act", "lodash.clonedeep"], factory);
+	else if(typeof exports === 'object')
+		exports["fx-schema-form-antd"] = factory(require("json-pointer"), require("fx-schema-form-core"), require("uuid"), require("redux-act"), require("lodash.clonedeep"));
+	else
+		root["fx-schema-form-antd"] = factory(root["json-pointer"], root["fx-schema-form-core"], root["uuid"], root["redux-act"], root["lodash.clonedeep"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_act__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux_act___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_redux_act__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_pointer__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_pointer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_json_pointer__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_clonedeep__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_clonedeep___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_clonedeep__);
+
+
+
+class FormReducer {
+    /**
+     * 构造
+     * @param initialState 初始化状态
+     * @param meta         当前的meta类
+     * @param updateState  更改数据的方法
+     */
+    constructor(initialState, meta, getOriginState, updateState) {
+        this.initialState = initialState;
+        this.meta = meta;
+        this.getOriginState = getOriginState;
+        this.updateState = updateState;
+        /**
+         * 单个元素的值变化时候调用
+         */
+        this.updateItem = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("更新表单值");
+        /**
+         * 显示/隐藏元素
+         */
+        this.toggleItem = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("显示/隐藏元素");
+        /**
+         * 删除元素
+         */
+        this.removeItem = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("删除元素");
+        /**
+         * 添加元素
+         */
+        this.addItem = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("添加元素");
+        /**
+         * 元素移位
+         */
+        this.switchItem = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("元素移位");
+        /**
+         * 初始化元素的meta信息
+         */
+        this.updateItemMeta = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("更新元素的meta信息");
+        /**
+         * 更改meta的状态
+         */
+        this.updateMetaState = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("更改meta的状态");
+        /**
+         * 更改meta的状态
+         */
+        this.updateData = Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createAction"])("更改data的值");
+    }
+    /**
+     * 获取当前的actions
+     */
+    get actions() {
+        return {
+            updateItem: this.updateItem,
+            toggleItem: this.toggleItem,
+            removeItem: this.removeItem,
+            addItem: this.addItem,
+            switchItem: this.switchItem,
+            updateMetaState: this.updateMetaState,
+            updateItemMeta: this.updateItemMeta,
+            updateData: this.updateData
+        };
+    }
+    /**
+     * 返回当前的reducer
+     */
+    get reducer() {
+        return Object(__WEBPACK_IMPORTED_MODULE_0_redux_act__["createReducer"])({
+            [this.updateItem]: this.updateItemHandle.bind(this),
+            [this.toggleItem]: this.toggleItemHandle.bind(this),
+            [this.addItem]: this.addItemHandle.bind(this),
+            [this.removeItem]: this.removeItemHandle.bind(this),
+            [this.switchItem]: this.switchItemHandle.bind(this),
+            [this.updateMetaState]: this.updateMetaStateHandle.bind(this),
+            [this.updateItemMeta]: this.updateMetaHandle.bind(this),
+            [this.updateData]: this.updateDataHandle.bind(this)
+        }, this.initialState);
+    }
+    /**
+     * 更新全部数据
+     * @param state state
+     * @param data  data
+     */
+    updateDataHandle(state, data) {
+        if (this.updateState) {
+            return this.updateState(state, { data, meta: { map: {}, meta: {} } });
+        }
+        return Object.assign({}, state, { data, meta: { map: {}, meta: {} } });
+    }
+    /**
+    * 获取当前state的信息
+    * @param state 当前的state
+    */
+    getOrigin(state) {
+        if (this.getOriginState) {
+            return this.getOriginState(state);
+        }
+        let originData = __WEBPACK_IMPORTED_MODULE_2_lodash_clonedeep___default()(state.data);
+        let originMeta = __WEBPACK_IMPORTED_MODULE_2_lodash_clonedeep___default()(state.meta);
+        return { originData, originMeta };
+    }
+    /**
+     * 更改meta的状态
+     *  1. 如果存在meta，则更新meta
+     * @param state 当前的state
+     */
+    updateMetaStateHandle(state, { isLoading, isValid, meta }) {
+        let { originMeta } = this.getOrigin(state);
+        if (meta) {
+            originMeta = meta;
+        }
+        if (isLoading !== undefined) {
+            originMeta.isLoading = isLoading;
+        }
+        if (isValid !== undefined) {
+            originMeta.isValid = isValid;
+        }
+        if (this.updateState) {
+            return this.updateState(state, { meta: originMeta });
+        }
+        return Object.assign({}, state, { meta: originMeta });
+    }
+    /**
+     * 更新数据
+     * @param state  state
+     * @param param1 data
+     */
+    updateItemHandle(state, { keys, data, meta }) {
+        let { originData } = this.getOrigin(state);
+        let { normalKey } = this.meta.getKey(keys);
+        __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).set(normalKey, data);
+        this.meta.setMeta(keys, meta);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+    }
+    updateMetaHandle(state, { keys, meta }) {
+        let { originData } = this.getOrigin(state);
+        let { normalKey } = this.meta.getKey(keys);
+        let curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.setMeta(keys, meta);
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
+        return Object.assign({}, state, { meta: this.meta.data });
+    }
+    toggleItemHandle(state, { keys }) {
+        let { normalKey } = this.meta.getKey(keys);
+        let curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
+        if (this.updateState) {
+            return this.updateState(state, { meta: this.meta.data });
+        }
+        return Object.assign({}, state, { meta: this.meta.data });
+    }
+    addItemHandle(state, { keys, data }) {
+        let { originData } = this.getOrigin(state);
+        let { normalKey } = this.meta.getKey(keys);
+        let curData = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).has(normalKey) ? __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).get(normalKey) : [];
+        __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).set(normalKey, [...curData, data]);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData });
+        }
+        return Object.assign({}, state, { data: originData });
+    }
+    removeItemHandle(state, { keys, index }) {
+        let { originData } = this.getOrigin(state);
+        let { normalKey } = this.meta.getKey([...keys, index.toString()]);
+        if (originData && __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).has(normalKey)) {
+            __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).remove(normalKey);
+        }
+        this.meta.removeMeta([...keys, index.toString()]);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+    }
+    switchItemHandle(state, { keys, curIndex, switchIndex }) {
+        let { originData } = this.getOrigin(state);
+        let { normalKey } = this.meta.getKey(keys);
+        let curData = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).get(normalKey);
+        [curData[curIndex], curData[switchIndex]] = [curData[switchIndex], curData[curIndex]];
+        __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(originData).set(normalKey, curData);
+        this.meta.switchMeta(keys, curIndex, switchIndex);
+        if (this.updateState) {
+            return this.updateState(state, { data: originData, meta: this.meta.data });
+        }
+        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = FormReducer;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_form__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_form__);
+/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__components_form__, "SchemaForm")) __webpack_require__.d(__webpack_exports__, "SchemaForm", function() { return __WEBPACK_IMPORTED_MODULE_0__components_form__["SchemaForm"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_formitem__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_formitem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_formitem__);
+/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__components_formitem__, "SchemaFormItem")) __webpack_require__.d(__webpack_exports__, "SchemaFormItem", function() { return __WEBPACK_IMPORTED_MODULE_1__components_formitem__["SchemaFormItem"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reducer_form__ = __webpack_require__(2);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FormReducer", function() { return __WEBPACK_IMPORTED_MODULE_2__reducer_form__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__factory__ = __webpack_require__(9);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "defaultTheme", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "nsFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["b"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_create__ = __webpack_require__(15);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createForms", function() { return __WEBPACK_IMPORTED_MODULE_4__libs_create__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SchemaFormCreate", function() { return __WEBPACK_IMPORTED_MODULE_4__libs_create__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__hocs__ = __webpack_require__(18);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "hocFactory", function() { return __WEBPACK_IMPORTED_MODULE_5__hocs__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_json_pointer__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_json_pointer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_json_pointer__);
+
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_6_json_pointer___default.a.set = function set(obj, pointer, value) {
+    let refTokens = Array.isArray(pointer) ? pointer : __WEBPACK_IMPORTED_MODULE_6_json_pointer___default.a.parse(pointer),
+        nextTok = refTokens[0];
+    for (let i = 0, n = refTokens.length; i < n - 1; ++i) {
+        let tok = refTokens[i];
+        if (tok === "-" && Array.isArray(obj)) {
+            tok = obj.length;
+        }
+        nextTok = refTokens[i + 1];
+        if (!(tok in obj)) {
+            if (nextTok.match(/^(\d+|-)$/)) {
+                obj[tok] = [];
+            } else {
+                obj[tok] = {};
+            }
+        }
+        if (!obj[tok] && nextTok) {
+            // let keys = refTokens.concat([]).splice(i);
+            obj[tok] = !Number.isNaN(nextTok * 1) ? [] : {};
+        }
+        obj = obj[tok];
+    }
+    if (nextTok === "-" && Array.isArray(obj)) {
+        nextTok = obj.length;
+    }
+    obj[nextTok] = value;
+    return this;
+};
+// jpp({}).set("/a", 1);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (20:16)\n\n\u001b[0m \u001b[90m 18 | \u001b[39m            \u001b[33mRootComponentHock\u001b[39m \u001b[33m=\u001b[39m \u001b[33mSchemaFormBlock\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 19 | \u001b[39m        }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 | \u001b[39m        \u001b[36mreturn\u001b[39m (\u001b[33m<\u001b[39m\u001b[33mRootComponentHock\u001b[39m\u001b[33m>\u001b[39m\n \u001b[90m    | \u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 | \u001b[39m                {mergeSchemaList\u001b[33m.\u001b[39mmap((mergeSchema\u001b[33m,\u001b[39m idx) \u001b[33m=>\u001b[39m {\n \u001b[90m 22 | \u001b[39m            mergeSchema\u001b[33m.\u001b[39mkeys \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mmergeKeys(mergeSchema)\u001b[33m;\u001b[39m\n \u001b[90m 23 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mSchemaFormItem\u001b[39m key\u001b[33m=\u001b[39m{\u001b[32m`${schemaKey}-${idx.toString()}}`\u001b[39m} getCurrentState\u001b[33m=\u001b[39m{getCurrentState} schemaKey\u001b[33m=\u001b[39m{schemaKey} arrayIndex\u001b[33m=\u001b[39m{arrayIndex} arrayLevel\u001b[33m=\u001b[39m{arrayLevel} \u001b[33mItemButtons\u001b[39m\u001b[33m=\u001b[39m{\u001b[33mItemButtons\u001b[39m} formDefaultData\u001b[33m=\u001b[39m{formDefaultData} mergeSchemaList\u001b[33m=\u001b[39m{mergeSchemaList} mergeSchema\u001b[33m=\u001b[39m{mergeSchema} schemaFormOptions\u001b[33m=\u001b[39m{schemaFormOptions} globalOptions\u001b[33m=\u001b[39m{globalOptions}\u001b[33m>\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (15:15)\n\n\u001b[0m \u001b[90m 13 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 14 | \u001b[39m        }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 | \u001b[39m        \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mFieldComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 | \u001b[39m    }\n \u001b[90m 17 | \u001b[39m}\n \u001b[90m 18 | \u001b[39m\u001b[36mexport\u001b[39m \u001b[36mconst\u001b[39m \u001b[33mSchemaFormItem\u001b[39m \u001b[33m=\u001b[39m hoc(\u001b[33mSchemaFormItemComponent\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return defaultTheme; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_ns_factory__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fields__ = __webpack_require__(11);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__libs_ns_factory__["a"]; });
+
+
+
+const defaultTheme = {
+    tempFactory: new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"](),
+    fieldFactory: new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"](),
+    widgetFactory: new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"]()
+};
+__WEBPACK_IMPORTED_MODULE_1__libs_ns_factory__["a" /* nsFactory */].add("default", defaultTheme);
+for (let key in __WEBPACK_IMPORTED_MODULE_2__fields__["a" /* default */]) {
+    if (__WEBPACK_IMPORTED_MODULE_2__fields__["a" /* default */].hasOwnProperty(key)) {
+        let field = __WEBPACK_IMPORTED_MODULE_2__fields__["a" /* default */][key];
+        defaultTheme.fieldFactory.add(key, field);
+        defaultTheme.fieldFactory.lock(key);
+    }
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__);
+
+class SchemaFormNsFactory extends __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"] {
+    constructor() {
+        super();
+    }
+}
+/* unused harmony export SchemaFormNsFactory */
+
+const nsFactory = new SchemaFormNsFactory();
+/* harmony export (immutable) */ __webpack_exports__["a"] = nsFactory;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__normal__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__normal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__normal__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__object__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__object__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__array__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__array___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__array__);
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    string: __WEBPACK_IMPORTED_MODULE_0__normal__["NormalField"],
+    boolean: __WEBPACK_IMPORTED_MODULE_0__normal__["NormalField"],
+    number: __WEBPACK_IMPORTED_MODULE_0__normal__["NormalField"],
+    integer: __WEBPACK_IMPORTED_MODULE_0__normal__["NormalField"],
+    null: __WEBPACK_IMPORTED_MODULE_0__normal__["NormalField"],
+    object: __WEBPACK_IMPORTED_MODULE_1__object__["ObjectField"],
+    array: __WEBPACK_IMPORTED_MODULE_2__array__["ArrayField"]
+});
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (5:16)\n\n\u001b[0m \u001b[90m 3 | \u001b[39m    render() {\n \u001b[90m 4 | \u001b[39m        \u001b[36mconst\u001b[39m { mergeSchema\u001b[33m,\u001b[39m currentTheme\u001b[33m,\u001b[39m \u001b[33mWidgetComponent\u001b[39m } \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 | \u001b[39m        \u001b[36mreturn\u001b[39m (\u001b[33m<\u001b[39m\u001b[33mWidgetComponent\u001b[39m key\u001b[33m=\u001b[39m{mergeSchema\u001b[33m.\u001b[39mkeys\u001b[33m.\u001b[39mjoin(\u001b[32m\".\"\u001b[39m)} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   | \u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 | \u001b[39m    }\n \u001b[90m 7 | \u001b[39m}\n \u001b[90m 8 | \u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (7:16)\n\n\u001b[0m \u001b[90m  5 | \u001b[39m        \u001b[36mconst\u001b[39m { mergeSchema\u001b[33m,\u001b[39m currentTheme\u001b[33m,\u001b[39m \u001b[33mWidgetComponent\u001b[39m\u001b[33m,\u001b[39m arrayIndex\u001b[33m,\u001b[39m \u001b[33mItemButtons\u001b[39m\u001b[33m,\u001b[39m arrayLevel\u001b[33m,\u001b[39m getCurrentState\u001b[33m,\u001b[39m globalOptions\u001b[33m,\u001b[39m schemaFormOptions\u001b[33m,\u001b[39m schemaKey } \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m;\u001b[39m\n \u001b[90m  6 | \u001b[39m        \u001b[36mconst\u001b[39m { uiSchema } \u001b[33m=\u001b[39m mergeSchema\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 | \u001b[39m        \u001b[36mreturn\u001b[39m (\u001b[33m<\u001b[39m\u001b[33mSchemaForm\u001b[39m arrayIndex\u001b[33m=\u001b[39m{arrayIndex} schemaFormOptions\u001b[33m=\u001b[39m{schemaFormOptions} getCurrentState\u001b[33m=\u001b[39m{getCurrentState} schemaKey\u001b[33m=\u001b[39m{schemaKey} arrayLevel\u001b[33m=\u001b[39m{arrayLevel} schema\u001b[33m=\u001b[39m{mergeSchema} parentKeys\u001b[33m=\u001b[39m{mergeSchema\u001b[33m.\u001b[39moriginKeys} \u001b[33mRootComponent\u001b[39m\u001b[33m=\u001b[39m{uiSchema\u001b[33m.\u001b[39mroot} uiSchema\u001b[33m=\u001b[39m{uiSchema\u001b[33m.\u001b[39mitems \u001b[33m||\u001b[39m [\u001b[32m\"*\"\u001b[39m]} globalOptions\u001b[33m=\u001b[39m{globalOptions}\u001b[33m>\u001b[39m\n \u001b[90m    | \u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  8 | \u001b[39m            \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mSchemaForm\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m  9 | \u001b[39m    }\n \u001b[90m 10 | \u001b[39m}\u001b[0m\n");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (14:16)\n\n\u001b[0m \u001b[90m 12 | \u001b[39m        \u001b[36mconst\u001b[39m { mergeSchema\u001b[33m,\u001b[39m schemaKey\u001b[33m,\u001b[39m globalOptions\u001b[33m,\u001b[39m schemaFormOptions\u001b[33m,\u001b[39m getCurrentState\u001b[33m,\u001b[39m \u001b[33mItemChildButtons\u001b[39m\u001b[33m,\u001b[39m arrayLevel \u001b[33m=\u001b[39m [] } \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m;\u001b[39m\n \u001b[90m 13 | \u001b[39m        \u001b[36mconst\u001b[39m { uiSchema\u001b[33m,\u001b[39m keys } \u001b[33m=\u001b[39m mergeSchema\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 | \u001b[39m        \u001b[36mreturn\u001b[39m (\u001b[33m<\u001b[39m\u001b[33mSchemaForm\u001b[39m key\u001b[33m=\u001b[39m{keys\u001b[33m.\u001b[39mjoin(\u001b[32m\".\"\u001b[39m) \u001b[33m+\u001b[39m idx} schema\u001b[33m=\u001b[39m{mergeSchema} getCurrentState\u001b[33m=\u001b[39m{getCurrentState} arrayIndex\u001b[33m=\u001b[39m{idx} arrayLevel\u001b[33m=\u001b[39m{arrayLevel\u001b[33m.\u001b[39mconcat([idx])} \u001b[33mItemButtons\u001b[39m\u001b[33m=\u001b[39m{() \u001b[33m=>\u001b[39m \u001b[33m<\u001b[39m\u001b[33mItemChildButtons\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops} index\u001b[33m=\u001b[39m{idx}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m} parentKeys\u001b[33m=\u001b[39m{mergeSchema\u001b[33m.\u001b[39moriginKeys} \u001b[33mRootComponent\u001b[39m\u001b[33m=\u001b[39m{\u001b[36mnull\u001b[39m} schemaKey\u001b[33m=\u001b[39m{schemaKey} uiSchema\u001b[33m=\u001b[39m{uiSchema\u001b[33m.\u001b[39mitems} schemaFormOptions\u001b[33m=\u001b[39m{schemaFormOptions} globalOptions\u001b[33m=\u001b[39m{globalOptions}\u001b[33m>\u001b[39m\n \u001b[90m    | \u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 15 | \u001b[39m            \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mSchemaForm\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 16 | \u001b[39m    }\n \u001b[90m 17 | \u001b[39m    \u001b[90m/**\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__reducer_form__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__meta__ = __webpack_require__(16);
+
+
+class SchemaFormCreate {
+    /**
+     * 创建一个schema form reducer
+     * @param key             唯一标志
+     * @param data            数据
+     * @param curJjv          当前的ajv实例
+     * @param schema          当前的json schema
+     * @param updateState     更新state的方法
+     */
+    createOne(key, data, curJjv, schema, getOriginState, updateState) {
+        let meta = new __WEBPACK_IMPORTED_MODULE_1__meta__["a" /* MetaData */]();
+        let defaultValue = curJjv.validate(schema, data).catch(() => 1);
+        let reducer = new __WEBPACK_IMPORTED_MODULE_0__reducer_form__["a" /* FormReducer */](updateState ? updateState({}, {
+            data: data,
+            meta: meta.data
+        }) : {
+            data: data,
+            meta: meta.data
+        }, meta, getOriginState, updateState);
+        meta.actions = reducer.actions;
+        SchemaFormCreate.metas[key] = meta;
+        return reducer;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = SchemaFormCreate;
+
+SchemaFormCreate.metas = {};
+/* harmony default export */ __webpack_exports__["b"] = (new SchemaFormCreate());
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_uuid__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_uuid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_uuid__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_pointer__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_pointer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_json_pointer__);
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function step(result) {
+            result.done ? resolve(result.value) : new P(function (resolve) {
+                resolve(result.value);
+            }).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+/**
+ * Meta的数据操作类
+ */
+class MetaData {
+    constructor() {
+        /**
+         * 数据
+         */
+        this.data = { map: {}, meta: {} };
+        /**
+         * reducer的actions
+         */
+        this.actions = {};
+        /**
+         * 是否初始化
+         */
+        this.isInit = false;
+    }
+    /**
+     * 初始化一个ajv
+     * @param curAjv ajv的实例
+     * @param key    ajv的schema的key
+     */
+    init(schemaFormOptions, key) {
+        if (this.isInit) {
+            return;
+        }
+        this.isInit = true;
+        this.schemaFormOptions = schemaFormOptions;
+        this.curKey = key;
+    }
+    /**
+     * 验证所有的数据
+     * @param data 数据
+     */
+    validateAll(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // 设置所有的字段验证都通过
+            for (let key in this.data.map) {
+                if (this.data.map.hasOwnProperty(key)) {
+                    let element = this.data.map[key];
+                    element.isValid = true;
+                    element.dirty = true;
+                }
+            }
+            this.data.isLoading = true;
+            this.data.isValid = false;
+            try {
+                let schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
+                let validate = this.schemaFormOptions.ajv.compile(schema);
+                // this.schemaFormOptions.ajv.removeSchema
+                // 调用验证方法
+                yield validate(data);
+                this.data.isValid = true;
+            } catch (err) {
+                this.data.isValid = false;
+                if (err.errors && err.errors.length) {
+                    this.setErrors(err.errors);
+                }
+            }
+            return this.data;
+        });
+    }
+    /**
+     * 设置表单的错误
+     * @param errors 错误详情
+     */
+    setErrors(errors) {
+        this.data.isValid = false;
+        errors.forEach(error => {
+            let keys = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.parse(error.dataPath);
+            let meta = this.getMeta(keys);
+            this.setMeta(keys, {
+                dirty: true,
+                isLoading: false,
+                isValid: false,
+                errors: [],
+                errorText: this.schemaFormOptions.ajv.errorsText([error], { separator: ",", dataVar: "" })
+            });
+        });
+    }
+    /**
+     * 获得当前字段的key
+     * @param keys    当前字段的Keys
+     */
+    getKey(keys) {
+        const key = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.compile(keys);
+        let escapeKey = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.escape(key);
+        return {
+            schemaKey: keys.map(k => {
+                if (!Number.isNaN(Number(k))) {
+                    return "-";
+                }
+                return k;
+            }).join("/"),
+            normalKey: key,
+            originEscapeKey: escapeKey,
+            escapeKey: "/" + escapeKey
+        };
+    }
+    /**
+     * 设置meta信息
+     * @param keys     keys
+     * @param meta     meta数据
+     * @param strick   废弃属性
+     */
+    setMeta(keys, meta, strick = true) {
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
+        let curMeta = this.getCurMetaData(curUuid);
+        if (curUuid !== escapeKey) {
+            this.setCurMetaUuid(normalKey, curUuid);
+        }
+        this.setCurMetaData(curUuid, Object.assign({}, curMeta, meta));
+    }
+    /**
+     * 获取当前keys的uuid
+     * @param param0     各种keys
+     */
+    getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey }) {
+        let jMap = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.map);
+        let jMeta = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta),
+            curMeta,
+            curUuid;
+        if (this.schemaFormOptions.map.has(schemaKey)) {
+            let schema = this.schemaFormOptions.map.get(schemaKey);
+            if (["array", "object"].indexOf(schema.type) >= 0) {
+                return escapeKey;
+            }
+        }
+        if (jMap.has(escapeKey)) {
+            return escapeKey;
+        }
+        // 如果meta中存在normalKey
+        if (jMeta.has(normalKey)) {
+            curMeta = jMeta.get(normalKey);
+            curUuid = curMeta;
+        }
+        if (typeof curMeta !== "string" || !curMeta) {
+            curUuid = "/" + __WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.escape(`/${__WEBPACK_IMPORTED_MODULE_0_uuid___default()()}`);
+        }
+        return curUuid;
+    }
+    /**
+     * 返回meta数据
+     * @param keys   keys
+     * @param strick 是否严格模式
+     */
+    getMeta(keys, strick = true) {
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
+        return this.getCurMetaData(curUuid);
+    }
+    /**
+     * 更换两个meta数据位置
+     * @param keys        keys
+     * @param curIndex    当前的索引
+     * @param switchIndex 更换的索引
+     */
+    switchMeta(keys, curIndex, switchIndex) {
+        let { normalKey, escapeKey, schemaKey, originEscapeKey } = this.getKey(keys);
+        if (!__WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta).has(normalKey)) {
+            return;
+        }
+        let curMeta = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta).get(normalKey);
+        [curMeta[curIndex], curMeta[switchIndex]] = [curMeta[switchIndex], curMeta[curIndex]];
+        __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta).set(normalKey, curMeta);
+    }
+    /**
+     * 删除meta数据
+     *  1. 遍历map，清除map中是${originEscapeKey}开头的key
+     *  2. 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
+     *  3. 删除map中当前keys对应的uuid
+     * @param keys keys
+     */
+    removeMeta(keys) {
+        let jMap = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.map),
+            jMeta = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta);
+        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
+        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
+        let regexp = new RegExp(`^${originEscapeKey}`, "ig");
+        // 遍历map，清除map中是${originEscapeKey}开头的key
+        for (let key in this.data.map) {
+            if (this.data.map.hasOwnProperty(key)) {
+                let mapKeys = this.getKey(__WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.parse(key));
+                if (regexp.test(mapKeys.originEscapeKey)) {
+                    jMap.remove(mapKeys.escapeKey);
+                }
+            }
+        }
+        // 清除meta中keys对应的数据，并且遍历meta值中的子元素，清除map中的key
+        if (jMeta.has(normalKey) && jMeta.get(normalKey)) {
+            let metaDict = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default.a.dict(jMeta.get(normalKey));
+            jMeta.remove(normalKey);
+            // 遍历子元素，并且清除数据
+            for (let key in metaDict) {
+                if (metaDict.hasOwnProperty(key)) {
+                    let element = metaDict[key];
+                    if (jMap.has(element)) {
+                        jMap.remove(element);
+                    }
+                }
+            }
+        }
+        // 删除当前的uuid
+        if (jMap.has(curUuid)) {
+            jMap.remove(curUuid);
+        }
+    }
+    /**
+     * 返回meta数据
+     * @param curUuid uuid
+     */
+    getCurMetaData(curUuid) {
+        if (__WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.map).has(`${curUuid}`)) {
+            return __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.map).get(`${curUuid}`);
+        }
+        return { isShow: true };
+    }
+    /**
+     * 设置meta数据
+     * @param curUuid uuid
+     * @param meta    meta数据
+     */
+    setCurMetaData(curUuid, meta) {
+        __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.map).set(`${curUuid}`, meta);
+    }
+    /**
+     * 设置当前meta的uuid
+     * @param key     key
+     * @param curUuid uuid
+     */
+    setCurMetaUuid(key, curUuid) {
+        let jMeta = __WEBPACK_IMPORTED_MODULE_1_json_pointer___default()(this.data.meta);
+        jMeta.set(key, curUuid);
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = MetaData;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_17__;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hocFactory; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_merge__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_merge__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_temp__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_temp___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__item_temp__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__item_field__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__item_field___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__item_field__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__item_theme__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__item_theme___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__item_theme__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__item_validate__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__item_validate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__item_validate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__item_array__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__item_array___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__item_array__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__item_make__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__item_make___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__item_make__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__item_condition__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__item_condition___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__item_condition__);
+
+
+
+
+
+
+
+
+
+const hocFactory = new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"]();
+const hocs = {
+    merge: __WEBPACK_IMPORTED_MODULE_1__form_merge__["MergeHoc"].bind(__WEBPACK_IMPORTED_MODULE_1__form_merge__["MergeHoc"], hocFactory),
+    temp: __WEBPACK_IMPORTED_MODULE_2__item_temp__["TempHoc"].bind(__WEBPACK_IMPORTED_MODULE_2__item_temp__["TempHoc"], hocFactory),
+    field: __WEBPACK_IMPORTED_MODULE_3__item_field__["FieldHoc"].bind(__WEBPACK_IMPORTED_MODULE_3__item_field__["FieldHoc"], hocFactory),
+    theme: __WEBPACK_IMPORTED_MODULE_4__item_theme__["ThemeHoc"].bind(__WEBPACK_IMPORTED_MODULE_4__item_theme__["ThemeHoc"], hocFactory),
+    validate: __WEBPACK_IMPORTED_MODULE_5__item_validate__["ValidateHoc"].bind(__WEBPACK_IMPORTED_MODULE_5__item_validate__["ValidateHoc"], hocFactory),
+    array: __WEBPACK_IMPORTED_MODULE_6__item_array__["ArrayHoc"].bind(__WEBPACK_IMPORTED_MODULE_6__item_array__["ArrayHoc"], hocFactory),
+    make: __WEBPACK_IMPORTED_MODULE_7__item_make__["MakeHoc"].bind(__WEBPACK_IMPORTED_MODULE_7__item_make__["MakeHoc"], hocFactory),
+    condition: __WEBPACK_IMPORTED_MODULE_8__item_condition__["ConditionHoc"].bind(__WEBPACK_IMPORTED_MODULE_8__item_condition__["ConditionHoc"], hocFactory)
+};
+for (let key in hocs) {
+    if (hocs.hasOwnProperty(key)) {
+        let hoc = hocs[key];
+        hocFactory.add(key, hoc);
+        hocFactory.lock(key);
+    }
+}
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (61:20)\n\n\u001b[0m \u001b[90m 59 | \u001b[39m            \u001b[90m// 合并schema和uiSchema\u001b[39m\n \u001b[90m 60 | \u001b[39m            mergeSchemaList \u001b[33m=\u001b[39m schemaMerge\u001b[33m.\u001b[39mmerge(schemaKey\u001b[33m,\u001b[39m mergeSchema\u001b[33m,\u001b[39m uiSchema\u001b[33m,\u001b[39m schemaFormOptions)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 61 | \u001b[39m            \u001b[36mreturn\u001b[39m (\u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m schemaFormOptions\u001b[33m=\u001b[39m{schemaFormOptions \u001b[33m||\u001b[39m {}} schemaKey\u001b[33m=\u001b[39m{schemaKey} mergeSchemaList\u001b[33m=\u001b[39m{mergeSchemaList} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m>\u001b[39m\n \u001b[90m    | \u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 62 | \u001b[39m                \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mComponent\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 63 | \u001b[39m        }\n \u001b[90m 64 | \u001b[39m    }\u001b[33m;\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (43:23)\n\n\u001b[0m \u001b[90m 41 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33mTempComponents\u001b[39m\u001b[33m.\u001b[39mreduce((prev\u001b[33m,\u001b[39m { key\u001b[33m,\u001b[39m \u001b[33mTemp\u001b[39m }) \u001b[33m=>\u001b[39m {\n \u001b[90m 42 | \u001b[39m                let \u001b[33mTempWithHoc\u001b[39m \u001b[33m=\u001b[39m metaConnect(\u001b[33mTemp\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 | \u001b[39m                \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mTempWithHoc\u001b[39m globalOptions\u001b[33m=\u001b[39m{globalOptions} tempKey\u001b[33m=\u001b[39m{key} uiSchemaOptions\u001b[33m=\u001b[39m{uiSchemaOptions} key\u001b[33m=\u001b[39m{keys\u001b[33m.\u001b[39mjoin(\u001b[32m\".\"\u001b[39m) \u001b[33m+\u001b[39m key \u001b[33m+\u001b[39m index\u001b[33m++\u001b[39m} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops} children\u001b[33m=\u001b[39m{prev}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 | \u001b[39m            }\u001b[33m,\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponentWithHoc\u001b[39m key\u001b[33m=\u001b[39m{keys\u001b[33m.\u001b[39mjoin(\u001b[32m\".\"\u001b[39m)} uiSchemaOptions\u001b[33m=\u001b[39m{uiSchemaOptions} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 45 | \u001b[39m        }\n \u001b[90m 46 | \u001b[39m        \u001b[90m/**\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (43:19)\n\n\u001b[0m \u001b[90m 41 | \u001b[39m                \u001b[90m// console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);\u001b[39m\n \u001b[90m 42 | \u001b[39m            }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops} \u001b[33mFieldComponent\u001b[39m\u001b[33m=\u001b[39m{(\u001b[33mFieldComponent\u001b[39m)} \u001b[33mWidgetComponent\u001b[39m\u001b[33m=\u001b[39m{\u001b[33mWidgetComponent\u001b[39m}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 | \u001b[39m        }\n \u001b[90m 45 | \u001b[39m    }\n \u001b[90m 46 | \u001b[39m    \u001b[36mreturn\u001b[39m \u001b[33mFieldComponentHoc\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (22:19)\n\n\u001b[0m \u001b[90m 20 | \u001b[39m                \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`没有找到${uiSchema.theme || \"default\"}的样式！`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 21 | \u001b[39m            }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m currentTheme\u001b[33m=\u001b[39m{theme} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 | \u001b[39m        }\n \u001b[90m 24 | \u001b[39m    }\n \u001b[90m 25 | \u001b[39m    \u001b[36mreturn\u001b[39m \u001b[33mThemeComponentHoc\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (68:19)\n\n\u001b[0m \u001b[90m 66 | \u001b[39m    let \u001b[33mValidateComponentHoc\u001b[39m \u001b[33m=\u001b[39m \u001b[36mclass\u001b[39m \u001b[33mValidateComponentHoc\u001b[39m \u001b[36mextends\u001b[39m \u001b[33mReact\u001b[39m\u001b[33m.\u001b[39m\u001b[33mPureComponent\u001b[39m {\n \u001b[90m 67 | \u001b[39m        render() {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 | \u001b[39m        }\n \u001b[90m 70 | \u001b[39m    }\u001b[33m;\u001b[39m\n \u001b[90m 71 | \u001b[39m    \u001b[33mValidateComponentHoc\u001b[39m \u001b[33m=\u001b[39m __decorate([\u001b[0m\n");
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (95:23)\n\n\u001b[0m \u001b[90m 93 | \u001b[39m            }\n \u001b[90m 94 | \u001b[39m            \u001b[36mif\u001b[39m (type \u001b[33m===\u001b[39m \u001b[32m\"array\"\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 95 | \u001b[39m                \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops} \u001b[33mItemButtons\u001b[39m\u001b[33m=\u001b[39m{\u001b[33mItemButtonsWithHoc\u001b[39m \u001b[33m?\u001b[39m () \u001b[33m=>\u001b[39m \u001b[33m<\u001b[39m\u001b[33mItemButtonsWithHoc\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[35m/> : () => <span /\u001b[39m\u001b[33m>\u001b[39m} \u001b[33mItemChildButtons\u001b[39m\u001b[33m=\u001b[39m{\u001b[33mItemChildButtonsWithHoc\u001b[39m \u001b[33m?\u001b[39m \u001b[33mItemChildButtonsWithHoc\u001b[39m \u001b[33m:\u001b[39m () \u001b[33m=>\u001b[39m \u001b[33m<\u001b[39m\u001b[33mspan\u001b[39m \u001b[35m/>}/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 96 | \u001b[39m            }\n \u001b[90m 97 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 98 | \u001b[39m        }\u001b[0m\n");
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (28:19)\n\n\u001b[0m \u001b[90m 26 | \u001b[39m                globalOptions[\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mfieldKey] \u001b[33m||\u001b[39m [\u001b[32m\"theme\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"field\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"validate\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"array\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"temp\"\u001b[39m]\u001b[33m;\u001b[39m\n \u001b[90m 27 | \u001b[39m            let \u001b[33mComponentWithHocs\u001b[39m \u001b[33m=\u001b[39m compose(\u001b[33m...\u001b[39mhocs\u001b[33m.\u001b[39mmap(hoc \u001b[33m=>\u001b[39m hocFactory\u001b[33m.\u001b[39mget(hoc)))(\u001b[33mComponent\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 28 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponentWithHocs\u001b[39m getHocOptions\u001b[33m=\u001b[39m{\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetHocOptions\u001b[33m.\u001b[39mbind(\u001b[36mthis\u001b[39m)} {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 29 | \u001b[39m        }\n \u001b[90m 30 | \u001b[39m        getHocOptions() {\n \u001b[90m 31 | \u001b[39m            \u001b[36mconst\u001b[39m { mergeSchema\u001b[33m,\u001b[39m globalOptions } \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m;\u001b[39m\u001b[0m\n");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unexpected token (48:19)\n\n\u001b[0m \u001b[90m 46 | \u001b[39m                \u001b[36mreturn\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 47 | \u001b[39m            }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 48 | \u001b[39m            \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mComponent\u001b[39m {\u001b[33m...\u001b[39m\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops}\u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m    | \u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 49 | \u001b[39m        }\n \u001b[90m 50 | \u001b[39m    }\u001b[33m;\u001b[39m\n \u001b[90m 51 | \u001b[39m    \u001b[33mConditionComponentHoc\u001b[39m \u001b[33m=\u001b[39m __decorate([\u001b[0m\n");
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=index.js.map
