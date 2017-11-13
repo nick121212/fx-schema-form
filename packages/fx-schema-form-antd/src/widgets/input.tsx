@@ -23,7 +23,7 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, globalOptions, uiSchemaOptions, validate, updateItemData, formItemData } = this.props;
+        const { mergeSchema, globalOptions, uiSchemaOptions, validate, updateItemData, formItemData, getWidgetOptions } = this.props;
         const { input = {} } = uiSchemaOptions.widget || {};
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
@@ -39,8 +39,7 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
                 }}
                 disabled={readonly}
                 placeholder={mergeSchema.title}
-                {...input}
-                {...inputDefault}
+                {...getWidgetOptions("input") }
                 {...this.setDefaultProps() }>
             </Input>
         );

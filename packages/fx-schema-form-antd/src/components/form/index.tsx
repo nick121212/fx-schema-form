@@ -4,12 +4,16 @@ import { SchemaFormBaseProps } from "./props";
 import { hoc } from "./container";
 import { SchemaFormItem } from "../../index";
 import { MergeHocOutProps } from "../../hocs/form/merge";
+import { UtilsHocOutProps } from "../../hocs/item/utils";
+
 import { SchemaFormBlock } from "../block";
+
+
 
 /**
  * form组建的props
  */
-export interface SchemaFormProps extends SchemaFormBaseProps {
+export interface SchemaFormProps extends SchemaFormBaseProps, UtilsHocOutProps {
 
 }
 

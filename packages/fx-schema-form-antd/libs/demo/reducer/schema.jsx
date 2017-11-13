@@ -1,20 +1,29 @@
 import { createAction, createReducer } from "redux-act";
-export class FormExampleReducer {
-    constructor(initialState) {
+var FormExampleReducer = (function () {
+    function FormExampleReducer(initialState) {
         this.initialState = initialState;
         this.updateData = createAction("更改data的值");
     }
-    get actions() {
-        return {
-            updateData: this.updateData
-        };
-    }
-    get reducer() {
-        return createReducer({
-            [this.updateData]: this.updateDataHandle.bind(this),
-        }, this.initialState);
-    }
-    updateDataHandle(state, data) {
+    Object.defineProperty(FormExampleReducer.prototype, "actions", {
+        get: function () {
+            return {
+                updateData: this.updateData
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FormExampleReducer.prototype, "reducer", {
+        get: function () {
+            return createReducer((_a = {},
+                _a[this.updateData] = this.updateDataHandle.bind(this),
+                _a), this.initialState);
+            var _a;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FormExampleReducer.prototype.updateDataHandle = function (state, data) {
         if (!data.schema) {
             data.schema = state.schema;
         }
@@ -22,6 +31,8 @@ export class FormExampleReducer {
             data.uiSchema = state.uiSchema;
         }
         return Object.assign({}, state, { schema: data.schema, uiSchema: data.uiSchema });
-    }
-}
+    };
+    return FormExampleReducer;
+}());
+export { FormExampleReducer };
 //# sourceMappingURL=schema.jsx.map

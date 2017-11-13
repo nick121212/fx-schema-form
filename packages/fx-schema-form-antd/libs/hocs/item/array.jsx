@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,61 +18,65 @@ import React from "react";
 import { branch, renderComponent, compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
-const handlers = withHandlers({
-    removeItem(props) {
-        return (index) => {
-            const { formItemData = [], mergeSchema, arrayIndex, actions } = props;
-            const { uiSchema, type, keys } = mergeSchema;
+var handlers = withHandlers({
+    removeItem: function (props) {
+        return function (index) {
+            var _a = props.formItemData, formItemData = _a === void 0 ? [] : _a, mergeSchema = props.mergeSchema, arrayIndex = props.arrayIndex, actions = props.actions;
+            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
             if (type === "array" && index !== undefined) {
-                actions.removeItem({ keys, index });
+                actions.removeItem({ keys: keys, index: index });
             }
         };
     },
-    switchItem(props) {
-        return (curIndex, switchIndex) => {
-            const { formItemData = [], mergeSchema, arrayIndex, actions } = props;
-            const { uiSchema, type, keys } = mergeSchema;
+    switchItem: function (props) {
+        return function (curIndex, switchIndex) {
+            var _a = props.formItemData, formItemData = _a === void 0 ? [] : _a, mergeSchema = props.mergeSchema, arrayIndex = props.arrayIndex, actions = props.actions;
+            var uiSchema = mergeSchema.uiSchema, type = mergeSchema.type, keys = mergeSchema.keys;
             if (type === "array" && curIndex !== undefined && switchIndex !== undefined) {
                 if (switchIndex < 0 || formItemData.length < switchIndex + 1) {
                     return;
                 }
                 actions.switchItem({
-                    keys,
-                    curIndex,
-                    switchIndex
+                    keys: keys,
+                    curIndex: curIndex,
+                    switchIndex: switchIndex
                 });
             }
         };
     },
-    toggleItem(props) {
-        return () => {
-            const { mergeSchema, actions, schemaFormOptions } = props;
-            const { keys } = mergeSchema;
-            actions.toggleItem({ keys });
+    toggleItem: function (props) {
+        return function () {
+            var mergeSchema = props.mergeSchema, actions = props.actions, schemaFormOptions = props.schemaFormOptions;
+            var keys = mergeSchema.keys;
+            actions.toggleItem({ keys: keys });
         };
     },
-    addItem(props) {
-        return () => {
-            const { mergeSchema, actions } = props;
-            const { keys } = mergeSchema;
+    addItem: function (props) {
+        return function () {
+            var mergeSchema = props.mergeSchema, actions = props.actions;
+            var keys = mergeSchema.keys;
             if (mergeSchema.items.type === "object") {
-                actions.addItem({ keys, data: {} });
+                actions.addItem({ keys: keys, data: {} });
             }
             else {
-                actions.addItem({ keys, data: undefined });
+                actions.addItem({ keys: keys, data: undefined });
             }
         };
     }
 });
-export const ArrayHoc = (hocFactory, Component) => {
-    let ArrayComponentHoc = class ArrayComponentHoc extends React.PureComponent {
-        render() {
-            const { mergeSchema, getHocOptions } = this.props;
-            const { type } = mergeSchema;
-            const hocOptions = getHocOptions();
-            const { array: arrayHocOptions } = hocOptions;
-            const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
-            let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
+export var ArrayHoc = function (hocFactory, Component) {
+    var ArrayComponentHoc = (function (_super) {
+        __extends(ArrayComponentHoc, _super);
+        function ArrayComponentHoc() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ArrayComponentHoc.prototype.render = function () {
+            var _this = this;
+            var _a = this.props, mergeSchema = _a.mergeSchema, getHocOptions = _a.getHocOptions;
+            var type = mergeSchema.type;
+            var arrayHocOptions = getHocOptions("array");
+            var _b = arrayHocOptions || {}, _c = _b.ItemChildButtons, ItemChildButtons = _c === void 0 ? null : _c, _d = _b.ItemButtons, ItemButtons = _d === void 0 ? null : _d;
+            var ItemChildButtonsWithHoc, ItemButtonsWithHoc;
             if (ItemChildButtons) {
                 ItemChildButtonsWithHoc = compose(handlers, connect(mapMetaStateToProps))(ItemChildButtons);
             }
@@ -70,26 +84,34 @@ export const ArrayHoc = (hocFactory, Component) => {
                 ItemButtonsWithHoc = compose(handlers, connect(mapMetaStateToProps))(ItemButtons);
             }
             if (type === "array") {
-                return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? () => <ItemButtonsWithHoc {...this.props}/> : () => <span />} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : () => <span />}/>;
+                return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? function () { return <ItemButtonsWithHoc {..._this.props}/>; } : function () { return <span />; }} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return <span />; }}/>;
             }
             return <Component {...this.props}/>;
+        };
+        ArrayComponentHoc = __decorate([
+            compose(connect(mapFormItemDataProps), handlers)
+        ], ArrayComponentHoc);
+        return ArrayComponentHoc;
+    }(React.PureComponent));
+    var PureComponent = (function (_super) {
+        __extends(PureComponent, _super);
+        function PureComponent() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-    };
-    ArrayComponentHoc = __decorate([
-        compose(handlers)
-    ], ArrayComponentHoc);
-    let PureComponent = class PureComponent extends React.PureComponent {
-        render() {
+        PureComponent.prototype.render = function () {
             return <Component {...this.props}/>;
-        }
+        };
+        PureComponent = __decorate([
+            compose(handlers, connect(mapFormItemDataProps))
+        ], PureComponent);
+        return PureComponent;
+    }(React.PureComponent));
+    var spinnerWhileLoading = function (isLoading) {
+        return branch(isLoading, renderComponent(PureComponent));
     };
-    PureComponent = __decorate([
-        compose(handlers, connect(mapFormItemDataProps))
-    ], PureComponent);
-    const spinnerWhileLoading = isLoading => branch(isLoading, renderComponent(PureComponent));
-    const enhance = spinnerWhileLoading(props => {
-        const { mergeSchema, getHocOptions } = props;
-        const { type } = mergeSchema;
+    var enhance = spinnerWhileLoading(function (props) {
+        var mergeSchema = props.mergeSchema, getHocOptions = props.getHocOptions;
+        var type = mergeSchema.type;
         return type !== "array";
     });
     return enhance(ArrayComponentHoc);

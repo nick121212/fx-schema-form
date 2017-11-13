@@ -1,14 +1,28 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import React from "react";
-export const FieldHoc = (hocFactory, Component) => {
-    class FieldComponentHoc extends React.PureComponent {
-        render() {
-            const { mergeSchema, currentTheme } = this.props;
-            const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
-            let FieldComponent, WidgetComponent;
+export var FieldHoc = function (hocFactory, Component) {
+    var FieldComponentHoc = (function (_super) {
+        __extends(FieldComponentHoc, _super);
+        function FieldComponentHoc() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        FieldComponentHoc.prototype.render = function () {
+            var _a = this.props, mergeSchema = _a.mergeSchema, currentTheme = _a.currentTheme;
+            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { theme: "", field: "", widget: "" } : _b;
+            var FieldComponent, WidgetComponent;
             if (typeof mergeSchema.type === "object") {
                 mergeSchema.type = mergeSchema.type[0];
             }
-            let field = uiSchema.field || mergeSchema.type;
+            var field = uiSchema.field || mergeSchema.type;
             if (typeof field === "object") {
                 if (field.length) {
                     field = field[0];
@@ -18,10 +32,10 @@ export const FieldHoc = (hocFactory, Component) => {
                 FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
             }
             else {
-                console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
+                console.error("\u627E\u4E0D\u5230field\uFF1A" + (uiSchema.field || mergeSchema.type));
                 return null;
             }
-            let widget = uiSchema.widget || mergeSchema.type;
+            var widget = uiSchema.widget || mergeSchema.type;
             if (typeof widget === "object") {
                 if (widget.length) {
                     widget = widget[0];
@@ -33,8 +47,9 @@ export const FieldHoc = (hocFactory, Component) => {
             else {
             }
             return <Component {...this.props} FieldComponent={(FieldComponent)} WidgetComponent={WidgetComponent}/>;
-        }
-    }
+        };
+        return FieldComponentHoc;
+    }(React.PureComponent));
     return FieldComponentHoc;
 };
 //# sourceMappingURL=field.jsx.map

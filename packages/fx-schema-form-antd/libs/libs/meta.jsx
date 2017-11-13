@@ -6,67 +6,106 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 import uuid from "uuid";
 import jpp from "json-pointer";
-export class MetaData {
-    constructor() {
+var MetaData = (function () {
+    function MetaData() {
         this.data = { map: {}, meta: {} };
         this.actions = {};
         this.isInit = false;
     }
-    init(schemaFormOptions, key) {
+    MetaData.prototype.init = function (schemaFormOptions, key) {
         if (this.isInit) {
             return;
         }
         this.isInit = true;
         this.schemaFormOptions = schemaFormOptions;
         this.curKey = key;
-    }
-    validateAll(data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            for (let key in this.data.map) {
-                if (this.data.map.hasOwnProperty(key)) {
-                    let element = this.data.map[key];
-                    element.isValid = true;
-                    element.dirty = true;
+    };
+    MetaData.prototype.validateAll = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var key, element, schema, validate, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        for (key in this.data.map) {
+                            if (this.data.map.hasOwnProperty(key)) {
+                                element = this.data.map[key];
+                                element.isValid = true;
+                                element.dirty = true;
+                            }
+                        }
+                        this.data.isLoading = true;
+                        this.data.isValid = false;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
+                        validate = this.schemaFormOptions.ajv.compile(schema);
+                        return [4, validate(data)];
+                    case 2:
+                        _a.sent();
+                        this.data.isValid = true;
+                        return [3, 4];
+                    case 3:
+                        err_1 = _a.sent();
+                        this.data.isValid = false;
+                        if (err_1.errors && err_1.errors.length) {
+                            this.setErrors(err_1.errors);
+                        }
+                        return [3, 4];
+                    case 4: return [2, this.data];
                 }
-            }
-            this.data.isLoading = true;
-            this.data.isValid = false;
-            try {
-                let schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
-                let validate = this.schemaFormOptions.ajv.compile(schema);
-                yield validate(data);
-                this.data.isValid = true;
-            }
-            catch (err) {
-                this.data.isValid = false;
-                if (err.errors && err.errors.length) {
-                    this.setErrors(err.errors);
-                }
-            }
-            return this.data;
+            });
         });
-    }
-    setErrors(errors) {
+    };
+    MetaData.prototype.setErrors = function (errors) {
+        var _this = this;
         this.data.isValid = false;
-        errors.forEach((error) => {
-            let keys = jpp.parse(error.dataPath);
-            let meta = this.getMeta(keys);
-            this.setMeta(keys, {
+        errors.forEach(function (error) {
+            var keys = jpp.parse(error.dataPath);
+            var meta = _this.getMeta(keys);
+            _this.setMeta(keys, {
                 dirty: true,
                 isLoading: false,
                 isValid: false,
                 errors: [],
-                errorText: this.schemaFormOptions.ajv.errorsText([error], { separator: ",", dataVar: "" })
+                errorText: _this.schemaFormOptions.ajv.errorsText([error], { separator: ",", dataVar: "" })
             });
         });
-    }
-    getKey(keys) {
-        const key = jpp.compile(keys);
-        let escapeKey = jpp.escape(key);
+    };
+    MetaData.prototype.getKey = function (keys) {
+        var key = jpp.compile(keys);
+        var escapeKey = jpp.escape(key);
         return {
-            schemaKey: keys.map((k) => {
+            schemaKey: keys.map(function (k) {
                 if (!Number.isNaN(Number(k))) {
                     return "-";
                 }
@@ -76,21 +115,23 @@ export class MetaData {
             originEscapeKey: escapeKey,
             escapeKey: "/" + escapeKey
         };
-    }
-    setMeta(keys, meta, strick = true) {
-        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
-        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
-        let curMeta = this.getCurMetaData(curUuid);
+    };
+    MetaData.prototype.setMeta = function (keys, meta, strick) {
+        if (strick === void 0) { strick = true; }
+        var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
+        var curUuid = this.getUuid({ normalKey: normalKey, escapeKey: escapeKey, originEscapeKey: originEscapeKey, schemaKey: schemaKey });
+        var curMeta = this.getCurMetaData(curUuid);
         if (curUuid !== escapeKey) {
             this.setCurMetaUuid(normalKey, curUuid);
         }
         this.setCurMetaData(curUuid, Object.assign({}, curMeta, meta));
-    }
-    getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey }) {
-        let jMap = jpp(this.data.map);
-        let jMeta = jpp(this.data.meta), curMeta, curUuid;
+    };
+    MetaData.prototype.getUuid = function (_a) {
+        var normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
+        var jMap = jpp(this.data.map);
+        var jMeta = jpp(this.data.meta), curMeta, curUuid;
         if (this.schemaFormOptions.map.has(schemaKey)) {
-            let schema = this.schemaFormOptions.map.get(schemaKey);
+            var schema = this.schemaFormOptions.map.get(schemaKey);
             if (["array", "object"].indexOf(schema.type) >= 0) {
                 return escapeKey;
             }
@@ -103,43 +144,45 @@ export class MetaData {
             curUuid = curMeta;
         }
         if (typeof curMeta !== "string" || !curMeta) {
-            curUuid = "/" + jpp.escape(`/${uuid()}`);
+            curUuid = "/" + jpp.escape("/" + uuid());
         }
         return curUuid;
-    }
-    getMeta(keys, strick = true) {
-        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
-        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
+    };
+    MetaData.prototype.getMeta = function (keys, strick) {
+        if (strick === void 0) { strick = true; }
+        var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
+        var curUuid = this.getUuid({ normalKey: normalKey, escapeKey: escapeKey, originEscapeKey: originEscapeKey, schemaKey: schemaKey });
         return this.getCurMetaData(curUuid);
-    }
-    switchMeta(keys, curIndex, switchIndex) {
-        let { normalKey, escapeKey, schemaKey, originEscapeKey } = this.getKey(keys);
+    };
+    MetaData.prototype.switchMeta = function (keys, curIndex, switchIndex) {
+        var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, schemaKey = _a.schemaKey, originEscapeKey = _a.originEscapeKey;
         if (!jpp(this.data.meta).has(normalKey)) {
             return;
         }
-        let curMeta = jpp(this.data.meta).get(normalKey);
-        [curMeta[curIndex], curMeta[switchIndex]] = [curMeta[switchIndex], curMeta[curIndex]];
+        var curMeta = jpp(this.data.meta).get(normalKey);
+        _b = [curMeta[switchIndex], curMeta[curIndex]], curMeta[curIndex] = _b[0], curMeta[switchIndex] = _b[1];
         jpp(this.data.meta).set(normalKey, curMeta);
-    }
-    removeMeta(keys) {
-        let jMap = jpp(this.data.map), jMeta = jpp(this.data.meta);
-        let { normalKey, escapeKey, originEscapeKey, schemaKey } = this.getKey(keys);
-        let curUuid = this.getUuid({ normalKey, escapeKey, originEscapeKey, schemaKey });
-        let regexp = new RegExp(`^${originEscapeKey}`, "ig");
-        for (let key in this.data.map) {
+        var _b;
+    };
+    MetaData.prototype.removeMeta = function (keys) {
+        var jMap = jpp(this.data.map), jMeta = jpp(this.data.meta);
+        var _a = this.getKey(keys), normalKey = _a.normalKey, escapeKey = _a.escapeKey, originEscapeKey = _a.originEscapeKey, schemaKey = _a.schemaKey;
+        var curUuid = this.getUuid({ normalKey: normalKey, escapeKey: escapeKey, originEscapeKey: originEscapeKey, schemaKey: schemaKey });
+        var regexp = new RegExp("^" + originEscapeKey, "ig");
+        for (var key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
-                let mapKeys = this.getKey(jpp.parse(key));
+                var mapKeys = this.getKey(jpp.parse(key));
                 if (regexp.test(mapKeys.originEscapeKey)) {
                     jMap.remove(mapKeys.escapeKey);
                 }
             }
         }
         if (jMeta.has(normalKey) && jMeta.get(normalKey)) {
-            let metaDict = jpp.dict(jMeta.get(normalKey));
+            var metaDict = jpp.dict(jMeta.get(normalKey));
             jMeta.remove(normalKey);
-            for (let key in metaDict) {
+            for (var key in metaDict) {
                 if (metaDict.hasOwnProperty(key)) {
-                    let element = metaDict[key];
+                    var element = metaDict[key];
                     if (jMap.has(element)) {
                         jMap.remove(element);
                     }
@@ -149,19 +192,21 @@ export class MetaData {
         if (jMap.has(curUuid)) {
             jMap.remove(curUuid);
         }
-    }
-    getCurMetaData(curUuid) {
-        if (jpp(this.data.map).has(`${curUuid}`)) {
-            return jpp(this.data.map).get(`${curUuid}`);
+    };
+    MetaData.prototype.getCurMetaData = function (curUuid) {
+        if (jpp(this.data.map).has("" + curUuid)) {
+            return jpp(this.data.map).get("" + curUuid);
         }
         return { isShow: true };
-    }
-    setCurMetaData(curUuid, meta) {
-        jpp(this.data.map).set(`${curUuid}`, meta);
-    }
-    setCurMetaUuid(key, curUuid) {
-        let jMeta = jpp(this.data.meta);
+    };
+    MetaData.prototype.setCurMetaData = function (curUuid, meta) {
+        jpp(this.data.map).set("" + curUuid, meta);
+    };
+    MetaData.prototype.setCurMetaUuid = function (key, curUuid) {
+        var jMeta = jpp(this.data.meta);
         jMeta.set(key, curUuid);
-    }
-}
+    };
+    return MetaData;
+}());
+export { MetaData };
 //# sourceMappingURL=meta.jsx.map

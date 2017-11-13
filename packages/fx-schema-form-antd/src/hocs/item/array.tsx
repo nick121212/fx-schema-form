@@ -99,16 +99,15 @@ export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Array
         public render(): JSX.Element {
             const { mergeSchema, getHocOptions } = this.props;
             const { type } = mergeSchema;
-            const hocOptions = getHocOptions();
-            const { array: arrayHocOptions } = hocOptions;
+            const arrayHocOptions = getHocOptions("array");
             const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
             let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
 
             if (ItemChildButtons) {
-                ItemChildButtonsWithHoc = compose(handlers, connect(mapMetaStateToProps))(ItemChildButtons);
+                ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
             }
             if (ItemButtons) {
-                ItemButtonsWithHoc = compose(handlers, connect(mapMetaStateToProps))(ItemButtons);
+                ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
             }
 
             if (type === "array") {

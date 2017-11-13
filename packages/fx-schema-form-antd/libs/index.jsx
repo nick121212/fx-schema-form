@@ -6,9 +6,9 @@ export { default as createForms, SchemaFormCreate } from "./libs/create";
 export { hocFactory } from "./hocs";
 import jpp from "json-pointer";
 jpp.set = function set(obj, pointer, value) {
-    let refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer), nextTok = refTokens[0];
-    for (let i = 0, n = refTokens.length; i < n - 1; ++i) {
-        let tok = refTokens[i];
+    var refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer), nextTok = refTokens[0];
+    for (var i = 0, n = refTokens.length; i < n - 1; ++i) {
+        var tok = refTokens[i];
         if (tok === "-" && Array.isArray(obj)) {
             tok = obj.length;
         }

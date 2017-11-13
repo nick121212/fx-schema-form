@@ -1,6 +1,7 @@
 /// <reference types="react" />
 import React from "react";
 import { SchemaFormBaseProps } from "./props";
-export interface SchemaFormProps extends SchemaFormBaseProps {
+import { UtilsHocOutProps } from "../../hocs/item/utils";
+export interface SchemaFormProps extends SchemaFormBaseProps, UtilsHocOutProps {
 }
 export declare const SchemaForm: React.ComponentClass<any>;

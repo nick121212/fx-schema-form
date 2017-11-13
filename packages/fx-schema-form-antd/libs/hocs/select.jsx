@@ -1,55 +1,55 @@
 import * as jpp from "json-pointer";
 import { createSelector } from "reselect";
 import { SchemaFormCreate } from "../libs/create";
-const getCurrentState = (state, props) => {
+var getCurrentState = function (state, props) {
     if (props.getCurrentState) {
         return props.getCurrentState(state, props);
     }
     return state[props.schemaKey];
 };
-export const getAllData = (state, props) => {
-    let { data = {} } = getCurrentState(state, props);
+export var getAllData = function (state, props) {
+    var _a = getCurrentState(state, props).data, data = _a === void 0 ? {} : _a;
     return data;
 };
-export const getData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    let { data = {} } = getCurrentState(state, props);
+export var getData = function (state, props) {
+    var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
+    var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
+    var _b = getCurrentState(state, props).data, data = _b === void 0 ? {} : _b;
     return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
 };
-export const getMetaStateData = (state, props) => {
-    const { schemaKey } = props;
-    const { meta } = getCurrentState(state, props);
+export var getMetaStateData = function (state, props) {
+    var schemaKey = props.schemaKey;
+    var meta = getCurrentState(state, props).meta;
     return {
         isLoading: meta.isLoading,
         isValid: meta.isValid
     };
 };
-export const getMetaData = (state, props) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    const metaData = SchemaFormCreate.metas[schemaKey];
-    const { meta } = getCurrentState(state, props);
+export var getMetaData = function (state, props) {
+    var schemaKey = props.schemaKey, mergeSchema = props.mergeSchema;
+    var _a = mergeSchema.keys, keys = _a === void 0 ? [] : _a;
+    var metaData = SchemaFormCreate.metas[schemaKey];
+    var meta = getCurrentState(state, props).meta;
     return metaData.getMeta(keys, mergeSchema.type !== "array");
 };
-export const getActions = (state, props) => {
-    const { schemaKey } = props;
-    const metaData = SchemaFormCreate.metas[schemaKey];
+export var getActions = function (state, props) {
+    var schemaKey = props.schemaKey;
+    var metaData = SchemaFormCreate.metas[schemaKey];
     if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
         metaData.init(props.schemaFormOptions, props.schemaKey);
     }
     return metaData.actions;
 };
-export const mapFormDataToProps = createSelector([getAllData], (formData) => {
-    return { formData };
+export var mapFormDataToProps = createSelector([getAllData], function (formData) {
+    return { formData: formData };
 });
-export const mapMetaStateToProps = createSelector([getMetaData], (meta) => {
-    return { meta };
+export var mapMetaStateToProps = createSelector([getMetaData], function (meta) {
+    return { meta: meta };
 });
-export const mapFormItemDataProps = createSelector([getData], (formItemData) => {
-    return { formItemData };
+export var mapFormItemDataProps = createSelector([getData], function (formItemData) {
+    return { formItemData: formItemData };
 });
-export const mapActionsStateToProps = createSelector([getActions], (actions) => {
-    return { actions };
+export var mapActionsStateToProps = createSelector([getActions], function (actions) {
+    return { actions: actions };
 });
 //# sourceMappingURL=select.jsx.map

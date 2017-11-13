@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,55 +18,60 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
 import { mapActionsStateToProps } from "../select";
-const mapDispatchToProps = (dispatch, ownProps) => {
-    const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
-    const { keys } = mergeSchema;
-    const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
-    for (const key in actions) {
+var mapDispatchToProps = function (dispatch, ownProps) {
+    var mergeSchema = ownProps.mergeSchema, actions = ownProps.actions, schemaFormOptions = ownProps.schemaFormOptions, schemaKey = ownProps.schemaKey, formData = ownProps.formData;
+    var keys = mergeSchema.keys;
+    var validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
+    for (var key in actions) {
         if (actions.hasOwnProperty(key)) {
-            const element = actions[key];
+            var element = actions[key];
             if (!element.assigned(dispatch)) {
                 element.assignTo(dispatch);
             }
         }
     }
     return {
-        updateItemData: (data) => {
-            actions.updateItem({ keys, data, meta: {} });
+        updateItemData: function (data) {
+            actions.updateItem({ keys: keys, data: data, meta: {} });
         },
-        validate: (data) => {
-            let result = {
+        validate: function (data) {
+            var result = {
                 dirty: true,
                 isValid: false,
                 isLoading: false,
                 errorText: ""
             };
-            let timeId = setTimeout(() => {
-                actions.updateItemMeta({ keys, meta: { isLoading: true, isValid: false, errorText: false } });
+            var timeId = setTimeout(function () {
+                actions.updateItemMeta({ keys: keys, meta: { isLoading: true, isValid: false, errorText: false } });
             }, 50);
-            validate(data).then(() => {
+            validate(data).then(function () {
                 clearTimeout(timeId);
                 result.isValid = true;
-                actions.updateItemMeta({ keys, meta: result });
-            }).catch((err) => {
+                actions.updateItemMeta({ keys: keys, meta: result });
+            }).catch(function (err) {
                 clearTimeout(timeId);
                 result.errorText = err.errors ?
                     schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
                     : err.message;
-                actions.updateItemMeta({ keys, meta: result });
+                actions.updateItemMeta({ keys: keys, meta: result });
             });
         }
     };
 };
-export const ValidateHoc = (hocFactory, Component) => {
-    let ValidateComponentHoc = class ValidateComponentHoc extends React.PureComponent {
-        render() {
-            return <Component {...this.props}/>;
+export var ValidateHoc = function (hocFactory, Component) {
+    var ValidateComponentHoc = (function (_super) {
+        __extends(ValidateComponentHoc, _super);
+        function ValidateComponentHoc() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-    };
-    ValidateComponentHoc = __decorate([
-        compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), shouldUpdate(() => false))
-    ], ValidateComponentHoc);
+        ValidateComponentHoc.prototype.render = function () {
+            return <Component {...this.props}/>;
+        };
+        ValidateComponentHoc = __decorate([
+            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), shouldUpdate(function () { return false; }))
+        ], ValidateComponentHoc);
+        return ValidateComponentHoc;
+    }(React.PureComponent));
     return ValidateComponentHoc;
 };
 //# sourceMappingURL=validate.jsx.map

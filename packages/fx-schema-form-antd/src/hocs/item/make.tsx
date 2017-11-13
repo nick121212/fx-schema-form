@@ -6,9 +6,10 @@ import { BaseFactory } from "fx-schema-form-core";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { defaultTheme } from "../../factory";
+import { UtilsHocOutProps, UtilsHoc } from "./utils";
 
-export interface MakeHocOutProps {
-    getHocOptions: () => any;
+export interface MakeHocOutProps extends UtilsHocOutProps {
+
 }
 
 /**
@@ -36,18 +37,9 @@ export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Schema
                 globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
 
             let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
-                (...hocs.map(hoc => hocFactory.get(hoc)))(Component);
+                (...["utils"].concat(hocs).map(hoc => hocFactory.get(hoc)))(Component);
 
-            return <ComponentWithHocs getHocOptions={this.getHocOptions.bind(this)} {...this.props} />;
-        }
-
-        private getHocOptions(): any {
-            const { mergeSchema, globalOptions } = this.props;
-            const { uiSchema } = mergeSchema;
-            const uiSchemaOptions = uiSchema.options || {};
-            const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
-
-            return hocOptions;
+            return <ComponentWithHocs {...this.props} />;
         }
     }
 

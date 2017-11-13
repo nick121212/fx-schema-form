@@ -1,10 +1,12 @@
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
-export class SchemaFormCreate {
-    createOne(key, data, curJjv, schema, getOriginState, updateState) {
-        let meta = new MetaData();
-        let defaultValue = curJjv.validate(schema, data).catch(() => 1);
-        let reducer = new FormReducer(updateState ? updateState({}, {
+var SchemaFormCreate = (function () {
+    function SchemaFormCreate() {
+    }
+    SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema, getOriginState, updateState) {
+        var meta = new MetaData();
+        var defaultValue = curJjv.validate(schema, data).catch(function () { return 1; });
+        var reducer = new FormReducer(updateState ? updateState({}, {
             data: data,
             meta: meta.data
         }) : {
@@ -14,8 +16,10 @@ export class SchemaFormCreate {
         meta.actions = reducer.actions;
         SchemaFormCreate.metas[key] = meta;
         return reducer;
-    }
-}
-SchemaFormCreate.metas = {};
+    };
+    SchemaFormCreate.metas = {};
+    return SchemaFormCreate;
+}());
+export { SchemaFormCreate };
 export default new SchemaFormCreate();
 //# sourceMappingURL=create.jsx.map

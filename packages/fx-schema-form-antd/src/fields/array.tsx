@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, Button, Form } from "antd";
 
 import { RC } from "../types";
 import { nsFactory, SchemaForm } from "../index";
@@ -19,8 +18,11 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
      */
     private renderItem(idx: number, maxLen: number): JSX.Element {
         const { mergeSchema, schemaKey, globalOptions, schemaFormOptions,
-            getCurrentState, ItemChildButtons, arrayLevel = [] } = this.props;
+            getCurrentState, ItemChildButtons, arrayLevel = [], getFieldOptions
+            } = this.props;
         const { uiSchema, keys } = mergeSchema;
+
+
 
         return (
             <SchemaForm
@@ -31,7 +33,7 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
                 arrayLevel={arrayLevel.concat([idx])}
                 ItemButtons={() => <ItemChildButtons {...this.props} index={idx} />}
                 parentKeys={mergeSchema.originKeys}
-                RootComponent={null}
+                RootComponent={getFieldOptions("array").root}
                 schemaKey={schemaKey}
                 uiSchema={uiSchema.items}
                 schemaFormOptions={schemaFormOptions}

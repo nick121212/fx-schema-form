@@ -31,9 +31,11 @@ let settings = new FormExampleReducer({
 let reducer: FormReducer<any> = createForms.createOne("array", {
 
 }, ajv, defaultSchema, (state: any) => {
+    let origin = state.toJS();
+
     return {
-        originMeta: state.get("meta").toJS(),
-        originData: state.get("data").toJS()
+        originMeta: origin.meta,
+        originData: origin.data
     };
 }, (state: any, data: any) => {
     if (Immutable.Map.isMap(state)) {

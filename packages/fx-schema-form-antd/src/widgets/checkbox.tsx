@@ -23,9 +23,7 @@ export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> 
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate, updateItemData } = this.props;
-        const { checkbox = {} } = uiSchemaOptions.widget || {};
-        const { checkbox: checkboxDefault = {} } = globalOptions.widget || {};
+        const { mergeSchema, arrayIndex, globalOptions, uiSchemaOptions, meta, validate, updateItemData, getWidgetOptions } = this.props;
         const { uiSchema = {}, keys } = mergeSchema;
         const { readonly = false } = uiSchema as any;
 
@@ -35,8 +33,7 @@ export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> 
                 validate((e.target as any).checked);
             }}
                 disabled={readonly}
-                {...checkbox}
-                {...checkboxDefault}
+                {...getWidgetOptions("checkbox")}
                 {...this.setDefaultProps() }
             ></Checkbox>
         );

@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 import React from "react";
 import Ajv from "ajv";
 import { Button, Popover, Popconfirm } from "antd";
@@ -16,25 +26,25 @@ defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
 defaultTheme.fieldFactory.add("gridcol", GridColField);
-for (let key in widgets) {
+for (var key in widgets) {
     if (widgets.hasOwnProperty(key)) {
-        let widget = widgets[key];
+        var widget = widgets[key];
         defaultTheme.widgetFactory.add(key, widget);
     }
 }
-for (let key in templates) {
+for (var key in templates) {
     if (templates.hasOwnProperty(key)) {
-        let template = templates[key];
+        var template = templates[key];
         defaultTheme.tempFactory.add(key, template);
     }
 }
-for (let key in templates1) {
+for (var key in templates1) {
     if (templates1.hasOwnProperty(key)) {
-        let template = templates1[key];
+        var template = templates1[key];
         defaultTheme.tempFactory.add(key, template);
     }
 }
-const curAjv = new Ajv({
+var curAjv = new Ajv({
     allErrors: true,
     removeAdditional: false,
     jsonPointers: true,
@@ -51,43 +61,56 @@ const curAjv = new Ajv({
     useDefaults: true,
     $data: true,
     errorDataPath: "property",
-    loadSchema: (uri) => {
+    loadSchema: function (uri) {
         console.log(uri);
-        return fetch(uri).then((res) => {
+        return fetch(uri).then(function (res) {
             return res.text();
         });
     }
 });
-const schemaFormOptions = {
+var schemaFormOptions = {
     ajv: curAjv
 };
-export class ItemButtons extends React.PureComponent {
-    render() {
-        const { isShow = true } = this.props.meta;
-        return (<div>
-                <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true} onClick={() => { this.props.addItem(); }}></Button>
-                <Button type={!isShow ? "dashed" : "primary"} shape="circle" icon={isShow ? "shrink" : "arrows-alt"} onClick={() => { this.props.toggleItem(); }}></Button>
-            </div>);
+var ItemButtons = (function (_super) {
+    __extends(ItemButtons, _super);
+    function ItemButtons() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-export class ItemChildButtons extends React.PureComponent {
-    render() {
-        const { index, removeItem, switchItem } = this.props;
-        const { isShow = true } = this.props.meta;
+    ItemButtons.prototype.render = function () {
+        var _this = this;
+        var _a = this.props.meta.isShow, isShow = _a === void 0 ? true : _a;
+        return (<div>
+                <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true} onClick={function () { _this.props.addItem(); }}></Button>
+                <Button type={!isShow ? "dashed" : "primary"} shape="circle" icon={isShow ? "shrink" : "arrows-alt"} onClick={function () { _this.props.toggleItem(); }}></Button>
+            </div>);
+    };
+    return ItemButtons;
+}(React.PureComponent));
+export { ItemButtons };
+var ItemChildButtons = (function (_super) {
+    __extends(ItemChildButtons, _super);
+    function ItemChildButtons() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ItemChildButtons.prototype.render = function () {
+        var _a = this.props, index = _a.index, removeItem = _a.removeItem, switchItem = _a.switchItem;
+        var _b = this.props.meta.isShow, isShow = _b === void 0 ? true : _b;
         return (<Popover placement="topLeft" title={null} content={(<div>
-                    <Popconfirm style={{ marginRight: 5 }} title="Are you sure？" onConfirm={() => {
+                    <Popconfirm style={{ marginRight: 5 }} title="Are you sure？" onConfirm={function () {
             removeItem(index);
         }} okText="Yes" cancelText="No">
                         <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
                     </Popconfirm>
-                    <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup" onClick={() => { switchItem(index, index - 1); }}></Button>
-                    <Button ghost={false} type="dashed" shape="circle" icon="unfold" onClick={() => { switchItem(index, index + 1); }}></Button>
+                    <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup" onClick={function () { switchItem(index, index - 1); }}></Button>
+                    <Button ghost={false} type="dashed" shape="circle" icon="unfold" onClick={function () { switchItem(index, index + 1); }}></Button>
                 </div>)} trigger="hover">
                 <Button icon="switch" shape="circle"></Button>
             </Popover>);
-    }
-}
-const globalOptions = {
+    };
+    return ItemChildButtons;
+}(React.PureComponent));
+export { ItemChildButtons };
+var globalOptions = {
     "ui:temp": ["formItem"],
     "boolean": {
         "widget": "switch"
@@ -134,12 +157,12 @@ curAjv.addSchema(flow);
 curAjv.addKeyword("idExists", {
     async: true,
     type: "string",
-    validate: ((sch, data) => {
-        return new Promise((resolve, reject) => {
+    validate: (function (sch, data) {
+        return new Promise(function (resolve, reject) {
             if (!data) {
                 return resolve(true);
             }
-            setTimeout(() => {
+            setTimeout(function () {
                 resolve(data === "nick");
             }, 200);
         });
