@@ -103,9 +103,12 @@ export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<Array
             const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
             let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
 
+            // 包装一个ItemChildButton的组件，用于删除，上下移动
             if (ItemChildButtons) {
                 ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
             }
+
+            // 包装一个ItemButton组件，用于添加，清空等功能
             if (ItemButtons) {
                 ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
             }
