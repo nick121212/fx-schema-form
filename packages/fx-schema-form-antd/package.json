@@ -1,8 +1,8 @@
 {
   "name": "fx-schema-form-antd",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "自动生成表单组件",
-  "main": "libs/index.js",
+  "main": "libs/index",
   "types": "libs/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
