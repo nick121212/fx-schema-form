@@ -6,7 +6,7 @@
 
 ## 功能
 
-> [fx-schema-form-antd](packages/fx-schema-form-antd/readme.md)
+> [fx-schema-form-antd](packages/fx-schema-form-react/readme.md)
 
 - 数组类型
 - 对象类型
