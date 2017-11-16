@@ -6,7 +6,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { defaultTheme } from "../../factory";
-import { UtilsHocOutProps, UtilsHoc } from "./utils";
+import { UtilsHocOutProps } from "./utils";
 
 export interface MakeHocOutProps extends UtilsHocOutProps {
 
@@ -20,28 +20,35 @@ export interface MakeHocOutProps extends UtilsHocOutProps {
  *  2. 加入属性WidgetComponent  schema对应的widgetcomponent
  *  3. HOC默认顺序：ThemeHoc -> FieldHoc -> ValidateHoc -> ArrayHoc -> TempHoc
  */
-export const MakeHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-    class MakeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
-        private fieldKey = "ui:item.hoc";
+export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+    return (Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
+        class MakeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+            private fieldKey = "ui:item.hoc";
 
-        public shouldComponentUpdate() {
-            return false;
+            public shouldComponentUpdate() {
+                return false;
+            }
+
+            public render(): JSX.Element {
+                const { mergeSchema, globalOptions } = this.props;
+                const { uiSchema = { options: {} }, keys, type } = mergeSchema;
+                const typeDefaultOptions = globalOptions[type] || {};
+                const hocs = uiSchema[this.fieldKey] ||
+                    typeDefaultOptions[this.fieldKey] ||
+                    globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
+
+                let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
+                    (...["utils"].concat(hocs).map(hoc => {
+                        if (typeof hoc !== "string") {
+                            return hoc;
+                        }
+                        return hocFactory.get(hoc)();
+                    }))(Component);
+
+                return <ComponentWithHocs {...this.props} />;
+            }
         }
 
-        public render(): JSX.Element {
-            const { mergeSchema, globalOptions } = this.props;
-            const { uiSchema = { options: {} }, keys, type } = mergeSchema;
-            const typeDefaultOptions = globalOptions[type] || {};
-            const hocs = uiSchema[this.fieldKey] ||
-                typeDefaultOptions[this.fieldKey] ||
-                globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
-
-            let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
-                (...["utils"].concat(hocs).map(hoc => hocFactory.get(hoc)))(Component);
-
-            return <ComponentWithHocs {...this.props} />;
-        }
-    }
-
-    return MakeComponentHoc;
+        return MakeComponentHoc;
+    };
 };

@@ -10,4 +10,5 @@ export interface ConditionSettings {
         val: any;
     }>;
 }
-export declare const ConditionHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<SchemaFormItemBaseProps & MakeHocOutProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: ConditionSettings) => (Component: any) => RC<SchemaFormItemBaseProps & MakeHocOutProps, any>;
+export default _default;

@@ -2,12 +2,11 @@ import React from "react";
 import Ajv, { Thenable, ValidateFunction, SchemaValidateFunction } from "ajv";
 import { Button, Popover, Popconfirm } from "antd";
 
-import { SchemaForm, createForms, hocFactory, defaultTheme } from "../index";
+import { SchemaForm, createForms, hocFactory, defaultTheme, SchemaFormReducer } from "../index";
 import { schema } from "./schema/normal";
 import normal from "./schema/normal1";
 import flow from "./schema/flow";
 import array from "./schema/array";
-
 
 import { AntdInputNumberWidget } from "./widget/number";
 import { ConditionHoc } from "./hoc/condition";
@@ -19,11 +18,12 @@ import templates from "../templates";
 import templates1 from "./templates";
 import widgets from "../widgets";
 
-// import ajvAsync from "ajv-async";
+// let schemaFormReducer = new SchemaFormReducer({}, () => {
 
-// console.log(ajvAsync);
+// });
 
-// hocFactory.add("condition", ConditionHoc.bind(ConditionHoc, hocFactory));
+
+
 defaultTheme.widgetFactory.add("number", AntdInputNumberWidget);
 defaultTheme.widgetFactory.add("integer", AntdInputNumberWidget);
 defaultTheme.fieldFactory.add("geo", GeoPositionField);
@@ -130,9 +130,6 @@ export class ItemChildButtons extends React.PureComponent<any, any> {
 
 const globalOptions = {
     "ui:temp": ["formItem"],
-    "boolean": {
-        "widget": "switch"
-    },
     "hoc": {
         "array": {
             ItemChildButtons: ItemChildButtons,
@@ -166,6 +163,13 @@ const globalOptions = {
     },
     "array": {
         "ui:temp": ["row", "col", "card"]
+    },
+    "string": {
+        "ui:temp": ["formItem"]
+    },
+    "boolean": {
+        "widget": "switch",
+        "ui:temp": ["formItem"]
     }
 };
 curAjv.addSchema(array);

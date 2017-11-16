@@ -32,7 +32,8 @@ let store = createStore<any>(combineReducers({
     "array": arrayReducer.reducer,
     "normal": normalReducer.reducer,
     "object": objectReducer.reducer,
-    "custom.hoc": cushocReducer.reducer
+    "custom.hoc": cushocReducer.reducer,
+    "schemaForm": cushocReducer.reducer
 }), immutable.Map());
 
 store.subscribe(() => {

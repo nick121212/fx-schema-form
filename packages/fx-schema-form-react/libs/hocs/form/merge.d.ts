@@ -1,3 +1,4 @@
+import { BaseFactory } from "fx-schema-form-core";
 import { RC } from "../../types";
 import { SchemaFormBaseProps } from "../../components/form/props";
 export interface MergeHocOutProps {
@@ -11,4 +12,5 @@ export interface MergeHocProps extends SchemaFormBaseProps {
         isValid: boolean;
     };
 }
-export declare const MergeHoc: (hocFactory: any, Component: RC<any, any>) => RC<MergeHocProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: RC<any, any>) => RC<MergeHocProps, any>;
+export default _default;

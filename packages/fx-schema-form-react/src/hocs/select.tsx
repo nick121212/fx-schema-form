@@ -9,6 +9,7 @@ import { SchemaFormItemBaseProps } from "../components/formitem/props";
 import { SchemaFormMeta, MetaData } from "../libs/meta";
 import { SchemaFormCreate } from "../libs/create";
 
+
 const getCurrentState = (state: any, props: SchemaFormItemBaseProps) => {
     if (props.getCurrentState) {
         return props.getCurrentState(state, props);
@@ -16,7 +17,6 @@ const getCurrentState = (state: any, props: SchemaFormItemBaseProps) => {
 
     return state[props.schemaKey];
 };
-
 
 /**
  * 获取formData的数据
@@ -113,6 +113,9 @@ export const mapMetaStateToProps = createSelector(
     }
 );
 
+/**
+ * 获取单个字段的数据
+ */
 export const mapFormItemDataProps = createSelector(
     [getData],
     (formItemData: any) => {

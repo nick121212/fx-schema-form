@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
 
-import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer, SchemaFormCreate } from "../../index";
+import { createForms, SchemaForm, SchemaFormItemBaseProps, FormReducer, SchemaFormCreate, hocFactory } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 
 const Panel = Collapse.Panel;
@@ -22,7 +22,14 @@ let schema = {
 };
 let uiSchema: any = [{
     "key": "name",
-    "ui:item.hoc": ["theme", "field", "validate", "array", "condition", "temp"],
+    "ui:item.hoc": [
+        "theme",
+        hocFactory.get("temp")({
+            templates: ["card"]
+        }),
+        "field", "validate", "array", hocFactory.get("condition")({
+            "fields": [{ "key": "/object/settings", "val": true }]
+        }), "temp"],
     "options": {
         "hoc": {
             "condition": {

@@ -6,4 +6,5 @@ export interface UtilsHocOutProps {
     getFieldOptions: (field: string) => any;
     getWidgetOptions: (widget: string) => any;
 }
-export declare const UtilsHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<SchemaFormItemBaseProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<SchemaFormItemBaseProps, any>;
+export default _default;

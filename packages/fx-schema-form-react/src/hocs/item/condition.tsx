@@ -31,40 +31,46 @@ export interface ConditionSettings {
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export const ConditionHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-    @connect(mapFormDataToProps)
-    class ConditionComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
-        private fieldKey = "ui:condition";
+export default (hocFactory: BaseFactory<any>, settings: ConditionSettings = { fields: [] }) => {
+    return (Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
+        @connect(mapFormDataToProps)
+        class ConditionComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+            private fieldKey = "ui:condition";
 
-        /**
-         * render
-         */
-        public render(): JSX.Element {
-            const { getHocOptions, formData, formDefaultData } = this.props;
-            const hocOptions = getHocOptions();
-            const { condition: conditionHocOptions } = hocOptions;
-            const { fields } = conditionHocOptions as ConditionSettings;
-            let isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
+            /**
+             * render
+             */
+            public render(): JSX.Element {
+                const { getHocOptions, formData, formDefaultData } = this.props;
+                const hocOptions = getHocOptions();
+                const { condition: conditionHocOptions } = hocOptions;
+                let { fields } = conditionHocOptions as ConditionSettings;
+                let isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
 
-            if (fields && fields.length) {
-                isShow = fields.reduce((prev: boolean, { key, val }) => {
-                    if (!jFormData.has(key)) {
-                        return prev && false;
-                    } else {
-                        let data = jFormData.get(key);
+                if (settings.fields && settings.fields.length) {
+                    fields = settings.fields;
+                }
 
-                        return prev && (data === val);
-                    }
-                }, isShow);
+                if (fields && fields.length) {
+                    isShow = fields.reduce((prev: boolean, { key, val }) => {
+                        if (!jFormData.has(key)) {
+                            return prev && false;
+                        } else {
+                            let data = jFormData.get(key);
+
+                            return prev && (data === val);
+                        }
+                    }, isShow);
+                }
+
+                if (!isShow) {
+                    return null;
+                }
+
+                return <Component {...this.props} />;
             }
-
-            if (!isShow) {
-                return null;
-            }
-
-            return <Component {...this.props} />;
         }
-    }
 
-    return ConditionComponentHoc;
+        return ConditionComponentHoc;
+    };
 };

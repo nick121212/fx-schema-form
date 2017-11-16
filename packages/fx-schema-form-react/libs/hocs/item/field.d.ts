@@ -6,4 +6,5 @@ export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;
     WidgetComponent: RC<any, any>;
 }
-export declare const FieldHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<SchemaFormItemBaseProps & ThemeHocOutProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<SchemaFormItemBaseProps & ThemeHocOutProps, any>;
+export default _default;

@@ -36,7 +36,8 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             RootComponent,
             schemaFormOptions,
             formDefaultData,
-            getCurrentState
+            getCurrentState,
+            actions
         } = this.props;
 
         let RootComponentHock = RootComponent;
@@ -45,6 +46,8 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
+
+        console.log(actions);
 
         return (
             <RootComponentHock>
@@ -59,6 +62,7 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
                             arrayIndex={arrayIndex}
                             arrayLevel={arrayLevel}
                             ItemButtons={ItemButtons}
+                            actions={actions}
                             formDefaultData={formDefaultData}
                             mergeSchemaList={mergeSchemaList}
                             mergeSchema={mergeSchema}

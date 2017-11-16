@@ -26,16 +26,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
     const { keys } = mergeSchema;
     const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
 
-    for (const key in actions) {
-        if (actions.hasOwnProperty(key)) {
-            const element = actions[key];
-
-            if (!element.assigned(dispatch)) {
-                element.assignTo(dispatch);
-            }
-        }
-    }
-
     // 返回validae方法，这里更新字段的值
     return {
         updateItemData: (data: any) => {
@@ -75,17 +65,21 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
  * 加入属性
  * currentTheme 当前的命名空间
  */
-export const ValidateHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps, any> => {
-    @(compose<SchemaFormItemBaseProps, any>(
-        connect(mapActionsStateToProps),
-        connect(null, mapDispatchToProps),
-        shouldUpdate(() => false)
-    ) as any)
-    class ValidateComponentHoc extends React.PureComponent<SchemaFormItemBaseProps, any> {
-        public render(): JSX.Element {
-            return <Component {...this.props} />;
+export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+    return (Component: any): RC<SchemaFormItemBaseProps, any> => {
+        @(compose<SchemaFormItemBaseProps, any>(
+            // connect(mapActionsStateToProps),
+            connect(null, mapDispatchToProps),
+            shouldUpdate(() => false)
+        ) as any)
+        class ValidateComponentHoc extends React.PureComponent<SchemaFormItemBaseProps, any> {
+            public render(): JSX.Element {
+                return <Component {...this.props} />;
+            }
         }
-    }
 
-    return ValidateComponentHoc;
+        return ValidateComponentHoc;
+    };
+
 };
+

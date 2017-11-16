@@ -5,4 +5,5 @@ export interface ValidateHocOutProps {
     validate?: (data: any) => void;
     updateItemData?: (data: any) => void;
 }
-export declare const ValidateHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<SchemaFormItemBaseProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<SchemaFormItemBaseProps, any>;
+export default _default;

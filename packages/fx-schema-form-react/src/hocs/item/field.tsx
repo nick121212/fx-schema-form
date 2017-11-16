@@ -21,51 +21,53 @@ export interface FieldHocOutProps {
  * 加入属性FieldComponent   schema对应的fieldcomponent
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
-export const FieldHoc = (hocFactory: BaseFactory<any>, Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps, any> => {
-    class FieldComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
-        public render(): JSX.Element | null {
-            const { mergeSchema, currentTheme } = this.props;
-            const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
-            let FieldComponent, WidgetComponent;
+export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+    return (Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps, any> => {
+        class FieldComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
+            public render(): JSX.Element | null {
+                const { mergeSchema, currentTheme } = this.props;
+                const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
+                let FieldComponent, WidgetComponent;
 
-            if (typeof mergeSchema.type === "object") {
-                mergeSchema.type = mergeSchema.type[0];
-            }
-
-            let field = uiSchema.field || mergeSchema.type;
-
-            if (typeof field === "object") {
-                if (field.length) {
-                    field = field[0];
+                if (typeof mergeSchema.type === "object") {
+                    mergeSchema.type = mergeSchema.type[0];
                 }
-            }
 
-            if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
-                FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
-            } else {
-                console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
-                return null;
-            }
+                let field = uiSchema.field || mergeSchema.type;
 
-            let widget = uiSchema.widget || mergeSchema.type;
-
-            if (typeof widget === "object") {
-                if (widget.length) {
-                    widget = widget[0];
+                if (typeof field === "object") {
+                    if (field.length) {
+                        field = field[0];
+                    }
                 }
-            }
 
-            if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
-                WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
-            } else {
-                // console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
-            }
+                if (currentTheme.fieldFactory.has(uiSchema.field || mergeSchema.type)) {
+                    FieldComponent = currentTheme.fieldFactory.get(uiSchema.field || mergeSchema.type);
+                } else {
+                    console.error(`找不到field：${uiSchema.field || mergeSchema.type}`);
+                    return null;
+                }
 
-            return <Component {...this.props}
-                FieldComponent={(FieldComponent)}
-                WidgetComponent={WidgetComponent} />;
+                let widget = uiSchema.widget || mergeSchema.type;
+
+                if (typeof widget === "object") {
+                    if (widget.length) {
+                        widget = widget[0];
+                    }
+                }
+
+                if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
+                    WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);
+                } else {
+                    // console.warn(`找不到widget：${uiSchema.widget || mergeSchema.type}`, mergeSchema);
+                }
+
+                return <Component {...this.props}
+                    FieldComponent={(FieldComponent)}
+                    WidgetComponent={WidgetComponent} />;
+            }
         }
-    }
 
-    return FieldComponentHoc;
+        return FieldComponentHoc;
+    };
 };

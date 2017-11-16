@@ -13,9 +13,6 @@ export declare class ItemChildButtons extends React.PureComponent<any, any> {
 }
 declare const globalOptions: {
     "ui:temp": string[];
-    "boolean": {
-        "widget": string;
-    };
     "hoc": {
         "array": {
             ItemChildButtons: typeof ItemChildButtons;
@@ -62,6 +59,13 @@ declare const globalOptions: {
         "ui:temp": string[];
     };
     "array": {
+        "ui:temp": string[];
+    };
+    "string": {
+        "ui:temp": string[];
+    };
+    "boolean": {
+        "widget": string;
         "ui:temp": string[];
     };
 };

@@ -12,8 +12,11 @@ export {
     ArrayHocOutProps,
     MergeHocOutProps,
     MakeHocOutProps,
-    ValidateHocOutProps
+    ValidateHocOutProps,
+    UtilsHocOutProps
 } from "./hocs";
+
+export { SchemaFormReducer } from "./reducer/schema.form";
 
 import jpp from "json-pointer";
 

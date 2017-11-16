@@ -86,64 +86,68 @@ const handlers = withHandlers({
     }
 });
 
-/**
- * 包装array的组件HOC
- * @param hocFactory  hoc的工厂方法
- * @param Component   需要包装的组件
- * 加入属性
- * arrayItems
- */
-export const ArrayHoc = (hocFactory: BaseFactory<any>, Component: any): RC<ArrayHocOutProps, any> => {
-    @(compose(handlers) as any)
-    class ArrayComponentHoc extends React.PureComponent<ArrayHocOutProps, any> {
-        public render(): JSX.Element {
-            const { mergeSchema, getHocOptions } = this.props;
-            const { type } = mergeSchema;
-            const arrayHocOptions = getHocOptions("array");
-            const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
-            let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
+export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+    /**
+     * 包装array的组件HOC
+     * @param hocFactory  hoc的工厂方法
+     * @param Component   需要包装的组件
+     * 加入属性
+     * arrayItems
+     */
+    return (Component: any): RC<ArrayHocOutProps, any> => {
+        // @(compose(handlers) as any)
+        class ArrayComponentHoc extends React.PureComponent<ArrayHocOutProps, any> {
+            public render(): JSX.Element {
+                const { mergeSchema, getHocOptions } = this.props;
+                const { type } = mergeSchema;
+                const arrayHocOptions = getHocOptions("array");
+                const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
+                let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
 
-            // 包装一个ItemChildButton的组件，用于删除，上下移动
-            if (ItemChildButtons) {
-                ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
+                // 包装一个ItemChildButton的组件，用于删除，上下移动
+                if (ItemChildButtons) {
+                    ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps),
+                        handlers,
+                        connect(mapMetaStateToProps))(ItemChildButtons);
+                }
+
+                // 包装一个ItemButton组件，用于添加，清空等功能
+                if (ItemButtons) {
+                    ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
+                }
+
+                if (type === "array") {
+                    return <Component {...this.props}
+                        ItemButtons={ItemButtonsWithHoc ? () => <ItemButtonsWithHoc {...this.props} /> : () => <span />}
+                        ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : () => <span />} />;
+                }
+
+                return <Component {...this.props} />;
             }
-
-            // 包装一个ItemButton组件，用于添加，清空等功能
-            if (ItemButtons) {
-                ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
-            }
-
-            if (type === "array") {
-                return <Component {...this.props}
-                    ItemButtons={ItemButtonsWithHoc ? () => <ItemButtonsWithHoc {...this.props} /> : () => <span />}
-                    ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : () => <span />} />;
-            }
-
-            return <Component {...this.props} />;
         }
-    }
 
-    @(compose(handlers, connect(mapFormItemDataProps)) as any)
-    class PureComponent extends React.PureComponent<any> {
-        public render() {
-            return <Component {...this.props} />;
+        @(compose(handlers, connect(mapFormItemDataProps)) as any)
+        class PureComponent extends React.PureComponent<any> {
+            public render() {
+                return <Component {...this.props} />;
+            }
         }
-    }
 
-    const spinnerWhileLoading = isLoading =>
-        branch(
-            isLoading,
-            renderComponent(PureComponent)
+        const spinnerWhileLoading = isLoading =>
+            branch(
+                isLoading,
+                renderComponent(PureComponent)
+            );
+
+        const enhance = spinnerWhileLoading(
+            props => {
+                const { mergeSchema, getHocOptions } = props;
+                const { type } = mergeSchema;
+
+                return type !== "array";
+            }
         );
 
-    const enhance = spinnerWhileLoading(
-        props => {
-            const { mergeSchema, getHocOptions } = props;
-            const { type } = mergeSchema;
-
-            return type !== "array";
-        }
-    );
-
-    return enhance(ArrayComponentHoc) as any;
+        return enhance(ArrayComponentHoc) as any;
+    };
 };

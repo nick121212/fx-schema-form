@@ -1,12 +1,13 @@
 
 import React from "react";
-import { schemaMerge } from "fx-schema-form-core";
+import { schemaMerge, BaseFactory } from "fx-schema-form-core";
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 
 import { RC } from "../../types";
 import { SchemaFormBaseProps } from "../../components/form/props";
 import { mapActionsStateToProps } from "../select";
+import { SchemaFormCreate } from "../../libs/create";
 
 /**
  * MergeHoc 添加的属性
@@ -52,46 +53,57 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormBasePro
  * schemaKey          生成的schemaKey
  * mergeSchemaList    合并之后的数据
  */
-export const MergeHoc = (hocFactory: any, Component: RC<any, any>): RC<MergeHocProps, any> => {
-    @(compose<MergeHocProps, any>(
-        onlyUpdateForKeys(["schema"]),
-        connect(null, mapDispatchToProps),
-    ) as any)
-    class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
-        public render(): JSX.Element {
-            let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey } = this.props, mergeSchemaList;
-            let formDefaultData = {}, mergeSchema = schema;
+export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+    return (Component: RC<any, any>): RC<MergeHocProps, any> => {
+        @(compose<MergeHocProps, any>(
+            onlyUpdateForKeys(["schema"]),
+            connect(mapActionsStateToProps),
+            connect(null, mapDispatchToProps),
+        ) as any)
+        class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
+            public render(): JSX.Element {
+                let { schema, uiSchema, parentKeys, schemaFormOptions, schemaKey } = this.props, mergeSchemaList;
+                let formDefaultData = {}, mergeSchema = schema;
+                let metaData = SchemaFormCreate.metas[schemaKey];
 
-            if (!schemaKey) {
-                schemaKey = (Date.now() + Math.random()).toString();
-            }
-            // 设置默认值
-            schemaFormOptions = schemaFormOptions || {
-                avjOptions: {}
-            };
-
-            // 判断schema的keys是否有值，为空则标志，这只是一个容器组件
-            if (parentKeys && !parentKeys.length) {
-                schemaFormOptions.parentKeys = schemaFormOptions.parentKeys || [];
-                if (schemaFormOptions.map.has(schemaFormOptions.parentKeys.join("/"))) {
-                    mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
+                if (!schemaKey) {
+                    schemaKey = (Date.now() + Math.random()).toString();
                 }
-            } else {
-                schemaFormOptions.parentKeys = parentKeys || [];
+                // 设置默认值
+                schemaFormOptions = schemaFormOptions || {
+                    avjOptions: {}
+                };
+
+                // 判断schema的keys是否有值，为空则标志，这只是一个容器组件
+                if (parentKeys && !parentKeys.length) {
+                    schemaFormOptions.parentKeys = schemaFormOptions.parentKeys || [];
+                    if (schemaFormOptions.map.has(schemaFormOptions.parentKeys.join("/"))) {
+                        mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
+                    }
+                } else {
+                    schemaFormOptions.parentKeys = parentKeys || [];
+                }
+                // 合并schema和uiSchema
+                mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);
+
+                // 初始化meta
+                if (schemaFormOptions && schemaFormOptions.ajv) {
+                    metaData.init(schemaFormOptions, schemaKey);
+                }
+
+                console.log(this.props);
+
+                return (
+                    <Component
+                        schemaFormOptions={schemaFormOptions || {}}
+                        schemaKey={schemaKey}
+                        mergeSchemaList={mergeSchemaList}
+                        {...this.props}>
+                    </Component>
+                );
             }
-            // 合并schema和uiSchema
-            mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);
-
-            return (
-                <Component
-                    schemaFormOptions={schemaFormOptions || {}}
-                    schemaKey={schemaKey}
-                    mergeSchemaList={mergeSchemaList}
-                    {...this.props}>
-                </Component>
-            );
         }
-    }
 
-    return MergeComponentHoc;
+        return MergeComponentHoc;
+    };
 };

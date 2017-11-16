@@ -13,4 +13,5 @@ export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOu
     ItemButtons?: new () => React.PureComponent<any>;
     ItemChildButtons?: new () => React.PureComponent<any>;
 }
-export declare const ArrayHoc: (hocFactory: BaseFactory<any>, Component: any) => RC<ArrayHocOutProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<ArrayHocOutProps, any>;
+export default _default;
