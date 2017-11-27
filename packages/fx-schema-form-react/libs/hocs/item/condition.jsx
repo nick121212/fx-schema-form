@@ -18,42 +18,48 @@ import React from "react";
 import jpp from "json-pointer";
 import { connect } from "react-redux";
 import { mapFormDataToProps } from "../select";
-export var ConditionHoc = function (hocFactory, Component) {
-    var ConditionComponentHoc = (function (_super) {
-        __extends(ConditionComponentHoc, _super);
-        function ConditionComponentHoc() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.fieldKey = "ui:condition";
-            return _this;
-        }
-        ConditionComponentHoc.prototype.render = function () {
-            var _a = this.props, getHocOptions = _a.getHocOptions, formData = _a.formData, formDefaultData = _a.formDefaultData;
-            var hocOptions = getHocOptions();
-            var conditionHocOptions = hocOptions.condition;
-            var fields = conditionHocOptions.fields;
-            var isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
-            if (fields && fields.length) {
-                isShow = fields.reduce(function (prev, _a) {
-                    var key = _a.key, val = _a.val;
-                    if (!jFormData.has(key)) {
-                        return prev && false;
-                    }
-                    else {
-                        var data = jFormData.get(key);
-                        return prev && (data === val);
-                    }
-                }, isShow);
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = { fields: [] }; }
+    return function (Component) {
+        var ConditionComponentHoc = (function (_super) {
+            __extends(ConditionComponentHoc, _super);
+            function ConditionComponentHoc() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.fieldKey = "ui:condition";
+                return _this;
             }
-            if (!isShow) {
-                return null;
-            }
-            return <Component {...this.props}/>;
-        };
-        ConditionComponentHoc = __decorate([
-            connect(mapFormDataToProps)
-        ], ConditionComponentHoc);
+            ConditionComponentHoc.prototype.render = function () {
+                var _a = this.props, getHocOptions = _a.getHocOptions, formData = _a.formData, formDefaultData = _a.formDefaultData;
+                var hocOptions = getHocOptions();
+                var conditionHocOptions = hocOptions.condition;
+                var fields = conditionHocOptions.fields;
+                var isShow = true, jFormData = jpp(Object.assign({}, formDefaultData, formData));
+                if (settings.fields && settings.fields.length) {
+                    fields = settings.fields;
+                }
+                if (fields && fields.length) {
+                    isShow = fields.reduce(function (prev, _a) {
+                        var key = _a.key, val = _a.val;
+                        if (!jFormData.has(key)) {
+                            return prev && false;
+                        }
+                        else {
+                            var data = jFormData.get(key);
+                            return prev && (data === val);
+                        }
+                    }, isShow);
+                }
+                if (!isShow) {
+                    return null;
+                }
+                return <Component {...this.props}/>;
+            };
+            ConditionComponentHoc = __decorate([
+                connect(mapFormDataToProps)
+            ], ConditionComponentHoc);
+            return ConditionComponentHoc;
+        }(React.PureComponent));
         return ConditionComponentHoc;
-    }(React.PureComponent));
-    return ConditionComponentHoc;
+    };
 };
 //# sourceMappingURL=condition.jsx.map

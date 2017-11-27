@@ -18,6 +18,8 @@ import React from "react";
 import { schemaMerge } from "fx-schema-form-core";
 import { connect } from "react-redux";
 import { compose, onlyUpdateForKeys } from "recompose";
+import { mapActionsStateToProps } from "../select";
+import { SchemaFormCreate } from "../../libs/create";
 var mapDispatchToProps = function (dispatch, ownProps) {
     var actions = ownProps.actions;
     for (var key in actions) {
@@ -30,39 +32,46 @@ var mapDispatchToProps = function (dispatch, ownProps) {
     }
     return { actions: actions };
 };
-export var MergeHoc = function (hocFactory, Component) {
-    var MergeComponentHoc = (function (_super) {
-        __extends(MergeComponentHoc, _super);
-        function MergeComponentHoc() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        MergeComponentHoc.prototype.render = function () {
-            var _a = this.props, schema = _a.schema, uiSchema = _a.uiSchema, parentKeys = _a.parentKeys, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey, mergeSchemaList;
-            var formDefaultData = {}, mergeSchema = schema;
-            if (!schemaKey) {
-                schemaKey = (Date.now() + Math.random()).toString();
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = {}; }
+    return function (Component) {
+        var MergeComponentHoc = (function (_super) {
+            __extends(MergeComponentHoc, _super);
+            function MergeComponentHoc() {
+                return _super !== null && _super.apply(this, arguments) || this;
             }
-            schemaFormOptions = schemaFormOptions || {
-                avjOptions: {}
-            };
-            if (parentKeys && !parentKeys.length) {
-                schemaFormOptions.parentKeys = schemaFormOptions.parentKeys || [];
-                if (schemaFormOptions.map.has(schemaFormOptions.parentKeys.join("/"))) {
-                    mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
+            MergeComponentHoc.prototype.render = function () {
+                var _a = this.props, schema = _a.schema, uiSchema = _a.uiSchema, parentKeys = _a.parentKeys, schemaFormOptions = _a.schemaFormOptions, schemaKey = _a.schemaKey, mergeSchemaList;
+                var formDefaultData = {}, mergeSchema = schema;
+                var metaData = SchemaFormCreate.metas[schemaKey];
+                if (!schemaKey) {
+                    schemaKey = (Date.now() + Math.random()).toString();
                 }
-            }
-            else {
-                schemaFormOptions.parentKeys = parentKeys || [];
-            }
-            mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);
-            return (<Component schemaFormOptions={schemaFormOptions || {}} schemaKey={schemaKey} mergeSchemaList={mergeSchemaList} {...this.props}>
-                </Component>);
-        };
-        MergeComponentHoc = __decorate([
-            compose(onlyUpdateForKeys(["schema"]), connect(null, mapDispatchToProps))
-        ], MergeComponentHoc);
+                schemaFormOptions = schemaFormOptions || {
+                    avjOptions: {}
+                };
+                if (parentKeys && !parentKeys.length) {
+                    schemaFormOptions.parentKeys = schemaFormOptions.parentKeys || [];
+                    if (schemaFormOptions.map.has(schemaFormOptions.parentKeys.join("/"))) {
+                        mergeSchema = schemaFormOptions.map.get(schemaFormOptions.parentKeys.join("/"));
+                    }
+                }
+                else {
+                    schemaFormOptions.parentKeys = parentKeys || [];
+                }
+                mergeSchemaList = schemaMerge.merge(schemaKey, mergeSchema, uiSchema, schemaFormOptions);
+                if (schemaFormOptions && schemaFormOptions.ajv) {
+                    metaData.init(schemaFormOptions, schemaKey);
+                }
+                return (<Component schemaFormOptions={schemaFormOptions || {}} schemaKey={schemaKey} mergeSchemaList={mergeSchemaList} {...this.props}>
+                    </Component>);
+            };
+            MergeComponentHoc = __decorate([
+                compose(onlyUpdateForKeys(["schema"]), connect(mapActionsStateToProps), connect(null, mapDispatchToProps))
+            ], MergeComponentHoc);
+            return MergeComponentHoc;
+        }(React.PureComponent));
         return MergeComponentHoc;
-    }(React.PureComponent));
-    return MergeComponentHoc;
+    };
 };
 //# sourceMappingURL=merge.jsx.map

@@ -22,61 +22,77 @@ import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 var metaConnect = compose(connect(mapMetaStateToProps), onlyUpdateForKeys(["meta"]), shouldUpdate(function (curProps, nextProps) {
     return !isEqual(curProps.meta, nextProps.meta);
 }));
-export var TempHoc = function (hocFactory, Component) {
-    var TempComponentHoc = (function (_super) {
-        __extends(TempComponentHoc, _super);
-        function TempComponentHoc() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.tempField = "ui:temp";
-            return _this;
-        }
-        TempComponentHoc.prototype.render = function () {
-            var _this = this;
-            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
-            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
-            var TempComponents = this.getTemplates();
-            var uiSchemaOptions = uiSchema.options || {};
-            var ComponentWithHoc = compose(connect(mapFormItemDataProps))(Component);
-            var index = 0;
-            return TempComponents.reduce(function (prev, _a) {
-                var key = _a.key, Temp = _a.Temp;
-                var TempWithHoc = metaConnect(Temp);
-                return <TempWithHoc globalOptions={globalOptions} tempKey={key} uiSchemaOptions={uiSchemaOptions} key={keys.join(".") + key + index++} {..._this.props} children={prev}/>;
-            }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}/>);
-        };
-        TempComponentHoc.prototype.getTemplates = function () {
-            var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
-            var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
-            var typeDefaultOptions = globalOptions[type] || {};
-            var template = uiSchema[this.tempField] ||
-                typeDefaultOptions[this.tempField] ||
-                globalOptions[this.tempField] || "default", TempComponent = [];
-            if (typeof template === "string") {
-                TempComponent.push({
-                    key: template,
-                    Temp: (currentTheme.tempFactory.get(template))
-                });
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = {
+        tempField: "ui:temp",
+        templates: [],
+        tempHoc: metaConnect
+    }; }
+    return function (Component) {
+        var TempComponentHoc = (function (_super) {
+            __extends(TempComponentHoc, _super);
+            function TempComponentHoc() {
+                return _super !== null && _super.apply(this, arguments) || this;
             }
-            else {
-                [].concat(template).reverse().forEach(function (tml, idx) {
-                    if (!currentTheme.tempFactory.has(tml || "default")) {
-                        console.error("\u4E0D\u5B58\u5728" + tml + "\u7684temp\uFF01");
+            TempComponentHoc.prototype.render = function () {
+                var _this = this;
+                var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
+                var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
+                var TempComponents = this.getTemplates();
+                var uiSchemaOptions = uiSchema.options || {};
+                var ComponentWithHoc = compose(connect(mapFormItemDataProps))(Component);
+                var index = 0;
+                return TempComponents.reduce(function (prev, _a) {
+                    var key = _a.key, Temp = _a.Temp;
+                    var TempWithHoc = (settings.tempHoc || metaConnect)(Temp);
+                    return <TempWithHoc globalOptions={globalOptions} tempKey={key} uiSchemaOptions={uiSchemaOptions} key={keys.join(".") + key + index++} {..._this.props} children={prev}/>;
+                }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}/>);
+            };
+            TempComponentHoc.prototype.getTemplates = function () {
+                var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
+                var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
+                var typeDefaultOptions = globalOptions[type] || {};
+                var template = uiSchema[settings.tempField] ||
+                    typeDefaultOptions[settings.tempField] ||
+                    globalOptions[settings.tempField] || "default", TempComponent = [];
+                if (settings.templates && settings.templates.length > 0) {
+                    template = settings.templates;
+                }
+                var getTemplate = function (tmp) {
+                    switch (tmp.constructor) {
+                        case String:
+                            if (!currentTheme.tempFactory.has(tmp)) {
+                                console.error("\u4E0D\u5B58\u5728" + tmp + "\u7684temp\uFF01");
+                            }
+                            else {
+                                TempComponent.push({
+                                    key: tmp,
+                                    Temp: currentTheme.tempFactory.get(tmp)
+                                });
+                            }
+                            break;
+                        case Object:
+                            TempComponent.push({
+                                key: tmp.name,
+                                Temp: tmp
+                            });
+                            break;
+                        case Array:
+                            [].concat(template).reverse().forEach(function (tml, idx) {
+                                getTemplate(tml);
+                            });
+                            break;
                     }
-                    else {
-                        TempComponent.push({
-                            key: tml,
-                            Temp: currentTheme.tempFactory.get(tml || "default")
-                        });
-                    }
-                });
-            }
-            return TempComponent;
-        };
-        TempComponentHoc = __decorate([
-            compose(shouldUpdate(function () { return false; }))
-        ], TempComponentHoc);
+                };
+                getTemplate(template);
+                return TempComponent;
+            };
+            TempComponentHoc = __decorate([
+                compose(shouldUpdate(function () { return false; }))
+            ], TempComponentHoc);
+            return TempComponentHoc;
+        }(React.PureComponent));
         return TempComponentHoc;
-    }(React.PureComponent));
-    return TempComponentHoc;
+    };
 };
 //# sourceMappingURL=temp.jsx.map

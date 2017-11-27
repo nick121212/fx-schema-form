@@ -4,6 +4,7 @@ export { FormReducer } from "./reducer/form";
 export { defaultTheme, nsFactory } from "./factory";
 export { default as createForms, SchemaFormCreate } from "./libs/create";
 export { hocFactory } from "./hocs";
+export { SchemaFormReducer } from "./reducer/schema.form";
 import jpp from "json-pointer";
 jpp.set = function set(obj, pointer, value) {
     var refTokens = Array.isArray(pointer) ? pointer : jpp.parse(pointer), nextTok = refTokens[0];

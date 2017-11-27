@@ -91,8 +91,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     metaData.init(schemaFormOptions, schemaKey);
                 }
 
-                console.log(this.props);
-
                 return (
                     <Component
                         schemaFormOptions={schemaFormOptions || {}}

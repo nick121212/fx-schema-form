@@ -17,19 +17,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from "react";
 import { connect } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
-import { mapActionsStateToProps } from "../select";
 var mapDispatchToProps = function (dispatch, ownProps) {
     var mergeSchema = ownProps.mergeSchema, actions = ownProps.actions, schemaFormOptions = ownProps.schemaFormOptions, schemaKey = ownProps.schemaKey, formData = ownProps.formData;
     var keys = mergeSchema.keys;
     var validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
-    for (var key in actions) {
-        if (actions.hasOwnProperty(key)) {
-            var element = actions[key];
-            if (!element.assigned(dispatch)) {
-                element.assignTo(dispatch);
-            }
-        }
-    }
     return {
         updateItemData: function (data) {
             actions.updateItem({ keys: keys, data: data, meta: {} });
@@ -58,20 +49,23 @@ var mapDispatchToProps = function (dispatch, ownProps) {
         }
     };
 };
-export var ValidateHoc = function (hocFactory, Component) {
-    var ValidateComponentHoc = (function (_super) {
-        __extends(ValidateComponentHoc, _super);
-        function ValidateComponentHoc() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ValidateComponentHoc.prototype.render = function () {
-            return <Component {...this.props}/>;
-        };
-        ValidateComponentHoc = __decorate([
-            compose(connect(mapActionsStateToProps), connect(null, mapDispatchToProps), shouldUpdate(function () { return false; }))
-        ], ValidateComponentHoc);
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = {}; }
+    return function (Component) {
+        var ValidateComponentHoc = (function (_super) {
+            __extends(ValidateComponentHoc, _super);
+            function ValidateComponentHoc() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            ValidateComponentHoc.prototype.render = function () {
+                return <Component {...this.props}/>;
+            };
+            ValidateComponentHoc = __decorate([
+                compose(connect(null, mapDispatchToProps), shouldUpdate(function () { return false; }))
+            ], ValidateComponentHoc);
+            return ValidateComponentHoc;
+        }(React.PureComponent));
         return ValidateComponentHoc;
-    }(React.PureComponent));
-    return ValidateComponentHoc;
+    };
 };
 //# sourceMappingURL=validate.jsx.map

@@ -10,26 +10,29 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import React from "react";
 import { nsFactory } from "../../index";
-export var ThemeHoc = function (hocFactory, Component) {
-    var ThemeComponentHoc = (function (_super) {
-        __extends(ThemeComponentHoc, _super);
-        function ThemeComponentHoc() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ThemeComponentHoc.prototype.render = function () {
-            var mergeSchema = this.props.mergeSchema;
-            var _a = mergeSchema.uiSchema, uiSchema = _a === void 0 ? { theme: "", field: "" } : _a;
-            var theme;
-            if (nsFactory.has(uiSchema.theme || "default")) {
-                theme = nsFactory.get(uiSchema.theme || "default");
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = {}; }
+    return function (Component) {
+        var ThemeComponentHoc = (function (_super) {
+            __extends(ThemeComponentHoc, _super);
+            function ThemeComponentHoc() {
+                return _super !== null && _super.apply(this, arguments) || this;
             }
-            else {
-                throw new Error("\u6CA1\u6709\u627E\u5230" + (uiSchema.theme || "default") + "\u7684\u6837\u5F0F\uFF01");
-            }
-            return <Component currentTheme={theme} {...this.props}/>;
-        };
+            ThemeComponentHoc.prototype.render = function () {
+                var mergeSchema = this.props.mergeSchema;
+                var _a = mergeSchema.uiSchema, uiSchema = _a === void 0 ? { theme: "", field: "" } : _a;
+                var theme;
+                if (nsFactory.has(uiSchema.theme || "default")) {
+                    theme = nsFactory.get(uiSchema.theme || "default");
+                }
+                else {
+                    throw new Error("\u6CA1\u6709\u627E\u5230" + (uiSchema.theme || "default") + "\u7684\u6837\u5F0F\uFF01");
+                }
+                return <Component currentTheme={theme} {...this.props}/>;
+            };
+            return ThemeComponentHoc;
+        }(React.PureComponent));
         return ThemeComponentHoc;
-    }(React.PureComponent));
-    return ThemeComponentHoc;
+    };
 };
 //# sourceMappingURL=theme.jsx.map

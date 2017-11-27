@@ -47,8 +47,6 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             RootComponentHock = SchemaFormBlock;
         }
 
-        console.log(actions);
-
         return (
             <RootComponentHock>
                 {
@@ -71,7 +69,7 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
                         </SchemaFormItem>;
                     })
                 }
-                {children}
+                {children || null}
             </RootComponentHock>
         );
     }

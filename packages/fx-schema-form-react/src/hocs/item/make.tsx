@@ -22,7 +22,7 @@ export interface MakeHocOutProps extends UtilsHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-        class MakeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+        class MakeComponentHoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
             private fieldKey = "ui:item.hoc";
 
             public shouldComponentUpdate() {

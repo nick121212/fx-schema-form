@@ -52,7 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import React from "react";
 import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
-import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
+import { createForms, SchemaForm, SchemaFormCreate, hocFactory } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
 var Panel = Collapse.Panel;
 var schema = {
@@ -71,7 +71,15 @@ var schema = {
 };
 var uiSchema = [{
         "key": "name",
-        "ui:item.hoc": ["theme", "field", "validate", "array", "condition", "temp"],
+        "ui:item.hoc": [
+            "theme",
+            hocFactory.get("temp")({
+                templates: ["card"]
+            }),
+            "field", "validate", "array", hocFactory.get("condition")({
+                "fields": [{ "key": "/object/settings", "val": true }]
+            }), "temp"
+        ],
         "options": {
             "hoc": {
                 "condition": {

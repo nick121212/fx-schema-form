@@ -64,56 +64,56 @@ var handlers = withHandlers({
         };
     }
 });
-export var ArrayHoc = function (hocFactory, Component) {
-    var ArrayComponentHoc = (function (_super) {
-        __extends(ArrayComponentHoc, _super);
-        function ArrayComponentHoc() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ArrayComponentHoc.prototype.render = function () {
-            var _this = this;
-            var _a = this.props, mergeSchema = _a.mergeSchema, getHocOptions = _a.getHocOptions;
+export default function (hocFactory, settings) {
+    if (settings === void 0) { settings = {}; }
+    return function (Component) {
+        var ArrayComponentHoc = (function (_super) {
+            __extends(ArrayComponentHoc, _super);
+            function ArrayComponentHoc() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            ArrayComponentHoc.prototype.render = function () {
+                var _this = this;
+                var _a = this.props, mergeSchema = _a.mergeSchema, getHocOptions = _a.getHocOptions;
+                var type = mergeSchema.type;
+                var arrayHocOptions = getHocOptions("array");
+                var _b = arrayHocOptions || {}, _c = _b.ItemChildButtons, ItemChildButtons = _c === void 0 ? null : _c, _d = _b.ItemButtons, ItemButtons = _d === void 0 ? null : _d;
+                var ItemChildButtonsWithHoc, ItemButtonsWithHoc;
+                if (ItemChildButtons) {
+                    ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
+                }
+                if (ItemButtons) {
+                    ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
+                }
+                if (type === "array") {
+                    return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? function () { return <ItemButtonsWithHoc {..._this.props}/>; } : function () { return <span />; }} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return <span />; }}/>;
+                }
+                return <Component {...this.props}/>;
+            };
+            return ArrayComponentHoc;
+        }(React.PureComponent));
+        var PureComponent = (function (_super) {
+            __extends(PureComponent, _super);
+            function PureComponent() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            PureComponent.prototype.render = function () {
+                return <Component {...this.props}/>;
+            };
+            PureComponent = __decorate([
+                compose(handlers, connect(mapFormItemDataProps))
+            ], PureComponent);
+            return PureComponent;
+        }(React.PureComponent));
+        var spinnerWhileLoading = function (isLoading) {
+            return branch(isLoading, renderComponent(PureComponent));
+        };
+        var enhance = spinnerWhileLoading(function (props) {
+            var mergeSchema = props.mergeSchema, getHocOptions = props.getHocOptions;
             var type = mergeSchema.type;
-            var arrayHocOptions = getHocOptions("array");
-            var _b = arrayHocOptions || {}, _c = _b.ItemChildButtons, ItemChildButtons = _c === void 0 ? null : _c, _d = _b.ItemButtons, ItemButtons = _d === void 0 ? null : _d;
-            var ItemChildButtonsWithHoc, ItemButtonsWithHoc;
-            if (ItemChildButtons) {
-                ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
-            }
-            if (ItemButtons) {
-                ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
-            }
-            if (type === "array") {
-                return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? function () { return <ItemButtonsWithHoc {..._this.props}/>; } : function () { return <span />; }} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return <span />; }}/>;
-            }
-            return <Component {...this.props}/>;
-        };
-        ArrayComponentHoc = __decorate([
-            compose(handlers)
-        ], ArrayComponentHoc);
-        return ArrayComponentHoc;
-    }(React.PureComponent));
-    var PureComponent = (function (_super) {
-        __extends(PureComponent, _super);
-        function PureComponent() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PureComponent.prototype.render = function () {
-            return <Component {...this.props}/>;
-        };
-        PureComponent = __decorate([
-            compose(handlers, connect(mapFormItemDataProps))
-        ], PureComponent);
-        return PureComponent;
-    }(React.PureComponent));
-    var spinnerWhileLoading = function (isLoading) {
-        return branch(isLoading, renderComponent(PureComponent));
+            return type !== "array";
+        });
+        return enhance(ArrayComponentHoc);
     };
-    var enhance = spinnerWhileLoading(function (props) {
-        var mergeSchema = props.mergeSchema, getHocOptions = props.getHocOptions;
-        var type = mergeSchema.type;
-        return type !== "array";
-    });
-    return enhance(ArrayComponentHoc);
 };
 //# sourceMappingURL=array.jsx.map

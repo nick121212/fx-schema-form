@@ -112,9 +112,6 @@ var ItemChildButtons = (function (_super) {
 export { ItemChildButtons };
 var globalOptions = {
     "ui:temp": ["formItem"],
-    "boolean": {
-        "widget": "switch"
-    },
     "hoc": {
         "array": {
             ItemChildButtons: ItemChildButtons,
@@ -148,6 +145,13 @@ var globalOptions = {
     },
     "array": {
         "ui:temp": ["row", "col", "card"]
+    },
+    "string": {
+        "ui:temp": ["formItem"]
+    },
+    "boolean": {
+        "widget": "switch",
+        "ui:temp": ["formItem"]
     }
 };
 curAjv.addSchema(array);

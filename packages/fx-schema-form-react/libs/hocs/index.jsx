@@ -1,13 +1,13 @@
 import { BaseFactory } from "fx-schema-form-core";
-import { MergeHoc } from "./form/merge";
-import { TempHoc } from "./item/temp";
-import { FieldHoc } from "./item/field";
-import { ThemeHoc } from "./item/theme";
-import { ValidateHoc } from "./item/validate";
-import { ArrayHoc } from "./item/array";
-import { MakeHoc } from "./item/make";
-import { ConditionHoc } from "./item/condition";
-import { UtilsHoc } from "./item/utils";
+import MergeHoc from "./form/merge";
+import TempHoc from "./item/temp";
+import FieldHoc from "./item/field";
+import ThemeHoc from "./item/theme";
+import ValidateHoc from "./item/validate";
+import ArrayHoc from "./item/array";
+import MakeHoc from "./item/make";
+import ConditionHoc from "./item/condition";
+import UtilsHoc from "./item/utils";
 var hocFactory = new BaseFactory();
 var hocs = {
     merge: MergeHoc.bind(MergeHoc, hocFactory),

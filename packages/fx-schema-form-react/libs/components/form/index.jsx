@@ -19,7 +19,7 @@ var SchemaFormComponent = (function (_super) {
     }
     SchemaFormComponent.prototype.render = function () {
         var _this = this;
-        var _a = this.props, children = _a.children, mergeSchemaList = _a.mergeSchemaList, schemaKey = _a.schemaKey, ItemButtons = _a.ItemButtons, arrayIndex = _a.arrayIndex, arrayLevel = _a.arrayLevel, globalOptions = _a.globalOptions, RootComponent = _a.RootComponent, schemaFormOptions = _a.schemaFormOptions, formDefaultData = _a.formDefaultData, getCurrentState = _a.getCurrentState;
+        var _a = this.props, children = _a.children, mergeSchemaList = _a.mergeSchemaList, schemaKey = _a.schemaKey, ItemButtons = _a.ItemButtons, arrayIndex = _a.arrayIndex, arrayLevel = _a.arrayLevel, globalOptions = _a.globalOptions, RootComponent = _a.RootComponent, schemaFormOptions = _a.schemaFormOptions, formDefaultData = _a.formDefaultData, getCurrentState = _a.getCurrentState, actions = _a.actions;
         var RootComponentHock = RootComponent;
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
@@ -27,10 +27,10 @@ var SchemaFormComponent = (function (_super) {
         return (<RootComponentHock>
                 {mergeSchemaList.map(function (mergeSchema, idx) {
             mergeSchema.keys = _this.mergeKeys(mergeSchema);
-            return <SchemaFormItem key={schemaKey + "-" + idx.toString() + "}"} getCurrentState={getCurrentState} schemaKey={schemaKey} arrayIndex={arrayIndex} arrayLevel={arrayLevel} ItemButtons={ItemButtons} formDefaultData={formDefaultData} mergeSchemaList={mergeSchemaList} mergeSchema={mergeSchema} schemaFormOptions={schemaFormOptions} globalOptions={globalOptions}>
+            return <SchemaFormItem key={schemaKey + "-" + idx.toString() + "}"} getCurrentState={getCurrentState} schemaKey={schemaKey} arrayIndex={arrayIndex} arrayLevel={arrayLevel} ItemButtons={ItemButtons} actions={actions} formDefaultData={formDefaultData} mergeSchemaList={mergeSchemaList} mergeSchema={mergeSchema} schemaFormOptions={schemaFormOptions} globalOptions={globalOptions}>
                         </SchemaFormItem>;
         })}
-                {children}
+                {children || null}
             </RootComponentHock>);
     };
     SchemaFormComponent.prototype.mergeKeys = function (mergeSchema) {

@@ -56,6 +56,6 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
             return this.renderItem(idx, formItemData.length);
         });
 
-        return <div style={{ width: "100%" }}>{child || null}</div >;
+        return <div style={{ width: "100%" }}>{child || null}</div>;
     }
 }

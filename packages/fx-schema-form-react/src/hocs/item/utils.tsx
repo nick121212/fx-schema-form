@@ -32,7 +32,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 return <Component
                     getHocOptions={this.getHocOptions.bind(this)}
                     getFieldOptions={this.getFieldOptions.bind(this)}
-                    getWidgetOptions={this.getFieldOptions.bind(this)}
+                    getWidgetOptions={this.getWidgetOptions.bind(this)}
                     {...this.props} />;
             }
 
@@ -55,7 +55,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * @param widget widget的名称
              */
             private getWidgetOptions(widget: string) {
-                const { mergeSchema, globalOptions, uiSchemaOptions } = this.props;
+                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = this.props;
                 const widgetOptions = uiSchemaOptions.widget || {};
                 const widgetDefaultOptions = globalOptions.widget || {};
 
