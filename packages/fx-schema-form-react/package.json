@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-react",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "description": "自动生成表单组件",
   "main": "libs/index",
   "types": "libs/index.d.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "ajv": "^5.3.0",
     "ajv-async": "^0.1.0",
-    "fx-schema-form-core": "^2.0.16",
+    "fx-schema-form-core": "^2.0.17",
     "json-pointer": "^0.6.0",
     "jsonata": "^1.3.0",
     "lodash.clonedeep": "^4.5.0",
