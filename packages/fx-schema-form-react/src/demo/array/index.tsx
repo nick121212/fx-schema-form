@@ -30,20 +30,7 @@ let settings = new FormExampleReducer({
 });
 let reducer: FormReducer<any> = createForms.createOne("array", {
 
-}, ajv, defaultSchema, (state: any) => {
-    let origin = state.toJS();
-
-    return {
-        originMeta: origin.meta,
-        originData: origin.data
-    };
-}, (state: any, data: any) => {
-    if (Immutable.Map.isMap(state)) {
-        return state.merge(data);
-    }
-
-    return Immutable.fromJS(data);
-});
+}, {}, "", ajv, defaultSchema);
 let nextKey = "array";
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {

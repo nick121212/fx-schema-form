@@ -2,6 +2,7 @@ import ajv from "ajv";
 
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
+import { conFactory } from "../container";
 
 export class SchemaFormCreate {
     public static metas: { [key: string]: MetaData } = {};
@@ -14,21 +15,16 @@ export class SchemaFormCreate {
      * @param schema          当前的json schema
      * @param updateState     更新state的方法
      */
-    public createOne<T>(key: string, data: T, curJjv?: ajv.Ajv, schema?: any,
-        getOriginState?: (state: any) => any,
-        updateState?: (state: any, data: any) => any): FormReducer<T> {
-        let meta: MetaData = new MetaData();
+    public createOne<T>(key: string, data: T, props: any, con = "jpp", curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
+        let meta: MetaData = new MetaData(con);
         let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(() => 1);
-        let reducer = new FormReducer<T>(updateState ? updateState({}, {
+        let container = conFactory.get(con);
+        let reducer = new FormReducer<T>(container.initData(props, {
             data: data,
             meta: meta.data
-        }) : {
-                data: data,
-                meta: meta.data
-            }, meta, getOriginState, updateState);
+        }), meta, props, container);
 
         meta.actions = reducer.actions;
-
         SchemaFormCreate.metas[key] = meta;
 
         return reducer;

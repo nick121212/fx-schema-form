@@ -8,8 +8,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from "react";
-import { SchemaForm } from "../index";
+import { connect } from "react-redux";
+import { shouldUpdate, compose } from "recompose";
+import { SchemaForm, } from "../index";
+import { mapFormItemDataProps } from "../hocs/select";
 var ArrayField = (function (_super) {
     __extends(ArrayField, _super);
     function ArrayField() {
@@ -17,9 +26,9 @@ var ArrayField = (function (_super) {
     }
     ArrayField.prototype.renderItem = function (idx, maxLen) {
         var _this = this;
-        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, getCurrentState = _a.getCurrentState, ItemChildButtons = _a.ItemChildButtons, _b = _a.arrayLevel, arrayLevel = _b === void 0 ? [] : _b, getFieldOptions = _a.getFieldOptions;
+        var _a = this.props, mergeSchema = _a.mergeSchema, schemaKey = _a.schemaKey, globalOptions = _a.globalOptions, schemaFormOptions = _a.schemaFormOptions, getCurrentState = _a.getCurrentState, ItemChildButtons = _a.ItemChildButtons, _b = _a.arrayLevel, arrayLevel = _b === void 0 ? [] : _b, getFieldOptions = _a.getFieldOptions, reducerKeys = _a.reducerKeys;
         var uiSchema = mergeSchema.uiSchema, keys = mergeSchema.keys;
-        return (<SchemaForm key={keys.join(".") + idx} schema={mergeSchema} getCurrentState={getCurrentState} arrayIndex={idx} arrayLevel={arrayLevel.concat([idx])} ItemButtons={function () { return <ItemChildButtons {..._this.props} index={idx}/>; }} parentKeys={mergeSchema.originKeys} RootComponent={getFieldOptions("array").root} schemaKey={schemaKey} uiSchema={uiSchema.items} schemaFormOptions={schemaFormOptions} globalOptions={globalOptions}>
+        return (<SchemaForm key={keys.join(".") + idx} schema={mergeSchema} getCurrentState={getCurrentState} arrayIndex={idx} reducerKeys={reducerKeys} arrayLevel={arrayLevel.concat([idx])} ItemButtons={function (props) { return <ItemChildButtons {..._this.props} {...props} arrayIndex={idx}/>; }} parentKeys={mergeSchema.originKeys} RootComponent={getFieldOptions("array").root} schemaKey={schemaKey} uiSchema={uiSchema.items} schemaFormOptions={schemaFormOptions} globalOptions={globalOptions}>
             </SchemaForm>);
     };
     ArrayField.prototype.render = function () {
@@ -32,7 +41,14 @@ var ArrayField = (function (_super) {
         });
         return <div style={{ width: "100%" }}>{child || null}</div>;
     };
+    ArrayField = __decorate([
+        compose(connect(mapFormItemDataProps), shouldUpdate(function (prev, next) {
+            var _a = prev.formItemData, formItemData = _a === void 0 ? [] : _a;
+            var _b = next.formItemData, formItemData1 = _b === void 0 ? [] : _b;
+            return formItemData.length !== formItemData1.length;
+        }))
+    ], ArrayField);
     return ArrayField;
-}(React.Component));
+}(React.PureComponent));
 export { ArrayField };
 //# sourceMappingURL=array.jsx.map

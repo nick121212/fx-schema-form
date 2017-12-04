@@ -1,50 +1,113 @@
 import { schemaMerge } from "../index";
 
 const schema = {
+    $async: true,
     type: "object",
-    title: "测试SCHEMA",
-    required: ["array1", "array", "name"],
-    removeAdditional: true,
+    id: "datamodel.create",
+    required: ["type", "name", "dsOption"],
     properties: {
-        name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
-        number: { type: "number", "title": "测试number类型" },
-        integer: { type: "integer", "title": "测试integer类型" },
-        boolean: { type: "boolean", "title": "测试boolean类型", default: true },
-        array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
-        object: {
+        type: {
+            type: "string",
+        },
+        name: {
+            type: "string"
+        },
+        infographicId: {
+            type: "number"
+        },
+        dsOption: {
             type: "object",
             properties: {
-                settings: { type: "boolean", default: true }
-            }
-        },
-        array1: {
-            type: "array",
-            title: "测试无限极数组类型",
-            items: {
-                type: "object",
-                required: ["test"],
-                properties: {
-                    test: { type: "string", title: "无限极测试数据", minLength: 3 },
-                    children: { $ref: "test#/properties/array1" }
+                version: {
+                    type: "number"
+                },
+                sourceType: {
+                    type: "string",
+                    enum: ["VIPDATA", "APPFLOWDATA"]
+                },
+                menuId: {
+                    type: "number"
+                },
+                parentMenuId: {
+                    type: "number"
+                },
+                params: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: {
+                                type: "string"
+                            },
+                            type: {
+                                type: "string",
+                                enum: ["fixed", "dimension", "period"]
+                            },
+                            data: {
+                                oneOf: [
+                                    { $ref: "test1#/" },
+                                    { $ref: "test1#/" },
+                                    { $ref: "test1#/" }
+                                ]
+                            }
+                        }
+                    }
                 }
             }
-        },
-        null: { type: "null", "title": "测试null类型" },
-        muti: { type: ["string", "integer", "number"], "title": "测试多类型" }
+        }
     }
 };
 
 let uiSchema: any = ["array"];
 
+let schemaaaa = {
+    type: "object",
+    required: ["dataFieldName", "correspondField"],
+    id: "test1",
+    properties: {
+        dataFieldName: {
+            type: "string"
+        },
+        correspondField: {
+            type: "string"
+        }
+    }
+};
+
+let schemadd = {
+    type: "object",
+    properties: {
+        data: {
+            oneOf: [{
+                type: "object",
+                $ref: "test1"
+            }, {
+                type: "object",
+                $ref: "test1"
+            }]
+        }
+    }
+};
+
 uiSchema = [{
-    "key": "",
-    items: [{ key: "array1/-/test" }, { key: "array1/-/children" }]
-}, {
-    "key": "array1",
-    "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+    key: "dsOption/params",
+    items: ["dsOption/params/-/type", "dsOption/params/-/name", "dsOption/params/-/data"]
 }];
 
-let options: any = {};
+
+let options: any = {
+    parentKeys: []
+};
+
+let aa1a = schemaMerge.merge("test1", schemaaaa, ["*"], options);
 let aaa = schemaMerge.merge("test", schema, uiSchema, options);
+
+// let bbb = schemaMerge.merge("test", aaa[0], aaa[0].uiSchema.items, options);
+// bbb = schemaMerge.merge("test", bbb[2].oneOf[0], ["*"], options);
+
+// let bbbb = schemaMerge.merge("test", bbb[0], bbb[0].uiSchema.items, options);
+//  bbbb = schemaMerge.merge("test", bbbb[0], bbbb[0].uiSchema.items, options);
+
+console.log(aaa);
 
 console.log(aaa);

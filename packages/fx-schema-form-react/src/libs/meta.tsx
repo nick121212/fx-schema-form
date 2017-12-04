@@ -45,6 +45,11 @@ export class MetaData {
      * 是否初始化
      */
     private isInit = false;
+
+    constructor(public readonly con: string) {
+
+    }
+
     /**
      * 初始化一个ajv
      * @param curAjv ajv的实例
@@ -77,8 +82,8 @@ export class MetaData {
         this.data.isValid = false;
 
         try {
-            let schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
-            let validate = this.schemaFormOptions.ajv.compile(schema);
+            let validate = this.schemaFormOptions.ajv.getSchema(this.curKey);
+            // let validate = this.schemaFormOptions.ajv.(schema);
 
             // this.schemaFormOptions.ajv.removeSchema
             // 调用验证方法
@@ -119,11 +124,18 @@ export class MetaData {
      * 获得当前字段的key
      * @param keys    当前字段的Keys
      */
-    public getKey(keys: Array<string>): { schemaKey: string; originEscapeKey: string; normalKey: string; escapeKey: string; } {
+    public getKey(keys: Array<string>): {
+        keys: Array<string>;
+        schemaKey: string;
+        originEscapeKey: string;
+        normalKey: string;
+        escapeKey: string;
+    } {
         const key = jpp.compile(keys);
         let escapeKey = jpp.escape(key);
 
         return {
+            keys,
             schemaKey: keys.map((k: string) => {
                 if (!Number.isNaN(Number(k))) {
                     return "-";
@@ -164,6 +176,9 @@ export class MetaData {
             let schema = this.schemaFormOptions.map.get(schemaKey);
 
             if (["array", "object"].indexOf(schema.type) >= 0) {
+                return escapeKey;
+            }
+            if (schema.oneOf && schema.oneOf.length) {
                 return escapeKey;
             }
         }
@@ -270,7 +285,7 @@ export class MetaData {
             return jpp(this.data.map).get(`${curUuid}`);
         }
 
-        return { isShow: true };
+        return null;
     }
 
     /**

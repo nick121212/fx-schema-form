@@ -4,6 +4,8 @@ import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, pure } from "recompose";
 import * as jpp from "json-pointer";
 import { BaseFactory } from "fx-schema-form-core";
+import merge from "lodash.merge";
+import resolvePathname from "resolve-pathname";
 
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
@@ -14,6 +16,8 @@ export interface UtilsHocOutProps {
     getHocOptions: (hoc?: string) => any;
     getFieldOptions: (field: string) => any;
     getWidgetOptions: (widget: string) => any;
+    getTitle(): () => any;
+    getPathKeys: (keys: string[], path: string) => string[];
 }
 
 /**
@@ -33,6 +37,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     getHocOptions={this.getHocOptions.bind(this)}
                     getFieldOptions={this.getFieldOptions.bind(this)}
                     getWidgetOptions={this.getWidgetOptions.bind(this)}
+                    getTitle={this.getTitle.bind(this)}
+                    getPathKeys={this.getPathKeys.bind(this)}
                     {...this.props} />;
             }
 
@@ -47,7 +53,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const fieldOptions = uiSchemaOptions.field || {};
                 const fieldDefaultOptions = globalOptions.field || {};
 
-                return Object.assign({}, fieldDefaultOptions[field] || {}, fieldOptions[field] || {});
+                return merge({}, fieldDefaultOptions[field] || {}, fieldOptions[field] || {});
             }
 
             /**
@@ -56,10 +62,13 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              */
             private getWidgetOptions(widget: string) {
                 const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = this.props;
-                const widgetOptions = uiSchemaOptions.widget || {};
-                const widgetDefaultOptions = globalOptions.widget || {};
+                const { options = { widget: {} } } = mergeSchema.uiSchema;
 
-                return Object.assign({}, widgetDefaultOptions[widget] || {}, widgetOptions[widget] || {});
+                const uiOptions = uiSchemaOptions.widget || {};
+                const widgetOptions = options.widget || {};
+                const widgetGlobalOptions = globalOptions.widget || {};
+
+                return merge({}, widgetGlobalOptions[widget] || {}, uiOptions[widget] || {}, widgetOptions[widget] || {});
             }
 
             /**
@@ -70,13 +79,41 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { mergeSchema, globalOptions } = this.props;
                 const { uiSchema } = mergeSchema;
                 const uiSchemaOptions = uiSchema.options || {};
-                const hocOptions = Object.assign({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+                const hocOptions = merge({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
 
                 if (hoc) {
                     return hocOptions[hoc] || {};
                 }
 
                 return hocOptions;
+            }
+
+            /**
+             * 获取标题数据
+             * uiSchema.title || title || key
+             */
+            private getTitle(): any {
+                const { mergeSchema } = this.props;
+                const { uiSchema, title, keys } = mergeSchema;
+
+                return uiSchema.title || title || [].concat(keys).pop();
+            }
+
+            /**
+             * 根据相对路径，得到keys
+             * @param keys 当前的keys
+             * @param path 路径
+             */
+            private getPathKeys(keys: Array<string>, path: string): Array<string> {
+                let keys1: string[] = resolvePathname(path, "/" + keys.join("/")).split("/");
+
+                keys1.shift();
+
+                if (keys1.length && !keys1[keys1.length - 1]) {
+                    keys1.pop();
+                }
+
+                return keys1;
             }
         }
 

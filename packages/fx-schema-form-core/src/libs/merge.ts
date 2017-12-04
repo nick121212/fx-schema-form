@@ -3,7 +3,7 @@ import * as Ajv from "ajv";
 
 import { uiSchemaSchema } from "./uischema";
 import { BaseFactory } from "./factory";
-import { array, object } from "./types";
+import { array, object, none } from "./types";
 import { UiMerge } from "./ui";
 
 
@@ -18,17 +18,24 @@ export class SchemaMerge {
      * @param schema  schema
      * @param options 参数配置
      */
-    private compileSchema(keys: Array<string>, schema: any, options: any) {
+    public compileSchema(keys: Array<string>, schema: any, options: any) {
         switch (schema.type) {
+            case undefined:
+                none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
+                break;
             case "object":
+                none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 object(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             case "array":
+                none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 array(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             default:
                 break;
         }
+
+        return schema;
     }
 
     /**
@@ -69,12 +76,11 @@ export class SchemaMerge {
         /**
          * 生成map
          */
-        this.compileSchema(options.parentKeys || [], schema, Object.assign({}, options, {
+        schema = this.compileSchema(options.parentKeys || [], schema, Object.assign({ maxDepth: 5, }, options, {
             map: options.map,
             ajv: options.ajv,
             key,
             depth: 1,
-            maxDepth: 3,
             schemaPathKey: schema.schemaPathKey || [key + "#"]
         }));
 
@@ -83,9 +89,8 @@ export class SchemaMerge {
         }
 
         // 合并
-        return this.uiMerge.merge(options.map, options.parentKeys, schema, uiSchema, Object.assign({ depth: 1 }, options, {
+        return this.uiMerge.merge(options.map, options.parentKeys, schema, uiSchema, Object.assign({ depth: 1, maxDepth: 5, }, options, {
             key,
-            maxDepth: 3,
             schemaPathKey: [`${key}#`]
         }));
     }

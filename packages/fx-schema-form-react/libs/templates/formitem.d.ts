@@ -4,6 +4,6 @@ import { SchemaFormItemProps } from "../components/formitem";
 export interface AntdFormItemTempProps extends SchemaFormItemProps {
     tempKey: string;
 }
-export declare class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any> {
+export declare class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps, any> {
     render(): JSX.Element;
 }

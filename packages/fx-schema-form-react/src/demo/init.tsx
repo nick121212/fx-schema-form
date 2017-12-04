@@ -79,12 +79,13 @@ const curAjv = new Ajv({
 });
 
 const schemaFormOptions = {
-    ajv: curAjv
+    ajv: curAjv,
+    maxDepth: 10
 };
 
 export class ItemButtons extends React.PureComponent<any, any> {
     public render() {
-        const { isShow = true } = this.props.meta;
+        const { isShow = true } = this.props.meta || {};
 
         return (
             <div>
@@ -100,8 +101,8 @@ export class ItemButtons extends React.PureComponent<any, any> {
 
 export class ItemChildButtons extends React.PureComponent<any, any> {
     public render() {
-        const { index, removeItem, switchItem } = this.props;
-        const { isShow = true } = this.props.meta;
+        const { arrayIndex, removeItem, switchItem } = this.props;
+        const { isShow = true } = this.props.meta || {};
 
         return (
             <Popover placement="topLeft" title={null} content={(
@@ -110,16 +111,16 @@ export class ItemChildButtons extends React.PureComponent<any, any> {
                         style={{ marginRight: 5 }}
                         title="Are you sure？"
                         onConfirm={() => {
-                            removeItem(index);
+                            removeItem(arrayIndex);
                         }}
                         okText="Yes"
                         cancelText="No">
                         <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
                     </Popconfirm>
                     <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup"
-                        onClick={() => { switchItem(index, index - 1); }}></Button>
+                        onClick={() => { switchItem(arrayIndex, arrayIndex - 1); }}></Button>
                     <Button ghost={false} type="dashed" shape="circle" icon="unfold"
-                        onClick={() => { switchItem(index, index + 1); }}></Button>
+                        onClick={() => { switchItem(arrayIndex, arrayIndex + 1); }}></Button>
                 </div>
             )} trigger="hover">
                 <Button icon="switch" shape="circle"></Button>

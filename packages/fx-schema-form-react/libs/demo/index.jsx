@@ -2,28 +2,20 @@ import React from "react";
 import ReactDom from "react-dom";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
-import * as immutable from "immutable";
+import Immutable from "immutable";
 import ReactPerfTool from "react-perf-tool";
 import Perf from "react-addons-perf";
 import { Provider } from "react-redux";
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import "./index.less";
 import "react-perf-tool/lib/styles.css";
-import { settings as arraySettings, reducer as arrayReducer, ArraySchemaFormComponent } from "./array";
 import { reducer as normalReducer, NormalSchemaFormComponent } from "./normal";
-import { reducer as objectReducer, ObjectSchemaFormComponent } from "./object";
-import { reducer as cushocReducer, CustomHocSchemaFormComponent } from "./custom.hoc";
 import { Menu, Icon } from "antd";
 var store = createStore(combineReducers({
-    "arraySetting": arraySettings.reducer,
-    "array": arrayReducer.reducer,
     "normal": normalReducer.reducer,
-    "object": objectReducer.reducer,
-    "custom.hoc": cushocReducer.reducer,
-    "schemaForm": cushocReducer.reducer
-}), immutable.Map());
+}), Immutable.fromJS({}));
 store.subscribe(function () {
-    console.log(store.getState().toJS().object);
+    console.log(store.getState().toJS());
 });
 ReactDom.render(<Provider store={store}>
         <Router>
@@ -47,9 +39,7 @@ ReactDom.render(<Provider store={store}>
                 </Menu>
 
                 <Route exact path="/" component={NormalSchemaFormComponent}/>
-                <Route path="/array" component={ArraySchemaFormComponent}/>
-                <Route path="/object" component={ObjectSchemaFormComponent}/>
-                <Route path="/custom.hoc" component={CustomHocSchemaFormComponent}/>
+                
             </div>
         </Router>
     </Provider>, document.getElementById("root"), console.log);

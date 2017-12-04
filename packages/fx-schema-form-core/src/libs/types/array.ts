@@ -15,7 +15,7 @@ export default (schema: any, parentKey: Array<string>, options: any) => {
             keys: [].concat(keys),
             schemaPathKey: schemaPathKey,
             resolve: true,
-            depth: options.depth
+            depth: options.depth,
         }), options);
 
         if (!options.map.has(keys.join("/"))) {

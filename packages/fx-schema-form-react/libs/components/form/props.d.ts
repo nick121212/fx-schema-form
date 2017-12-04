@@ -7,6 +7,8 @@ export interface SchemaFormBaseProps {
     globalOptions: any;
     RootComponent?: RC<any, any>;
     parentKeys?: Array<string>;
+    reducerKeys: Array<string>;
+    con?: string;
     schemaFormOptions?: any;
     actions?: any;
     getCurrentState?: (state: any, props: any) => any;

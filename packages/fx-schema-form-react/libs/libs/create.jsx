@@ -1,18 +1,18 @@
 import { FormReducer } from "../reducer/form";
 import { MetaData } from "./meta";
+import { conFactory } from "../container";
 var SchemaFormCreate = (function () {
     function SchemaFormCreate() {
     }
-    SchemaFormCreate.prototype.createOne = function (key, data, curJjv, schema, getOriginState, updateState) {
-        var meta = new MetaData();
+    SchemaFormCreate.prototype.createOne = function (key, data, props, con, curJjv, schema) {
+        if (con === void 0) { con = "jpp"; }
+        var meta = new MetaData(con);
         var defaultValue = curJjv.validate(schema, data).catch(function () { return 1; });
-        var reducer = new FormReducer(updateState ? updateState({}, {
+        var container = conFactory.get(con);
+        var reducer = new FormReducer(container.initData(props, {
             data: data,
             meta: meta.data
-        }) : {
-            data: data,
-            meta: meta.data
-        }, meta, getOriginState, updateState);
+        }), meta, props, container);
         meta.actions = reducer.actions;
         SchemaFormCreate.metas[key] = meta;
         return reducer;

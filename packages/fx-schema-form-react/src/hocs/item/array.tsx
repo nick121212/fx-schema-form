@@ -1,8 +1,9 @@
 
 import React from "react";
-import { branch, renderComponent, shouldUpdate, compose, withHandlers, renderNothing } from "recompose";
+import { branch, renderComponent, shouldUpdate, compose, withHandlers, renderNothing, onlyUpdateForKeys } from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
+import isEqual from "lodash.isequal";
 
 import { RC, NsFactory } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
@@ -12,9 +13,9 @@ import { MakeHocOutProps } from "./make";
 
 export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps, MakeHocOutProps {
     toggleItem?: () => void;
-    removeItem?: (data: number) => void;
-    addItem?: (data: any) => void;
-    switchItem?: (data: any) => void;
+    removeItem?: (index: number) => void;
+    addItem?: (data?: any) => void;
+    switchItem?: (curIndex: number, switchIndex: number) => void;
 
     ItemButtons?: new () => React.PureComponent<any>;
     ItemChildButtons?: new () => React.PureComponent<any>;
@@ -73,11 +74,11 @@ const handlers = withHandlers({
      * 添加一个项目
      */
     addItem(props: SchemaFormItemBaseProps & { actions: any }) {
-        return (defaultValue: any) => {
+        return (defaultValue?: any) => {
             const { mergeSchema, actions } = props;
             const { keys } = mergeSchema;
 
-            if (mergeSchema.items.type === "object") {
+            if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 actions.addItem({ keys, data: defaultValue || {} });
             } else {
                 actions.addItem({ keys, data: defaultValue });
@@ -106,19 +107,40 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                 // 包装一个ItemChildButton的组件，用于删除，上下移动
                 if (ItemChildButtons) {
-                    ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps),
+                    ItemChildButtonsWithHoc = compose(
+                        shouldUpdate(() => false),
+                        connect(mapFormItemDataProps),
+                        shouldUpdate((prev: ArrayHocOutProps, next: ArrayHocOutProps) => {
+                            let { formItemData = [] } = prev;
+                            let { formItemData: formItemData1 = [] } = next;
+
+                            if (formItemData.size && formItemData1.size) {
+                                return formItemData.size !== formItemData1.size;
+                            }
+
+                            return formItemData.length !== formItemData1.length;
+                        }),
                         handlers,
-                        connect(mapMetaStateToProps))(ItemChildButtons);
+                        connect(mapMetaStateToProps),
+                        shouldUpdate((curProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps) => {
+                            return !isEqual(curProps.meta, nextProps.meta);
+                        }))(ItemChildButtons);
                 }
 
                 // 包装一个ItemButton组件，用于添加，清空等功能
                 if (ItemButtons) {
-                    ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
+                    ItemButtonsWithHoc = compose(
+                        handlers,
+                        connect(mapMetaStateToProps),
+                        shouldUpdate((curProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps) => {
+                            return !isEqual(curProps.meta, nextProps.meta);
+                        })
+                    )(ItemButtons);
                 }
 
                 if (type === "array") {
                     return <Component {...this.props}
-                        ItemButtons={ItemButtonsWithHoc ? () => <ItemButtonsWithHoc {...this.props} /> : () => <span />}
+                        ItemButtons={ItemButtonsWithHoc ? (props) => <ItemButtonsWithHoc {...this.props} {...props} /> : () => <span />}
                         ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : () => <span />} />;
                 }
 
@@ -126,7 +148,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             }
         }
 
-        @(compose(handlers, connect(mapFormItemDataProps)) as any)
+        @(compose(handlers) as any)
         class PureComponent extends React.PureComponent<any> {
             public render() {
                 return <Component {...this.props} />;

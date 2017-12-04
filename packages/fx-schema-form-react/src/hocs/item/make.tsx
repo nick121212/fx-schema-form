@@ -1,11 +1,10 @@
 
 import React from "react";
-import { compose } from "recompose";
+import { compose, shouldUpdate } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
-import { defaultTheme } from "../../factory";
 import { UtilsHocOutProps } from "./utils";
 
 export interface MakeHocOutProps extends UtilsHocOutProps {
@@ -22,18 +21,15 @@ export interface MakeHocOutProps extends UtilsHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<SchemaFormItemBaseProps & MakeHocOutProps, any> => {
-        class MakeComponentHoc extends React.Component<SchemaFormItemBaseProps & MakeHocOutProps, any> {
+        @(shouldUpdate(() => false) as any)
+        class MakeComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & MakeHocOutProps, any> {
             private fieldKey = "ui:item.hoc";
-
-            public shouldComponentUpdate() {
-                return false;
-            }
 
             public render(): JSX.Element {
                 const { mergeSchema, globalOptions } = this.props;
                 const { uiSchema = { options: {} }, keys, type } = mergeSchema;
                 const typeDefaultOptions = globalOptions[type] || {};
-                const hocs = uiSchema[this.fieldKey] ||
+                const hocs = settings.hocs || uiSchema[this.fieldKey] ||
                     typeDefaultOptions[this.fieldKey] ||
                     globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
 

@@ -55,7 +55,6 @@ import { connect } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 import ReactCodeMirror from "react-codemirror";
 import isEqual from "lodash.isequal";
-import Immutable from "immutable";
 import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
 import { ajv, globalOptions } from "../init";
 import { FormExampleReducer } from "../reducer/schema";
@@ -75,18 +74,7 @@ var settings = new FormExampleReducer({
     schema: cloneDeep(defaultSchema),
     uiSchema: ["*"]
 });
-var reducer = createForms.createOne("array", {}, ajv, defaultSchema, function (state) {
-    var origin = state.toJS();
-    return {
-        originMeta: origin.meta,
-        originData: origin.data
-    };
-}, function (state, data) {
-    if (Immutable.Map.isMap(state)) {
-        return state.merge(data);
-    }
-    return Immutable.fromJS(data);
-});
+var reducer = createForms.createOne("array", {}, {}, "", ajv, defaultSchema);
 var nextKey = "array";
 var ArraySchemaFormComponent = (function (_super) {
     __extends(ArraySchemaFormComponent, _super);

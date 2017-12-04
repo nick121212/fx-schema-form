@@ -13,7 +13,7 @@ exports.default = function (schema, parentKey, options) {
             keys: [].concat(keys),
             schemaPathKey: schemaPathKey,
             resolve: true,
-            depth: options.depth
+            depth: options.depth,
         }), options);
         if (!options.map.has(keys.join("/"))) {
             options.map.add(keys.join("/"), currentSchema);

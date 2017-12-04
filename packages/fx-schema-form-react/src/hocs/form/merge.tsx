@@ -6,7 +6,7 @@ import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 
 import { RC } from "../../types";
 import { SchemaFormBaseProps } from "../../components/form/props";
-import { mapActionsStateToProps } from "../select";
+import { mapActionsStateToProps, mapActionsDispatchToProps } from "../select";
 import { SchemaFormCreate } from "../../libs/create";
 
 /**
@@ -23,28 +23,6 @@ export interface MergeHocProps extends SchemaFormBaseProps {
 }
 
 /**
- * 使得actions可以直接调用，绑定到dispatch
- * @param dispatch dispatch
- * @param ownProps 属性
- */
-const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormBaseProps) => {
-    const { actions } = ownProps;
-
-    for (const key in actions) {
-        if (actions.hasOwnProperty(key)) {
-            const element = actions[key];
-
-            if (!element.assigned(dispatch)) {
-                element.assignTo(dispatch);
-            }
-        }
-    }
-
-    return { actions };
-};
-
-
-/**
  * merge参数中的schema和uiSchema，生成新的对象mergeSchemaList，传入组件的props中
  * @param hocFactory  hoc的工厂方法
  * @param Component   需要包装的组件
@@ -58,7 +36,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
         @(compose<MergeHocProps, any>(
             onlyUpdateForKeys(["schema"]),
             connect(mapActionsStateToProps),
-            connect(null, mapDispatchToProps),
+            connect(null, mapActionsDispatchToProps),
         ) as any)
         class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
             public render(): JSX.Element {

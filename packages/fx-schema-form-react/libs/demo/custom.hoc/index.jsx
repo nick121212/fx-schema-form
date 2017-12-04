@@ -76,9 +76,7 @@ var uiSchema = [{
             hocFactory.get("temp")({
                 templates: ["card"]
             }),
-            "field", "validate", "array", hocFactory.get("condition")({
-                "fields": [{ "key": "/object/settings", "val": true }]
-            }), "temp"
+            "field", "validate", "array", "temp"
         ],
         "options": {
             "hoc": {
@@ -88,7 +86,7 @@ var uiSchema = [{
             }
         }
     }, "object/settings"];
-var reducer = createForms.createOne("custom.hoc", {}, ajv, schema);
+var reducer = createForms.createOne("custom.hoc", {}, {}, "jpp", ajv, schema);
 var CustomHocSchemaFormComponent = (function (_super) {
     __extends(CustomHocSchemaFormComponent, _super);
     function CustomHocSchemaFormComponent() {

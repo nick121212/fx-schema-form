@@ -2,6 +2,7 @@ export { SchemaForm } from "./components/form";
 export { SchemaFormItem } from "./components/formitem";
 export { FormReducer } from "./reducer/form";
 export { defaultTheme, nsFactory } from "./factory";
+export { conFactory } from "./container";
 export { default as createForms, SchemaFormCreate } from "./libs/create";
 export { hocFactory } from "./hocs";
 export { SchemaFormReducer } from "./reducer/schema.form";

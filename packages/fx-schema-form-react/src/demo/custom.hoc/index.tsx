@@ -27,9 +27,7 @@ let uiSchema: any = [{
         hocFactory.get("temp")({
             templates: ["card"]
         }),
-        "field", "validate", "array", hocFactory.get("condition")({
-            "fields": [{ "key": "/object/settings", "val": true }]
-        }), "temp"],
+        "field", "validate", "array", "temp"],
     "options": {
         "hoc": {
             "condition": {
@@ -40,7 +38,7 @@ let uiSchema: any = [{
 }, "object/settings"];
 
 let reducer: FormReducer<any> = createForms.createOne("custom.hoc", {
-}, ajv, schema);
+}, {}, "jpp", ajv, schema);
 
 @connect((state: any, props: SchemaFormItemBaseProps) => {
     let { meta, data } = state.get("custom.hoc");

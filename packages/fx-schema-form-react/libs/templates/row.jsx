@@ -8,8 +8,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from "react";
 import { Row } from "antd";
+import { shouldUpdate } from "recompose";
 var AntdRowTemp = (function (_super) {
     __extends(AntdRowTemp, _super);
     function AntdRowTemp() {
@@ -22,7 +29,10 @@ var AntdRowTemp = (function (_super) {
                 {children}
             </Row>);
     };
+    AntdRowTemp = __decorate([
+        shouldUpdate(function () { return false; })
+    ], AntdRowTemp);
     return AntdRowTemp;
-}(React.Component));
+}(React.PureComponent));
 export { AntdRowTemp };
 //# sourceMappingURL=row.jsx.map

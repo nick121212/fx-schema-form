@@ -18,20 +18,8 @@ import React from "react";
 import { schemaMerge } from "fx-schema-form-core";
 import { connect } from "react-redux";
 import { compose, onlyUpdateForKeys } from "recompose";
-import { mapActionsStateToProps } from "../select";
+import { mapActionsStateToProps, mapActionsDispatchToProps } from "../select";
 import { SchemaFormCreate } from "../../libs/create";
-var mapDispatchToProps = function (dispatch, ownProps) {
-    var actions = ownProps.actions;
-    for (var key in actions) {
-        if (actions.hasOwnProperty(key)) {
-            var element = actions[key];
-            if (!element.assigned(dispatch)) {
-                element.assignTo(dispatch);
-            }
-        }
-    }
-    return { actions: actions };
-};
 export default function (hocFactory, settings) {
     if (settings === void 0) { settings = {}; }
     return function (Component) {
@@ -67,7 +55,7 @@ export default function (hocFactory, settings) {
                     </Component>);
             };
             MergeComponentHoc = __decorate([
-                compose(onlyUpdateForKeys(["schema"]), connect(mapActionsStateToProps), connect(null, mapDispatchToProps))
+                compose(onlyUpdateForKeys(["schema"]), connect(mapActionsStateToProps), connect(null, mapActionsDispatchToProps))
             ], MergeComponentHoc);
             return MergeComponentHoc;
         }(React.PureComponent));

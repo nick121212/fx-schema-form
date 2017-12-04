@@ -1,91 +1,12 @@
 
 import React from "react";
 import { connect, Dispatch } from "react-redux";
-import *  as jpp from "json-pointer";
 import Reselect, { createSelector } from "reselect";
-import cloneDeep from "lodash.clonedeep";
 
-import { SchemaFormItemBaseProps } from "../components/formitem/props";
 import { SchemaFormMeta, MetaData } from "../libs/meta";
-import { SchemaFormCreate } from "../libs/create";
+import { conFactory } from "../container";
 
-
-const getCurrentState = (state: any, props: SchemaFormItemBaseProps) => {
-    if (props.getCurrentState) {
-        return props.getCurrentState(state, props);
-    }
-
-    return state[props.schemaKey];
-};
-
-/**
- * 获取formData的数据
- * @param state state
- * @param props 属性
- */
-export const getAllData = (state: any, props: SchemaFormItemBaseProps) => {
-    let { data = {} } = getCurrentState(state, props);
-
-    return data;
-};
-
-/**
- * 获取state中的meta数据
- * @param state 全局state
- * @param props 当前component的props
- */
-export const getData = (state: any, props: SchemaFormItemBaseProps) => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    let { data = {} } = getCurrentState(state, props);
-
-    return jpp.has(data, jpp.compile(keys)) ? jpp.get(data, jpp.compile(keys)) : undefined;
-};
-
-/**
- * 获取state中的meta数据
- * @param state 全局state
- * @param props 当前component的props
- */
-export const getMetaStateData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
-    const { schemaKey } = props;
-    const { meta } = getCurrentState(state, props);
-
-    return {
-        isLoading: meta.isLoading,
-        isValid: meta.isValid
-    };
-};
-
-/**
- * 获取state中的meta数据
- * @param state 全局state
- * @param props 当前component的props
- */
-export const getMetaData = (state: any, props: SchemaFormItemBaseProps): SchemaFormMeta => {
-    const { schemaKey, mergeSchema } = props;
-    const { keys = [] } = mergeSchema;
-    const metaData = SchemaFormCreate.metas[schemaKey];
-    const { meta } = getCurrentState(state, props);
-
-    return metaData.getMeta(keys, mergeSchema.type !== "array");
-};
-
-/**
- * 获取state中的meta数据中的actions
- * @param state 全局state
- * @param props 当前component的props
- */
-export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
-    const { schemaKey } = props;
-    const metaData = SchemaFormCreate.metas[schemaKey];
-
-    if (props.schemaFormOptions && props.schemaFormOptions.ajv) {
-        metaData.init(props.schemaFormOptions, props.schemaKey);
-    }
-
-    return metaData.actions;
-};
+const contaienr = conFactory.get("default");
 
 /**
  * 获取单个字段的信息
@@ -94,7 +15,7 @@ export const getActions = (state: any, props: SchemaFormItemBaseProps) => {
  * formItemData    当前字段的数据
  */
 export const mapFormDataToProps = createSelector(
-    [getAllData],
+    [contaienr.getAllData.bind(contaienr)],
     (formData: any) => {
         return { formData };
     }
@@ -107,7 +28,7 @@ export const mapFormDataToProps = createSelector(
  * formItemData    当前字段的数据
  */
 export const mapMetaStateToProps = createSelector(
-    [getMetaData],
+    [contaienr.getItemMeta.bind(contaienr)],
     (meta: any) => {
         return { meta };
     }
@@ -117,7 +38,7 @@ export const mapMetaStateToProps = createSelector(
  * 获取单个字段的数据
  */
 export const mapFormItemDataProps = createSelector(
-    [getData],
+    [contaienr.getItemData.bind(contaienr)],
     (formItemData: any) => {
         return { formItemData };
     }
@@ -127,8 +48,29 @@ export const mapFormItemDataProps = createSelector(
  * 返回actions
  */
 export const mapActionsStateToProps = createSelector(
-    [getActions],
+    [contaienr.getActions.bind(contaienr)],
     (actions: any) => {
         return { actions };
     }
 );
+
+/**
+ * 使得actions可以直接调用，绑定到dispatch
+ * @param dispatch dispatch
+ * @param ownProps 属性
+ */
+export const mapActionsDispatchToProps = (dispatch: Dispatch<any>, ownProps: any) => {
+    const { actions } = ownProps;
+
+    for (const key in actions) {
+        if (actions.hasOwnProperty(key)) {
+            const element = actions[key];
+
+            if (!element.assigned(dispatch)) {
+                element.assignTo(dispatch);
+            }
+        }
+    }
+
+    return { actions };
+};

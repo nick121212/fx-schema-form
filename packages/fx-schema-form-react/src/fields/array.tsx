@@ -1,8 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+import { shouldUpdate, compose } from "recompose";
 
 import { RC } from "../types";
-import { nsFactory, SchemaForm } from "../index";
+import { nsFactory, SchemaForm, } from "../index";
 import { SchemaFormItemProps } from "../components/formitem";
+import { mapFormItemDataProps } from "../hocs/select";
 
 export interface ArryFieldProps extends SchemaFormItemProps {
 
@@ -11,18 +14,28 @@ export interface ArryFieldProps extends SchemaFormItemProps {
 /**
  * 数组字段的生成规则
  */
-export class ArrayField extends React.Component<ArryFieldProps, any> {
+// @(shouldUpdate(() => false) as any)
+@(compose(connect(mapFormItemDataProps),
+    shouldUpdate((prev: ArryFieldProps, next: ArryFieldProps) => {
+        let { formItemData = [] } = prev;
+        let { formItemData: formItemData1 = [] } = next;
+
+        return formItemData.length !== formItemData1.length;
+    })) as any)
+export class ArrayField extends React.PureComponent<ArryFieldProps, any> {
     /**
      * 遍历数据，生成子表单
      * @param idx 数组的索引
      */
     private renderItem(idx: number, maxLen: number): JSX.Element {
         const { mergeSchema, schemaKey, globalOptions, schemaFormOptions,
-            getCurrentState, ItemChildButtons, arrayLevel = [], getFieldOptions
+            getCurrentState, ItemChildButtons, arrayLevel = [], getFieldOptions,
+            reducerKeys
             } = this.props;
         const { uiSchema, keys } = mergeSchema;
 
 
+        // console.log("array firldd drekdlflkadklfklalkjfkd----");
 
         return (
             <SchemaForm
@@ -30,8 +43,9 @@ export class ArrayField extends React.Component<ArryFieldProps, any> {
                 schema={mergeSchema}
                 getCurrentState={getCurrentState}
                 arrayIndex={idx}
+                reducerKeys={reducerKeys}
                 arrayLevel={arrayLevel.concat([idx])}
-                ItemButtons={() => <ItemChildButtons {...this.props} index={idx} />}
+                ItemButtons={(props) => <ItemChildButtons {...this.props} { ...props} arrayIndex={idx} />}
                 parentKeys={mergeSchema.originKeys}
                 RootComponent={getFieldOptions("array").root}
                 schemaKey={schemaKey}

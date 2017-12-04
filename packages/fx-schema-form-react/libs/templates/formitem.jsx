@@ -8,8 +8,18 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from "react";
+import { connect } from "react-redux";
+import { shouldUpdate, compose } from "recompose";
+import isEqual from "lodash.isequal";
 import { Form, Row, Col } from "antd";
+import { mapMetaStateToProps } from "../hocs/select";
 var AntdFormItemTemp = (function (_super) {
     __extends(AntdFormItemTemp, _super);
     function AntdFormItemTemp() {
@@ -20,21 +30,26 @@ var AntdFormItemTemp = (function (_super) {
         var tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
         var _d = tempOptions.hasFeedback, hasFeedback = _d === void 0 ? false : _d;
         var props = {};
-        var dirty = meta.dirty, isValid = meta.isValid, _e = meta.errorText, errorText = _e === void 0 ? "" : _e, _f = meta.isLoading, isLoading = _f === void 0 ? false : _f;
+        var _e = meta || {}, _f = _e.dirty, dirty = _f === void 0 ? false : _f, _g = _e.isValid, isValid = _g === void 0 ? true : _g, _h = _e.errorText, errorText = _h === void 0 ? "" : _h, _j = _e.isLoading, isLoading = _j === void 0 ? false : _j;
         if (dirty) {
             props.validateStatus = !isValid ? "error" : "success";
         }
         if (isLoading) {
             props.validateStatus = "validating";
         }
-        return (<Form.Item required={mergeSchema.isRequired} label={mergeSchema.title || [].concat(mergeSchema.keys).pop()} extra={mergeSchema.description} help={isValid ? "" : errorText} hasFeedback={dirty && hasFeedback} {...props} {...tempOptions}>
+        return (<Form.Item key={tempKey + isValid} required={mergeSchema.isRequired} label={mergeSchema.title || [].concat(mergeSchema.keys).pop()} extra={mergeSchema.description} help={isValid ? "" : errorText} hasFeedback={dirty && hasFeedback} {...props} {...tempOptions}>
                 <Row type="flex">
                     <Col span={20}>{children}</Col>
                     <Col offset={1} span={3}>{ItemButtons && <ItemButtons />}</Col>
                 </Row>
             </Form.Item>);
     };
+    AntdFormItemTemp = __decorate([
+        compose(shouldUpdate(function () { return false; }), connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
+            return !isEqual(curProps.meta, nextProps.meta);
+        }))
+    ], AntdFormItemTemp);
     return AntdFormItemTemp;
-}(React.Component));
+}(React.PureComponent));
 export { AntdFormItemTemp };
 //# sourceMappingURL=formitem.jsx.map

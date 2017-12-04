@@ -6,7 +6,6 @@ import ThemeHoc from "./item/theme";
 import ValidateHoc from "./item/validate";
 import ArrayHoc from "./item/array";
 import MakeHoc from "./item/make";
-import ConditionHoc from "./item/condition";
 import UtilsHoc from "./item/utils";
 var hocFactory = new BaseFactory();
 var hocs = {
@@ -17,8 +16,7 @@ var hocs = {
     validate: ValidateHoc.bind(ValidateHoc, hocFactory),
     array: ArrayHoc.bind(ArrayHoc, hocFactory),
     make: MakeHoc.bind(MakeHoc, hocFactory),
-    condition: ConditionHoc.bind(ConditionHoc, hocFactory),
-    utils: UtilsHoc.bind(UtilsHoc, hocFactory)
+    utils: UtilsHoc.bind(UtilsHoc, hocFactory),
 };
 for (var key in hocs) {
     if (hocs.hasOwnProperty(key)) {

@@ -4,6 +4,7 @@ export { SchemaFormItemBaseProps } from "./components/formitem/props";
 export { FormReducer } from "./reducer/form";
 export { defaultTheme, nsFactory } from "./factory";
 export { RC } from "./types";
+export { conFactory } from "./container";
 export { default as createForms, SchemaFormCreate } from "./libs/create";
 export {
     hocFactory,
@@ -53,6 +54,3 @@ jpp.set = function set(obj, pointer, value) {
 
     return this;
 };
-
-
-// jpp({}).set("/a", 1);

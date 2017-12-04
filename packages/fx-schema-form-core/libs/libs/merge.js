@@ -12,15 +12,21 @@ var SchemaMerge = (function () {
     }
     SchemaMerge.prototype.compileSchema = function (keys, schema, options) {
         switch (schema.type) {
+            case undefined:
+                types_1.none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
+                break;
             case "object":
+                types_1.none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 types_1.object(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             case "array":
+                types_1.none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 types_1.array(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             default:
                 break;
         }
+        return schema;
     };
     SchemaMerge.prototype.merge = function (key, schema, uiSchema, options) {
         if (uiSchema === void 0) { uiSchema = ["*"]; }
@@ -40,20 +46,18 @@ var SchemaMerge = (function () {
         if (!options.ajv.getSchema(key)) {
             options.ajv.addSchema(schema, key);
         }
-        this.compileSchema(options.parentKeys || [], schema, Object.assign({}, options, {
+        schema = this.compileSchema(options.parentKeys || [], schema, Object.assign({ maxDepth: 5, }, options, {
             map: options.map,
             ajv: options.ajv,
             key: key,
             depth: 1,
-            maxDepth: 3,
             schemaPathKey: schema.schemaPathKey || [key + "#"]
         }));
         if (options.depth) {
             options.depth++;
         }
-        return this.uiMerge.merge(options.map, options.parentKeys, schema, uiSchema, Object.assign({ depth: 1 }, options, {
+        return this.uiMerge.merge(options.map, options.parentKeys, schema, uiSchema, Object.assign({ depth: 1, maxDepth: 5, }, options, {
             key: key,
-            maxDepth: 3,
             schemaPathKey: [key + "#"]
         }));
     };

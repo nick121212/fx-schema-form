@@ -4,6 +4,7 @@ import jpp from "json-pointer";
 import cloneDeep from "lodash.clonedeep";
 
 import { MetaData, SchemaFormMeta } from "../libs/meta";
+import { ConBase } from "../container/icon";
 
 export interface SchemaFormState<T> {
     data: T;
@@ -18,6 +19,7 @@ export interface Actions {
     switchItem: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     updateMetaState: SimpleActionCreator<any>;
     updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
+    removeItemMap: SimpleActionCreator<{ keys: Array<string> }>;
     updateData: SimpleActionCreator<{ data: any }>;
 }
 
@@ -55,6 +57,8 @@ export class FormReducer<T> {
      */
     private updateData: SimpleActionCreator<{ data: any }> = createAction("更改data的值");
 
+    private removeItemMap: SimpleActionCreator<{ keys: Array<string> }> = createAction("删除元素的map以及meta数据");
+
     /**
      * 构造
      * @param initialState 初始化状态
@@ -64,8 +68,10 @@ export class FormReducer<T> {
     constructor(
         private initialState: any,
         private meta: any,
-        private getOriginState?: (state: any) => any,
-        private updateState?: (state: any, data: any) => any) { }
+        private props: any,
+        private con: ConBase<any, any, any>) {
+
+    }
 
     /**
      * 获取当前的actions
@@ -79,7 +85,8 @@ export class FormReducer<T> {
             switchItem: this.switchItem,
             updateMetaState: this.updateMetaState,
             updateItemMeta: this.updateItemMeta,
-            updateData: this.updateData
+            updateData: this.updateData,
+            removeItemMap: this.removeItemMap
         };
     }
 
@@ -96,6 +103,7 @@ export class FormReducer<T> {
             [this.updateMetaState as any]: this.updateMetaStateHandle.bind(this),
             [this.updateItemMeta as any]: this.updateMetaHandle.bind(this),
             [this.updateData as any]: this.updateDataHandle.bind(this),
+            [this.removeItemMap as any]: this.removeItemMapHandle.bind(this)
         }, this.initialState);
     }
 
@@ -105,26 +113,7 @@ export class FormReducer<T> {
      * @param data  data
      */
     private updateDataHandle(state: SchemaFormState<any>, data: any) {
-        if (this.updateState) {
-            return this.updateState(state, { data, meta: { map: {}, meta: {} } });
-        }
-
-        return Object.assign({}, state, { data, meta: { map: {}, meta: {} } });
-    }
-
-    /**
-    * 获取当前state的信息
-    * @param state 当前的state
-    */
-    private getOrigin(state: SchemaFormState<any>): { originData: any; originMeta: any } {
-        if (this.getOriginState) {
-            return this.getOriginState(state);
-        }
-
-        let originData = cloneDeep(state.data);
-        let originMeta = cloneDeep(state.meta);
-
-        return { originData, originMeta };
+        return this.con.updateState(state, this.props, { data, meta: { map: {}, meta: {} } });
     }
 
     /**
@@ -134,7 +123,7 @@ export class FormReducer<T> {
      */
     private updateMetaStateHandle(state: SchemaFormState<T>,
         { isLoading, isValid, meta }: { isLoading?: boolean; isValid?: boolean; meta?: any }): SchemaFormState<T> {
-        let { originMeta } = this.getOrigin(state);
+        let originMeta = this.con.getAllMeta(state, this.props);
 
         if (meta) {
             originMeta = meta;
@@ -147,11 +136,7 @@ export class FormReducer<T> {
             originMeta.isValid = isValid;
         }
 
-        if (this.updateState) {
-            return this.updateState(state, { meta: originMeta });
-        }
-
-        return Object.assign({}, state, { meta: originMeta });
+        return this.con.mergeData(state, this.props, { meta: originMeta });
     }
 
     /**
@@ -161,92 +146,78 @@ export class FormReducer<T> {
      */
     private updateItemHandle(state: SchemaFormState<T>,
         { keys, data, meta }: { keys: Array<string>, data: any, meta: { isValid: boolean } }): SchemaFormState<T> {
-        let { originData } = this.getOrigin(state);
-        let { normalKey } = this.meta.getKey(keys);
+        let originData = this.con.updateItem(state, this.props, data, this.meta.getKey(keys));
 
-        jpp(originData).set(normalKey, data);
-        this.meta.setMeta(keys, meta);
-
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
+        if (meta) {
+            this.meta.data = this.con.getAllMeta(state, this.props);
+            this.meta.setMeta(keys, meta);
         }
 
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     }
 
-    private updateMetaHandle(state: SchemaFormState<T>, { keys, meta }: { keys: Array<string>, meta: SchemaFormMeta }) {
-        let { originData } = this.getOrigin(state);
+    private updateMetaHandle(state: SchemaFormState<T>, { keys, meta, data }: { keys: Array<string>, meta: SchemaFormMeta, data: any }) {
         let { normalKey } = this.meta.getKey(keys);
-        let curMeta = this.meta.getMeta(keys, false) || {};
 
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.setMeta(keys, meta);
 
-        if (this.updateState) {
-            return this.updateState(state, { meta: this.meta.data });
-        }
-
-        return Object.assign({}, state, { meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }
 
     private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
         let { normalKey } = this.meta.getKey(keys);
         let curMeta = this.meta.getMeta(keys, false) || {};
 
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
 
-        if (this.updateState) {
-            return this.updateState(state, { meta: this.meta.data });
-        }
-
-        return Object.assign({}, state, { meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }
 
     private addItemHandle(state: SchemaFormState<T>, { keys, data }: { keys: Array<string>, data: any }): SchemaFormState<T> {
-        let { originData } = this.getOrigin(state);
-        let { normalKey } = this.meta.getKey(keys);
-        let curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
+        let originData = this.con.addItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys
+            }
+        }), data, this.meta.getKey(keys));
 
-        jpp(originData).set(normalKey, [...curData, data]);
-
-        if (this.updateState) {
-            return this.updateState(state, { data: originData });
-        }
-
-        return Object.assign({}, state, { data: originData });
+        return this.con.mergeData(state, this.props, { data: originData });
     }
 
     private removeItemHandle(state: SchemaFormState<T>, { keys, index }: { index: number, keys: Array<string> }): SchemaFormState<T> {
-        let { originData } = this.getOrigin(state);
-        let { normalKey } = this.meta.getKey([...keys, index.toString()]);
+        let originData = this.con.removeItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys
+            }
+        }), index, this.meta.getKey(keys));
 
-        if (originData && jpp(originData).has(normalKey)) {
-            jpp(originData).remove(normalKey);
-        }
-
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.removeMeta([...keys, index.toString()]);
 
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
-        }
-
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     }
 
     private switchItemHandle(state: SchemaFormState<T>,
         { keys, curIndex, switchIndex }: { curIndex: number; switchIndex: number; keys: Array<string>; }): SchemaFormState<T> {
-        let { originData } = this.getOrigin(state);
-        let { normalKey } = this.meta.getKey(keys);
-        let curData = jpp(originData).get(normalKey);
+        let originData = this.con.switchItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys
+            }
+        }), curIndex, switchIndex, this.meta.getKey(keys));
 
-        [curData[curIndex], curData[switchIndex]] = [curData[switchIndex], curData[curIndex]];
-
-        jpp(originData).set(normalKey, curData);
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.switchMeta(keys, curIndex, switchIndex);
 
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
-        }
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+    }
 
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+    private removeItemMapHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }) {
+        let curMeta = this.meta.getMeta(keys, false) || {};
+
+        this.meta.data = this.con.getAllMeta(state, this.props);
+        this.meta.removeMeta(keys);
+
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }
 }

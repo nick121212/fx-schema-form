@@ -15,8 +15,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from "react";
-import { branch, renderComponent, compose, withHandlers } from "recompose";
+import { branch, renderComponent, shouldUpdate, compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
+import isEqual from "lodash.isequal";
 import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 var handlers = withHandlers({
     removeItem: function (props) {
@@ -55,7 +56,7 @@ var handlers = withHandlers({
         return function (defaultValue) {
             var mergeSchema = props.mergeSchema, actions = props.actions;
             var keys = mergeSchema.keys;
-            if (mergeSchema.items.type === "object") {
+            if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 actions.addItem({ keys: keys, data: defaultValue || {} });
             }
             else {
@@ -80,13 +81,24 @@ export default function (hocFactory, settings) {
                 var _b = arrayHocOptions || {}, _c = _b.ItemChildButtons, ItemChildButtons = _c === void 0 ? null : _c, _d = _b.ItemButtons, ItemButtons = _d === void 0 ? null : _d;
                 var ItemChildButtonsWithHoc, ItemButtonsWithHoc;
                 if (ItemChildButtons) {
-                    ItemChildButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemChildButtons);
+                    ItemChildButtonsWithHoc = compose(shouldUpdate(function () { return false; }), connect(mapFormItemDataProps), shouldUpdate(function (prev, next) {
+                        var _a = prev.formItemData, formItemData = _a === void 0 ? [] : _a;
+                        var _b = next.formItemData, formItemData1 = _b === void 0 ? [] : _b;
+                        if (formItemData.size && formItemData1.size) {
+                            return formItemData.size !== formItemData1.size;
+                        }
+                        return formItemData.length !== formItemData1.length;
+                    }), handlers, connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
+                        return !isEqual(curProps.meta, nextProps.meta);
+                    }))(ItemChildButtons);
                 }
                 if (ItemButtons) {
-                    ItemButtonsWithHoc = compose(connect(mapFormItemDataProps), handlers, connect(mapMetaStateToProps))(ItemButtons);
+                    ItemButtonsWithHoc = compose(handlers, connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
+                        return !isEqual(curProps.meta, nextProps.meta);
+                    }))(ItemButtons);
                 }
                 if (type === "array") {
-                    return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? function () { return <ItemButtonsWithHoc {..._this.props}/>; } : function () { return <span />; }} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return <span />; }}/>;
+                    return <Component {...this.props} ItemButtons={ItemButtonsWithHoc ? function (props) { return <ItemButtonsWithHoc {..._this.props} {...props}/>; } : function () { return <span />; }} ItemChildButtons={ItemChildButtonsWithHoc ? ItemChildButtonsWithHoc : function () { return <span />; }}/>;
                 }
                 return <Component {...this.props}/>;
             };
@@ -101,7 +113,7 @@ export default function (hocFactory, settings) {
                 return <Component {...this.props}/>;
             };
             PureComponent = __decorate([
-                compose(handlers, connect(mapFormItemDataProps))
+                compose(handlers)
             ], PureComponent);
             return PureComponent;
         }(React.PureComponent));

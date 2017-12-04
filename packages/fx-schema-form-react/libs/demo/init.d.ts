@@ -4,6 +4,7 @@ import Ajv from "ajv";
 declare const curAjv: Ajv.Ajv;
 declare const schemaFormOptions: {
     ajv: Ajv.Ajv;
+    maxDepth: number;
 };
 export declare class ItemButtons extends React.PureComponent<any, any> {
     render(): JSX.Element;

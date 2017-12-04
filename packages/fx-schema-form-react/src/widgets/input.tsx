@@ -3,10 +3,12 @@ import { Input, Icon } from "antd";
 import { InputProps } from "antd/lib/input/Input";
 
 import { SchemaFormItemProps } from "../components/formitem";
+import { onlyUpdateForKeys } from "recompose";
 
 export interface AntdInputWidgetProps extends SchemaFormItemProps {
 }
 
+@(onlyUpdateForKeys(["formItemData"]) as any)
 export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> {
     private setDefaultProps(): InputProps {
         const { mergeSchema } = this.props;
@@ -23,7 +25,8 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
     }
 
     public render(): JSX.Element {
-        const { mergeSchema, globalOptions, uiSchemaOptions, validate, updateItemData, formItemData, getWidgetOptions } = this.props;
+        const { mergeSchema, globalOptions, uiSchemaOptions,
+            updateItemData, updateItemMeta, formItemData, getWidgetOptions } = this.props;
         const { input = {} } = uiSchemaOptions.widget || {};
         const { input: inputDefault = {} } = globalOptions.widget || {};
         const { uiSchema = {}, keys } = mergeSchema;
@@ -31,8 +34,9 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
 
         return (
             <Input
-                onBlur={() => {
-                    validate(formItemData);
+                onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
+                    // updateItemData(e.currentTarget.value);
+                    updateItemMeta(formItemData);
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
                     updateItemData(e.currentTarget.value);

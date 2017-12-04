@@ -12,8 +12,8 @@ import { MakeHocOutProps } from "./make";
 import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 
 const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps & MakeHocOutProps, any>(
+    shouldUpdate(() => false),
     connect(mapMetaStateToProps),
-    onlyUpdateForKeys(["meta"]),
     shouldUpdate((curProps: SchemaFormItemBaseProps, nextProps: SchemaFormItemBaseProps) => {
         return !isEqual(curProps.meta, nextProps.meta);
     })
@@ -35,29 +35,25 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         * 获取模板的components
         * @param uiSchema 合并后的数据
         */
-        @(compose<any, any>(shouldUpdate(() => false)) as any)
+        // @(settings.tempHoc || metaConnect)
         class TempComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
             public render(): JSX.Element {
                 const { mergeSchema, globalOptions } = this.props;
                 const { uiSchema = { options: {} }, keys } = mergeSchema;
                 const TempComponents = this.getTemplates();
                 const uiSchemaOptions = uiSchema.options || {};
-                const ComponentWithHoc = compose<any, any>(
-                    connect(mapFormItemDataProps)
-                )(Component);
-                let index = 0;
 
                 return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
-                    let TempWithHoc = (settings.tempHoc || metaConnect)(Temp);
-
+                    // let TempWithHoc = (Temp);
+                    let TempWithHoc = (Temp);
                     return <TempWithHoc
                         globalOptions={globalOptions}
                         tempKey={key}
                         uiSchemaOptions={uiSchemaOptions}
-                        key={keys.join(".") + key + index++}
+                        key={keys.join(".") + key}
                         {...this.props}
                         children={prev} />;
-                }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props} />);
+                }, <Component key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props} />);
             }
 
             /**
@@ -97,21 +93,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                         case Array:
                             [].concat(template).reverse().forEach((tml, idx) => {
                                 getTemplate(tml);
-                                // if (tml.constructor !== String) {
-                                //     TempComponent.push({
-                                //         key: tml.name,
-                                //         Temp: tml
-                                //     });
-                                // } else {
-                                //     if (!currentTheme.tempFactory.has(tml)) {
-                                //         console.error(`不存在${tml}的temp！`);
-                                //     } else {
-                                //         TempComponent.push({
-                                //             key: tml,
-                                //             Temp: currentTheme.tempFactory.get(tml)
-                                //         });
-                                //     }
-                                // }
                             });
                             break;
                     }

@@ -13,7 +13,8 @@ import { mapActionsStateToProps } from "../select";
 
 export interface ValidateHocOutProps {
     validate?: (data: any) => void;
-    updateItemData?: (data: any) => void;
+    updateItemData?: (data: any, meta?: any) => void;
+    updateItemMeta?: (data: any) => void;
 }
 
 /**
@@ -25,35 +26,38 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
     const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
+    const validateAsync = async (data: any) => {
+        let result: any = {
+            dirty: true,
+            isValid: false,
+            isLoading: false
+        };
+        let timeId = setTimeout(() => {
+            actions.updateItemMeta({ keys, meta: { isLoading: true, isValid: false, errorText: false } });
+        }, 200);
+
+        await validate(data).then(() => {
+            result.isValid = true;
+        }).catch((err) => {
+            result.errorText = err.errors ?
+                schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
+                : err.message;
+        });
+        clearTimeout(timeId);
+
+        return result;
+    };
 
     // 返回validae方法，这里更新字段的值
     return {
-        updateItemData: (data: any) => {
-            actions.updateItem({ keys, data, meta: {} });
+        validate: validateAsync,
+        updateItemData: (data: any, meta?: any) => {
+            actions.updateItem({ keys, data, meta });
         },
-        validate: (data: any) => {
-            // 验证操作
-            let result = {
-                dirty: true,
-                isValid: false,
-                isLoading: false,
-                errorText: ""
-            };
+        updateItemMeta: async (data: any) => {
+            let result = await validateAsync(data);
 
-            let timeId = setTimeout(() => {
-                actions.updateItemMeta({ keys, meta: { isLoading: true, isValid: false, errorText: false } });
-            }, 50);
-            validate(data).then(() => {
-                clearTimeout(timeId);
-                result.isValid = true;
-                actions.updateItemMeta({ keys, meta: result });
-            }).catch((err) => {
-                clearTimeout(timeId);
-                result.errorText = err.errors ?
-                    schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
-                    : err.message;
-                actions.updateItemMeta({ keys, meta: result });
-            });
+            actions.updateItemMeta({ keys, meta: result });
         }
     };
 };

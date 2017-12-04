@@ -2,47 +2,99 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("../index");
 var schema = {
+    $async: true,
     type: "object",
-    title: "测试SCHEMA",
-    required: ["array1", "array", "name"],
-    removeAdditional: true,
+    id: "datamodel.create",
+    required: ["type", "name", "dsOption"],
     properties: {
-        name: { type: "string", "title": "昵称", "default": "nora", description: "昵称，必填" },
-        number: { type: "number", "title": "测试number类型" },
-        integer: { type: "integer", "title": "测试integer类型" },
-        boolean: { type: "boolean", "title": "测试boolean类型", default: true },
-        array: { type: "array", items: { type: "string", "title": "测试array类型ITEM", minLength: 3 }, "title": "测试array类型" },
-        object: {
+        type: {
+            type: "string",
+        },
+        name: {
+            type: "string"
+        },
+        infographicId: {
+            type: "number"
+        },
+        dsOption: {
             type: "object",
             properties: {
-                settings: { type: "boolean", default: true }
-            }
-        },
-        array1: {
-            type: "array",
-            title: "测试无限极数组类型",
-            items: {
-                type: "object",
-                required: ["test"],
-                properties: {
-                    test: { type: "string", title: "无限极测试数据", minLength: 3 },
-                    children: { $ref: "test#/properties/array1" }
+                version: {
+                    type: "number"
+                },
+                sourceType: {
+                    type: "string",
+                    enum: ["VIPDATA", "APPFLOWDATA"]
+                },
+                menuId: {
+                    type: "number"
+                },
+                parentMenuId: {
+                    type: "number"
+                },
+                params: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: {
+                                type: "string"
+                            },
+                            type: {
+                                type: "string",
+                                enum: ["fixed", "dimension", "period"]
+                            },
+                            data: {
+                                oneOf: [
+                                    { $ref: "test1#/" },
+                                    { $ref: "test1#/" },
+                                    { $ref: "test1#/" }
+                                ]
+                            }
+                        }
+                    }
                 }
             }
-        },
-        null: { type: "null", "title": "测试null类型" },
-        muti: { type: ["string", "integer", "number"], "title": "测试多类型" }
+        }
     }
 };
 var uiSchema = ["array"];
+var schemaaaa = {
+    type: "object",
+    required: ["dataFieldName", "correspondField"],
+    id: "test1",
+    properties: {
+        dataFieldName: {
+            type: "string"
+        },
+        correspondField: {
+            type: "string"
+        }
+    }
+};
+var schemadd = {
+    type: "object",
+    properties: {
+        data: {
+            oneOf: [{
+                    type: "object",
+                    $ref: "test1"
+                }, {
+                    type: "object",
+                    $ref: "test1"
+                }]
+        }
+    }
+};
 uiSchema = [{
-        "key": "",
-        items: [{ key: "array1/-/test" }, { key: "array1/-/children" }]
-    }, {
-        "key": "array1",
-        "items": [{ key: "array1/-/test" }, { key: "array1/-/children" }]
+        key: "dsOption/params",
+        items: ["dsOption/params/-/type", "dsOption/params/-/name", "dsOption/params/-/data"]
     }];
-var options = {};
+var options = {
+    parentKeys: []
+};
+var aa1a = index_1.schemaMerge.merge("test1", schemaaaa, ["*"], options);
 var aaa = index_1.schemaMerge.merge("test", schema, uiSchema, options);
+console.log(aaa);
 console.log(aaa);
 //# sourceMappingURL=index.js.map

@@ -8,18 +8,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from "react";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
+import { compose, shouldUpdate } from "recompose";
 import isEqual from "lodash.isequal";
 import { connect } from "react-redux";
-import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
-var metaConnect = compose(connect(mapMetaStateToProps), onlyUpdateForKeys(["meta"]), shouldUpdate(function (curProps, nextProps) {
+import { mapMetaStateToProps } from "../select";
+var metaConnect = compose(shouldUpdate(function () { return false; }), connect(mapMetaStateToProps), shouldUpdate(function (curProps, nextProps) {
     return !isEqual(curProps.meta, nextProps.meta);
 }));
 export default function (hocFactory, settings) {
@@ -40,13 +34,11 @@ export default function (hocFactory, settings) {
                 var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys;
                 var TempComponents = this.getTemplates();
                 var uiSchemaOptions = uiSchema.options || {};
-                var ComponentWithHoc = compose(connect(mapFormItemDataProps))(Component);
-                var index = 0;
                 return TempComponents.reduce(function (prev, _a) {
                     var key = _a.key, Temp = _a.Temp;
-                    var TempWithHoc = (settings.tempHoc || metaConnect)(Temp);
-                    return <TempWithHoc globalOptions={globalOptions} tempKey={key} uiSchemaOptions={uiSchemaOptions} key={keys.join(".") + key + index++} {..._this.props} children={prev}/>;
-                }, <ComponentWithHoc key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}/>);
+                    var TempWithHoc = (Temp);
+                    return <TempWithHoc globalOptions={globalOptions} tempKey={key} uiSchemaOptions={uiSchemaOptions} key={keys.join(".") + key} {..._this.props} children={prev}/>;
+                }, <Component key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}/>);
             };
             TempComponentHoc.prototype.getTemplates = function () {
                 var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
@@ -87,9 +79,6 @@ export default function (hocFactory, settings) {
                 getTemplate(template);
                 return TempComponent;
             };
-            TempComponentHoc = __decorate([
-                compose(shouldUpdate(function () { return false; }))
-            ], TempComponentHoc);
             return TempComponentHoc;
         }(React.PureComponent));
         return TempComponentHoc;

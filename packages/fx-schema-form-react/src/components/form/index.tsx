@@ -35,6 +35,7 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             globalOptions,
             RootComponent,
             schemaFormOptions,
+            reducerKeys,
             formDefaultData,
             getCurrentState,
             actions
@@ -47,6 +48,8 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             RootComponentHock = SchemaFormBlock;
         }
 
+        console.log("form component render===========");
+
         return (
             <RootComponentHock>
                 {
@@ -58,6 +61,7 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
                             getCurrentState={getCurrentState}
                             schemaKey={schemaKey}
                             arrayIndex={arrayIndex}
+                            reducerKeys={reducerKeys}
                             arrayLevel={arrayLevel}
                             ItemButtons={ItemButtons}
                             actions={actions}
@@ -81,7 +85,20 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
         const { arrayLevel = [] } = this.props;
         let arrayLevelCopy = arrayLevel.concat([]);
 
+        // if (!mergeSchema.keys) {
+        //     mergeSchema.keys = [];
+        // }
+
+        console.log("-----", mergeSchema.keys);
+
+        if (mergeSchema.keys.constructor === Function) {
+            console.log(mergeSchema.keys());
+        }
+
         mergeSchema.originKeys = mergeSchema.keys.concat([]);
+
+
+
         return mergeSchema.keys.map((key: string) => {
             if (key === "-") {
                 return arrayLevelCopy.shift();

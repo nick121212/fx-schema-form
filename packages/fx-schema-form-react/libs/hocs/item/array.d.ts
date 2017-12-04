@@ -7,9 +7,9 @@ import { ValidateHocOutProps } from "./validate";
 import { MakeHocOutProps } from "./make";
 export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps, MakeHocOutProps {
     toggleItem?: () => void;
-    removeItem?: (data: number) => void;
-    addItem?: (data: any) => void;
-    switchItem?: (data: any) => void;
+    removeItem?: (index: number) => void;
+    addItem?: (data?: any) => void;
+    switchItem?: (curIndex: number, switchIndex: number) => void;
     ItemButtons?: new () => React.PureComponent<any>;
     ItemChildButtons?: new () => React.PureComponent<any>;
 }

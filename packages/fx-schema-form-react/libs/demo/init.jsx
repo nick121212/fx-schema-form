@@ -69,7 +69,8 @@ var curAjv = new Ajv({
     }
 });
 var schemaFormOptions = {
-    ajv: curAjv
+    ajv: curAjv,
+    maxDepth: 10
 };
 var ItemButtons = (function (_super) {
     __extends(ItemButtons, _super);
@@ -78,7 +79,7 @@ var ItemButtons = (function (_super) {
     }
     ItemButtons.prototype.render = function () {
         var _this = this;
-        var _a = this.props.meta.isShow, isShow = _a === void 0 ? true : _a;
+        var _a = (this.props.meta || {}).isShow, isShow = _a === void 0 ? true : _a;
         return (<div>
                 <Button style={{ marginRight: 5 }} type="primary" shape="circle" icon="plus" ghost={true} onClick={function () { _this.props.addItem(); }}></Button>
                 <Button type={!isShow ? "dashed" : "primary"} shape="circle" icon={isShow ? "shrink" : "arrows-alt"} onClick={function () { _this.props.toggleItem(); }}></Button>
@@ -93,16 +94,16 @@ var ItemChildButtons = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ItemChildButtons.prototype.render = function () {
-        var _a = this.props, index = _a.index, removeItem = _a.removeItem, switchItem = _a.switchItem;
-        var _b = this.props.meta.isShow, isShow = _b === void 0 ? true : _b;
+        var _a = this.props, arrayIndex = _a.arrayIndex, removeItem = _a.removeItem, switchItem = _a.switchItem;
+        var _b = (this.props.meta || {}).isShow, isShow = _b === void 0 ? true : _b;
         return (<Popover placement="topLeft" title={null} content={(<div>
                     <Popconfirm style={{ marginRight: 5 }} title="Are you sure？" onConfirm={function () {
-            removeItem(index);
+            removeItem(arrayIndex);
         }} okText="Yes" cancelText="No">
                         <Button ghost={true} type="danger" shape="circle" icon="delete"></Button>
                     </Popconfirm>
-                    <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup" onClick={function () { switchItem(index, index - 1); }}></Button>
-                    <Button ghost={false} type="dashed" shape="circle" icon="unfold" onClick={function () { switchItem(index, index + 1); }}></Button>
+                    <Button style={{ marginRight: 5 }} ghost={false} type="dashed" shape="circle" icon="packup" onClick={function () { switchItem(arrayIndex, arrayIndex - 1); }}></Button>
+                    <Button ghost={false} type="dashed" shape="circle" icon="unfold" onClick={function () { switchItem(arrayIndex, arrayIndex + 1); }}></Button>
                 </div>)} trigger="hover">
                 <Button icon="switch" shape="circle"></Button>
             </Popover>);

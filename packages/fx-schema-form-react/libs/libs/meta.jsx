@@ -36,7 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import uuid from "uuid";
 import jpp from "json-pointer";
 var MetaData = (function () {
-    function MetaData() {
+    function MetaData(con) {
+        this.con = con;
         this.data = { map: {}, meta: {} };
         this.actions = {};
         this.isInit = false;
@@ -51,7 +52,7 @@ var MetaData = (function () {
     };
     MetaData.prototype.validateAll = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var key, element, schema, validate, err_1;
+            var key, element, validate, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -67,8 +68,7 @@ var MetaData = (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        schema = this.schemaFormOptions.ajv.getSchema(this.curKey).schema;
-                        validate = this.schemaFormOptions.ajv.compile(schema);
+                        validate = this.schemaFormOptions.ajv.getSchema(this.curKey);
                         return [4, validate(data)];
                     case 2:
                         _a.sent();
@@ -105,6 +105,7 @@ var MetaData = (function () {
         var key = jpp.compile(keys);
         var escapeKey = jpp.escape(key);
         return {
+            keys: keys,
             schemaKey: keys.map(function (k) {
                 if (!Number.isNaN(Number(k))) {
                     return "-";
@@ -133,6 +134,9 @@ var MetaData = (function () {
         if (this.schemaFormOptions.map.has(schemaKey)) {
             var schema = this.schemaFormOptions.map.get(schemaKey);
             if (["array", "object"].indexOf(schema.type) >= 0) {
+                return escapeKey;
+            }
+            if (schema.oneOf && schema.oneOf.length) {
                 return escapeKey;
             }
         }
@@ -197,7 +201,7 @@ var MetaData = (function () {
         if (jpp(this.data.map).has("" + curUuid)) {
             return jpp(this.data.map).get("" + curUuid);
         }
-        return { isShow: true };
+        return null;
     };
     MetaData.prototype.setCurMetaData = function (curUuid, meta) {
         jpp(this.data.map).set("" + curUuid, meta);

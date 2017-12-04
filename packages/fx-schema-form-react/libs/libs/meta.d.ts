@@ -9,6 +9,7 @@ export interface SchemaFormMeta {
     type?: string;
 }
 export declare class MetaData {
+    readonly con: string;
     data: {
         map: any;
         meta: any;
@@ -19,10 +20,12 @@ export declare class MetaData {
     private schemaFormOptions;
     private curKey;
     private isInit;
+    constructor(con: string);
     init(schemaFormOptions: any, key: string): void;
     validateAll(data: any): Promise<any>;
     setErrors(errors: ajv.ErrorObject[]): void;
     getKey(keys: Array<string>): {
+        keys: Array<string>;
         schemaKey: string;
         originEscapeKey: string;
         normalKey: string;

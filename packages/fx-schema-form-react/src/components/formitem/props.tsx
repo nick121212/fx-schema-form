@@ -14,6 +14,8 @@ export interface SchemaFormItemBaseProps {
     formDefaultData?: any;
     formData?: any;
     formItemData?: any;
+    reducerKeys: Array<string>;
+    con?: string;
     meta?: any;
     getCurrentState?: (state: any, props: any) => any;
 }

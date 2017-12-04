@@ -54,10 +54,13 @@ import { Form, Button, Collapse } from "antd";
 import { connect } from "react-redux";
 import { createForms, SchemaForm, SchemaFormCreate } from "../../index";
 import { ajv, schemaFormOptions, globalOptions } from "../init";
+import { shouldUpdate } from "recompose";
 var Panel = Collapse.Panel;
 var schema = ajv.getSchema("normal").schema;
 var uiSchema = ["*"];
-var reducer = createForms.createOne("normal", {}, ajv, schema);
+var reducer = createForms.createOne("normal", {}, {
+    reducerKeys: []
+}, "immu", ajv, schema);
 var NormalSchemaFormComponent = (function (_super) {
     __extends(NormalSchemaFormComponent, _super);
     function NormalSchemaFormComponent() {
@@ -89,23 +92,9 @@ var NormalSchemaFormComponent = (function (_super) {
     };
     NormalSchemaFormComponent.prototype.render = function () {
         var isLoading = this.props.isLoading;
-        return (<Collapse bordered={false} defaultActiveKey={["1", "4"]}>
-                <Panel header={"schema"} key="2">
-                    {JSON.stringify(schema)}
-                </Panel>
-                <Panel header={"uiSchema"} key="5">
-                    {uiSchema ? JSON.stringify(uiSchema || {}) : {}}
-                </Panel>
-                <Panel header={"data"} key="3">
-                    {this.props.data ? JSON.stringify(this.props.data) : {}}
-                </Panel>
-                <Panel header={"meta"} key="4">
-                    {this.props.meta ? JSON.stringify(this.props.meta || {}) : {}}
-                </Panel>
+        return (<Collapse bordered={false} defaultActiveKey={["1"]}>
                 <Panel header={"生成的表单"} key="1">
-                    <SchemaForm schemaKey={"normal"} schemaFormOptions={schemaFormOptions} schema={schema} getCurrentState={function (state, props) {
-            return state.get("normal");
-        }} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
+                    <SchemaForm schemaKey={"normal"} schemaFormOptions={schemaFormOptions} schema={schema} key="293993939" reducerKeys={["normal"]} RootComponent={Form} uiSchema={uiSchema} globalOptions={globalOptions}>
                         <Form.Item labelCol={{ xs: 6, offset: 12 }} wrapperCol={{ xs: 6, offset: 12 }}>
                             <Button type="primary" loading={isLoading} onClick={this.doSubmit.bind(this)}>提交</Button>
                         </Form.Item>
@@ -114,14 +103,9 @@ var NormalSchemaFormComponent = (function (_super) {
             </Collapse>);
     };
     NormalSchemaFormComponent = __decorate([
+        shouldUpdate(function () { return false; }),
         connect(function (state, props) {
-            var _a = state.get("normal"), meta = _a.meta, data = _a.data;
-            return {
-                isValid: meta.isValid,
-                isLoading: meta.isLoading,
-                meta: meta,
-                data: data
-            };
+            return {};
         })
     ], NormalSchemaFormComponent);
     return NormalSchemaFormComponent;

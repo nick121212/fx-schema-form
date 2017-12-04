@@ -1,12 +1,10 @@
 import { createAction, createReducer } from "redux-act";
-import jpp from "json-pointer";
-import cloneDeep from "lodash.clonedeep";
 var FormReducer = (function () {
-    function FormReducer(initialState, meta, getOriginState, updateState) {
+    function FormReducer(initialState, meta, props, con) {
         this.initialState = initialState;
         this.meta = meta;
-        this.getOriginState = getOriginState;
-        this.updateState = updateState;
+        this.props = props;
+        this.con = con;
         this.updateItem = createAction("更新表单值");
         this.toggleItem = createAction("显示/隐藏元素");
         this.removeItem = createAction("删除元素");
@@ -15,6 +13,7 @@ var FormReducer = (function () {
         this.updateItemMeta = createAction("更新元素的meta信息");
         this.updateMetaState = createAction("更改meta的状态");
         this.updateData = createAction("更改data的值");
+        this.removeItemMap = createAction("删除元素的map以及meta数据");
     }
     Object.defineProperty(FormReducer.prototype, "actions", {
         get: function () {
@@ -26,7 +25,8 @@ var FormReducer = (function () {
                 switchItem: this.switchItem,
                 updateMetaState: this.updateMetaState,
                 updateItemMeta: this.updateItemMeta,
-                updateData: this.updateData
+                updateData: this.updateData,
+                removeItemMap: this.removeItemMap
             };
         },
         enumerable: true,
@@ -43,6 +43,7 @@ var FormReducer = (function () {
                 _a[this.updateMetaState] = this.updateMetaStateHandle.bind(this),
                 _a[this.updateItemMeta] = this.updateMetaHandle.bind(this),
                 _a[this.updateData] = this.updateDataHandle.bind(this),
+                _a[this.removeItemMap] = this.removeItemMapHandle.bind(this),
                 _a), this.initialState);
             var _a;
         },
@@ -50,22 +51,11 @@ var FormReducer = (function () {
         configurable: true
     });
     FormReducer.prototype.updateDataHandle = function (state, data) {
-        if (this.updateState) {
-            return this.updateState(state, { data: data, meta: { map: {}, meta: {} } });
-        }
-        return Object.assign({}, state, { data: data, meta: { map: {}, meta: {} } });
-    };
-    FormReducer.prototype.getOrigin = function (state) {
-        if (this.getOriginState) {
-            return this.getOriginState(state);
-        }
-        var originData = cloneDeep(state.data);
-        var originMeta = cloneDeep(state.meta);
-        return { originData: originData, originMeta: originMeta };
+        return this.con.updateState(state, this.props, { data: data, meta: { map: {}, meta: {} } });
     };
     FormReducer.prototype.updateMetaStateHandle = function (state, _a) {
         var isLoading = _a.isLoading, isValid = _a.isValid, meta = _a.meta;
-        var originMeta = this.getOrigin(state).originMeta;
+        var originMeta = this.con.getAllMeta(state, this.props);
         if (meta) {
             originMeta = meta;
         }
@@ -75,80 +65,69 @@ var FormReducer = (function () {
         if (isValid !== undefined) {
             originMeta.isValid = isValid;
         }
-        if (this.updateState) {
-            return this.updateState(state, { meta: originMeta });
-        }
-        return Object.assign({}, state, { meta: originMeta });
+        return this.con.mergeData(state, this.props, { meta: originMeta });
     };
     FormReducer.prototype.updateItemHandle = function (state, _a) {
         var keys = _a.keys, data = _a.data, meta = _a.meta;
-        var originData = this.getOrigin(state).originData;
-        var normalKey = this.meta.getKey(keys).normalKey;
-        jpp(originData).set(normalKey, data);
-        this.meta.setMeta(keys, meta);
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
+        var originData = this.con.updateItem(state, this.props, data, this.meta.getKey(keys));
+        if (meta) {
+            this.meta.data = this.con.getAllMeta(state, this.props);
+            this.meta.setMeta(keys, meta);
         }
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.updateMetaHandle = function (state, _a) {
-        var keys = _a.keys, meta = _a.meta;
-        var originData = this.getOrigin(state).originData;
+        var keys = _a.keys, meta = _a.meta, data = _a.data;
         var normalKey = this.meta.getKey(keys).normalKey;
-        var curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.setMeta(keys, meta);
-        if (this.updateState) {
-            return this.updateState(state, { meta: this.meta.data });
-        }
-        return Object.assign({}, state, { meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     };
     FormReducer.prototype.toggleItemHandle = function (state, _a) {
         var keys = _a.keys;
         var normalKey = this.meta.getKey(keys).normalKey;
         var curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
-        if (this.updateState) {
-            return this.updateState(state, { meta: this.meta.data });
-        }
-        return Object.assign({}, state, { meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     };
     FormReducer.prototype.addItemHandle = function (state, _a) {
         var keys = _a.keys, data = _a.data;
-        var originData = this.getOrigin(state).originData;
-        var normalKey = this.meta.getKey(keys).normalKey;
-        var curData = jpp(originData).has(normalKey) ? jpp(originData).get(normalKey) : [];
-        jpp(originData).set(normalKey, curData.concat([data]));
-        if (this.updateState) {
-            return this.updateState(state, { data: originData });
-        }
-        return Object.assign({}, state, { data: originData });
+        var originData = this.con.addItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys: keys
+            }
+        }), data, this.meta.getKey(keys));
+        return this.con.mergeData(state, this.props, { data: originData });
     };
     FormReducer.prototype.removeItemHandle = function (state, _a) {
         var keys = _a.keys, index = _a.index;
-        var originData = this.getOrigin(state).originData;
-        var normalKey = this.meta.getKey(keys.concat([index.toString()])).normalKey;
-        if (originData && jpp(originData).has(normalKey)) {
-            jpp(originData).remove(normalKey);
-        }
+        var originData = this.con.removeItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys: keys
+            }
+        }), index, this.meta.getKey(keys));
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.removeMeta(keys.concat([index.toString()]));
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
-        }
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     };
     FormReducer.prototype.switchItemHandle = function (state, _a) {
         var keys = _a.keys, curIndex = _a.curIndex, switchIndex = _a.switchIndex;
-        var originData = this.getOrigin(state).originData;
-        var normalKey = this.meta.getKey(keys).normalKey;
-        var curData = jpp(originData).get(normalKey);
-        _b = [curData[switchIndex], curData[curIndex]], curData[curIndex] = _b[0], curData[switchIndex] = _b[1];
-        jpp(originData).set(normalKey, curData);
+        var originData = this.con.switchItem(state, Object.assign({}, this.props, {
+            mergeSchema: {
+                keys: keys
+            }
+        }), curIndex, switchIndex, this.meta.getKey(keys));
+        this.meta.data = this.con.getAllMeta(state, this.props);
         this.meta.switchMeta(keys, curIndex, switchIndex);
-        if (this.updateState) {
-            return this.updateState(state, { data: originData, meta: this.meta.data });
-        }
-        return Object.assign({}, state, { data: originData, meta: this.meta.data });
-        var _b;
+        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+    };
+    FormReducer.prototype.removeItemMapHandle = function (state, _a) {
+        var keys = _a.keys;
+        var curMeta = this.meta.getMeta(keys, false) || {};
+        this.meta.data = this.con.getAllMeta(state, this.props);
+        this.meta.removeMeta(keys);
+        return this.con.mergeData(state, this.props, { meta: this.meta.data });
     };
     return FormReducer;
 }());

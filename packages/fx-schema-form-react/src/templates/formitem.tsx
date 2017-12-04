@@ -1,14 +1,24 @@
 import React from "react";
+import { connect } from "react-redux";
+import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
+import isEqual from "lodash.isequal";
 import { Form, Input, Row, Col } from "antd";
 import { FormItemProps } from "antd/lib/form/FormItem";
 
 import { SchemaFormItemProps } from "../components/formitem";
+import { mapMetaStateToProps } from "../hocs/select";
 
 export interface AntdFormItemTempProps extends SchemaFormItemProps {
     tempKey: string;
 }
 
-export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any> {
+
+@(compose(shouldUpdate(() => false),
+    connect(mapMetaStateToProps),
+    shouldUpdate((curProps: SchemaFormItemProps, nextProps: SchemaFormItemProps) => {
+        return !isEqual(curProps.meta, nextProps.meta);
+    })) as any)
+export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps, any> {
     public render(): JSX.Element {
         const { children, arrayIndex, ItemButtons, mergeSchema, globalOptions = {}, tempKey, uiSchemaOptions,
             meta = { dirty: false, isValid: true, isLoading: false }
@@ -16,7 +26,7 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
         const tempOptions = Object.assign({}, globalOptions[tempKey] || {}, uiSchemaOptions[tempKey] || {});
         const { hasFeedback = false } = tempOptions;
         let props: FormItemProps = {};
-        let { dirty, isValid, errorText = "", isLoading = false } = meta;
+        let { dirty = false, isValid = true, errorText = "", isLoading = false } = meta || {};
 
         if (dirty) {
             props.validateStatus = !isValid ? "error" : "success";
@@ -28,6 +38,7 @@ export class AntdFormItemTemp extends React.Component<AntdFormItemTempProps, any
 
         return (
             <Form.Item
+                key={tempKey + isValid}
                 required={mergeSchema.isRequired}
                 label={mergeSchema.title || [].concat(mergeSchema.keys).pop()}
                 extra={mergeSchema.description}

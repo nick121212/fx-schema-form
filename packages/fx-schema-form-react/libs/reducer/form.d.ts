@@ -1,5 +1,6 @@
 import { SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux";
+import { ConBase } from "../container/icon";
 export interface SchemaFormState<T> {
     data: T;
     meta: any;
@@ -29,6 +30,9 @@ export interface Actions {
         keys: Array<string>;
         data: any;
     }>;
+    removeItemMap: SimpleActionCreator<{
+        keys: Array<string>;
+    }>;
     updateData: SimpleActionCreator<{
         data: any;
     }>;
@@ -36,8 +40,8 @@ export interface Actions {
 export declare class FormReducer<T> {
     private initialState;
     private meta;
-    private getOriginState;
-    private updateState;
+    private props;
+    private con;
     private updateItem;
     private toggleItem;
     private removeItem;
@@ -46,16 +50,17 @@ export declare class FormReducer<T> {
     private updateItemMeta;
     private updateMetaState;
     private updateData;
-    constructor(initialState: any, meta: any, getOriginState?: (state: any) => any, updateState?: (state: any, data: any) => any);
+    private removeItemMap;
+    constructor(initialState: any, meta: any, props: any, con: ConBase<any, any, any>);
     readonly actions: Actions;
     readonly reducer: Reducer<any>;
     private updateDataHandle(state, data);
-    private getOrigin(state);
     private updateMetaStateHandle(state, {isLoading, isValid, meta});
     private updateItemHandle(state, {keys, data, meta});
-    private updateMetaHandle(state, {keys, meta});
+    private updateMetaHandle(state, {keys, meta, data});
     private toggleItemHandle(state, {keys});
     private addItemHandle(state, {keys, data});
     private removeItemHandle(state, {keys, index});
     private switchItemHandle(state, {keys, curIndex, switchIndex});
+    private removeItemMapHandle(state, {keys});
 }
