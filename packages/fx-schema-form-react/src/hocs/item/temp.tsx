@@ -1,6 +1,6 @@
 import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
-import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle } from "recompose";
+import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
 import { pick } from "recompose/utils/pick";
 import isEqual from "lodash.isequal";
 import { connect } from "react-redux";
@@ -28,7 +28,7 @@ const metaConnect = compose<SchemaFormItemBaseProps & ThemeHocOutProps & MakeHoc
 export default (hocFactory: BaseFactory<any>, settings: any = {
     tempField: "ui:temp",
     templates: [],
-    tempHoc: metaConnect
+    tempHoc: (TempComponent) => TempComponent
 }) => {
     return (Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps, any> => {
         /**
@@ -45,7 +45,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
 
                 return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
                     // let TempWithHoc = (Temp);
-                    let TempWithHoc = (Temp);
+                    let TempWithHoc = settings.tempHoc(Temp);
                     return <TempWithHoc
                         globalOptions={globalOptions}
                         tempKey={key}
@@ -62,10 +62,11 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             private getTemplates(): Array<{ key: string, Temp: RC<any, any> }> {
                 const { mergeSchema, globalOptions, currentTheme } = this.props;
                 const { uiSchema = { options: {} }, keys, type } = mergeSchema;
-                const typeDefaultOptions = globalOptions[type] || {};
+                const { field = {} } = globalOptions || {};
+                const typeDefaultOptions = field[type] || {};
+
                 let template = uiSchema[settings.tempField] ||
-                    typeDefaultOptions[settings.tempField] ||
-                    globalOptions[settings.tempField] || "default",
+                    typeDefaultOptions[settings.tempField] || "default",
                     TempComponent = [];
 
                 if (settings.templates && settings.templates.length > 0) {

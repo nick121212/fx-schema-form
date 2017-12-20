@@ -16,6 +16,7 @@ export interface UtilsHocOutProps {
     getHocOptions: (hoc?: string) => any;
     getFieldOptions: (field: string) => any;
     getWidgetOptions: (widget: string) => any;
+    getTempOptions: (temp: string) => any;
     getTitle(): () => any;
     getPathKeys: (keys: string[], path: string) => string[];
 }
@@ -38,6 +39,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     getFieldOptions={this.getFieldOptions.bind(this)}
                     getWidgetOptions={this.getWidgetOptions.bind(this)}
                     getTitle={this.getTitle.bind(this)}
+                    getTempOptions={this.getTempOptions.bind(this)}
                     getPathKeys={this.getPathKeys.bind(this)}
                     {...this.props} />;
             }
@@ -54,6 +56,16 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const fieldDefaultOptions = globalOptions.field || {};
 
                 return merge({}, fieldDefaultOptions[field] || {}, fieldOptions[field] || {});
+            }
+
+            private getTempOptions(temp: string) {
+                const { mergeSchema, globalOptions } = this.props;
+                const { uiSchema } = mergeSchema;
+                const uiSchemaOptions = uiSchema.options || {};
+                const tempOptions = uiSchemaOptions[temp] || {};
+                const fieldDefaultOptions = globalOptions[temp] || {};
+
+                return merge({}, tempOptions, fieldDefaultOptions);
             }
 
             /**

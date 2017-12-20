@@ -36,14 +36,22 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
             actions.updateItemMeta({ keys, meta: { isLoading: true, isValid: false, errorText: false } });
         }, 200);
 
-        await validate(data).then(() => {
+        try {
+            await validate(data);
             result.isValid = true;
-        }).catch((err) => {
+            clearTimeout(timeId);
+        } catch (err) {
+            clearTimeout(timeId);
             result.errorText = err.errors ?
                 schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
                 : err.message;
-        });
-        clearTimeout(timeId);
+        }
+        // .then(() => {
+
+        // }).catch((err) => {
+
+        // });
+        // clearTimeout(timeId);
 
         return result;
     };

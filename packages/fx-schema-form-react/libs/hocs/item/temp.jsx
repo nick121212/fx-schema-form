@@ -20,7 +20,7 @@ export default function (hocFactory, settings) {
     if (settings === void 0) { settings = {
         tempField: "ui:temp",
         templates: [],
-        tempHoc: metaConnect
+        tempHoc: function (TempComponent) { return TempComponent; }
     }; }
     return function (Component) {
         var TempComponentHoc = (function (_super) {
@@ -36,17 +36,17 @@ export default function (hocFactory, settings) {
                 var uiSchemaOptions = uiSchema.options || {};
                 return TempComponents.reduce(function (prev, _a) {
                     var key = _a.key, Temp = _a.Temp;
-                    var TempWithHoc = (Temp);
+                    var TempWithHoc = settings.tempHoc(Temp);
                     return <TempWithHoc globalOptions={globalOptions} tempKey={key} uiSchemaOptions={uiSchemaOptions} key={keys.join(".") + key} {..._this.props} children={prev}/>;
                 }, <Component key={keys.join(".")} uiSchemaOptions={uiSchemaOptions} {...this.props}/>);
             };
             TempComponentHoc.prototype.getTemplates = function () {
                 var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions, currentTheme = _a.currentTheme;
                 var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
-                var typeDefaultOptions = globalOptions[type] || {};
+                var _c = (globalOptions || {}).field, field = _c === void 0 ? {} : _c;
+                var typeDefaultOptions = field[type] || {};
                 var template = uiSchema[settings.tempField] ||
-                    typeDefaultOptions[settings.tempField] ||
-                    globalOptions[settings.tempField] || "default", TempComponent = [];
+                    typeDefaultOptions[settings.tempField] || "default", TempComponent = [];
                 if (settings.templates && settings.templates.length > 0) {
                     template = settings.templates;
                 }

@@ -58,7 +58,7 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
         return metaData.getMeta(keys);
     }
     public updateState(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any) {
-        return Immutable.Map(data);
+        return Immutable.fromJS(data);
     }
     public mergeData(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any) {
         let newState = state;
@@ -67,6 +67,9 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
             newState = newState.set("data", data.data);
         }
         if (data.meta) {
+            if (!Immutable.Map.isMap(data.meta)) {
+                data.meta = Immutable.fromJS(data.meta);
+            }
             newState = newState.set("meta", data.meta);
         }
 
@@ -94,7 +97,7 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
 
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
 
-        return jAllData.setIn(keyInfo.keys, formItemData.push(data));
+        return jAllData.setIn(keyInfo.keys, formItemData.push(Immutable.fromJS(data)));
     }
     public removeItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: number, keyInfo: any) {
         let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();

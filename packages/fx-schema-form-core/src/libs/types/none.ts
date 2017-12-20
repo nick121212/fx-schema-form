@@ -3,9 +3,11 @@ import convert from "../keys";
 export default (schema: any, parentKey: Array<string>, options: any) => {
     const currentSchema = convert(Object.assign({}, "", schema), options);
 
-    const keys = parentKey.concat(currentSchema.keys || []);
+    if (!currentSchema.resolve) {
+        const keys = parentKey.concat(currentSchema.keys || []);
 
-    Object.assign(schema, currentSchema, { keys, resolve: true, depth: options.depth });
+        Object.assign(schema, currentSchema, { keys, resolve: true, depth: options.depth });
+    }
 
     // if(options.ajv.h)
     // delete schema.id;

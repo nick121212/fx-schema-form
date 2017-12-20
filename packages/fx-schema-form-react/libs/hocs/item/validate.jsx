@@ -58,7 +58,7 @@ var mapDispatchToProps = function (dispatch, ownProps) {
     var keys = mergeSchema.keys;
     var validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
     var validateAsync = function (data) { return __awaiter(_this, void 0, void 0, function () {
-        var result, timeId;
+        var result, timeId, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -70,17 +70,23 @@ var mapDispatchToProps = function (dispatch, ownProps) {
                     timeId = setTimeout(function () {
                         actions.updateItemMeta({ keys: keys, meta: { isLoading: true, isValid: false, errorText: false } });
                     }, 200);
-                    return [4, validate(data).then(function () {
-                            result.isValid = true;
-                        }).catch(function (err) {
-                            result.errorText = err.errors ?
-                                schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
-                                : err.message;
-                        })];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4, validate(data)];
+                case 2:
                     _a.sent();
+                    result.isValid = true;
                     clearTimeout(timeId);
-                    return [2, result];
+                    return [3, 4];
+                case 3:
+                    err_1 = _a.sent();
+                    clearTimeout(timeId);
+                    result.errorText = err_1.errors ?
+                        schemaFormOptions.ajv.errorsText(err_1.errors, { dataVar: "/" + keys.join("/") })
+                        : err_1.message;
+                    return [3, 4];
+                case 4: return [2, result];
             }
         });
     }); };

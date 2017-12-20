@@ -28,7 +28,7 @@ let settings = new FormExampleReducer({
     schema: cloneDeep(defaultSchema),
     uiSchema: ["*"]
 });
-let reducer: FormReducer<any> = createForms.createOne("array", {
+let reducer: FormReducer<any> =  createForms.createOne("array", {
 
 }, {}, "", ajv, defaultSchema);
 let nextKey = "array";

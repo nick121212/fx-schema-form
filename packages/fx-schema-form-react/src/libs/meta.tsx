@@ -28,6 +28,7 @@ export class MetaData {
         meta: any;
         isValid?: boolean;
         isLoading?: boolean;
+        errMessage?: string;
     } = { map: {}, meta: {} };
     /**
      * reducer的actions
@@ -69,6 +70,8 @@ export class MetaData {
      * @param data 数据
      */
     public async validateAll(data: any): Promise<any> {
+        let validateData;
+
         // 设置所有的字段验证都通过
         for (let key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
@@ -87,10 +90,19 @@ export class MetaData {
 
             // this.schemaFormOptions.ajv.removeSchema
             // 调用验证方法
-            await validate(data);
+            validateData = await validate(data);
+            if (validateData === false) {
+                this.data.isValid = false;
+                if (validate.errors && validate.errors.length) {
+                    this.setErrors(validate.errors);
+                }
+                return;
+            }
             this.data.isValid = true;
+
         } catch (err) {
             this.data.isValid = false;
+            this.data.errMessage = validateData.errorsText(err.errors);
             if (err.errors && err.errors.length) {
                 this.setErrors(err.errors);
             }

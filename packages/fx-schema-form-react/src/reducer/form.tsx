@@ -20,7 +20,7 @@ export interface Actions {
     updateMetaState: SimpleActionCreator<any>;
     updateItemMeta: SimpleActionCreator<{ keys: Array<string>, data: any }>;
     removeItemMap: SimpleActionCreator<{ keys: Array<string> }>;
-    updateData: SimpleActionCreator<{ data: any }>;
+    updateData: SimpleActionCreator<any>;
 }
 
 export class FormReducer<T> {
@@ -55,7 +55,7 @@ export class FormReducer<T> {
     /**
      * 更改meta的状态
      */
-    private updateData: SimpleActionCreator<{ data: any }> = createAction("更改data的值");
+    private updateData: SimpleActionCreator<any> = createAction("更改data的值");
 
     private removeItemMap: SimpleActionCreator<{ keys: Array<string> }> = createAction("删除元素的map以及meta数据");
 
@@ -170,7 +170,7 @@ export class FormReducer<T> {
         let curMeta = this.meta.getMeta(keys, false) || {};
 
         this.meta.data = this.con.getAllMeta(state, this.props);
-        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
+        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : true }), false);
 
         return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }

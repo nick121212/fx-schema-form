@@ -52,7 +52,7 @@ var MetaData = (function () {
     };
     MetaData.prototype.validateAll = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var key, element, validate, err_1;
+            var validateData, key, element, validate, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -71,12 +71,20 @@ var MetaData = (function () {
                         validate = this.schemaFormOptions.ajv.getSchema(this.curKey);
                         return [4, validate(data)];
                     case 2:
-                        _a.sent();
+                        validateData = _a.sent();
+                        if (validateData === false) {
+                            this.data.isValid = false;
+                            if (validate.errors && validate.errors.length) {
+                                this.setErrors(validate.errors);
+                            }
+                            return [2];
+                        }
                         this.data.isValid = true;
                         return [3, 4];
                     case 3:
                         err_1 = _a.sent();
                         this.data.isValid = false;
+                        this.data.errMessage = validateData.errorsText(err_1.errors);
                         if (err_1.errors && err_1.errors.length) {
                             this.setErrors(err_1.errors);
                         }

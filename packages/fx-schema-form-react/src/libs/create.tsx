@@ -15,14 +15,20 @@ export class SchemaFormCreate {
      * @param schema          当前的json schema
      * @param updateState     更新state的方法
      */
-    public createOne<T>(key: string, data: T, props: any, con = "jpp", curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
+    public  createOne<T>(key: string, data: T, props: any, con = "jpp", curJjv?: ajv.Ajv, schema?: any): FormReducer<T> {
         let meta: MetaData = new MetaData(con);
-        let defaultValue = (curJjv.validate(schema, data) as Promise<any>).catch(() => 1);
         let container = conFactory.get(con);
+        let defaultData = curJjv.validate(schema, data);
         let reducer = new FormReducer<T>(container.initData(props, {
             data: data,
             meta: meta.data
         }), meta, props, container);
+
+        // try {
+        // ;
+        // } catch (e) {
+        //     console.log(1);
+        // }
 
         meta.actions = reducer.actions;
         SchemaFormCreate.metas[key] = meta;

@@ -60,7 +60,7 @@ var ImmutableCon = (function (_super) {
         return metaData.getMeta(keys);
     };
     ImmutableCon.prototype.updateState = function (state, props, data) {
-        return Immutable.Map(data);
+        return Immutable.fromJS(data);
     };
     ImmutableCon.prototype.mergeData = function (state, props, data) {
         var newState = state;
@@ -68,6 +68,9 @@ var ImmutableCon = (function (_super) {
             newState = newState.set("data", data.data);
         }
         if (data.meta) {
+            if (!Immutable.Map.isMap(data.meta)) {
+                data.meta = Immutable.fromJS(data.meta);
+            }
             newState = newState.set("meta", data.meta);
         }
         return newState;
@@ -90,7 +93,7 @@ var ImmutableCon = (function (_super) {
         var formItemData = this.getItemData(state, props) || Immutable.List();
         var jAllData = this.getAllData(state, props);
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
-        return jAllData.setIn(keyInfo.keys, formItemData.push(data));
+        return jAllData.setIn(keyInfo.keys, formItemData.push(Immutable.fromJS(data)));
     };
     ImmutableCon.prototype.removeItem = function (state, props, data, keyInfo) {
         var formItemData = this.getItemData(state, props) || Immutable.List();

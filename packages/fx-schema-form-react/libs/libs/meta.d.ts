@@ -15,6 +15,7 @@ export declare class MetaData {
         meta: any;
         isValid?: boolean;
         isLoading?: boolean;
+        errMessage?: string;
     };
     actions: any;
     private schemaFormOptions;

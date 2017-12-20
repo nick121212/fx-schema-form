@@ -7,8 +7,8 @@ var SchemaFormCreate = (function () {
     SchemaFormCreate.prototype.createOne = function (key, data, props, con, curJjv, schema) {
         if (con === void 0) { con = "jpp"; }
         var meta = new MetaData(con);
-        var defaultValue = curJjv.validate(schema, data).catch(function () { return 1; });
         var container = conFactory.get(con);
+        var defaultData = curJjv.validate(schema, data);
         var reducer = new FormReducer(container.initData(props, {
             data: data,
             meta: meta.data

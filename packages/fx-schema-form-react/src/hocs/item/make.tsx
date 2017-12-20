@@ -28,10 +28,10 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             public render(): JSX.Element {
                 const { mergeSchema, globalOptions } = this.props;
                 const { uiSchema = { options: {} }, keys, type } = mergeSchema;
+                const fieldOptions = this.props.getFieldOptions(type);
                 const typeDefaultOptions = globalOptions[type] || {};
                 const hocs = settings.hocs || uiSchema[this.fieldKey] ||
-                    typeDefaultOptions[this.fieldKey] ||
-                    globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
+                    fieldOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
 
                 let ComponentWithHocs = compose<SchemaFormItemBaseProps & MakeHocOutProps, any>
                     (...["utils"].concat(hocs).map(hoc => {

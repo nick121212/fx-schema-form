@@ -88,7 +88,7 @@ var FormReducer = (function () {
         var normalKey = this.meta.getKey(keys).normalKey;
         var curMeta = this.meta.getMeta(keys, false) || {};
         this.meta.data = this.con.getAllMeta(state, this.props);
-        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : false }), false);
+        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : true }), false);
         return this.con.mergeData(state, this.props, { meta: this.meta.data });
     };
     FormReducer.prototype.addItemHandle = function (state, _a) {

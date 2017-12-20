@@ -33,9 +33,7 @@ export interface Actions {
     removeItemMap: SimpleActionCreator<{
         keys: Array<string>;
     }>;
-    updateData: SimpleActionCreator<{
-        data: any;
-    }>;
+    updateData: SimpleActionCreator<any>;
 }
 export declare class FormReducer<T> {
     private initialState;

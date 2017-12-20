@@ -5,6 +5,7 @@ export interface UtilsHocOutProps {
     getHocOptions: (hoc?: string) => any;
     getFieldOptions: (field: string) => any;
     getWidgetOptions: (widget: string) => any;
+    getTempOptions: (temp: string) => any;
     getTitle(): () => any;
     getPathKeys: (keys: string[], path: string) => string[];
 }

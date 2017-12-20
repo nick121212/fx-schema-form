@@ -9,7 +9,7 @@ export declare class ImmutableCon extends ConBase<any, SchemaFormItemProps, any>
     getAllMeta(state: Immutable.Map<string, any>, props: SchemaFormItemProps): any;
     getItemData(state: Immutable.Map<string, any>, props: SchemaFormItemProps): any;
     getItemMeta(state: Immutable.Map<string, any>, props: SchemaFormItemProps): SchemaFormMeta;
-    updateState(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any): Immutable.Map<{}, {}>;
+    updateState(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any): any;
     mergeData(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any): Immutable.Map<string, any>;
     getOriginData(state: Immutable.Map<string, any>, props: SchemaFormItemProps): any;
     initData(props: any, data: any): any;

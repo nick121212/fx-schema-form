@@ -29,10 +29,10 @@ export default function (hocFactory, settings) {
             MakeComponentHoc.prototype.render = function () {
                 var _a = this.props, mergeSchema = _a.mergeSchema, globalOptions = _a.globalOptions;
                 var _b = mergeSchema.uiSchema, uiSchema = _b === void 0 ? { options: {} } : _b, keys = mergeSchema.keys, type = mergeSchema.type;
+                var fieldOptions = this.props.getFieldOptions(type);
                 var typeDefaultOptions = globalOptions[type] || {};
                 var hocs = settings.hocs || uiSchema[this.fieldKey] ||
-                    typeDefaultOptions[this.fieldKey] ||
-                    globalOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
+                    fieldOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
                 var ComponentWithHocs = compose.apply(void 0, ["utils"].concat(hocs).map(function (hoc) {
                     if (typeof hoc !== "string") {
                         return hoc;
