@@ -102,7 +102,7 @@ export class MetaData {
 
         } catch (err) {
             this.data.isValid = false;
-            this.data.errMessage = validateData.errorsText(err.errors);
+            // this.data.errMessage = validateData.errorsText(err.errors);
             if (err.errors && err.errors.length) {
                 this.setErrors(err.errors);
             }
@@ -118,6 +118,9 @@ export class MetaData {
     public setErrors(errors: ajv.ErrorObject[]) {
         this.data.isValid = false;
 
+        this.data.errMessage = this.schemaFormOptions.ajv.errorsText(errors, {
+            separator: "\r\n"
+        });
         errors.forEach((error: ajv.ErrorObject) => {
             let keys = jpp.parse(error.dataPath);
             let meta = this.getMeta(keys);

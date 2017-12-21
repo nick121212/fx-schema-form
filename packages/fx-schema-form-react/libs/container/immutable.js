@@ -1,68 +1,55 @@
 import Immutable from "immutable";
-import clone from "lodash.clonedeep";
-
 import { ConBase } from "./icon";
-import { MetaData, SchemaFormMeta } from "../libs/meta";
 import { SchemaFormCreate } from "../libs/create";
-import { SchemaFormItemProps } from "../components/formitem";
-
-export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
-    private resolveKeys(data: Immutable.Map<string, any>, keys: Array<string>) {
+export class ImmutableCon extends ConBase {
+    resolveKeys(data, keys) {
         if (data.hasIn(keys)) {
             return data;
         }
-
         for (let i = 0, n = keys.length; i < n; i++) {
             let mKeys = [].concat(keys).splice(0, i + 1);
-
             if (!data.hasIn(mKeys)) {
                 mKeys.pop();
                 if (!data.hasIn(mKeys)) {
                     if (keys[i].constructor === Number) {
                         data = data.setIn(mKeys, Immutable.List());
-                    } else {
+                    }
+                    else {
                         data = data.setIn(mKeys, Immutable.Map());
                     }
                 }
             }
         }
-
         return data;
     }
-    public getState(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getState(state, props) {
         return state.getIn(props.reducerKeys || []) || Immutable.Map();
     }
-    public getAllData(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getAllData(state, props) {
         let curState = this.getState(state, props);
-
         return curState.get("data");
     }
-
-    public getAllMeta(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getAllMeta(state, props) {
         let curState = this.getState(state, props);
-
         return curState.get("meta").toJS();
     }
-    public getItemData(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getItemData(state, props) {
         const jData = this.getAllData(state, props);
         const { schemaKey, mergeSchema } = props;
         const { keys = [] } = mergeSchema;
-
         return jData.getIn(keys);
     }
-    public getItemMeta(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getItemMeta(state, props) {
         const { schemaKey, mergeSchema } = props;
         const { keys = [] } = mergeSchema;
         const metaData = SchemaFormCreate.metas[schemaKey];
-
         return metaData.getMeta(keys);
     }
-    public updateState(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any) {
+    updateState(state, props, data) {
         return Immutable.fromJS(data);
     }
-    public mergeData(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any) {
+    mergeData(state, props, data) {
         let newState = state;
-
         if (data.data) {
             newState = newState.set("data", data.data);
         }
@@ -72,54 +59,42 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
             }
             newState = newState.set("meta", data.meta);
         }
-
         return newState;
     }
-    public getOriginData(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
+    getOriginData(state, props) {
         return this.getAllData(state, props);
     }
-    public initData(props: any, data: any) {
+    initData(props, data) {
         return Immutable.fromJS(data);
     }
-    public updateItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any) {
-        let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
+    updateItem(state, props, data, keyInfo) {
+        let jAllData = this.getAllData(state, props);
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
-
         if (!Immutable.Map.isMap(data)) {
             data = Immutable.fromJS(data);
         }
-
-        // jAllData = jAllData.removeIn(keyInfo.keys);
-
         return jAllData.setIn(keyInfo.keys, data);
     }
-    public addItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any, keyInfo: any) {
-        let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();
-        let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
-
+    addItem(state, props, data, keyInfo) {
+        let formItemData = this.getItemData(state, props) || Immutable.List();
+        let jAllData = this.getAllData(state, props);
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
-
         return jAllData.setIn(keyInfo.keys, formItemData.push(Immutable.fromJS(data)));
     }
-    public removeItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: number, keyInfo: any) {
-        let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();
-        let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
-
+    removeItem(state, props, data, keyInfo) {
+        let formItemData = this.getItemData(state, props) || Immutable.List();
+        let jAllData = this.getAllData(state, props);
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
-
         return jAllData.setIn(keyInfo.keys, formItemData.remove(data));
     }
-
-    public switchItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
-        let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();
-        let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
+    switchItem(state, props, from, to, keyInfo) {
+        let formItemData = this.getItemData(state, props) || Immutable.List();
+        let jAllData = this.getAllData(state, props);
         let cur = formItemData.get(from);
-
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
-
         formItemData = formItemData.set(from, formItemData.get(to));
         formItemData = formItemData.set(to, cur);
-
         return jAllData.setIn(keyInfo.keys, formItemData);
     }
 }
+//# sourceMappingURL=immutable.js.map
