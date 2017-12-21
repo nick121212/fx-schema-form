@@ -48,7 +48,7 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
             RootComponentHock = SchemaFormBlock;
         }
 
-        console.log("form component render===========");
+        // console.log("form component render===========");
 
         return (
             <RootComponentHock>
@@ -89,15 +89,13 @@ class SchemaFormComponent extends React.PureComponent<SchemaFormProps & MergeHoc
         //     mergeSchema.keys = [];
         // }
 
-        console.log("-----", mergeSchema.keys);
+        // console.log("-----", mergeSchema.keys);
 
-        if (mergeSchema.keys.constructor === Function) {
-            console.log(mergeSchema.keys());
-        }
+        // if (mergeSchema.keys.constructor === Function) {
+        //     console.log(mergeSchema.keys());
+        // }
 
         mergeSchema.originKeys = mergeSchema.keys.concat([]);
-
-
 
         return mergeSchema.keys.map((key: string) => {
             if (key === "-") {

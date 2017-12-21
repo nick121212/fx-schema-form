@@ -87,6 +87,7 @@ var ImmutableCon = (function (_super) {
         if (!Immutable.Map.isMap(data)) {
             data = Immutable.fromJS(data);
         }
+        jAllData = jAllData.removeIn(keyInfo.keys);
         return jAllData.setIn(keyInfo.keys, data);
     };
     ImmutableCon.prototype.addItem = function (state, props, data, keyInfo) {

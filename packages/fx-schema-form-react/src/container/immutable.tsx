@@ -82,12 +82,14 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
         return Immutable.fromJS(data);
     }
     public updateItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any) {
-        let jAllData = this.getAllData(state, props);
+        let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
 
         if (!Immutable.Map.isMap(data)) {
             data = Immutable.fromJS(data);
         }
+
+        jAllData = jAllData.removeIn(keyInfo.keys);
 
         return jAllData.setIn(keyInfo.keys, data);
     }

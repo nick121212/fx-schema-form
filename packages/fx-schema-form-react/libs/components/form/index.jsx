@@ -24,7 +24,6 @@ var SchemaFormComponent = (function (_super) {
         if (!RootComponentHock) {
             RootComponentHock = SchemaFormBlock;
         }
-        console.log("form component render===========");
         return (<RootComponentHock>
                 {mergeSchemaList.map(function (mergeSchema, idx) {
             mergeSchema.keys = _this.mergeKeys(mergeSchema);
@@ -37,10 +36,6 @@ var SchemaFormComponent = (function (_super) {
     SchemaFormComponent.prototype.mergeKeys = function (mergeSchema) {
         var _a = this.props.arrayLevel, arrayLevel = _a === void 0 ? [] : _a;
         var arrayLevelCopy = arrayLevel.concat([]);
-        console.log("-----", mergeSchema.keys);
-        if (mergeSchema.keys.constructor === Function) {
-            console.log(mergeSchema.keys());
-        }
         mergeSchema.originKeys = mergeSchema.keys.concat([]);
         return mergeSchema.keys.map(function (key) {
             if (key === "-") {
