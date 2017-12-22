@@ -2,6 +2,7 @@
 
 通过[json-schema](http://jsonschema.net/),[ui-schema](#custoization-ui-schema),以及[antd](https://ant.design/index-cn)自动生成表单组件。前后端可以复用一份JsonSchema来验证字段，错误消息前后端统一，这个可以有。
 
+[高阶应用demo](https://nick121212.github.io/fx-schema-form-react-demo/dist/index.html#/panel/create)
 [点击这里查看demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-react/out/index.html)
 
 > Note: 组件之间的功能组合使用hoc来实现。
@@ -399,9 +400,16 @@ hocFactory.add("condition",ConditionHoc);
 ![](./images/show.jpg)
 
 ### <span id="advanced-customization-field">自定义字段</span>
+
+> NOTE: 自定义字段用于解析特殊的数据格式
+
 ### <span id="advanced-customization-temp">自定义模板</span>
+
+模板用于提供额外的显示组件，比如验证错误信息，loading信息等等。
+
 ### <span id="advanced-customization-widget">自定义组件</span>
 
+显示组件，比如input，autocomponent等。
 
 ## <span id="license">License</span>
 
