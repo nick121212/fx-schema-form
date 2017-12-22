@@ -3,6 +3,7 @@
 通过[json-schema](http://jsonschema.net/),[ui-schema](#custoization-ui-schema),以及[antd](https://ant.design/index-cn)自动生成表单组件。前后端可以复用一份JsonSchema来验证字段，错误消息前后端统一，这个可以有。
 
 [高阶应用demo](https://nick121212.github.io/fx-schema-form-react-demo/dist/index.html#/panel/create)
+
 [点击这里查看demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-react/out/index.html)
 
 > Note: 组件之间的功能组合使用hoc来实现。
