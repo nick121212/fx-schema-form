@@ -34,7 +34,8 @@ export interface MergeHocProps extends SchemaFormBaseProps {
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: RC<any, any>): RC<MergeHocProps, any> => {
         @(compose<MergeHocProps, any>(
-            onlyUpdateForKeys(["schema"]),
+            // onlyUpdateForKeys(["schema"]),
+            shouldUpdate(() => false),
             connect(mapActionsStateToProps),
             connect(null, mapActionsDispatchToProps),
         ) as any)

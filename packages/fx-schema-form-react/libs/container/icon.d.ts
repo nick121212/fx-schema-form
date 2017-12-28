@@ -13,4 +13,5 @@ export declare abstract class ConBase<S, P, T> {
     abstract addItem(state: S, props: P, data: any, keyInfo: any): any;
     abstract removeItem(state: S, props: P, data: any, keyInfo: any): any;
     abstract switchItem(state: S, props: P, from: any, to: any, keyInfo: any): any;
+    abstract canSwitch(state: S, props: P, from: any, to: any, keyInfo: any): any;
 }

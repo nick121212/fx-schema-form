@@ -63,6 +63,13 @@ export class JppCon extends ConBase {
         jAllData.set(keyInfo.normalKey, formItemData);
         return jAllData;
     }
+    canSwitch(state, props, from, to, keyInfo) {
+        let formItemData = this.getItemData(state, props) || [];
+        if (formItemData.length <= to || to < 0) {
+            return false;
+        }
+        return true;
+    }
     switchItem(state, props, from, to, keyInfo) {
         let formItemData = this.getItemData(state, props) || [];
         let jAllData = jpp(this.getAllData(state, props));

@@ -83,7 +83,15 @@ export class JppCon extends ConBase<any, SchemaFormItemProps, any> {
 
         return jAllData;
     }
+    public canSwitch(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
+        let formItemData = this.getItemData(state, props) || [];
 
+        if (formItemData.length <= to || to < 0) {
+            return false;
+        }
+
+        return true;
+    }
     public switchItem(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
         let formItemData = this.getItemData(state, props) || [];
         let jAllData = jpp(this.getAllData(state, props));

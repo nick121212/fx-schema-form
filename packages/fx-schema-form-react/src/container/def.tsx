@@ -88,6 +88,12 @@ export class DefCon extends ConBase<any, SchemaFormItemProps, any> {
         return container.removeItem(state, props, data, keyInfo);
     }
 
+    public canSwitch(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
+        let container: ConBase<any, any, any> = this.getContainer(props);
+
+        return container.canSwitch(state, props, from, to, keyInfo);
+    }
+
     public switchItem(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
         let container: ConBase<any, any, any> = this.getContainer(props);
 

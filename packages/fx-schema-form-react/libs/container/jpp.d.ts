@@ -16,5 +16,6 @@ export declare class JppCon extends ConBase<any, SchemaFormItemProps, any> {
     updateItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any): jpp.JSON_PointerWrap;
     addItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any): jpp.JSON_PointerWrap;
     removeItem(state: any, props: SchemaFormItemProps, data: number, keyInfo: any): jpp.JSON_PointerWrap;
+    canSwitch(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): boolean;
     switchItem(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): jpp.JSON_PointerWrap;
 }

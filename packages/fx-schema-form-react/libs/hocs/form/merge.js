@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from "react";
 import { schemaMerge } from "fx-schema-form-core";
 import { connect } from "react-redux";
-import { compose, onlyUpdateForKeys } from "recompose";
+import { compose, shouldUpdate } from "recompose";
 import { mapActionsStateToProps, mapActionsDispatchToProps } from "../select";
 import { SchemaFormCreate } from "../../libs/create";
 export default (hocFactory, settings = {}) => {
@@ -40,7 +40,7 @@ export default (hocFactory, settings = {}) => {
             }
         };
         MergeComponentHoc = __decorate([
-            compose(onlyUpdateForKeys(["schema"]), connect(mapActionsStateToProps), connect(null, mapActionsDispatchToProps))
+            compose(shouldUpdate(() => false), connect(mapActionsStateToProps), connect(null, mapActionsDispatchToProps))
         ], MergeComponentHoc);
         return MergeComponentHoc;
     };

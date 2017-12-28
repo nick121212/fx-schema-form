@@ -64,6 +64,10 @@ export class DefCon extends ConBase {
         let container = this.getContainer(props);
         return container.removeItem(state, props, data, keyInfo);
     }
+    canSwitch(state, props, from, to, keyInfo) {
+        let container = this.getContainer(props);
+        return container.canSwitch(state, props, from, to, keyInfo);
+    }
     switchItem(state, props, from, to, keyInfo) {
         let container = this.getContainer(props);
         return container.switchItem(state, props, from, to, keyInfo);

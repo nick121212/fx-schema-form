@@ -37,7 +37,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     getFieldOptions={this.getFieldOptions.bind(this)}
                     getWidgetOptions={this.getWidgetOptions.bind(this)}
                     getTitle={this.getTitle.bind(this)}
-                    getTempOptions={this.getTempOptions.bind(this)}
+                    getTempOptions={this.getTempOptions}
                     getPathKeys={this.getPathKeys.bind(this)}
                     {...this.props} />;
             }

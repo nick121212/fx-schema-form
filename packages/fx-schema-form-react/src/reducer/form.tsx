@@ -206,16 +206,24 @@ export class FormReducer<T> {
 
     private switchItemHandle(state: SchemaFormState<T>,
         { keys, curIndex, switchIndex }: { curIndex: number; switchIndex: number; keys: Array<string>; }): SchemaFormState<T> {
-        let originData = this.con.switchItem(state, Object.assign({}, this.props, {
+        if (this.con.canSwitch(state, Object.assign({}, this.props, {
             mergeSchema: {
                 keys
             }
-        }), curIndex, switchIndex, this.meta.getKey(keys));
+        }), curIndex, switchIndex, this.meta.getKey(keys))) {
+            let originData = this.con.switchItem(state, Object.assign({}, this.props, {
+                mergeSchema: {
+                    keys
+                }
+            }), curIndex, switchIndex, this.meta.getKey(keys));
 
-        this.meta.data = this.con.getAllMeta(state, this.props);
-        this.meta.switchMeta(keys, curIndex, switchIndex);
+            this.meta.data = this.con.getAllMeta(state, this.props);
+            this.meta.switchMeta(keys, curIndex, switchIndex);
 
-        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+            return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+        }
+
+        return state;
     }
 
     private removeItemMapHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }) {

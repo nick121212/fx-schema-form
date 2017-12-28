@@ -16,5 +16,6 @@ export declare class ImmutableCon extends ConBase<any, SchemaFormItemProps, any>
     updateItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any): Immutable.Map<string, any>;
     addItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: any, keyInfo: any): Immutable.Map<string, any>;
     removeItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, data: number, keyInfo: any): Immutable.Map<string, any>;
+    canSwitch(state: Immutable.Map<string, any>, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): boolean;
     switchItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): Immutable.Map<string, any>;
 }

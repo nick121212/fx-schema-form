@@ -17,5 +17,6 @@ export declare class DefCon extends ConBase<any, SchemaFormItemProps, any> {
     updateItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any): any;
     addItem(state: any, props: SchemaFormItemProps, data: any, keyInfo: any): any;
     removeItem(state: any, props: SchemaFormItemProps, data: number, keyInfo: any): any;
+    canSwitch(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): any;
     switchItem(state: any, props: SchemaFormItemProps, from: number, to: number, keyInfo: any): any;
 }

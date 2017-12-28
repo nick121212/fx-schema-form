@@ -109,13 +109,25 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
 
         return jAllData.setIn(keyInfo.keys, formItemData.remove(data));
     }
+    public canSwitch(state: Immutable.Map<string, any>, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
+        let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();
 
+        if (formItemData.size <= to || to < 0) {
+            return false;
+        }
+
+        return true;
+    }
     public switchItem(state: Immutable.Map<string, any>, props: SchemaFormItemProps, from: number, to: number, keyInfo: any) {
         let formItemData: Immutable.List<any> = this.getItemData(state, props) || Immutable.List();
         let jAllData: Immutable.Map<string, any> = this.getAllData(state, props);
         let cur = formItemData.get(from);
 
         jAllData = this.resolveKeys(jAllData, keyInfo.keys);
+
+        if (formItemData.size <= to || to < 0) {
+            return state;
+        }
 
         formItemData = formItemData.set(from, formItemData.get(to));
         formItemData = formItemData.set(to, cur);

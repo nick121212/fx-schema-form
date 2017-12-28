@@ -97,14 +97,21 @@ export class FormReducer {
         return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     }
     switchItemHandle(state, { keys, curIndex, switchIndex }) {
-        let originData = this.con.switchItem(state, Object.assign({}, this.props, {
+        if (this.con.canSwitch(state, Object.assign({}, this.props, {
             mergeSchema: {
                 keys
             }
-        }), curIndex, switchIndex, this.meta.getKey(keys));
-        this.meta.data = this.con.getAllMeta(state, this.props);
-        this.meta.switchMeta(keys, curIndex, switchIndex);
-        return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+        }), curIndex, switchIndex, this.meta.getKey(keys))) {
+            let originData = this.con.switchItem(state, Object.assign({}, this.props, {
+                mergeSchema: {
+                    keys
+                }
+            }), curIndex, switchIndex, this.meta.getKey(keys));
+            this.meta.data = this.con.getAllMeta(state, this.props);
+            this.meta.switchMeta(keys, curIndex, switchIndex);
+            return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
+        }
+        return state;
     }
     removeItemMapHandle(state, { keys }) {
         let curMeta = this.meta.getMeta(keys, false) || {};

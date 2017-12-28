@@ -5,7 +5,7 @@ export default (hocFactory, settings = {}) => {
     return (Component) => {
         class ComponentHoc extends React.PureComponent {
             render() {
-                return React.createElement(Component, Object.assign({ getHocOptions: this.getHocOptions.bind(this), getFieldOptions: this.getFieldOptions.bind(this), getWidgetOptions: this.getWidgetOptions.bind(this), getTitle: this.getTitle.bind(this), getTempOptions: this.getTempOptions.bind(this), getPathKeys: this.getPathKeys.bind(this) }, this.props));
+                return React.createElement(Component, Object.assign({ getHocOptions: this.getHocOptions.bind(this), getFieldOptions: this.getFieldOptions.bind(this), getWidgetOptions: this.getWidgetOptions.bind(this), getTitle: this.getTitle.bind(this), getTempOptions: this.getTempOptions, getPathKeys: this.getPathKeys.bind(this) }, this.props));
             }
             getFieldOptions(field) {
                 const { mergeSchema, globalOptions } = this.props;
@@ -47,7 +47,7 @@ export default (hocFactory, settings = {}) => {
                 return uiSchema.title || title || [].concat(keys).pop();
             }
             getPathKeys(keys, path) {
-                let keys1 = resolvePathname(path, "/" + keys.join("/") + "/").split("/");
+                let keys1 = resolvePathname(path, "/" + keys.join("/")).split("/");
                 keys1.shift();
                 if (keys1.length && !keys1[keys1.length - 1]) {
                     keys1.pop();
