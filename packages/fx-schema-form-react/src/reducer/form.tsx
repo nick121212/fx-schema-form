@@ -156,6 +156,12 @@ export class FormReducer<T> {
         return this.con.mergeData(state, this.props, { data: originData, meta: this.meta.data });
     }
 
+    /**
+     * 更新meta数据
+     * keys 更新的keys
+     * meta meta数据
+     * data data数据
+     */
     private updateMetaHandle(state: SchemaFormState<T>, { keys, meta, data }: { keys: Array<string>, meta: SchemaFormMeta, data: any }) {
         let { normalKey } = this.meta.getKey(keys);
 

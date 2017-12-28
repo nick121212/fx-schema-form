@@ -9,8 +9,6 @@ import resolvePathname from "resolve-pathname";
 
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
-// import { mapActionsStateToProps } from "../select";
-
 
 export interface UtilsHocOutProps {
     getHocOptions: (hoc?: string) => any;

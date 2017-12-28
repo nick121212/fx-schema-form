@@ -47,7 +47,7 @@ export default (hocFactory, settings = {}) => {
                 return uiSchema.title || title || [].concat(keys).pop();
             }
             getPathKeys(keys, path) {
-                let keys1 = resolvePathname(path, "/" + keys.join("/")).split("/");
+                let keys1 = resolvePathname(path, "/" + keys.join("/") + "/").split("/");
                 keys1.shift();
                 if (keys1.length && !keys1[keys1.length - 1]) {
                     keys1.pop();
