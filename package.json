@@ -7,8 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "publish": "lerna publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick121212/fx-schema-form.git"
+  },
   "keywords": [
-    "crawler",
     "typescript",
     "json-schema",
     "jsonSchema",

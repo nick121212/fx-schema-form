@@ -25,6 +25,21 @@
     "resolve-pathname": "^2.2.0",
     "uuid": "^3.1.0"
   },
+  "keywords": [
+    "typescript",
+    "json-schema",
+    "jsonSchema",
+    "react-schema-form",
+    "react",
+    "schema-form",
+    "form-generator",
+    "form",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick121212/fx-schema-form.git"
+  },
   "devDependencies": {
     "@types/json-pointer": "^1.0.30",
     "@types/jsonata": "^1.3.0",
