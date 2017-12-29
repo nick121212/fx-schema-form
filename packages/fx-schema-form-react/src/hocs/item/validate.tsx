@@ -12,7 +12,7 @@ import { mapActionsStateToProps } from "../select";
 
 
 export interface ValidateHocOutProps {
-    validate?: (data: any) => void;
+    validate?: (data: any) => Promise<any>;
     updateItemData?: (data: any, meta?: any) => void;
     updateItemMeta?: (data: any) => void;
 }
