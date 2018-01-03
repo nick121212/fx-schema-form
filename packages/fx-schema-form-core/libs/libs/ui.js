@@ -28,7 +28,7 @@ var UiMerge = (function () {
             keys[key] = true;
             uiSchema = Object.assign({}, map.get(key), typeof keyProp === "string" ? { uiSchema: {} } : { uiSchema: keyProp.uiSchema || keyProp });
             if (uiSchema.uiSchema.items) {
-                uiSchema.uiSchema.items = this.merge(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
+                uiSchema.uiSchema.items = this.merge(map, uiSchema.items ? [] : uiSchema.keys, uiSchema.items || uiSchema, uiSchema.uiSchema.items, options);
             }
             return uiSchema;
         }
@@ -100,7 +100,11 @@ var UiMerge = (function () {
             Object.keys(schema.properties).forEach(function (keyProp) {
                 var uiSchema = _this.mergeObject(keyProp, map, parentKeys, keys);
                 if (uiSchema) {
-                    uiSchemasFirst.push(uiSchema);
+                    if (uiSchemasLast.reduce(function (prev, next) {
+                        return prev && next.keys.join("") !== uiSchema.keys.join("");
+                    }, true)) {
+                        uiSchemasFirst.push(uiSchema);
+                    }
                 }
             });
         }

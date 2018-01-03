@@ -47,10 +47,14 @@ const handlers = withHandlers({
             const { mergeSchema, actions } = props;
             const { keys } = mergeSchema;
             if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
-                actions.addItem({ keys, data: defaultValue || {} });
+                let newData = {};
+                props.schemaFormOptions.ajv.validate(mergeSchema.items, newData);
+                actions.addItem({ keys, data: defaultValue || newData });
             }
             else {
-                actions.addItem({ keys, data: defaultValue });
+                let newData;
+                props.schemaFormOptions.ajv.validate(mergeSchema, newData);
+                actions.addItem({ keys, data: defaultValue || newData });
             }
         };
     }

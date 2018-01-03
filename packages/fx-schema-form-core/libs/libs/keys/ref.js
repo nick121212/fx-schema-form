@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = function (schema, options) {
     if (schema.$ref) {
         schema.$ref = schema.$ref;
-        return options.ajv.getSchema(schema.$ref).schema;
+        schema = options.ajv.getSchema(schema.$ref).schema;
     }
+    delete schema.$id;
     return schema;
 };
 //# sourceMappingURL=ref.js.map

@@ -18,7 +18,8 @@ import { compose, shouldUpdate } from "recompose";
 const mapDispatchToProps = (dispatch, ownProps) => {
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
-    const validate = schemaFormOptions.ajv.compile(Object.assign({}, mergeSchema, { $async: true, id: null }));
+    const schema = Object.assign({}, mergeSchema, { $async: true });
+    const validate = schemaFormOptions.ajv.compile(schema);
     const validateAsync = (data) => __awaiter(this, void 0, void 0, function* () {
         let result = {
             dirty: true,

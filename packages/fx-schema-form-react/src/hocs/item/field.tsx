@@ -58,7 +58,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 }
 
                 // 如果有enum，并且没有设置widget的，则默认给他加上combobox的widget，以及options
-                if (mergeSchema.enum && !uiSchema.widget) {
+                if (mergeSchema.enum) {
                     uiSchema.widget = "combobox";
                     mergeSchema.uiSchema = merge({
                         options: {

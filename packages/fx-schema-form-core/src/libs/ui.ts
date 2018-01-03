@@ -42,7 +42,8 @@ export class UiMerge {
             uiSchema = Object.assign({}, map.get(key),
                 typeof keyProp === "string" ? { uiSchema: {} } : { uiSchema: keyProp.uiSchema || keyProp });
             if (uiSchema.uiSchema.items) {
-                uiSchema.uiSchema.items = this.merge(map, [], uiSchema.items, uiSchema.uiSchema.items, options);
+                uiSchema.uiSchema.items = this.merge(map, uiSchema.items ? [] : uiSchema.keys,
+                    uiSchema.items || uiSchema, uiSchema.uiSchema.items, options);
             }
             // delete uiSchema.$ref;
 
@@ -136,12 +137,18 @@ export class UiMerge {
             }
         });
 
+        // 如果是对象,遍历properties属性
         if (idx >= 0 && schema.type === "object" && schema.properties) {
             Object.keys(schema.properties).forEach(keyProp => {
                 let uiSchema = this.mergeObject(keyProp, map, parentKeys, keys);
 
                 if (uiSchema) {
-                    uiSchemasFirst.push(uiSchema);
+                    // 判断last中是否已经存在这个属性
+                    if (uiSchemasLast.reduce((prev, next) => {
+                        return prev && next.keys.join("") !== uiSchema.keys.join("");
+                    }, true)) {
+                        uiSchemasFirst.push(uiSchema);
+                    }
                 }
             });
         }

@@ -29,7 +29,7 @@ export default (hocFactory, settings = {}) => {
                         widget = widget[0];
                     }
                 }
-                if (mergeSchema.enum && !uiSchema.widget) {
+                if (mergeSchema.enum) {
                     uiSchema.widget = "combobox";
                     mergeSchema.uiSchema = merge({
                         options: {
