@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-core",
-  "version": "2.0.41",
+  "version": "2.0.45",
   "description": "",
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
