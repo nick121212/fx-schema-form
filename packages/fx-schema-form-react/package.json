@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-react",
-  "version": "2.0.43",
+  "version": "2.0.44",
   "description": "自动生成表单组件",
   "main": "libs/index",
   "types": "libs/index.d.ts",
