@@ -2,7 +2,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 export interface ValidateHocOutProps {
-    validate?: (data: any) => void;
+    validate?: (data: any) => Promise<any>;
     updateItemData?: (data: any, meta?: any) => void;
     updateItemMeta?: (data: any) => void;
 }

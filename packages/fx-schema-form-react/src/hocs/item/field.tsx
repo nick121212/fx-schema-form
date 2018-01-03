@@ -2,6 +2,7 @@
 import React from "react";
 import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
+import merge from "lodash.merge";
 
 import { ThemeHocOutProps } from "./theme";
 import { RC } from "../../types";
@@ -54,6 +55,25 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     if (widget.length) {
                         widget = widget[0];
                     }
+                }
+
+                // 如果有enum，并且没有设置widget的，则默认给他加上combobox的widget，以及options
+                if (mergeSchema.enum && !uiSchema.widget) {
+                    uiSchema.widget = "combobox";
+                    mergeSchema.uiSchema = merge({
+                        options: {
+                            widget: {
+                                "combobox": {
+                                    options: mergeSchema.enum.map((e) => {
+                                        return {
+                                            key: e,
+                                            text: e.toString()
+                                        };
+                                    })
+                                }
+                            }
+                        }
+                    }, uiSchema);
                 }
 
                 if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {

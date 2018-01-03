@@ -1,4 +1,5 @@
 import React from "react";
+import merge from "lodash.merge";
 export default (hocFactory, settings = {}) => {
     return (Component) => {
         class FieldComponentHoc extends React.PureComponent {
@@ -27,6 +28,23 @@ export default (hocFactory, settings = {}) => {
                     if (widget.length) {
                         widget = widget[0];
                     }
+                }
+                if (mergeSchema.enum && !uiSchema.widget) {
+                    uiSchema.widget = "combobox";
+                    mergeSchema.uiSchema = merge({
+                        options: {
+                            widget: {
+                                "combobox": {
+                                    options: mergeSchema.enum.map((e) => {
+                                        return {
+                                            key: e,
+                                            text: e.toString()
+                                        };
+                                    })
+                                }
+                            }
+                        }
+                    }, uiSchema);
                 }
                 if (currentTheme.widgetFactory.has(uiSchema.widget || mergeSchema.type)) {
                     WidgetComponent = currentTheme.widgetFactory.get(uiSchema.widget || mergeSchema.type);

@@ -147,7 +147,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.less', '.tsx']
     },
     externals: !(__PROD__) ? [{}] : [{
-        "react": "React",
+        "react": true,
         "react-dom": true,
         "recompose": true,
         "antd": true,
