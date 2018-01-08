@@ -144,7 +144,7 @@ export class MetaData {
         for (let key in this.data.map) {
             if (this.data.map.hasOwnProperty(key)) {
                 let mapKeys = this.getKey(jpp.parse(key));
-                if (regexp.test(mapKeys.originEscapeKey)) {
+                if (regexp.test(mapKeys.originEscapeKey.toString())) {
                     jMap.remove(mapKeys.escapeKey);
                 }
             }

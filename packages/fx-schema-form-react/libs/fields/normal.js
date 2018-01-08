@@ -6,7 +6,7 @@ export class NormalField extends React.PureComponent {
     render() {
         const { mergeSchema, currentTheme, WidgetComponent, getFieldOptions } = this.props;
         const fieldOptions = getFieldOptions("normal");
-        let WidgetComponentWithHoc = compose(connect(mapFormItemDataProps), ...(fieldOptions.hocs || []))(WidgetComponent);
+        let WidgetComponentWithHoc = compose(...(fieldOptions.hocs || []), connect(mapFormItemDataProps))(WidgetComponent);
         return (React.createElement(WidgetComponentWithHoc, Object.assign({ key: mergeSchema.keys.join(".") }, this.props)));
     }
 }

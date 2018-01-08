@@ -43,7 +43,7 @@ export class ImmutableCon extends ConBase {
         const { schemaKey, mergeSchema } = props;
         const { keys = [] } = mergeSchema;
         const metaData = SchemaFormCreate.metas[schemaKey];
-        return metaData.getMeta(keys);
+        return Immutable.fromJS(metaData.getMeta(keys));
     }
     updateState(state, props, data) {
         return Immutable.fromJS(data);
