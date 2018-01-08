@@ -8,6 +8,7 @@ import React from "react";
 import { branch, renderComponent, shouldUpdate, compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import isEqual from "lodash.isequal";
+import merge from "lodash.merge";
 import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 const handlers = withHandlers({
     removeItem(props) {
@@ -44,12 +45,16 @@ const handlers = withHandlers({
     },
     addItem(props) {
         return (defaultValue) => {
-            const { mergeSchema, actions } = props;
+            const { mergeSchema, actions, getHocOptions } = props;
             const { keys } = mergeSchema;
+            const options = getHocOptions("array");
             if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 let newData = {};
                 props.schemaFormOptions.ajv.validate(mergeSchema.items, newData);
-                actions.addItem({ keys, data: defaultValue || newData });
+                actions.addItem({
+                    keys,
+                    data: merge({}, options.itemDefaultData || {}, defaultValue || newData, options.itemFormatData || {})
+                });
             }
             else {
                 let newData;

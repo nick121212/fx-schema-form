@@ -4,12 +4,14 @@ import { branch, renderComponent, shouldUpdate, compose, withHandlers, renderNot
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 import isEqual from "lodash.isequal";
+import merge from "lodash.merge";
 
 import { RC, NsFactory } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { ValidateHocOutProps } from "./validate";
 import { mapMetaStateToProps, mapFormItemDataProps } from "../select";
 import { MakeHocOutProps } from "./make";
+import { UtilsHocOutProps } from "./utils";
 
 export interface ArrayHocOutProps extends SchemaFormItemBaseProps, ValidateHocOutProps, MakeHocOutProps {
     toggleItem?: () => void;
@@ -73,16 +75,22 @@ const handlers = withHandlers({
     /**
      * 添加一个项目
      */
-    addItem(props: SchemaFormItemBaseProps & { actions: any }) {
+    addItem(props: SchemaFormItemBaseProps & UtilsHocOutProps & { actions: any }) {
         return (defaultValue?: any) => {
-            const { mergeSchema, actions } = props;
+            const { mergeSchema, actions, getHocOptions } = props;
             const { keys } = mergeSchema;
+            const options = getHocOptions("array");
 
             if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 let newData = {};
 
                 props.schemaFormOptions.ajv.validate(mergeSchema.items, newData);
-                actions.addItem({ keys, data: defaultValue || newData });
+                // 合并参数，itemFormatData，itemDefaultData
+                actions.addItem({
+                    keys,
+                    data: merge({}, options.itemDefaultData || {},
+                        defaultValue || newData, options.itemFormatData || {})
+                });
             } else {
                 let newData;
 

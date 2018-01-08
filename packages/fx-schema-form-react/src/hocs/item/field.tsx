@@ -9,6 +9,7 @@ import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 import { ValidateHocOutProps } from "./validate";
 import { mapMetaStateToProps } from "../select";
+import { UtilsHocOutProps } from "./utils";
 
 export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;
@@ -23,12 +24,13 @@ export interface FieldHocOutProps {
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
-    return (Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps, any> => {
-        class FieldComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps, any> {
+    return (Component: any): RC<SchemaFormItemBaseProps & ThemeHocOutProps & UtilsHocOutProps, any> => {
+        class FieldComponentHoc extends React.PureComponent<SchemaFormItemBaseProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element | null {
-                const { mergeSchema, currentTheme } = this.props;
+                const { mergeSchema, currentTheme, getHocOptions } = this.props;
                 const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
                 let FieldComponent, WidgetComponent;
+                let options = getHocOptions("field");
 
                 if (typeof mergeSchema.type === "object") {
                     mergeSchema.type = mergeSchema.type[0];
@@ -58,7 +60,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 }
 
                 // 如果有enum，并且没有设置widget的，则默认给他加上combobox的widget，以及options
-                if (mergeSchema.enum) {
+                if (mergeSchema.enum && options.autoCombine !== false) {
                     uiSchema.widget = "combobox";
                     mergeSchema.uiSchema = merge({
                         options: {

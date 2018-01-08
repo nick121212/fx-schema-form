@@ -176,8 +176,7 @@ export class FormReducer<T> {
         let curMeta = this.meta.getMeta(keys, false) || {};
 
         this.meta.data = this.con.getAllMeta(state, this.props);
-        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: curMeta.isShow !== undefined ? !curMeta.isShow : true }), false);
-
+        this.meta.setMeta(keys, Object.assign({}, curMeta, { isShow: (curMeta.isShow === undefined ? false : !curMeta.isShow) }));
         return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }
 

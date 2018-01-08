@@ -4,9 +4,10 @@ export default (hocFactory, settings = {}) => {
     return (Component) => {
         class FieldComponentHoc extends React.PureComponent {
             render() {
-                const { mergeSchema, currentTheme } = this.props;
+                const { mergeSchema, currentTheme, getHocOptions } = this.props;
                 const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
                 let FieldComponent, WidgetComponent;
+                let options = getHocOptions("field");
                 if (typeof mergeSchema.type === "object") {
                     mergeSchema.type = mergeSchema.type[0];
                 }
@@ -29,7 +30,7 @@ export default (hocFactory, settings = {}) => {
                         widget = widget[0];
                     }
                 }
-                if (mergeSchema.enum) {
+                if (mergeSchema.enum && options.autoCombine !== false) {
                     uiSchema.widget = "combobox";
                     mergeSchema.uiSchema = merge({
                         options: {
