@@ -47,7 +47,7 @@ const handlers = withHandlers({
         return (defaultValue) => {
             const { mergeSchema, actions, getHocOptions } = props;
             const { keys } = mergeSchema;
-            const options = getHocOptions(this.props, "array");
+            const options = getHocOptions(props, "array");
             if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 let newData = {};
                 props.schemaFormOptions.ajv.validate(mergeSchema.items, newData);
