@@ -7,7 +7,7 @@ export default (hocFactory, settings = {}) => {
                 const { mergeSchema, currentTheme, getHocOptions } = this.props;
                 const { uiSchema = { theme: "", field: "", widget: "" } } = mergeSchema;
                 let FieldComponent, WidgetComponent;
-                let options = getHocOptions("field");
+                let options = getHocOptions(this.props, "field");
                 if (typeof mergeSchema.type === "object") {
                     mergeSchema.type = mergeSchema.type[0];
                 }

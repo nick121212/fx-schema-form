@@ -47,7 +47,7 @@ const handlers = withHandlers({
         return (defaultValue) => {
             const { mergeSchema, actions, getHocOptions } = props;
             const { keys } = mergeSchema;
-            const options = getHocOptions("array");
+            const options = getHocOptions(this.props, "array");
             if (mergeSchema.items.type === "object" || !mergeSchema.items.type) {
                 let newData = {};
                 props.schemaFormOptions.ajv.validate(mergeSchema.items, newData);
@@ -70,7 +70,7 @@ export default (hocFactory, settings = {}) => {
             render() {
                 const { mergeSchema, getHocOptions } = this.props;
                 const { type } = mergeSchema;
-                const arrayHocOptions = getHocOptions("array");
+                const arrayHocOptions = getHocOptions(this.props, "array");
                 const { ItemChildButtons = null, ItemButtons = null } = arrayHocOptions || {};
                 let ItemChildButtonsWithHoc, ItemButtonsWithHoc;
                 if (ItemChildButtons) {

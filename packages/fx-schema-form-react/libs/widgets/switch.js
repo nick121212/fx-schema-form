@@ -19,7 +19,7 @@ export class AntdSwitchWidget extends React.Component {
         return (React.createElement(Switch, Object.assign({ onChange: (checked) => {
                 updateItemData(checked);
                 validate(checked);
-            }, disabled: readonly }, getWidgetOptions("switch"), this.setDefaultProps())));
+            }, disabled: readonly }, getWidgetOptions(this.props, "switch"), this.setDefaultProps())));
     }
 }
 //# sourceMappingURL=switch.js.map

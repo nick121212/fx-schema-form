@@ -33,7 +33,7 @@ export class AntdSwitchWidget extends React.Component<AntdSwitchProps, any> {
                 validate(checked);
             }}
                 disabled={readonly}
-                {...getWidgetOptions("switch") }
+                {...getWidgetOptions(this.props, "switch") }
                 {...this.setDefaultProps() }></Switch >
         );
     }

@@ -43,7 +43,7 @@ export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> 
                 }}
                 disabled={readonly}
                 placeholder={mergeSchema.title}
-                {...getWidgetOptions("input") }
+                {...getWidgetOptions(this.props, "input") }
                 {...this.setDefaultProps() }>
             </Input>
         );

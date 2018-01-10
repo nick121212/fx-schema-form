@@ -19,7 +19,7 @@ export class AntdCheckboxWidget extends React.Component {
         return (React.createElement(Checkbox, Object.assign({ onChange: (e) => {
                 updateItemData(e.target.checked);
                 validate(e.target.checked);
-            }, disabled: readonly }, getWidgetOptions("checkbox"), this.setDefaultProps())));
+            }, disabled: readonly }, getWidgetOptions(this.props, "checkbox"), this.setDefaultProps())));
     }
 }
 //# sourceMappingURL=checkbox.js.map

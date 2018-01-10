@@ -11,11 +11,11 @@ import { RC } from "../../types";
 import { SchemaFormItemBaseProps } from "../../components/formitem/props";
 
 export interface UtilsHocOutProps {
-    getHocOptions: (hoc?: string) => any;
-    getFieldOptions: (field: string) => any;
-    getWidgetOptions: (widget: string) => any;
-    getTempOptions: (temp: string) => any;
-    getTitle(): () => any;
+    getHocOptions: (props: SchemaFormItemBaseProps, hoc?: string) => any;
+    getFieldOptions: (props: SchemaFormItemBaseProps, field: string) => any;
+    getWidgetOptions: (props: SchemaFormItemBaseProps, widget: string) => any;
+    getTempOptions: (props: SchemaFormItemBaseProps, temp: string) => any;
+    getTitle(props: SchemaFormItemBaseProps): () => any;
     getPathKeys: (keys: string[], path: string) => string[];
 }
 
@@ -33,12 +33,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
         class ComponentHoc extends React.PureComponent<SchemaFormItemBaseProps, any> {
             public render(): JSX.Element {
                 return <Component
-                    getHocOptions={this.getHocOptions.bind(this)}
-                    getFieldOptions={this.getFieldOptions.bind(this)}
-                    getWidgetOptions={this.getWidgetOptions.bind(this)}
-                    getTitle={this.getTitle.bind(this)}
+                    getHocOptions={this.getHocOptions}
+                    getFieldOptions={this.getFieldOptions}
+                    getWidgetOptions={this.getWidgetOptions}
+                    getTitle={this.getTitle}
                     getTempOptions={this.getTempOptions}
-                    getPathKeys={this.getPathKeys.bind(this)}
+                    getPathKeys={this.getPathKeys}
                     {...this.props} />;
             }
 
@@ -46,32 +46,33 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 获取field的参数
              * @param field field的名称
              */
-            private getFieldOptions(field: string) {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
-                const uiSchemaOptions = uiSchema.options || {};
+            private getFieldOptions(props: SchemaFormItemBaseProps, field: string) {
+                const { mergeSchema, globalOptions } = props;
+                const { uiSchema = { options: {} } } = mergeSchema;
+                const uiSchemaOptions: any = uiSchema.options || {};
                 const fieldOptions = uiSchemaOptions.field || {};
                 const fieldDefaultOptions = globalOptions.field || {};
 
                 return merge({}, fieldDefaultOptions[field] || {}, fieldOptions[field] || {});
             }
 
-            private getTempOptions(temp: string) {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
-                const uiSchemaOptions = uiSchema.options || {};
-                const tempOptions = uiSchemaOptions[temp] || {};
-                const fieldDefaultOptions = globalOptions[temp] || {};
+            private getTempOptions(props: SchemaFormItemBaseProps, temp: string) {
+                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = props;
+                const { options = { template: {} } } = mergeSchema.uiSchema;
 
-                return merge({}, tempOptions, fieldDefaultOptions);
+                const uiOptions = uiSchemaOptions.template || {};
+                const widgetOptions = options.template || {};
+                const widgetGlobalOptions = globalOptions.template || {};
+
+                return merge({}, widgetGlobalOptions[temp] || {}, uiOptions[temp] || {}, widgetOptions[temp] || {});
             }
 
             /**
              * 获取widget的参数
              * @param widget widget的名称
              */
-            private getWidgetOptions(widget: string) {
-                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = this.props;
+            private getWidgetOptions(props: SchemaFormItemBaseProps, widget: string) {
+                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = props;
                 const { options = { widget: {} } } = mergeSchema.uiSchema;
 
                 const uiOptions = uiSchemaOptions.widget || {};
@@ -85,11 +86,11 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 返回hoc的参数
              * @param hoc hoc的名称
              */
-            private getHocOptions(hoc?: string): any {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
-                const uiSchemaOptions = uiSchema.options || {};
-                const hocOptions = merge({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
+            private getHocOptions(props: SchemaFormItemBaseProps, hoc?: string): any {
+                const { mergeSchema, globalOptions } = props;
+                const { uiSchema = { options: {} } } = mergeSchema;
+                const uiSchemaOptions: any = uiSchema.options || {};
+                const hocOptions: any = merge({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
 
                 if (hoc) {
                     return hocOptions[hoc] || {};
@@ -102,8 +103,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 获取标题数据
              * uiSchema.title || title || key
              */
-            private getTitle(): any {
-                const { mergeSchema } = this.props;
+            private getTitle(props: SchemaFormItemBaseProps): any {
+                const { mergeSchema } = props;
                 const { uiSchema, title, keys } = mergeSchema;
 
                 return uiSchema.title || title || [].concat(keys).pop();

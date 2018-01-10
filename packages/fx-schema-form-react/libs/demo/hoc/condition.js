@@ -8,7 +8,7 @@ export const ConditionHoc = (hocFactory, Component) => {
         }
         render() {
             const { getHocOptions, formData, formDefaultData } = this.props;
-            const hocOptions = getHocOptions();
+            const hocOptions = getHocOptions(this.props, "condition");
             const { array: arrayHocOptions } = hocOptions;
             const { condition: conditionHocOptions } = hocOptions;
             const { fields } = conditionHocOptions;

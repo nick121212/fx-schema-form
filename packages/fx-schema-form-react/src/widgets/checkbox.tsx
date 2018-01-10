@@ -33,7 +33,7 @@ export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> 
                 validate((e.target as any).checked);
             }}
                 disabled={readonly}
-                {...getWidgetOptions("checkbox")}
+                {...getWidgetOptions(this.props, "checkbox") }
                 {...this.setDefaultProps() }
             ></Checkbox>
         );

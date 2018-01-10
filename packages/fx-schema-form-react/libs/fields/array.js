@@ -13,7 +13,7 @@ let ArrayField = class ArrayField extends React.PureComponent {
     renderItem(idx, maxLen) {
         const { mergeSchema, schemaKey, globalOptions, schemaFormOptions, getCurrentState, ItemChildButtons, arrayLevel = [], getFieldOptions, reducerKeys } = this.props;
         const { uiSchema, keys } = mergeSchema;
-        return (React.createElement(SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, getCurrentState: getCurrentState, arrayIndex: idx, reducerKeys: reducerKeys, arrayLevel: arrayLevel.concat([idx]), ItemButtons: (props) => React.createElement(ItemChildButtons, Object.assign({}, this.props, props, { arrayIndex: idx })), parentKeys: mergeSchema.originKeys, RootComponent: getFieldOptions("array").root, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
+        return (React.createElement(SchemaForm, { key: keys.join(".") + idx, schema: mergeSchema, getCurrentState: getCurrentState, arrayIndex: idx, reducerKeys: reducerKeys, arrayLevel: arrayLevel.concat([idx]), ItemButtons: (props) => React.createElement(ItemChildButtons, Object.assign({}, this.props, props, { arrayIndex: idx })), parentKeys: mergeSchema.originKeys, RootComponent: getFieldOptions(this.props, "array").root, schemaKey: schemaKey, uiSchema: uiSchema.items, schemaFormOptions: schemaFormOptions, globalOptions: globalOptions }));
     }
     render() {
         const { mergeSchema, currentTheme, WidgetComponent, schemaKey, globalOptions, schemaFormOptions, formItemData, meta = { dirty: false, isValid: true, isShow: true } } = this.props;

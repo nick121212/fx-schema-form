@@ -25,7 +25,7 @@ export const ConditionHoc = (hocFactory: BaseFactory<any>, Component: any): RC<S
          */
         public render(): JSX.Element {
             const { getHocOptions, formData, formDefaultData } = this.props;
-            const hocOptions = getHocOptions();
+            const hocOptions = getHocOptions(this.props, "condition");
             const { array: arrayHocOptions } = hocOptions;
             const { condition: conditionHocOptions } = hocOptions;
             const { fields } = conditionHocOptions;

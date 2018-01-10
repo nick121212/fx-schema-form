@@ -47,7 +47,7 @@ export class ArrayField extends React.PureComponent<ArryFieldProps, any> {
                 arrayLevel={arrayLevel.concat([idx])}
                 ItemButtons={(props) => <ItemChildButtons {...this.props} { ...props} arrayIndex={idx} />}
                 parentKeys={mergeSchema.originKeys}
-                RootComponent={getFieldOptions("array").root}
+                RootComponent={getFieldOptions(this.props, "array").root}
                 schemaKey={schemaKey}
                 uiSchema={uiSchema.items}
                 schemaFormOptions={schemaFormOptions}

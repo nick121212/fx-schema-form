@@ -26,7 +26,7 @@ export class ObjectField extends React.PureComponent<ObjectFieldProps, any> {
                 reducerKeys={reducerKeys}
                 schema={mergeSchema}
                 parentKeys={mergeSchema.originKeys}
-                RootComponent={getFieldOptions("object").root}
+                RootComponent={getFieldOptions(this.props, "object").root}
                 uiSchema={uiSchema.items || ["*"]}
                 globalOptions={globalOptions}>
             </SchemaForm>

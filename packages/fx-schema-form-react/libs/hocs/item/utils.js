@@ -5,35 +5,35 @@ export default (hocFactory, settings = {}) => {
     return (Component) => {
         class ComponentHoc extends React.PureComponent {
             render() {
-                return React.createElement(Component, Object.assign({ getHocOptions: this.getHocOptions.bind(this), getFieldOptions: this.getFieldOptions.bind(this), getWidgetOptions: this.getWidgetOptions.bind(this), getTitle: this.getTitle.bind(this), getTempOptions: this.getTempOptions, getPathKeys: this.getPathKeys.bind(this) }, this.props));
+                return React.createElement(Component, Object.assign({ getHocOptions: this.getHocOptions, getFieldOptions: this.getFieldOptions, getWidgetOptions: this.getWidgetOptions, getTitle: this.getTitle, getTempOptions: this.getTempOptions, getPathKeys: this.getPathKeys }, this.props));
             }
-            getFieldOptions(field) {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
+            getFieldOptions(props, field) {
+                const { mergeSchema, globalOptions } = props;
+                const { uiSchema = { options: {} } } = mergeSchema;
                 const uiSchemaOptions = uiSchema.options || {};
                 const fieldOptions = uiSchemaOptions.field || {};
                 const fieldDefaultOptions = globalOptions.field || {};
                 return merge({}, fieldDefaultOptions[field] || {}, fieldOptions[field] || {});
             }
-            getTempOptions(temp) {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
-                const uiSchemaOptions = uiSchema.options || {};
-                const tempOptions = uiSchemaOptions[temp] || {};
-                const fieldDefaultOptions = globalOptions[temp] || {};
-                return merge({}, tempOptions, fieldDefaultOptions);
+            getTempOptions(props, temp) {
+                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = props;
+                const { options = { template: {} } } = mergeSchema.uiSchema;
+                const uiOptions = uiSchemaOptions.template || {};
+                const widgetOptions = options.template || {};
+                const widgetGlobalOptions = globalOptions.template || {};
+                return merge({}, widgetGlobalOptions[temp] || {}, uiOptions[temp] || {}, widgetOptions[temp] || {});
             }
-            getWidgetOptions(widget) {
-                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = this.props;
+            getWidgetOptions(props, widget) {
+                const { mergeSchema = {}, globalOptions = {}, uiSchemaOptions = {} } = props;
                 const { options = { widget: {} } } = mergeSchema.uiSchema;
                 const uiOptions = uiSchemaOptions.widget || {};
                 const widgetOptions = options.widget || {};
                 const widgetGlobalOptions = globalOptions.widget || {};
                 return merge({}, widgetGlobalOptions[widget] || {}, uiOptions[widget] || {}, widgetOptions[widget] || {});
             }
-            getHocOptions(hoc) {
-                const { mergeSchema, globalOptions } = this.props;
-                const { uiSchema } = mergeSchema;
+            getHocOptions(props, hoc) {
+                const { mergeSchema, globalOptions } = props;
+                const { uiSchema = { options: {} } } = mergeSchema;
                 const uiSchemaOptions = uiSchema.options || {};
                 const hocOptions = merge({}, globalOptions.hoc || {}, uiSchemaOptions.hoc || {});
                 if (hoc) {
@@ -41,8 +41,8 @@ export default (hocFactory, settings = {}) => {
                 }
                 return hocOptions;
             }
-            getTitle() {
-                const { mergeSchema } = this.props;
+            getTitle(props) {
+                const { mergeSchema } = props;
                 const { uiSchema, title, keys } = mergeSchema;
                 return uiSchema.title || title || [].concat(keys).pop();
             }

@@ -11,7 +11,7 @@ let ObjectField = class ObjectField extends React.PureComponent {
     render() {
         const { mergeSchema, currentTheme, WidgetComponent, arrayIndex, ItemButtons, arrayLevel, getCurrentState, globalOptions, schemaFormOptions, schemaKey, getFieldOptions, reducerKeys } = this.props;
         const { uiSchema } = mergeSchema;
-        return (React.createElement(SchemaForm, { arrayIndex: arrayIndex, schemaFormOptions: schemaFormOptions, getCurrentState: getCurrentState, schemaKey: schemaKey, arrayLevel: arrayLevel, reducerKeys: reducerKeys, schema: mergeSchema, parentKeys: mergeSchema.originKeys, RootComponent: getFieldOptions("object").root, uiSchema: uiSchema.items || ["*"], globalOptions: globalOptions }));
+        return (React.createElement(SchemaForm, { arrayIndex: arrayIndex, schemaFormOptions: schemaFormOptions, getCurrentState: getCurrentState, schemaKey: schemaKey, arrayLevel: arrayLevel, reducerKeys: reducerKeys, schema: mergeSchema, parentKeys: mergeSchema.originKeys, RootComponent: getFieldOptions(this.props, "object").root, uiSchema: uiSchema.items || ["*"], globalOptions: globalOptions }));
     }
 };
 ObjectField = __decorate([

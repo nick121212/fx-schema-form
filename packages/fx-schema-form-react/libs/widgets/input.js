@@ -29,7 +29,7 @@ let AntdInputWidget = class AntdInputWidget extends React.Component {
                 updateItemMeta(formItemData);
             }, onChange: (e) => {
                 updateItemData(e.currentTarget.value);
-            }, disabled: readonly, placeholder: mergeSchema.title }, getWidgetOptions("input"), this.setDefaultProps())));
+            }, disabled: readonly, placeholder: mergeSchema.title }, getWidgetOptions(this.props, "input"), this.setDefaultProps())));
     }
 };
 AntdInputWidget = __decorate([

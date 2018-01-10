@@ -13,7 +13,7 @@ export interface NormalFieldProps extends SchemaFormItemProps {
 export class NormalField extends React.PureComponent<NormalFieldProps, any> {
     public render(): JSX.Element {
         const { mergeSchema, currentTheme, WidgetComponent, getFieldOptions } = this.props;
-        const fieldOptions = getFieldOptions("normal");
+        const fieldOptions = getFieldOptions(this.props, "normal");
         let WidgetComponentWithHoc = compose(
             ...(fieldOptions.hocs || []),
             connect(mapFormItemDataProps)

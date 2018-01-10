@@ -16,7 +16,7 @@ export default (hocFactory, settings = {}) => {
             render() {
                 const { mergeSchema, globalOptions } = this.props;
                 const { uiSchema = { options: {} }, keys, type } = mergeSchema;
-                const fieldOptions = this.props.getFieldOptions(type);
+                const fieldOptions = this.props.getFieldOptions(this.props, type);
                 const typeDefaultOptions = globalOptions[type] || {};
                 const hocs = settings.hocs || uiSchema[this.fieldKey] ||
                     fieldOptions[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
