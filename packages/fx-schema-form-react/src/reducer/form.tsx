@@ -56,7 +56,9 @@ export class FormReducer<T> {
      * 更改meta的状态
      */
     private updateData: SimpleActionCreator<any> = createAction("更改data的值");
-
+    /**
+     * 删除元素的map以及meta数据
+     */
     private removeItemMap: SimpleActionCreator<{ keys: Array<string> }> = createAction("删除元素的map以及meta数据");
 
     /**
@@ -158,9 +160,9 @@ export class FormReducer<T> {
 
     /**
      * 更新meta数据
-     * keys 更新的keys
-     * meta meta数据
-     * data data数据
+     * @param keys 更新的keys
+     * @param meta meta数据
+     * @param data data数据
      */
     private updateMetaHandle(state: SchemaFormState<T>, { keys, meta, data }: { keys: Array<string>, meta: SchemaFormMeta, data: any }) {
         let { normalKey } = this.meta.getKey(keys);
@@ -171,6 +173,10 @@ export class FormReducer<T> {
         return this.con.mergeData(state, this.props, { meta: this.meta.data });
     }
 
+    /**
+     * toggle meta中的isShow字段
+     * @param keys 更新的keys
+     */
     private toggleItemHandle(state: SchemaFormState<T>, { keys }: { keys: Array<string> }): SchemaFormState<T> {
         let { normalKey } = this.meta.getKey(keys);
         let curMeta = this.meta.getMeta(keys, false) || {};

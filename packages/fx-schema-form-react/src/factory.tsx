@@ -8,6 +8,10 @@ import hocs from "./hocs";
 import fields from "./fields";
 import { FormReducer } from "./reducer/form";
 
+/**
+ * 默认样式配置
+ * 每个样式包含temp，field和widget三个factory
+ */
 const defaultTheme = {
     tempFactory: new BaseFactory<RC<any, any>>(),
     fieldFactory: new BaseFactory<RC<any, any>>(),

@@ -11,16 +11,12 @@ var SchemaMerge = (function () {
         uiMerge.init(this.merge.bind(this));
     }
     SchemaMerge.prototype.compileSchema = function (keys, schema, options) {
+        types_1.none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
         switch (schema.type) {
-            case undefined:
-                types_1.none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
-                break;
             case "object":
-                types_1.none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 types_1.object(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             case "array":
-                types_1.none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 types_1.array(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             default:

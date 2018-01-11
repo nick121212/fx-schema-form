@@ -19,16 +19,15 @@ export class SchemaMerge {
      * @param options 参数配置
      */
     public compileSchema(keys: Array<string>, schema: any, options: any) {
+        none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
+
         switch (schema.type) {
-            case undefined:
-                none(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
-                break;
             case "object":
-                none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
+                // none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 object(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             case "array":
-                none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
+                // none(schema, [], Object.assign({}, options, { compileSchema: this.compileSchema }));
                 array(schema, keys, Object.assign({}, options, { compileSchema: this.compileSchema }));
                 break;
             default:
