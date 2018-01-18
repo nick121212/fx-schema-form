@@ -581,7 +581,7 @@ let schema = {
 }
 ```
 
-设置uiScham的值，当object/settings的值为true的时候，显示name字段；
+设置uiScham的值，根据不同的【type】的值，来显示不同的表单；
 
 ``` jsx
 [{

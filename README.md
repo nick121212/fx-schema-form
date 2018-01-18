@@ -369,7 +369,7 @@ arrayHoc做了A/B Test，如果是数组才使用，其他类型直接返回Comp
 ### <span id="advanced-customization-hoc">自定义hoc</span>
 
 如果默认的hoc功能不够用，可以自定义hoc来扩展SchemaFormItem组件。
-比如需要一个显示/隐藏的功能：
+比如需要一个根据某个字段的值，开显示不同的表单。
 
 ```jsx
 
@@ -581,7 +581,7 @@ let schema = {
 }
 ```
 
-设置uiScham的值，当object/settings的值为true的时候，显示name字段；
+设置uiScham的值，根据不同的【type】的值，来显示不同的表单；
 
 ``` jsx
 [{
