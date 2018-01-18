@@ -25,7 +25,7 @@ export interface ValidateHocOutProps {
 const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBaseProps & { actions: any }) => {
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
-    const schema = Object.assign({}, mergeSchema, { $async: true });
+    const schema = Object.assign({}, mergeSchema, {});
     const validate = schemaFormOptions.ajv.compile(schema);
     const validateAsync = async (data: any) => {
         let result: any = {
@@ -40,19 +40,14 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: SchemaFormItemBas
         try {
             await validate(data);
             result.isValid = true;
-            clearTimeout(timeId);
         } catch (err) {
-            clearTimeout(timeId);
             result.errorText = err.errors ?
                 schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
                 : err.message;
         }
-        // .then(() => {
-
-        // }).catch((err) => {
-
-        // });
-        // clearTimeout(timeId);
+        finally {
+            clearTimeout(timeId);
+        }
 
         return result;
     };

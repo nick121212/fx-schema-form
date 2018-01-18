@@ -18,7 +18,7 @@ import { compose, shouldUpdate } from "recompose";
 const mapDispatchToProps = (dispatch, ownProps) => {
     const { mergeSchema, actions, schemaFormOptions, schemaKey, formData } = ownProps;
     const { keys } = mergeSchema;
-    const schema = Object.assign({}, mergeSchema, { $async: true });
+    const schema = Object.assign({}, mergeSchema, {});
     const validate = schemaFormOptions.ajv.compile(schema);
     const validateAsync = (data) => __awaiter(this, void 0, void 0, function* () {
         let result = {
@@ -32,13 +32,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         try {
             yield validate(data);
             result.isValid = true;
-            clearTimeout(timeId);
         }
         catch (err) {
-            clearTimeout(timeId);
             result.errorText = err.errors ?
                 schemaFormOptions.ajv.errorsText(err.errors, { dataVar: "/" + keys.join("/") })
                 : err.message;
+        }
+        finally {
+            clearTimeout(timeId);
         }
         return result;
     });
