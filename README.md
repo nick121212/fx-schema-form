@@ -536,48 +536,54 @@ Schema
 
 ``` jsx
 let schema = {
-    oneOf: [{
-        default: {},
-        type: "object",
-        title: "固定参数-fixed",
-        required: ["value"],
-        properties: {
-            value: { type: "string" }
-        }
-    }, {
-        type: "object",
-        default: {},
-        title: "维度参数-dimension",
-        required: ["dataFieldName", "correspondField"],
-        properties: {
-            dataFieldName: { type: "string" },
-            correspondField: { type: "string" }
-        }
-    }, {
-        type: "object",
-        default: {},
-        title: "周期性参数-period",
-        required: ["correspondValue"],
-        properties: {
-            correspondValue: {
-                default: {},
-                type: "object",
-                required: ["dataType", "initialValue", "periodGap"],
-                properties: {
-                    dataType: { type: "string" },
-                    initialValue: { type: "string" },
-                    periodGap: {
-                        type: "object",
-                        required: ["value", "unit"],
-                        properties: {
-                            value: { type: "number" },
-                            unit: { type: "string" }
+    type:{
+        type:"string",
+        enum:["fixed","dimension","period"]
+    },
+    data:{
+        oneOf: [{
+            default: {},
+            type: "object",
+            title: "固定参数-fixed",
+            required: ["value"],
+            properties: {
+                value: { type: "string" }
+            }
+        }, {
+            type: "object",
+            default: {},
+            title: "维度参数-dimension",
+            required: ["dataFieldName", "correspondField"],
+            properties: {
+                dataFieldName: { type: "string" },
+                correspondField: { type: "string" }
+            }
+        }, {
+            type: "object",
+            default: {},
+            title: "周期性参数-period",
+            required: ["correspondValue"],
+            properties: {
+                correspondValue: {
+                    default: {},
+                    type: "object",
+                    required: ["dataType", "initialValue", "periodGap"],
+                    properties: {
+                        dataType: { type: "string" },
+                        initialValue: { type: "string" },
+                        periodGap: {
+                            type: "object",
+                            required: ["value", "unit"],
+                            properties: {
+                                value: { type: "number" },
+                                unit: { type: "string" }
+                            }
                         }
                     }
                 }
             }
-        }
-    }]
+        }]
+    }
 }
 ```
 
@@ -585,6 +591,8 @@ let schema = {
 
 ``` jsx
 [{
+    key:"type"
+},{
     key: "data",
     "ui:item.hoc": ["theme", "field", "validate", "temp", hocFactory.get("con")({
         paths: [{ path: "./type", jsonata: "$" }],
@@ -711,6 +719,7 @@ let schema = {
 这里是一个树形结构，这里是希望做成一个可以拖拽的编辑页面，所以不能直接像普通的数组一样渲染组件。下图中，中间和右边部分都是一个SchemaForm组件。
 
 ![](./images/design.jpg)
+[项目地址](https://github.com/nick121212/fx-schema-form-react-demo)
 [DEMO](https://nick121212.github.io/fx-schema-form-react-demo/dist/index.html#/panel/create)
 
 ``` jsx
@@ -954,4 +963,4 @@ export class TextBoxWidget extends React.PureComponent<TextBoxWidgetProps, any> 
 
 ## <span id="license">License</span>
 
-Apache 2
+MIT
