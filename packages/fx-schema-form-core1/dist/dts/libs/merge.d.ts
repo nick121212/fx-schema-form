@@ -2,7 +2,6 @@ import { Ajv } from "ajv";
 import { UiSchema } from "../models/uischema";
 /**
  * 用来转换uiSchema的类
- *
  */
 export declare class MergeLib {
     private ajv;

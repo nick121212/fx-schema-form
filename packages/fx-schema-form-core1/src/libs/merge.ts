@@ -8,7 +8,6 @@ import { FxJsonSchema } from "../models/jsonschema";
 
 /**
  * 用来转换uiSchema的类
- * 
  */
 export class MergeLib {
     /**
@@ -25,7 +24,7 @@ export class MergeLib {
      * 2. 处理uiSchema中带*号的数据
      * 3. 返回合并后的数据
      * @param ajv         当前的ajv实例
-     * @param $id         schema的$id 
+     * @param $id         schema的$id
      * @param parentKeys  父亲的keys 暂时没用到
      * @param uiSchemas   uiSchema
      */
@@ -124,11 +123,11 @@ export class MergeLib {
 
             uiSchemasLast.push(this.mergeUiSchemaToArray(uiSchema));
         });
-        
+
         // 如果是object类型，遍历properties属性，与之前的数据去重后添加到数组
         if (this.curSchema.type === "object" && this.curSchema.properties) {
             Object.keys(this.curSchema.properties).forEach((us: string) => {
-                let uiSchema = this.initUiSchema([].concat(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat([us])).join("/"));
+                let uiSchema = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat([us]).join("/"));
 
                 if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
                     return val.key === uiSchema.key;
@@ -141,7 +140,7 @@ export class MergeLib {
 
         // 如果是数组，获取下一级的key，然后做对比处理
         if (this.curSchema.type === "array" && this.curSchema.items) {
-            let uiSchema = this.initUiSchema([].concat(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"])).join("/"));
+            let uiSchema = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
 
             if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
                 return val.key === uiSchema.key;

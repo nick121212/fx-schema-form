@@ -2,13 +2,13 @@
   "name": "fx-schema-form-core",
   "version": "2.1.1",
   "description": "",
-  "main": "libs/index.js",
-  "types": "libs/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/dts/index.d.ts",
   "pre-commit": [
     "lint"
   ],
   "scripts": {
-    "prd": "NODE_ENV=production atool-build --no-compress",
+    "prd": "NODE_ENV=production atool-build",
     "stg": "NODE_ENV=stg atool-build --verbose",
     "lint": "eslint --ext .js,.jsx src/",
     "dora":"atool-build -h",
