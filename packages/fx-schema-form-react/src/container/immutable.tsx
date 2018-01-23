@@ -37,7 +37,6 @@ export class ImmutableCon extends ConBase<any, SchemaFormItemProps, any> {
 
         return curState.get("data");
     }
-
     public getAllMeta(state: Immutable.Map<string, any>, props: SchemaFormItemProps) {
         let curState = this.getState(state, props);
 
