@@ -44,6 +44,10 @@ module.exports = (webpackConfig) => {
         return loader;
     });
 
+    retVal.plugins.shift();
+
+    // console.log(retVal.plugins);
+
     // retVal.plugins.push(new webpack.optimize.UglifyJsPlugin({
     //     comments: false,
     //     compress: {
