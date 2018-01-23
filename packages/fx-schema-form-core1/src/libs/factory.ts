@@ -14,11 +14,11 @@ export class BaseFactory<T> {
      */
     public add(name: string, intance: T, override = false): void {
         if (this.protectedInstances.hasOwnProperty(name)) {
-            return console.error(`name=【${name}】被锁定，请先解锁！`);
+            return console.error(`name=【${name}】has locked!`);
         }
 
         if (!override && this.has(name)) {
-            return console.error(`已经存在name=【${name}】的实例！`);
+            return console.error(`【${name}】exist!`);
         }
         this.instances[name] = intance;
     }
@@ -36,7 +36,7 @@ export class BaseFactory<T> {
             return this.instances[name];
         }
 
-        throw new Error(`base.factory-不存在name=【${name}】!`);
+        throw new Error(`name=[${name}]not exist`);
     }
 
     /**
