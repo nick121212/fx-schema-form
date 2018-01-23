@@ -1,9 +1,10 @@
 import ajv from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaFieldFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib } from "../index";
+import { schemaFieldFactory, schemaKeysFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib, MergeLib } from "../index";
 
 import schemas from "./schemas";
+import { setInterval } from "timers";
 // schemaFactory.add("$test", {
 //     type: "string",
 //     $id: "$test"
@@ -80,6 +81,29 @@ let a = [
     new ResolveLib(curAjv, schema),
 ];
 
+console.log(schemaFieldFactory, schemaKeysFactory);
+
+let b = new MergeLib(curAjv, "design", [], ["name", "*", "dsModelIds"]).mergeUiSchemaList;
+
+curAjv.validate(b[0], undefined);
+
+console.log(curAjv.errors, curAjv.errorsText());
+
+// b.forEach((val: any) => {
+//     console.log(val);
+//     if (val.type === "object" || val.type === "array") {
+//         console.log(new MergeLib(curAjv, val.schemaPath, [], ["*"]).mergeUiSchemaList);
+//     }
+// });
+
+let c = new MergeLib(curAjv, "design", [], ["infoOptions"]).mergeUiSchemaList;
+
+setInterval(() => {
+    c = new MergeLib(curAjv, (c[0] as any).schemaPath, [], ["infoOptions"]).mergeUiSchemaList;
+
+    console.log(c[0]);
+}, 2000);
+
 // for (const key in schemas) {
 //     if (schemas.hasOwnProperty(key)) {
 //         const element = schemas[key];
@@ -88,4 +112,3 @@ let a = [
 //     }
 // }
 
-console.log(schemaFieldFactory);

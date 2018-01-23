@@ -4,16 +4,14 @@ import { JSONSchema6 } from "json-schema";
 
 import { ResolveLib } from "../libs/resolve";
 
-
+/**
+ * 解析schema中的关键字 oneOf
+ * 如果发现有oneOf关键字，遍历替换成schema
+ */
 export default (schema: JSONSchema6, ajv: Ajv) => {
     if (schema && schema.oneOf) {
         schema.oneOf.map((schemaOfOne: JSONSchema6) => {
-
             let resolve = new ResolveLib(ajv, schemaOfOne);
-            // if (s.resolve) {
-            //     return s;
-            // }
-            // return options.compileSchema(schema.keys, s, options);
 
             return resolve.mergeSchema;
         });

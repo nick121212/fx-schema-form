@@ -6,6 +6,7 @@
         "module": "es2015",
         /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'. */
         "lib": [
+            "dom",
             "es7",
             "es2015"
         ],

@@ -1,30 +1,23 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaFieldFactory, convertKeys } from "../factory";
+import { schemaFieldFactory, schemaKeysFactory, convertKeys } from "../factory";
 import { ResolveLib } from "../libs/resolve";
 
-export default (schema: JSONSchema6, $id: string, ajv: Ajv) => {
+export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
     const currentSchema = convertKeys(schema, ajv);
+    const keys: string[] = ResolveLib.getDataKeys(schemaKey);
+    const $id = ResolveLib.getSchemaId(schemaKey);
 
-    if (schemaFieldFactory.has([$id].join("/"))) {
+    if (schemaFieldFactory.has(schemaKey)) {
         return schema;
     }
 
-    if (currentSchema) {
-        // const resolve = new ResolveLib(ajv, {}, $id);
-        schemaFieldFactory.add([$id].join("/"), Object.assign({}, currentSchema, {
-            keys: ResolveLib.getDataKeys($id)
-        }));
-
-        return currentSchema;
-    } else {
-        schemaFieldFactory.add([$id].join("/"), Object.assign({}, schema, {
-            keys: ResolveLib.getDataKeys($id)
-        }));
-    }
-
-    // console.log(schema, [$id].join("/"));
+    schemaFieldFactory.add(schemaKey, Object.assign({}, currentSchema || schema, {
+        keys,
+        schemaPath: schemaKey
+    }));
+    schemaKeysFactory.add([$id].concat(keys).join("/"), schemaKey);
 
     return schema;
 };
