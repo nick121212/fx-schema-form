@@ -15,14 +15,12 @@ console.log(__PROD__);
 module.exports = (webpackConfig) => {
     let retVal = Object.assign({}, webpackConfig, {
         // 起点或是应用程序的起点入口。从这个起点开始，应用程序启动执行。如果传递一个数组，那么数组的每一项都会执行。
-        entry: {
-            index: __DEV__ ? ['./src/demo/index.ts'] : ['./src/index.ts']
-        },
+        entry: __DEV__ ? './src/demo/index.ts' : './src/index.ts',
         //防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖(external dependencies)。
         //例如，React 和 react-dom不打包到bundle中
-        externals: __DEV__ ? {} : {
-            "ajv": "Ajv"
-        },
+        externals: __DEV__ ? {} : [{
+            "ajv": "ajv"
+        }],
         devServer: devServer
     });
 
@@ -46,14 +44,14 @@ module.exports = (webpackConfig) => {
         return loader;
     });
 
-    retVal.plugins.push(new webpack.optimize.UglifyJsPlugin({
-        comments: false,
-        compress: {
-            unused: true,
-            dead_code: true,
-            warnings: false,
-        }
-    }));
+    // retVal.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    //     comments: false,
+    //     compress: {
+    //         unused: false,
+    //         dead_code: false,
+    //         warnings: false,
+    //     }
+    // }));
 
     if (__DEV__) {
         retVal.plugins.push(new HtmlWebpackPlugin({
@@ -66,7 +64,9 @@ module.exports = (webpackConfig) => {
             path: path.resolve('./dist'),
             filename: '[name].js',
             publicPath: '/',
+            chunkFilename: "[name].min.js",
             libraryTarget: "umd",
+            sourceMapFilename: "[file].map",
             library: "fxSchemaFormCore"
         };
     }

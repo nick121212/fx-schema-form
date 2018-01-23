@@ -12,8 +12,55 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(4);
+	"use strict";
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.schemaTypeFactory = exports.schemaKeyWordFactory = exports.schemaFieldFactory = exports.schemaKeysFactory = exports.BaseFactory = exports.MergeLib = exports.ResolveLib = undefined;
+
+	var _resolve = __webpack_require__(1);
+
+	Object.defineProperty(exports, "ResolveLib", {
+	  enumerable: true,
+	  get: function get() {
+	    return _resolve.ResolveLib;
+	  }
+	});
+
+	var _merge = __webpack_require__(7);
+
+	Object.defineProperty(exports, "MergeLib", {
+	  enumerable: true,
+	  get: function get() {
+	    return _merge.MergeLib;
+	  }
+	});
+
+	var _keys = __webpack_require__(4);
+
+	var _types = __webpack_require__(10);
+
+	var _factory = __webpack_require__(3);
+
+	var _factory2 = __webpack_require__(2);
+
+	_factory2.schemaKeyWordFactory.add("ref", _keys.ref);
+	_factory2.schemaKeyWordFactory.add("oneof", _keys.oneof);
+	_factory2.schemaTypeFactory.add("array", _types.array);
+	_factory2.schemaTypeFactory.add("string", _types.none);
+	_factory2.schemaTypeFactory.add("undefined", _types.none);
+	_factory2.schemaTypeFactory.add("number", _types.none);
+	_factory2.schemaTypeFactory.add("null", _types.none);
+	_factory2.schemaTypeFactory.add("any", _types.none);
+	_factory2.schemaTypeFactory.add("integer", _types.none);
+	_factory2.schemaTypeFactory.add("boolean", _types.none);
+	_factory2.schemaTypeFactory.add("object", _types.object);
+	exports.BaseFactory = _factory.BaseFactory;
+	exports.schemaKeysFactory = _factory2.schemaKeysFactory;
+	exports.schemaFieldFactory = _factory2.schemaFieldFactory;
+	exports.schemaKeyWordFactory = _factory2.schemaKeyWordFactory;
+	exports.schemaTypeFactory = _factory2.schemaTypeFactory;
 
 /***/ }),
 /* 1 */
@@ -269,62 +316,8 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.schemaTypeFactory = exports.schemaKeyWordFactory = exports.schemaFieldFactory = exports.schemaKeysFactory = exports.BaseFactory = exports.MergeLib = exports.ResolveLib = undefined;
 
-	var _resolve = __webpack_require__(1);
-
-	Object.defineProperty(exports, "ResolveLib", {
-	  enumerable: true,
-	  get: function get() {
-	    return _resolve.ResolveLib;
-	  }
-	});
-
-	var _merge = __webpack_require__(8);
-
-	Object.defineProperty(exports, "MergeLib", {
-	  enumerable: true,
-	  get: function get() {
-	    return _merge.MergeLib;
-	  }
-	});
-
-	var _keys = __webpack_require__(5);
-
-	var _types = __webpack_require__(11);
-
-	var _factory = __webpack_require__(3);
-
-	var _factory2 = __webpack_require__(2);
-
-	_factory2.schemaKeyWordFactory.add("ref", _keys.ref);
-	_factory2.schemaKeyWordFactory.add("oneof", _keys.oneof);
-	_factory2.schemaTypeFactory.add("array", _types.array);
-	_factory2.schemaTypeFactory.add("string", _types.none);
-	_factory2.schemaTypeFactory.add("undefined", _types.none);
-	_factory2.schemaTypeFactory.add("number", _types.none);
-	_factory2.schemaTypeFactory.add("null", _types.none);
-	_factory2.schemaTypeFactory.add("any", _types.none);
-	_factory2.schemaTypeFactory.add("integer", _types.none);
-	_factory2.schemaTypeFactory.add("boolean", _types.none);
-	_factory2.schemaTypeFactory.add("object", _types.object);
-	exports.BaseFactory = _factory.BaseFactory;
-	exports.schemaKeysFactory = _factory2.schemaKeysFactory;
-	exports.schemaFieldFactory = _factory2.schemaFieldFactory;
-	exports.schemaKeyWordFactory = _factory2.schemaKeyWordFactory;
-	exports.schemaTypeFactory = _factory2.schemaTypeFactory;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _ref = __webpack_require__(7);
+	var _ref = __webpack_require__(6);
 
 	Object.defineProperty(exports, "ref", {
 	  enumerable: true,
@@ -333,7 +326,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	  }
 	});
 
-	var _oneof = __webpack_require__(6);
+	var _oneof = __webpack_require__(5);
 
 	Object.defineProperty(exports, "oneof", {
 	  enumerable: true,
@@ -345,7 +338,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -374,7 +367,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	module.exports = exports["default"];
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -414,7 +407,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	module.exports = exports["default"];
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -426,7 +419,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _uischema = __webpack_require__(9);
+	var _uischema = __webpack_require__(8);
 
 	var _factory = __webpack_require__(2);
 
@@ -560,7 +553,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	exports.MergeLib = MergeLib;
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -589,7 +582,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	};
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -622,7 +615,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	module.exports = exports["default"];
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -631,7 +624,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	  value: true
 	});
 
-	var _array = __webpack_require__(10);
+	var _array = __webpack_require__(9);
 
 	Object.defineProperty(exports, "array", {
 	  enumerable: true,
@@ -640,7 +633,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	  }
 	});
 
-	var _object = __webpack_require__(13);
+	var _object = __webpack_require__(12);
 
 	Object.defineProperty(exports, "object", {
 	  enumerable: true,
@@ -649,7 +642,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	  }
 	});
 
-	var _none = __webpack_require__(12);
+	var _none = __webpack_require__(11);
 
 	Object.defineProperty(exports, "none", {
 	  enumerable: true,
@@ -661,7 +654,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -695,7 +688,7 @@ return webpackJsonpfxSchemaFormCore([1,0],[
 	module.exports = exports["default"];
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";

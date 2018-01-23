@@ -8,10 +8,10 @@
     "lint"
   ],
   "scripts": {
-    "prd": "NODE_ENV=production atool-build",
+    "prd": "NODE_ENV=production atool-build --no-compress",
     "stg": "NODE_ENV=stg atool-build --verbose",
     "lint": "eslint --ext .js,.jsx src/",
-    "dora":"dora -h",
+    "dora":"atool-build -h",
     "start": "dora --plugins \"webpack\" --port 8002",
     "test": "atool-test-mocha ./**/__tests__/*-test.js"
   },
