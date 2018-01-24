@@ -12,7 +12,7 @@ export class BaseFactory<T> {
      * @param override {boolean}   是否覆盖
      * @return         {void}
      */
-    public add(name: string, intance: T, override = false): void {
+    public add(name: string, intance: T, override = false): boolean | void {
         if (this.protectedInstances.hasOwnProperty(name)) {
             return console.error(`name=【${name}】has locked!`);
         }
@@ -21,6 +21,8 @@ export class BaseFactory<T> {
             return console.error(`【${name}】exist!`);
         }
         this.instances[name] = intance;
+
+        return true;
     }
 
     public has(name: string): boolean {

@@ -19,7 +19,8 @@ describe("普通类型的解析", () => {
             extendRefs: true,
             missingRefs: true
         });
-
+        schemaFieldFactory.clear();
+        schemaKeysFactory.clear();
         new ResolveLib(ajv, {
             $id: "test1",
             type: "number",

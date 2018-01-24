@@ -13,7 +13,7 @@ export declare class BaseFactory<T> {
      * @param override {boolean}   是否覆盖
      * @return         {void}
      */
-    add(name: string, intance: T, override?: boolean): void;
+    add(name: string, intance: T, override?: boolean): boolean | void;
     has(name: string): boolean;
     /**
      * 获取一个实例
