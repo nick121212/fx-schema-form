@@ -77,4 +77,12 @@ export class BaseFactory<T> {
             }
         }
     }
+
+    /**
+     * 清空当前的hash
+     */
+    public clear() {
+        this.instances = {};
+        this.protectedInstances = {};
+    }
 }

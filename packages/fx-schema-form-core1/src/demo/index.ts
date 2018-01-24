@@ -77,17 +77,42 @@ const schema: JSONSchema6 = {
     }
 };
 
-let a = [
-    new ResolveLib(curAjv, schema),
-];
+let b = [new ResolveLib(curAjv, {
+    $id: "test1",
+    type: "number",
+    title: "测试的schema"
+}),
 
-console.log(schemaFieldFactory, schemaKeysFactory);
+new ResolveLib(curAjv, {
+    $id: "test2",
+    type: "string",
+    title: "测试的schema"
+}),
 
-let b = new MergeLib(curAjv, "design", [], ["name", "*", "dsModelIds"]).mergeUiSchemaList;
+new ResolveLib(curAjv, {
+    $id: "test",
+    title: "测试oneof的schema",
+    type: "array",
+    items: {
+        type: "string"
+    }
+})];
 
-curAjv.validate(b[0], undefined);
+let schema12 = schemaTypeFactory.get("array")(curAjv.getSchema("test").schema as any, "test#", curAjv);
 
-console.log(curAjv.errors, curAjv.errorsText());
+console.log(schema12, schemaFieldFactory, schemaKeysFactory);
+
+// let a = [
+//     new ResolveLib(curAjv, schema),
+// ];
+
+// console.log(schemaFieldFactory, schemaKeysFactory);
+
+// let b = new MergeLib(curAjv, "design", [], ["name", "*", "dsModelIds"]).mergeUiSchemaList;
+
+// curAjv.validate(b[0], undefined);
+
+// console.log(curAjv.errors, curAjv.errorsText());
 
 // b.forEach((val: any) => {
 //     console.log(val);
@@ -96,13 +121,13 @@ console.log(curAjv.errors, curAjv.errorsText());
 //     }
 // });
 
-let c = new MergeLib(curAjv, "design", [], ["infoOptions"]).mergeUiSchemaList;
+// let c = new MergeLib(curAjv, "design", [], ["infoOptions"]).mergeUiSchemaList;
 
-setInterval(() => {
-    c = new MergeLib(curAjv, (c[0] as any).schemaPath, [], ["infoOptions"]).mergeUiSchemaList;
+// setInterval(() => {
+//     c = new MergeLib(curAjv, (c[0] as any).schemaPath, [], ["infoOptions"]).mergeUiSchemaList;
 
-    console.log(c[0]);
-}, 2000);
+//     console.log(c[0]);
+// }, 2000);
 
 // for (const key in schemas) {
 //     if (schemas.hasOwnProperty(key)) {

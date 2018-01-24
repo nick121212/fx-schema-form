@@ -35,4 +35,8 @@ export declare class BaseFactory<T> {
      * @param func 遍历方法
      */
     forEach(func: (key: string, val: T) => any): void;
+    /**
+     * 清空当前的hash
+     */
+    clear(): void;
 }

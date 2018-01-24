@@ -12,7 +12,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
     if (schema && schema.$ref) {
         let validate: ValidateFunction = ajv.getSchema(schema.$ref);
 
-        if (validate.schema) {
+        if (validate && validate.schema) {
             let schemaAjv = validate.schema as JSONSchema6;
 
             schemaAjv.$ref = schema.$ref;
@@ -23,7 +23,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
 
             return schemaAjv;
         } else {
-            throw new Error("没有发现${schema.$ref}的schema。");
+            throw new Error("${schema.$ref} not exist.");
         }
     }
 

@@ -9,8 +9,8 @@ import { ResolveLib } from "../libs/resolve";
  * 如果发现有oneOf关键字，遍历替换成schema
  */
 export default (schema: JSONSchema6, ajv: Ajv) => {
-    if (schema && schema.oneOf) {
-        schema.oneOf.map((schemaOfOne: JSONSchema6) => {
+    if (schema && schema.oneOf && schema.oneOf.constructor === Array) {
+        schema.oneOf = schema.oneOf.map((schemaOfOne: JSONSchema6) => {
             let resolve = new ResolveLib(ajv, schemaOfOne);
 
             return resolve.mergeSchema;

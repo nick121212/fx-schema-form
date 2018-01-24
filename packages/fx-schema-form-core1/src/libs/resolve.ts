@@ -3,12 +3,11 @@ import { JSONSchema6 } from "json-schema";
 
 import { schemaFieldFactory, schemaTypeFactory } from "../factory";
 
+// 去掉末尾的#正则
+const regexp = /#$/g;
+
 /**
- * 解析schema中的字段，缓存到【schemaFieldFactory】中    static getSchemaId(arg0: any): any {
-        throw new Error("Method not implemented.");
-    }    static getSchemaId: any;
-
-
+ * 解析schema中的字段，缓存到【schemaFieldFactory】中
  * 1. 验证schema的合法性
  * 2. 提取成map
  */
@@ -21,7 +20,7 @@ export class ResolveLib {
             this.initSchema(ajv, schema);
         }
         // 生成map
-        this.compileSchema(schema, $id);
+        this.compileSchema(schema, $id || schema.$ref);
     }
 
     /**
@@ -33,8 +32,9 @@ export class ResolveLib {
      * @param schema  schema
      */
     private initSchema(ajv: Ajv, schema: JSONSchema6): JSONSchema6 {
-        // 如果没有$id, 直接报错
-        if (!schema.$id) {
+        let $id: string = schema.$id;
+        // 如果没有$id, 同时没有$ref的情况下直接报错
+        if (!$id && !schema.$ref) {
             throw new Error(`id is required by fx-schema-form-core.`);
         }
 
@@ -44,7 +44,7 @@ export class ResolveLib {
         }
 
         // 把schema加入到ajv
-        if (!ajv.getSchema(schema.$id)) {
+        if ($id && !ajv.getSchema($id)) {
             ajv.addSchema(schema);
         }
 
@@ -58,7 +58,7 @@ export class ResolveLib {
      * @param schema  schema
      */
     private compileSchema(schema: JSONSchema6, $id: string): void {
-        schemaTypeFactory.get("undefined")(schema, $id || (schema.$id + "#"), this.ajv);
+        schema = schemaTypeFactory.get("undefined")(schema, $id || (schema.$id + "#"), this.ajv);
 
         this.mergeSchema = schema;
 
@@ -95,8 +95,12 @@ export class ResolveLib {
         let filterKeyWords = ["items", "properties"];
         let keys = schemaKey.split("/").map((key: string, index: number) => {
             // 第一个替换末尾的#
-            if (index === 0 && /#$/g.test(key)) {
-                return keepFirst ? key.replace(/#$/g, "") : null;
+            if (index === 0 && regexp.test(key)) {
+                // 这里是regexp的陷阱,需要修改lastIndex = 0
+                // 对于同一个正则表达式对象regex，不能重复调用：第一次返回true，第二次就返回false，很显然这种效果不是我们想要的。
+                // 这是因为RegExp.test()方法，第一次从位置0开始查找，可以匹配；第二次的查找位置就不是0了，说以就不能匹配了。
+                regexp.lastIndex = 0;
+                return keepFirst ? key.replace(regexp, "") : null;
             }
 
             // 去掉properties
@@ -112,6 +116,7 @@ export class ResolveLib {
             return key;
         });
 
+        // 提取其中不为空的项
         return keys.filter((key: string) => {
             return !!key;
         });
@@ -128,7 +133,7 @@ export class ResolveLib {
             throw new Error(`${schemaKey} not a valid schemaPath.`);
         }
 
-        return keys[0].replace(/#$/g, "");
+        return keys[0].replace(regexp, "");
     }
 }
 

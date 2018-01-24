@@ -1,11 +1,7 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 /**
- * 解析schema中的字段，缓存到【schemaFieldFactory】中    static getSchemaId(arg0: any): any {
-        throw new Error("Method not implemented.");
-    }    static getSchemaId: any;
-
-
+ * 解析schema中的字段，缓存到【schemaFieldFactory】中
  * 1. 验证schema的合法性
  * 2. 提取成map
  */
