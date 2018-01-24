@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/dts/index.d.ts",
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ],
   "scripts": {
     "prd": "NODE_ENV=production atool-build",
