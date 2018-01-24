@@ -1,7 +1,7 @@
 {
   "lerna": "2.0.0-rc.5",
   "packages": [
-    "packages/*"
+    "packages/fx-schema-form-core1"
   ],
-  "version": "2.1.1"
+  "version": "3.0.0"
 }
