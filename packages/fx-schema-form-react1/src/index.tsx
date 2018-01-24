@@ -1,2 +1,2 @@
 
-import { MergeLib,ResolveLib } from "fx-schema-form-core";
+import { MergeLib, ResolveLib } from "fx-schema-form-core";
