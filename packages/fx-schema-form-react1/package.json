@@ -1,0 +1,73 @@
+{
+  "name": "fx-schema-form-react",
+  "version": "2.1.1",
+  "description": "自动生成表单组件",
+  "main": "libs/index",
+  "types": "libs/index.d.ts",
+  "scripts": {
+    "prd": "NODE_ENV=production atool-build",
+    "lint": "eslint --ext .js,.jsx src/",
+    "start": "dora --plugins webpack -p 8003",
+    "test": "atool-test-mocha ./**/__tests__/*-test.js"
+  },
+  "author": "NICK",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^5.3.0",
+    "immutable": "^3.8.2",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "resolve-pathname": "^2.2.0",
+    "uuid": "^3.1.0"
+  },
+  "keywords": [
+    "typescript",
+    "json-schema",
+    "jsonSchema",
+    "react-schema-form",
+    "react",
+    "schema-form",
+    "form-generator",
+    "form",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick121212/fx-schema-form.git"
+  },
+  "devDependencies": {
+    "@types/react-redux": "^5.0.14",
+    "atool-build": "^0.9.0",
+    "atool-test-mocha": "^0.1.4",
+    "awesome-typescript-loader": "^3.2.3",
+    "babel-eslint": "^7.0.0",
+    "babel-plugin-import": "^1.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.8.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-runtime": "^6.9.2",
+    "copy-webpack-plugin": "^4.2.0",
+    "dora": "^0.4.5",
+    "dora-plugin-webpack": "^0.8.1",
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "expect": "^1.20.1",
+    "html-loader": "^0.5.1",
+    "html-webpack-plugin": "^2.30.1",
+    "immutable-devtools": "^0.0.7",
+    "node-sass": "^4.6.1",
+    "pre-commit": "1.x",
+    "react": "^15.2.0",
+    "react-addons-perf": "^15.4.2",
+    "react-dom": "^15.2.0",
+    "react-hot-loader": "^3.1.1",
+    "style-loader": "^0.19.0",
+    "ts-loader": "^3.1.1",
+    "tslint": "^5.8.0",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.6.2"
+  }
+}
