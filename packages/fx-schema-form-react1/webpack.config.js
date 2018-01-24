@@ -10,7 +10,7 @@ module.exports = (webpackConfig) => {
     let retVal = Object.assign({}, webpackConfig, {
         // 起点或是应用程序的起点入口。从这个起点开始，应用程序启动执行。如果传递一个数组，那么数组的每一项都会执行。
         entry: {
-            index: ["./src/index.tsx"]
+            index: ["./src/demo.tsx"]
         },
         //防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖(external dependencies)。
         //例如，React 和 react-dom不打包到bundle中

@@ -17,7 +17,8 @@
   "author": "NICK",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^5.2.2"
+    "ajv": "^5.2.2",
+    "webpack": "^1.12.15"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",

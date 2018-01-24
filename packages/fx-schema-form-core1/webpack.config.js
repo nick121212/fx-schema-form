@@ -10,8 +10,6 @@ const __TEST__ = env.toUpperCase() == "UAT";
 const __PROD__ = env.toUpperCase() == "PRODUCTION";
 const __STAG__ = env.toUpperCase() == "STG";
 
-console.log(__PROD__);
-
 module.exports = (webpackConfig) => {
     let retVal = Object.assign({}, webpackConfig, {
         // 起点或是应用程序的起点入口。从这个起点开始，应用程序启动执行。如果传递一个数组，那么数组的每一项都会执行。
@@ -73,7 +71,7 @@ module.exports = (webpackConfig) => {
             chunkFilename: "[name].min.js",
             libraryTarget: "umd",
             sourceMapFilename: "[file].map",
-            library: "fxSchemaFormCore"
+            library: "fx-schema-form-core"
         };
     }
 

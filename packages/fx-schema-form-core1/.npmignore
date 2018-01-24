@@ -4,5 +4,10 @@ package-lock.json
 tsconfig.json
 tslint.json
 webpack.config.js
+node_modules
+webpack
+tests
 src
 .babelrc
+.jshintrc
+readme.md

@@ -12,14 +12,6 @@
   },
   "author": "NICK",
   "license": "MIT",
-  "dependencies": {
-    "ajv": "^5.3.0",
-    "immutable": "^3.8.2",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "resolve-pathname": "^2.2.0",
-    "uuid": "^3.1.0"
-  },
   "keywords": [
     "typescript",
     "json-schema",
@@ -34,6 +26,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nick121212/fx-schema-form.git"
+  },
+  "dependencies": {
+    "ajv": "^5.5.2",
+    "fx-schema-form-core": "^3.0.0",
+    "immutable": "^3.8.2",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-immutable": "^4.0.0",
+    "resolve-pathname": "^2.2.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@types/react-redux": "^5.0.14",
