@@ -2,13 +2,13 @@
   "name": "fx-schema-form-react",
   "version": "2.1.1",
   "description": "自动生成表单组件",
-  "main": "libs/index",
-  "types": "libs/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dts/index.d.ts",
   "scripts": {
     "prd": "NODE_ENV=production atool-build",
     "lint": "eslint --ext .js,.jsx src/",
     "start": "dora --plugins webpack -p 8003",
-    "test": "atool-test-mocha ./**/__tests__/*-test.js"
+    "test": "atool-test-mocha ./tests/**/*.spec.js"
   },
   "author": "NICK",
   "license": "MIT",
@@ -33,11 +33,13 @@
     "immutable": "^3.8.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
+    "redux-act": "^1.5.1",
     "redux-immutable": "^4.0.0",
-    "resolve-pathname": "^2.2.0",
-    "uuid": "^3.1.0"
+    "resolve-pathname": "^2.2.0"
   },
   "devDependencies": {
+    "@types/immutable": "^3.8.7",
+    "@types/react": "^15.0.0",
     "@types/react-redux": "^5.0.14",
     "atool-build": "^0.9.0",
     "atool-test-mocha": "^0.1.4",
@@ -66,6 +68,7 @@
     "react-addons-perf": "^15.4.2",
     "react-dom": "^15.2.0",
     "react-hot-loader": "^3.1.1",
+    "react-perf-tool": "^0.2.2",
     "style-loader": "^0.19.0",
     "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",

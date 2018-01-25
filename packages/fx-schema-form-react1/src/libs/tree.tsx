@@ -1,3 +1,8 @@
+/**
+ * tree map struct
+ * 这里用来记录数据的元数据信息
+ * 元数据信息包括，isValid，isLoading，isShow，...etc
+ */
 export class TreeMap {
     private children: TreeMap[] = [];
 
@@ -7,7 +12,7 @@ export class TreeMap {
      * @param value  当前节点的值
      * @param parent 当前节点的父亲节点
      */
-    constructor(private key: string, private value: any, private parent?: TreeMap) { }
+    constructor(private key: string, public value: any, private parent?: TreeMap) { }
 
     /**
      * 添加一个孩子元素
@@ -143,7 +148,8 @@ export class TreeMap {
 
     /**
      * 根据给定的路径数组，返回对应的节点
-     * @param keys 
+     * time complexity = O(n) / Linear
+     * @param keys 路径
      * @returns TreeMap | null
      */
     public containPath(keys: Array<string | number>): TreeMap | null {
@@ -158,6 +164,7 @@ export class TreeMap {
 
     /**
      * 从父亲节点中删除当前节点
+     * time complexity = O(n) / Linear
      */
     public removeFromParent(): void {
         let index = this.getIndexInParent();
@@ -167,6 +174,7 @@ export class TreeMap {
 
     /**
      * 22交换位置
+     * time complexity = O(1) / Linear
      * @param toIndex 交换位置的元素
      */
     public switchOneToOneFromParent(toIndex: number): void {
@@ -189,13 +197,14 @@ export class TreeMap {
 
     /**
      * 移动到某个位置
+     * time complexity = O(1) / Linear
      * @param toIndex 需要移动到的位置
      */
     public insertToFromParent(toIndex: number): void {
         let curIndex = this.getIndexInParent();
         let offset = (toIndex > curIndex ? 1 : 0);
 
-        // 如果没有父亲，或者父亲没有子节点，或者当前位置小于0 
+        // 如果没有父亲，或者父亲没有子节点，或者当前位置小于0
         if (!this.parent || !this.parent.children || curIndex < 0 || this.parent.children.length <= toIndex) {
             return;
         }
@@ -203,7 +212,7 @@ export class TreeMap {
         // 现充父亲节点中删除当前元素
         this.removeFromParent();
         // 将当前节点插入到制定的位置
-        this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this).concat(this.parent.children.splice(toIndex - offset));
+        this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
+            .concat(this.parent.children.splice(toIndex - offset));
     }
 }
-
