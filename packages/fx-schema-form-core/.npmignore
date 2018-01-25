@@ -1,8 +1,0 @@
-.vscode
-.history
-package-lock.json
-tsconfig.json
-tslint.json
-webpack.config.js
-src
-.babelrc
