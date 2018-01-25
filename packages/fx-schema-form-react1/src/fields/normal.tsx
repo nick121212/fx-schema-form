@@ -16,18 +16,20 @@ export class NormalField extends React.PureComponent<NormalFieldProps, any> {
         const { WidgetComponent, FieldComponent, ...extraProps } = this.props;
         const fieldOptions = extraProps.getOptions(this.props, "field", "normal");
         const { keys } = extraProps.uiSchema as FxUiSchema;
-
-        // let WidgetComponentWithHoc = compose(
-        //     ...(fieldOptions.hocs || []),
-        //     connect(mapFormItemDataProps)
-        // )(WidgetComponent);
+        let WidgetComponentWithHoc = WidgetComponent;
 
         if (!WidgetComponent) {
             return null;
         }
 
+        if (fieldOptions.hocs && fieldOptions.hocs.length) {
+            WidgetComponentWithHoc = compose(
+                ...(fieldOptions.hocs || [])
+            )(WidgetComponent);
+        }
+
         return (
-            <WidgetComponent key={keys.join(".")} {...extraProps} />
+            <WidgetComponentWithHoc key={keys.join(".")} {...extraProps} />
         );
     }
 }

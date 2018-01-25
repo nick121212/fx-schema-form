@@ -12,6 +12,10 @@ export interface DefaultProps {
      */
     schemaId: string;
     /**
+     * form的ID，用于从state中查找数据
+     */
+    formId?: string;
+    /**
      * uiSchema
      */
     uiSchema?: Array<string | FxUiSchema> | FxUiSchema;
@@ -23,10 +27,6 @@ export interface DefaultProps {
      * 全局默认配置
      */
     globalOptions: Immutable.Map<string, any>;
-    /**
-     * 分配的全局的key，用于从store中获取数据
-     */
-    formKey: string;
     /**
      * ajv的实例
      */

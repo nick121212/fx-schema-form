@@ -1,8 +1,10 @@
 import React from "react";
+import { compose } from "redux";
 
 import { DefaultProps } from "../default.props";
 import { hoc } from "./container";
 import { FieldHocOutProps } from "../../hocs/field";
+import { UtilsHocOutProps } from "../../hocs/utils";
 
 export interface Props extends DefaultProps {
 
@@ -16,13 +18,19 @@ export class SchemaFormItem extends React.PureComponent<Props, any> {
     }
 
     public render() {
-        const { FieldComponent, uiSchema, ...extraProps } = this.props as Props & FieldHocOutProps;
+        const { FieldComponent, uiSchema, ...extraProps } = this.props as Props & FieldHocOutProps & UtilsHocOutProps;
+        const options = extraProps.getOptions(this.props, "field", (uiSchema as any).field || (uiSchema as any).type);
+        let FieldComponentWithHoc = FieldComponent;
 
         if (!FieldComponent) {
             console.log(uiSchema, "没有找到匹配的field");
             return null;
         }
 
-        return <FieldComponent uiSchema={uiSchema} {...extraProps} />;
+        FieldComponentWithHoc = compose(
+            ...(options.hocs || [])
+        )(FieldComponent);
+
+        return <FieldComponentWithHoc uiSchema={uiSchema} {...extraProps} />;
     }
 }

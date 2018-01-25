@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 import ajv from "ajv";
 import { design } from "./schemas";
 
-import { reducerFactory, SchemaFormActions, SchemaForm } from "../index";
+import { reducerFactory, SchemaFormActions, SchemaForm, hocFactory } from "../index";
 
 const curAjv: ajv.Ajv = new ajv({
     allErrors: true,
@@ -36,11 +36,27 @@ store.subscribe(() => {
 });
 
 actions.createForm.assignTo(store);
+actions.updateItemData.assignTo(store);
+
+
+actions.createForm({ key: "designForm", data: { name: "test" } });
+
+const gloabelOptions = Immutable.fromJS({
+    field: {
+        normal: {
+            hocs: [hocFactory.get("data")({
+                rootReducerKey: ["schemaForm"]
+            })]
+        }
+    }
+});
+// const uiSchema
 
 ReactDOM.render(
     <Provider store={store}>
         <div>
-            <SchemaForm schemaId="design" uiSchema={["name"]} parentKeys={[]} globalOptions={null} formKey="testForm" ajv={curAjv} />
+            <SchemaForm schemaId="design" uiSchema={["name", "dsModelData"]} parentKeys={["designForm"]}
+                globalOptions={gloabelOptions} ajv={curAjv} />
             <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,

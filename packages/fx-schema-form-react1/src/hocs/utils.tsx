@@ -60,7 +60,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     }
 
                     return prev;
-                }, Immutable.fromJS({}));
+                }, Immutable.fromJS({})).toJS();
             }
 
             /**

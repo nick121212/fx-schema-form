@@ -51,7 +51,7 @@ const design = {
                     type: "object"
                 },
                 ids: {
-                    type: "object"
+                    type: "string"
                 }
             }
         },

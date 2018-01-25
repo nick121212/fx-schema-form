@@ -14,8 +14,6 @@ export class SchemaForm extends React.PureComponent<Props, any> {
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, ...extraProps } = this.props as Props & MergeHocOutProps;
 
-        console.log(mergeSchemaList);
-
         return (
             <div>
                 {

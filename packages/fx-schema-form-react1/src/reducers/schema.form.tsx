@@ -6,6 +6,7 @@ import { FxReducer } from "./reducer";
 
 export interface SchemaFormActions {
     createForm: SimpleActionCreator<{ key: string, data: any }>;
+    updateItemData: SimpleActionCreator<{ keys: string[], data: any }>;
 }
 
 export class SchemaFormReducer<T> implements FxReducer {
@@ -13,6 +14,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * 单个元素的值变化时候调用
      */
     private createForm: SimpleActionCreator<{ key: string, data: any }> = createAction("创建一个表单数据");
+    private updateItemData: SimpleActionCreator<{ keys: string[], data: any }> = createAction("更新一个表单数据");
 
     /**
      * 构造
@@ -24,7 +26,8 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     public get actions(): SchemaFormActions {
         return {
-            createForm: this.createForm
+            createForm: this.createForm,
+            updateItemData: this.updateItemData
         };
     }
     /**
@@ -33,9 +36,9 @@ export class SchemaFormReducer<T> implements FxReducer {
     public get reducer(): Reducer<any> {
         return createReducer<any>({
             [this.createForm as any]: this.createFormHandle.bind(this),
+            [this.updateItemData as any]: this.updateItemDataHandle.bind(this),
         }, this.initialState);
     }
-
     /**
      * 创建一份表单数据
      * @param state   当前的state
@@ -45,6 +48,14 @@ export class SchemaFormReducer<T> implements FxReducer {
         if (state.has(key)) {
             return state;
         }
-        return state.set(key, data);
+        return state.set(key, Immutable.fromJS(data));
+    }
+    /**
+     * 修改一个数据
+     * @param state  当前的state
+     * @param param1 参数值，keys 和 data
+     */
+    private updateItemDataHandle(state: Immutable.Map<string, any>, { keys, data }: any): Immutable.Map<string, any> {
+        return state.setIn(keys, Immutable.fromJS(data));
     }
 }

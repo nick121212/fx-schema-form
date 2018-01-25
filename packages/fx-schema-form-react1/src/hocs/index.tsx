@@ -6,3 +6,4 @@ export { default as array } from "./array";
 export { default as validate } from "./validate";
 export { default as make } from "./make";
 export { default as temp } from "./temp";
+export { default as data } from "./data";

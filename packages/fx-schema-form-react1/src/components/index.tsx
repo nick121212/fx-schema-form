@@ -16,6 +16,7 @@ export interface SchemaFormNs<F, T, W> {
 export type RC<P, T> = new () => React.PureComponent<P, T>;
 export interface FxUiSchema extends UiSchema {
     options?: Immutable.Map<string, any>;
+    children?: Array<UiSchema | string>;
     theme?: string;
     field?: string;
     widget?: string;

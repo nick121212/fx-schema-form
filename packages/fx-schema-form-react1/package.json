@@ -28,7 +28,6 @@
     "url": "git+https://github.com/nick121212/fx-schema-form.git"
   },
   "dependencies": {
-    "@types/json-schema": "^6.0.0",
     "ajv": "^5.5.2",
     "fx-schema-form-core": "^3.0.0",
     "immutable": "^3.8.2",
@@ -37,10 +36,10 @@
     "redux": "^3.7.2",
     "redux-act": "^1.5.1",
     "redux-immutable": "^4.0.0",
+    "reselect": "^3.0.1",
     "resolve-pathname": "^2.2.0"
   },
   "devDependencies": {
-    "@types/immutable": "^3.8.7",
     "@types/json-schema": "^6.0.0",
     "@types/react": "^15.0.0",
     "@types/react-redux": "^5.0.14",
