@@ -13,7 +13,7 @@ let arrayFieldStyle = {
     height: "100%"
 };
 
-export class NormalField extends React.PureComponent<ArrayFieldProps, any> {
+export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
     /**
      * 遍历数据，生成子表单
      * @param idx 数组的索引
@@ -32,7 +32,7 @@ export class NormalField extends React.PureComponent<ArrayFieldProps, any> {
                 arrayIndex={idx}
                 arrayLevel={arrayLevel.concat([idx])}
                 schemaId={uiSchema.schemaPath}
-                uiSchema={uiSchema.children || ["*"]}
+                uiSchema={uiSchema.children || ["-"]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
                 ajv={ajv} />

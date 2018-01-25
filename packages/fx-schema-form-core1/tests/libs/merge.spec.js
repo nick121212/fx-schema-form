@@ -43,7 +43,12 @@ describe("测试MergeLib类", () => {
                 dsModelIds: {
                     type: "array",
                     items: {
-                        type: "number"
+                        type: "object",
+                        properties: {
+                            name: {
+                                type: "string"
+                            }
+                        }
                     }
                 },
                 dsModelData: {
@@ -102,6 +107,14 @@ describe("测试MergeLib类", () => {
         assert.throw(() => {
             let merge = new MergeLib(ajv, "design1", [], ["*"]);
         });
+    });
+
+    it("实例化MergeLib，schema取一个数组字段", () => {
+        let merge = new MergeLib(ajv, "design", [], ["dsModelIds/-"]);
+        let merge1 = new MergeLib(ajv, "design", [], ["*"]);
+        let merge2 = new MergeLib(ajv, "design", [], ["dsModelIds/-/name"]);
+
+        console.log(merge.mergeUiSchemaList, merge2.mergeUiSchemaList);
     });
 
 });

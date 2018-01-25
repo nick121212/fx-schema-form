@@ -39,11 +39,21 @@ actions.createForm.assignTo(store);
 actions.updateItemData.assignTo(store);
 
 
-actions.createForm({ key: "designForm", data: { name: "test" } });
+actions.createForm({
+    key: "designForm", data: {
+        name: "test",
+        dsModelIds: [1, 2]
+    }
+});
 
 const gloabelOptions = Immutable.fromJS({
     field: {
         normal: {
+            hocs: [hocFactory.get("data")({
+                rootReducerKey: ["schemaForm"]
+            })]
+        },
+        array: {
             hocs: [hocFactory.get("data")({
                 rootReducerKey: ["schemaForm"]
             })]
@@ -55,7 +65,7 @@ const gloabelOptions = Immutable.fromJS({
 ReactDOM.render(
     <Provider store={store}>
         <div>
-            <SchemaForm schemaId="design" uiSchema={["name", "dsModelData"]} parentKeys={["designForm"]}
+            <SchemaForm schemaId="design" uiSchema={["dsModelIds"]} parentKeys={["designForm"]}
                 globalOptions={gloabelOptions} ajv={curAjv} />
             <ReactPerfTool perf={Perf} />
         </div>

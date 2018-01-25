@@ -141,7 +141,7 @@ export class MergeLib {
         // 如果是数组，获取下一级的key，然后做对比处理
         if (this.curSchema.type === "array" && this.curSchema.items) {
             let uiSchema = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).join("/"));
-            let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
+            // let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
 
             if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
                 return val.key === uiSchema.key;
@@ -150,12 +150,12 @@ export class MergeLib {
                 uiSchemasFirst.push(uiSchema);
             }
 
-            if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-                return val.key === uiSchemaItems.key;
-            }).length) {
-                uiSchemaItems = this.mergeUiSchemaToArray(uiSchemaItems);
-                uiSchemasFirst.push(uiSchemaItems);
-            }
+            // if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
+            //     return val.key === uiSchemaItems.key;
+            // }).length) {
+            //     uiSchemaItems = this.mergeUiSchemaToArray(uiSchemaItems);
+            //     uiSchemasFirst.push(uiSchemaItems);
+            // }
         }
 
         return uiSchemasFirst.concat(uiSchemasLast);

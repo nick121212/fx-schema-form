@@ -6,7 +6,7 @@ import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
 import { SchemaForm, DefaultProps, RC } from "./components";
 
-import { NormalField, ObjectField } from "./fields";
+import { NormalField, ObjectField, ArrayField } from "./fields";
 import { NoneTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
 
@@ -27,6 +27,7 @@ defaultTheme.fieldFactory.add("integer", NormalField);
 defaultTheme.fieldFactory.add("boolean", NormalField);
 defaultTheme.fieldFactory.add("null", NormalField);
 defaultTheme.fieldFactory.add("object", ObjectField);
+defaultTheme.fieldFactory.add("array", ArrayField);
 
 defaultTheme.tempFactory.add("default", NoneTemp);
 
