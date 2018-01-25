@@ -19,6 +19,7 @@
     - [npm](#installation-npm)
     - [cdn](#installation-cdn)
 - [依赖项](#dependencies)
+- [性能](#performance)
 - [默认使用](#usage)
 - [表单定制化](#custoization)
     - [uiSchema配置](#custoization-ui-schema)
@@ -71,6 +72,15 @@ $ npm install fx-schema-form-react --save
 - avj
 - json-pointer
 
+## <span id="performance">性能</span>
+
++ 单层次
+    - 首次加载，使用10000个元素的数组，渲染时间为：2286.185ms
+    - 首次加载，使用1000个元素的数组，渲染时间为：14049.915ms
++ 2层
+    - 首次加载，使用1000个元素的数组，渲染时间为：3856.085ms
+    -首次加载，使用10000个元素的数组，渲染时间为：3856.085ms
+    
 ## <span id="usage">默认使用</span>
 
 ```jsx

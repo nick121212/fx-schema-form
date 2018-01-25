@@ -33,6 +33,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             }
         }
 
-        return ThemeComponentHoc;
+        return ThemeComponentHoc as any;
     };
 };

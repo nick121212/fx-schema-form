@@ -7,7 +7,7 @@ import {Checkbox} from "antd";
 export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps {
 }
 
-export class AntdCheckboxWidget extends React.Component<AntdCheckBoxProps, any> {
+export class AntdCheckboxWidget extends React.PureComponent<AntdCheckBoxProps, any> {
     private setDefaultProps(): any {
         const { uiSchema } = this.props;
         const props: any = {};

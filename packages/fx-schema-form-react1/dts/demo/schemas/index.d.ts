@@ -38,6 +38,14 @@ declare const design: {
             type: string;
             items: {
                 type: string;
+                properties: {
+                    name: {
+                        type: string;
+                    };
+                    password: {
+                        type: string;
+                    };
+                };
             };
         };
         dsModelData: {

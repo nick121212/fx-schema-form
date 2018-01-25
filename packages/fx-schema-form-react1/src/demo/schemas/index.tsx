@@ -41,7 +41,11 @@ const design = {
         dsModelIds: {
             type: "array",
             items: {
-                type: "number"
+                type: "object",
+                properties: {
+                    name: { type: "string" },
+                    password: { type: "string" }
+                }
             }
         },
         dsModelData: {

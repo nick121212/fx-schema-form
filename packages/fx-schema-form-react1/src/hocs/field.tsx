@@ -28,17 +28,27 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 let FieldComponent, WidgetComponent;
                 let options = getOptions(this.props, "hoc", "field");
 
-                if (currentTheme.fieldFactory.has(field || type as string)) {
-                    FieldComponent = currentTheme.fieldFactory.get(field || type as string);
+                let calcField = field || type as string;
+
+                if (currentTheme.fieldFactory.has(calcField)) {
+                    FieldComponent = currentTheme.fieldFactory.get(calcField);
                 } else {
-                    console.error(`找不到field：${field || type}`);
-                    return null;
+                    if (currentTheme.fieldFactory.has("default")) {
+                        FieldComponent = currentTheme.fieldFactory.get("default");
+                    } else {
+                        console.error(`找不到field：${field || type}`);
+                        return null;
+                    }
                 }
 
                 if (currentTheme.widgetFactory.has(widget || type as string)) {
                     WidgetComponent = currentTheme.widgetFactory.get(widget || type as string);
                 } else {
-                    console.warn(`找不到widget：${widget || type}`, uiSchema);
+                    if (currentTheme.widgetFactory.has("default")) {
+                        WidgetComponent = currentTheme.widgetFactory.get("default");
+                    } else {
+                        console.warn(`找不到widget：${widget || type}`, uiSchema);
+                    }
                 }
 
                 return <Component {...this.props}
@@ -47,6 +57,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             }
         }
 
-        return FieldComponentHoc;
+        return FieldComponentHoc as any;
     };
 };

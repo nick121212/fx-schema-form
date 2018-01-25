@@ -1,4 +1,5 @@
 import React from "react";
+import { shouldUpdate } from "recompose";
 
 import { SchemaForm } from "../components/form";
 import { DefaultProps, FxUiSchema } from "../components";
@@ -18,7 +19,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
      * 遍历数据，生成子表单
      * @param idx 数组的索引
      */
-    private renderItem(idx: number, maxLen: number): JSX.Element {
+    private renderItem(idx: number): JSX.Element {
         const { parentKeys, globalOptions, arrayLevel = [], ajv } = this.props,
             uiSchema = this.props.uiSchema as FxUiSchema;
 
@@ -32,7 +33,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
                 arrayIndex={idx}
                 arrayLevel={arrayLevel.concat([idx])}
                 schemaId={uiSchema.schemaPath}
-                uiSchema={uiSchema.children || ["-"]}
+                uiSchema={uiSchema.children || [uiSchema.keys.concat(["-"]).join("/")]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
                 ajv={ajv} />
@@ -42,12 +43,12 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
      * 渲染页面
      */
     public render(): JSX.Element | null {
-        const { uiSchema, formItemData } = this.props;
-        let child;
+        const { uiSchema, formItemData } = this.props,
+            child = [];
 
-        child = formItemData && formItemData.map((data: any, idx: number) => {
-            return this.renderItem(idx, formItemData.length);
-        });
+        for (let i = 0; i < +formItemData; i++) {
+            child.push(this.renderItem(i));
+        }
 
         return <div style={arrayFieldStyle}>{child || null}</div>;
     }

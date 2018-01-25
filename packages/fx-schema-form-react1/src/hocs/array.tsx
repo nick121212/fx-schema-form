@@ -27,6 +27,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             }
         }
 
-        return ArrayComponentHoc;
+        return ArrayComponentHoc as any;
     };
 };

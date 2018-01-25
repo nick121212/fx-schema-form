@@ -8,28 +8,42 @@ import Immutable from "immutable";
 
 import { DefaultProps, RC, FxUiSchema } from "../components";
 
-export interface ArrayHocOutProps extends DefaultProps {
+export interface DataHocOutProps extends DefaultProps {
 
 }
 
-export default (hocFactory: BaseFactory<any>, settings: any = {
+export interface DataHocSettings {
+    rootReducerKey: string[];
+    data?: boolean;
+    dataLength?: boolean;
+}
+
+export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHocSettings = {
     data: true,
     rootReducerKey: ["schemaForm"]
 }) => {
 
-    const getItemData = (state: Immutable.Map<string, any>) => {
-        console.log(state);
-
-        state.getIn([]);
-    };
-
     const getItemDataHoc = (keys: string[]) => {
         return (state: Immutable.Map<string, any>) => {
-            console.log(state.toJS());
+            if (!state.hasIn(settings.rootReducerKey.concat(keys)) && settings.data) {
+                return {};
+            }
 
-            return {
-                formItemData: state.getIn(settings.rootReducerKey.concat(keys))
-            };
+            let formItemData = state.getIn(settings.rootReducerKey.concat(keys));
+
+            if (!settings.dataLength) {
+                return {
+                    formItemData
+                };
+            }
+
+            if (formItemData) {
+                return {
+                    formItemData: formItemData.size
+                };
+            }
+
+            return {};
         };
     };
 
@@ -40,8 +54,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
      * 加入属性
      * arrayItems
      */
-    return (Component: any): RC<ArrayHocOutProps, any> => {
-        class DataComponentHoc extends React.PureComponent<ArrayHocOutProps, any> {
+    return (Component: any): RC<DataHocOutProps, any> => {
+        class DataComponentHoc extends React.PureComponent<DataHocOutProps, any> {
             public render(): JSX.Element {
                 const { keys } = this.props.uiSchema as FxUiSchema,
                     ComponentWithHoc = connect(getItemDataHoc([...this.props.parentKeys, ...keys]))(Component);
@@ -50,6 +64,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             }
         }
 
-        return DataComponentHoc;
+        return DataComponentHoc as any;
     };
 };

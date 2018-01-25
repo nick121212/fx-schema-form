@@ -10,10 +10,15 @@ export interface NormalFieldProps extends DefaultProps, UtilsHocOutProps, FieldH
 
 }
 
-// @(shouldUpdate(() => false) as any)
-export class NormalField extends React.PureComponent<NormalFieldProps, any> {
+@(shouldUpdate(() => false) as any)
+export class NormalField extends React.PureComponent<NormalFieldProps> {
+
+    constructor(props: NormalFieldProps, context: any) {
+        super(props, context);
+    }
+
     public render(): JSX.Element {
-        const { WidgetComponent, FieldComponent, ...extraProps } = this.props;
+        const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props;
         const fieldOptions = extraProps.getOptions(this.props, "field", "normal");
         const { keys } = extraProps.uiSchema as FxUiSchema;
         let WidgetComponentWithHoc = WidgetComponent;

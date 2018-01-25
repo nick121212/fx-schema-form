@@ -38,11 +38,32 @@ store.subscribe(() => {
 actions.createForm.assignTo(store);
 actions.updateItemData.assignTo(store);
 
+let dsModelIds = [];
+
+let start = performance.now();
+
+// 加载10000个
+//  {
+//     type: "array",
+//     items: {
+//         type: "object",
+//         properties: {
+//             name: { type: "string" },
+//             password: { type: "string" }
+//         }
+//     }
+// }
+for (let i = 10000; i > 0; i--) {
+    dsModelIds.unshift({
+        name: "nick" + i,
+        password: "nick" + i + i
+    });
+}
 
 actions.createForm({
     key: "designForm", data: {
         name: "test",
-        dsModelIds: [1, 2]
+        dsModelIds: dsModelIds
     }
 });
 
@@ -50,21 +71,31 @@ const gloabelOptions = Immutable.fromJS({
     field: {
         normal: {
             hocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"]
+                rootReducerKey: ["schemaForm"],
+                data: true
             })]
         },
         array: {
             hocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"]
+                rootReducerKey: ["schemaForm"],
+                data: true,
+                dataLength: true
             })]
         }
     }
 });
-// const uiSchema
 
 ReactDOM.render(
     <Provider store={store}>
-        <div>
+        <div style={{
+            backgroundColor: "red"
+        }} onClick={() => {
+            dsModelIds.push(dsModelIds.length + 1);
+            actions.updateItemData({
+                keys: ["designForm", "dsModelIds"],
+                data: dsModelIds
+            });
+        }}>
             <SchemaForm schemaId="design" uiSchema={["dsModelIds"]} parentKeys={["designForm"]}
                 globalOptions={gloabelOptions} ajv={curAjv} />
             <ReactPerfTool perf={Perf} />
@@ -73,5 +104,7 @@ ReactDOM.render(
     document.getElementById("root"),
     () => {
         console.log("form has been ok!");
+
+        console.log("首次渲染form所用时间：", performance.now() - start);
     });
 

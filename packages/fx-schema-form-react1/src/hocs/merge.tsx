@@ -16,6 +16,8 @@ export interface MergeHocOutProps {
 export interface MergeHocProps extends DefaultProps {
 }
 
+let totalTime = 0, timeid;
+
 /**
  * merge参数中的schema和uiSchema，生成新的对象mergeSchemaList，传入组件的props中
  * @param hocFactory  hoc的工厂方法
@@ -25,12 +27,6 @@ export interface MergeHocProps extends DefaultProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: RC<any, any>): RC<MergeHocProps, any> => {
-        // @(compose<MergeHocProps, any>(
-        //     // onlyUpdateForKeys(["schema"]),
-        //     shouldUpdate(() => false),
-        //     connect(mapActionsStateToProps),
-        //     connect(null, mapActionsDispatchToProps),
-        // ) as any)
         class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
             private _merge: MergeLib;
             private _mergeUiSchemaList: FxUiSchema[];
@@ -38,10 +34,20 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             constructor(props: MergeHocProps) {
                 super(props);
 
+                clearTimeout(timeid);
+
+                let start = performance.now();
+
                 this._merge = new MergeLib(props.ajv, props.schemaId, props.parentKeys, props.uiSchema as any);
                 this._mergeUiSchemaList = this._merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);
                 });
+
+                totalTime += (performance.now() - start);
+                timeid = setTimeout(() => {
+                    console.log("merge所用时间", totalTime);
+                }, 1000);
+
             }
 
             private mergeKeys(mergeSchema: any) {
@@ -49,7 +55,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const arrayLevelCopy = arrayLevel.concat([]);
 
                 mergeSchema = Object.assign({}, mergeSchema);
-
                 mergeSchema.originKeys = mergeSchema.keys.concat([]);
                 mergeSchema.keys = mergeSchema.keys.map((key: string) => {
                     if (key === "-") {

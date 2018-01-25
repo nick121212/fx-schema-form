@@ -10,7 +10,7 @@ import { FxUiSchema } from "../components/index";
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps {
 }
 
-export class AntdInputWidget extends React.Component<AntdInputWidgetProps, any> {
+export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
     private setDefaultProps(): any {
         const props: any = {};
 

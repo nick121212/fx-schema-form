@@ -90,6 +90,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             }
         }
 
-        return TempComponentHoc;
+        return TempComponentHoc as any;
     };
 };

@@ -42,6 +42,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             }
         }
 
-        return MakeComponentHoc;
+        return MakeComponentHoc as any;
     };
 };
