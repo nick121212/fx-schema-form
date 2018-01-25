@@ -21,11 +21,11 @@ export const defaultTheme = {
 };
 
 defaultTheme.fieldFactory.add("default", NormalField);
-defaultTheme.fieldFactory.add("string", NormalField);
-defaultTheme.fieldFactory.add("number", NormalField);
-defaultTheme.fieldFactory.add("integer", NormalField);
-defaultTheme.fieldFactory.add("boolean", NormalField);
-defaultTheme.fieldFactory.add("null", NormalField);
+// defaultTheme.fieldFactory.add("string", NormalField);
+// defaultTheme.fieldFactory.add("number", NormalField);
+// defaultTheme.fieldFactory.add("integer", NormalField);
+// defaultTheme.fieldFactory.add("boolean", NormalField);
+// defaultTheme.fieldFactory.add("null", NormalField);
 defaultTheme.fieldFactory.add("object", ObjectField);
 defaultTheme.fieldFactory.add("array", ArrayField);
 

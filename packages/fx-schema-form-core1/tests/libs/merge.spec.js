@@ -114,7 +114,8 @@ describe("测试MergeLib类", () => {
         let merge1 = new MergeLib(ajv, "design", [], ["*"]);
         let merge2 = new MergeLib(ajv, "design", [], ["dsModelIds/-/name"]);
 
-        console.log(merge.mergeUiSchemaList, merge2.mergeUiSchemaList);
+        expect(merge.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-'].join());
+        expect(merge2.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-', 'name'].join());
     });
 
 });
