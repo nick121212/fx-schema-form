@@ -77,7 +77,7 @@ const schema: JSONSchema6 = {
     }
 };
 
-let b = [new ResolveLib(curAjv, {
+let b11dfd = [new ResolveLib(curAjv, {
     $id: "test1",
     type: "number",
     title: "测试的schema"
@@ -96,11 +96,8 @@ new ResolveLib(curAjv, {
     items: {
         type: "string"
     }
-})];
-
-let schema12 = schemaTypeFactory.get("array")(curAjv.getSchema("test").schema as any, "test#", curAjv);
-
-console.log(schema12, schemaFieldFactory, schemaKeysFactory);
+}),
+new ResolveLib(curAjv, schema)];
 
 // let a = [
 //     new ResolveLib(curAjv, schema),
@@ -108,7 +105,11 @@ console.log(schema12, schemaFieldFactory, schemaKeysFactory);
 
 // console.log(schemaFieldFactory, schemaKeysFactory);
 
-// let b = new MergeLib(curAjv, "design", [], ["name", "*", "dsModelIds"]).mergeUiSchemaList;
+let b = new MergeLib(curAjv, "design", [], [ {
+    key: "dsModelData", children: ["dsModelData/data"]
+}]).mergeUiSchemaList;
+
+console.log(b);
 
 // curAjv.validate(b[0], undefined);
 

@@ -61,9 +61,9 @@ export class MergeLib {
             };
         }
 
-        return {
+        return Object.assign({}, uiSchema, {
             key: [$id, (uiSchema as UiSchema).key].join("/")
-        };
+        });
     }
 
     /**

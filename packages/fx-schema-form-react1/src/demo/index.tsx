@@ -5,10 +5,25 @@ import ReactPerfTool from "react-perf-tool";
 import "react-perf-tool/lib/styles.css";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
+import { ResolveLib } from "fx-schema-form-core";
 import Immutable from "immutable";
 import { Provider } from "react-redux";
+import ajv from "ajv";
+import { design } from "./schemas";
 
-import { reducerFactory, SchemaFormActions } from "../index";
+import { reducerFactory, SchemaFormActions, SchemaForm } from "../index";
+
+const curAjv: ajv.Ajv = new ajv({
+    allErrors: true,
+    jsonPointers: true,
+    useDefaults: true,
+    $data: true,
+    errorDataPath: "property",
+    removeAdditional: true,
+});
+
+let designResolve = new ResolveLib(curAjv, design as any);
+
 
 let actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
 
@@ -22,18 +37,12 @@ store.subscribe(() => {
 
 actions.createForm.assignTo(store);
 
-actions.createForm({ key: "test", data: Immutable.fromJS({}) });
-actions.createForm({ key: "test1", data: Immutable.fromJS({}) });
-actions.createForm({ key: "test1", data: Immutable.fromJS({}) });
-
-
 ReactDOM.render(
     <Provider store={store}>
-        <span>
-            Hello World!
-
-        <ReactPerfTool perf={Perf} />
-        </span>
+        <div>
+            <SchemaForm schemaId="design" uiSchema={["name"]} parentKeys={[]} globalOptions={null} formKey="testForm" ajv={curAjv} />
+            <ReactPerfTool perf={Perf} />
+        </div>
     </Provider>,
     document.getElementById("root"),
     () => {
