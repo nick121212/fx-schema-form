@@ -35,14 +35,22 @@ export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, a
                     // updateItemData(e.currentTarget.value);
                     // updateItemMeta(formItemData);
 
-                    schemaFormReducer.actions.updateItemData({
-                        keys: [schemaId].concat(keys),
-                        data: e.currentTarget.value
-                    });
+                    if (e.currentTarget.value !== this.props.formItemData) {
+                        schemaFormReducer.actions.updateItemMeta({
+                            parentKeys: parentKeys,
+                            keys: keys,
+                            data: {
+                                isValid: !!e.currentTarget.value,
+                                dirty: true
+                            }
+                        });
+                    }
+
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
                     schemaFormReducer.actions.updateItemData({
-                        keys: parentKeys.concat(keys),
+                        parentKeys: parentKeys,
+                        keys: keys,
                         data: e.currentTarget.value
                     });
                 }}

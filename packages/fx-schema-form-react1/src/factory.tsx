@@ -1,3 +1,4 @@
+import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { FxReducer } from "./reducers/reducer";

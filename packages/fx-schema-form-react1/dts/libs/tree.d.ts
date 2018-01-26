@@ -1,6 +1,6 @@
 export declare class TreeMap {
     private key;
-    private value;
+    value: any;
     private parent;
     private children;
     constructor(key: string, value: any, parent?: TreeMap);

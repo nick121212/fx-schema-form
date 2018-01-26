@@ -45,7 +45,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                 totalTime += (performance.now() - start);
                 timeid = setTimeout(() => {
-                    console.log("merge所用时间", totalTime);
+                    console.log("merge所用时间", totalTime, Date.now());
                 }, 1000);
 
             }

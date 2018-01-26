@@ -18,5 +18,6 @@ export interface FxUiSchema extends UiSchema {
     field?: string;
     widget?: string;
     temps?: string;
+    isRequired?: boolean;
 }
 export declare type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;

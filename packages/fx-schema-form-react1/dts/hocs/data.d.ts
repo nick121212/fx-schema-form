@@ -6,6 +6,7 @@ export interface DataHocSettings {
     rootReducerKey: string[];
     data?: boolean;
     dataLength?: boolean;
+    meta?: boolean;
 }
 declare const _default: (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings?: DataHocSettings) => (Component: any) => RC<DataHocOutProps, any>;
 export default _default;

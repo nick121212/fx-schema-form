@@ -10,7 +10,6 @@ export interface NormalFieldProps extends DefaultProps, UtilsHocOutProps, FieldH
 
 }
 
-@(shouldUpdate(() => false) as any)
 export class NormalField extends React.PureComponent<NormalFieldProps> {
 
     constructor(props: NormalFieldProps, context: any) {
@@ -27,9 +26,9 @@ export class NormalField extends React.PureComponent<NormalFieldProps> {
             return null;
         }
 
-        if (fieldOptions.hocs && fieldOptions.hocs.length) {
+        if (fieldOptions.widgetHocs && fieldOptions.widgetHocs.length) {
             WidgetComponentWithHoc = compose(
-                ...(fieldOptions.hocs || [])
+                ...fieldOptions.widgetHocs
             )(WidgetComponent);
         }
 

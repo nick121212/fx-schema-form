@@ -35,7 +35,7 @@ export class TreeMap {
             let key = keys.shift();
             let isNumber = key.constructor === Number;
 
-            child = curNode.contains(isNumber ? "-" : key.toString());
+            child = curNode.contains(key);
 
             // 这里需要做一下特殊处理
             // 如果是数字的话，则说明是数组，key改成`-`
@@ -156,7 +156,14 @@ export class TreeMap {
         let node: TreeMap = this;
 
         keys.forEach((key: string | number) => {
+            if (!node) {
+                return null;
+            }
             node = node.contains(key);
+
+            if (!node) {
+                return null;
+            }
         });
 
         return node;

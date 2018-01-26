@@ -17,8 +17,7 @@ import { UtilsHocOutProps } from "./utils";
 
 export default (hocFactory: BaseFactory<any>, settings: any = {
     tempField: "temps",
-    templates: [],
-    tempHoc: (TempComponent) => TempComponent
+    templates: []
 }) => {
     return (Component: any): RC<DefaultProps & ThemeHocOutProps, any> => {
         /**
@@ -27,17 +26,26 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         */
         class TempComponentHoc extends React.PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element {
-                const { uiSchema, globalOptions } = this.props;
+                const { uiSchema, getOptions } = this.props;
                 const { options: uiSchemaOptions, keys } = uiSchema as FxUiSchema;
                 const TempComponents = this.getTemplates();
 
                 return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
-                    let TempWithHoc = settings.tempHoc(Temp);
+                    const tempOptions = getOptions(this.props, "temp", key),
+                        TempWithHoc = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
                         tempKey={key}
                         key={keys.join(".") + key}
-                        {...this.props}
+                        uiSchema={this.props.uiSchema}
+                        schemaId={this.props.schemaId}
+                        arrayLevel={this.props.arrayLevel}
+                        arrayIndex={this.props.arrayIndex}
+                        globalOptions={this.props.globalOptions}
+                        parentKeys={this.props.parentKeys}
+                        getTitle={this.props.getTitle}
+                        getOptions={this.props.getOptions}
+                        getPathKeys={this.props.getPathKeys}
                         children={prev} />;
                 }, <Component key={keys.join(".")} {...this.props} />);
             }
@@ -48,7 +56,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             private getTemplates(): Array<{ key: string, Temp: RC<any, any> }> {
                 const { uiSchema, currentTheme, getOptions } = this.props,
                     { keys, type } = uiSchema as FxUiSchema,
-                    typeDefaultOptions = getOptions(this.props, "temp", type as string),
+                    typeDefaultOptions = getOptions(this.props, "field", type as string),
                     TempComponent = [];
                 let template;
 

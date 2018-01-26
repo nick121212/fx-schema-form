@@ -45,22 +45,27 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { options } = uiSchema as FxUiSchema;
                 const optionsArray = [];
 
-                if (options && options.hasIn([category, field])) {
-                    optionsArray.push(options.getIn([category, field]));
+                if (globalOptions && globalOptions.hasIn([category, "default"])) {
+                    optionsArray.push(globalOptions.getIn([category, "default"]));
                 }
 
                 if (globalOptions && globalOptions.hasIn([category, field])) {
                     optionsArray.push(globalOptions.getIn([category, field]));
                 }
 
+                if (options && options.hasIn([category, field])) {
+                    optionsArray.push(options.getIn([category, field]));
+                }
 
-                return optionsArray.reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
+                let opts =  optionsArray.reverse().reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
                     if (next) {
-                        return next.mergeDeep(prev);
+                        return next.merge(prev);
                     }
 
                     return prev;
                 }, Immutable.fromJS({})).toJS();
+
+                return opts;
             }
 
             /**

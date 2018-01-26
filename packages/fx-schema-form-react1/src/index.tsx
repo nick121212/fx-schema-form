@@ -7,7 +7,7 @@ import { SchemaFormActions } from "./reducers/schema.form";
 import { SchemaForm, DefaultProps, RC } from "./components";
 
 import { NormalField, ObjectField, ArrayField } from "./fields";
-import { NoneTemp } from "./templates";
+import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
 
 /**
@@ -25,11 +25,13 @@ defaultTheme.fieldFactory.add("object", ObjectField as any);
 defaultTheme.fieldFactory.add("array", ArrayField as any);
 
 defaultTheme.tempFactory.add("default", NoneTemp as any);
+defaultTheme.tempFactory.add("card", AntdCardTemp as any);
+defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
 
 defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
 defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 
-themeFactory.add("default", defaultTheme);
+themeFactory.add("default", defaultTheme as any);
 
 export {
     FxReducer,

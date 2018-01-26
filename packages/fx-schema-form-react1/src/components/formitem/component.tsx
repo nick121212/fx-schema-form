@@ -27,10 +27,12 @@ export class SchemaFormItem extends React.PureComponent<Props, any> {
             return null;
         }
 
-        FieldComponentWithHoc = compose(
-            ...(options.hocs || [])
-        )(FieldComponent);
+        if (options.fieldHocs && options.fieldHocs.length) {
+            FieldComponentWithHoc = compose(
+                ...(options.fieldHocs || [])
+            )(FieldComponent);
+        }
 
-        return <FieldComponentWithHoc uiSchema={uiSchema} {...extraProps} />;
+        return <FieldComponentWithHoc key={(uiSchema as any).keys.join("formItem")} uiSchema={uiSchema} {...extraProps} />;
     }
 }

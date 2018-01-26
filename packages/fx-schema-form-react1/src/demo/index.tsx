@@ -9,7 +9,12 @@ import { ResolveLib } from "fx-schema-form-core";
 import Immutable from "immutable";
 import { Provider } from "react-redux";
 import ajv from "ajv";
+import { immutableRenderDecorator } from "react-immutable-render-mixin";
+
+import { Form } from "antd";
 import { design } from "./schemas";
+
+import "antd/dist/antd.css";
 
 import { reducerFactory, SchemaFormActions, SchemaForm, hocFactory } from "../index";
 
@@ -23,8 +28,6 @@ const curAjv: ajv.Ajv = new ajv({
 });
 
 let designResolve = new ResolveLib(curAjv, design as any);
-
-
 let actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
 
 let store = createStore<any>(combineReducers({
@@ -32,15 +35,14 @@ let store = createStore<any>(combineReducers({
 }), Immutable.fromJS({}));
 
 store.subscribe(() => {
-    console.log(store.getState().toJS());
+    // console.log(store.getState().toJS());
 });
 
 actions.createForm.assignTo(store);
 actions.updateItemData.assignTo(store);
+actions.updateItemMeta.assignTo(store);
 
 let dsModelIds = [];
-
-let start = performance.now();
 
 // 加载10000个
 //  {
@@ -53,58 +55,90 @@ let start = performance.now();
 //         }
 //     }
 // }
-for (let i = 10000; i > 0; i--) {
+for (let i = 11; i > 0; i--) {
     dsModelIds.unshift({
         name: "nick" + i,
-        password: "nick" + i + i
+        password: "password" + i + i
     });
 }
 
-actions.createForm({
-    key: "designForm", data: {
-        name: "test",
-        dsModelIds: dsModelIds
-    }
-});
+
+
 
 const gloabelOptions = Immutable.fromJS({
     field: {
-        normal: {
-            hocs: [hocFactory.get("data")({
+        default: {
+            temps: ["formitem"],
+            widgetHocs: [hocFactory.get("data")({
                 rootReducerKey: ["schemaForm"],
                 data: true
             })]
         },
         array: {
-            hocs: [hocFactory.get("data")({
+            temps: ["card"],
+            fieldHocs: [hocFactory.get("data")({
                 rootReducerKey: ["schemaForm"],
                 data: true,
                 dataLength: true
             })]
+        },
+        normal: {
+        },
+        object: {
+
+        }
+    },
+    temp: {
+        card: {
+            tempHocs: [hocFactory.get("data")({
+                rootReducerKey: ["schemaForm"],
+                meta: true
+            }), immutableRenderDecorator]
+        },
+        formitem: {
+            tempHocs: [hocFactory.get("data")({
+                rootReducerKey: ["schemaForm"],
+                meta: true
+            }), immutableRenderDecorator]
         }
     }
 });
 
+let start = performance.now();
+
+console.log("start", Date.now());
+
 ReactDOM.render(
     <Provider store={store}>
-        <div style={{
-            backgroundColor: "red"
-        }} onClick={() => {
-            dsModelIds.push(dsModelIds.length + 1);
-            actions.updateItemData({
-                keys: ["designForm", "dsModelIds"],
-                data: dsModelIds
-            });
-        }}>
-            <SchemaForm schemaId="design" uiSchema={["dsModelIds"]} parentKeys={["designForm"]}
-                globalOptions={gloabelOptions} ajv={curAjv} />
+        <div>
+            {
+                dsModelIds.map((d, i) => {
+                    actions.createForm({
+                        key: "designForm" + i,
+                        data: {
+                            name: "test",
+                            dsModelIds: [{}, {}, {}]
+                        }
+                    });
+                    return <SchemaForm
+                        key={i}
+                        RootComponent={Form}
+                        schemaId="design"
+                        uiSchema={["name", {
+                            key: "dsModelIds",
+                            title: "测试title" + i
+                        }]}
+                        parentKeys={["designForm" + i]}
+                        globalOptions={gloabelOptions}
+                        ajv={curAjv} />;
+                })
+            }
             <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,
     document.getElementById("root"),
     () => {
         console.log("form has been ok!");
-
         console.log("首次渲染form所用时间：", performance.now() - start);
     });
 

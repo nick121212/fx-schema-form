@@ -109,6 +109,15 @@ describe("测试MergeLib类", () => {
         });
     });
 
+    it("实例化MergeLib，测试uiSchema的数据合并", () => {
+        let merge = new MergeLib(ajv, "design", [], ["name", {
+            key: "dsModelIds",
+            title: "测试Title"
+        }]);
+
+        expect(merge.mergeUiSchemaList[1].title).to.equal("测试Title");
+    });
+
     it("实例化MergeLib，schema取一个数组字段", () => {
         let merge = new MergeLib(ajv, "design", [], ["dsModelIds/-"]);
         let merge1 = new MergeLib(ajv, "design", [], ["*"]);
