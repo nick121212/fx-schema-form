@@ -65,7 +65,7 @@ npm install --save fx-schema-form-react
 
 > Note: 请根据自己的项目情况选择使用。
 
-## [性能](performance)
+## [性能](##performance)
 
 这里。更改一下数据，处罚错误信息；以下是Schema和图片：
 
@@ -201,7 +201,7 @@ ReactDOM.render(
     });
 ```
 
-## [表单定制化](custoization)
+## [表单定制化](##custoization)
 
 ## [License](license)
 
