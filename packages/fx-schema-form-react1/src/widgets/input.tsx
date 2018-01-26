@@ -12,6 +12,7 @@ export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, Va
 }
 
 export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
+    private _count = 0;
     private setDefaultProps(): any {
         const props: any = {};
 
@@ -33,15 +34,13 @@ export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, a
         return (
             <Input
                 onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
-                    updateItemMeta(this.props, e.currentTarget.value);
+                    if (this._count > 0) {
+                        updateItemMeta(this.props, e.currentTarget.value);
+                    }
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                    this._count++;
                     updateItemData(this.props, e.currentTarget.value);
-                    // schemaFormReducer.actions.updateItemData({
-                    //     parentKeys: parentKeys,
-                    //     keys: keys,
-                    //     data: e.currentTarget.value
-                    // });
                 }}
                 disabled={readonly}
                 placeholder={getTitle(this.props)}

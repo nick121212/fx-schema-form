@@ -6,6 +6,7 @@ import { ValidateHocOutProps } from "../hocs/validate";
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 export declare class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
+    private _count;
     private setDefaultProps();
     render(): JSX.Element;
 }

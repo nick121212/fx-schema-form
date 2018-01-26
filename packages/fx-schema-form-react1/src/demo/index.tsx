@@ -85,7 +85,7 @@ const gloabelOptions = Immutable.fromJS({
         normal: {
         },
         object: {
-
+            temps: ["card"]
         }
     },
     temp: {
@@ -108,30 +108,28 @@ let start = performance.now();
 
 console.log("start", Date.now());
 
+actions.createForm({
+    key: "designForm",
+    data: {
+        name: "test",
+        dsModelIds: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, null]
+    }
+});
+
 ReactDOM.render(
     <Provider store={store}>
         <div>
             {
-                dsModelIds.map((d, i) => {
-                    actions.createForm({
-                        key: "designForm" + i,
-                        data: {
-                            name: "test",
-                            dsModelIds: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, null]
-                        }
-                    });
-                    return <SchemaForm
-                        key={i}
-                        RootComponent={Form}
-                        schemaId="design"
-                        uiSchema={["name", {
-                            key: "dsModelIds",
-                            title: "测试title" + i
-                        }]}
-                        parentKeys={["designForm" + i]}
-                        globalOptions={gloabelOptions}
-                        ajv={curAjv} />;
-                })
+                <SchemaForm
+                    RootComponent={Form}
+                    schemaId="design"
+                    uiSchema={["name", {
+                        key: "dsModelIds",
+                        title: "测试title"
+                    }]}
+                    parentKeys={["designForm"]}
+                    globalOptions={gloabelOptions}
+                    ajv={curAjv} />
             }
             <ReactPerfTool perf={Perf} />
         </div>

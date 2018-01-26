@@ -57,7 +57,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     optionsArray.push(options.getIn([category, field]));
                 }
 
-                let opts =  optionsArray.reverse().reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
+                let opts = optionsArray.reverse().reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
                     if (next) {
                         return next.merge(prev);
                     }
@@ -76,7 +76,11 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { uiSchema } = props;
                 const { title, keys } = uiSchema as FxUiSchema;
 
-                return title || [].concat(keys).pop();
+                if (title !== undefined) {
+                    return title;
+                }
+
+                return [].concat(keys).pop();
             }
 
             /**

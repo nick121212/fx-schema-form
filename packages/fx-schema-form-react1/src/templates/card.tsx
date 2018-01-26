@@ -16,7 +16,7 @@ export class AntdCardTemp extends React.PureComponent<AntdCardTempProps, any> {
         // let { isValid = true, errorText = "", isShow = true } = meta || {};
 
         return (
-            <Card title={getTitle(this.props)}  {...tempOptions.options}>
+            <Card title={getTitle(this.props).toString()}  {...tempOptions.options}>
                 {children}
             </Card>
         );
