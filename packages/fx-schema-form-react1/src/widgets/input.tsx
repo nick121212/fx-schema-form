@@ -4,8 +4,8 @@ import { DefaultProps } from "../components";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { Input } from "antd";
 import { hocFactory } from "../factory";
-import { schemaFormReducer } from "../reducer";
 import { FxUiSchema } from "../components/index";
+import { schemaFormReducer } from "../reducer";
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps {
 }
@@ -32,20 +32,14 @@ export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, a
         return (
             <Input
                 onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
-                    // updateItemData(e.currentTarget.value);
-                    // updateItemMeta(formItemData);
-
-                    if (e.currentTarget.value !== this.props.formItemData) {
-                        schemaFormReducer.actions.updateItemMeta({
-                            parentKeys: parentKeys,
-                            keys: keys,
-                            data: {
-                                isValid: !!e.currentTarget.value,
-                                dirty: true
-                            }
-                        });
-                    }
-
+                    schemaFormReducer.actions.updateItemMeta({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        data: {
+                            isValid: !!e.currentTarget.value,
+                            dirty: true
+                        }
+                    });
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
                     schemaFormReducer.actions.updateItemData({

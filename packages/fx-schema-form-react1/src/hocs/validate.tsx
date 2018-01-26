@@ -7,6 +7,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps, RC } from "../components";
+import { schemaFormReducer } from "../reducer";
 
 export interface ValidateHocOutProps extends DefaultProps, MakeHocOutProps {
 
@@ -14,15 +15,15 @@ export interface ValidateHocOutProps extends DefaultProps, MakeHocOutProps {
 
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     /**
-     * 包装array的组件HOC
+     * 包装validate的组件HOC
      * @param hocFactory  hoc的工厂方法
      * @param Component   需要包装的组件
      * 加入属性
-     * arrayItems
      */
     return (Component: any): RC<DefaultProps, any> => {
         class ArrayComponentHoc extends React.PureComponent<DefaultProps, any> {
             public render(): JSX.Element {
+                console.log("validate", schemaFormReducer);
                 return <Component {...this.props} />;
             }
         }

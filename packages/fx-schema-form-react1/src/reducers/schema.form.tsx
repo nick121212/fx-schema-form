@@ -42,6 +42,42 @@ export class SchemaFormReducer<T> implements FxReducer {
             [this.updateItemMeta as any]: this.updateItemMetaHandle.bind(this),
         }, this.initialState);
     }
+
+    private resolveKeys(state: Immutable.Map<string, any>, keys: Array<string>) {
+        if (state.hasIn(keys)) {
+            return state;
+        }
+
+        for (let i = 0, n = keys.length; i < n; i++) {
+            let mKeys = [].concat(keys).splice(0, i + 1);
+
+            // 如果key存在
+            if (!state.hasIn(mKeys)) {
+                mKeys.pop();
+                if (!state.hasIn(mKeys)) {
+                    if (keys[i].constructor === Number) {
+                        state = state.setIn(mKeys, Immutable.List());
+                    } else {
+                        state = state.setIn(mKeys, Immutable.Map());
+                    }
+                }
+            } else if (i < n) {
+                let data = state.getIn(mKeys);
+
+                if (!Immutable.Map.isMap(data) && !Immutable.List.isList(data)) {
+                    if (keys[i + 1].constructor === Number) {
+                        state = state.setIn(mKeys, Immutable.List());
+                    } else {
+                        state = state.setIn(mKeys, Immutable.Map());
+                    }
+                }
+                // state = state.setIn(mKeys, Immutable.List());
+            }
+        }
+
+        return state;
+    }
+
     /**
      * 创建一份表单数据
      * @param state   当前的state
@@ -68,6 +104,8 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private updateItemDataHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data }: any): Immutable.Map<string, any> {
         let dataKeys = parentKeys.concat(["data", ...keys]);
+
+        state = this.resolveKeys(state, dataKeys);
 
         return state.setIn(dataKeys, Immutable.fromJS(data));
     }

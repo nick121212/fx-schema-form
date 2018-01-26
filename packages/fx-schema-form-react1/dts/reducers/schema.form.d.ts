@@ -25,6 +25,7 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     readonly reducer: Reducer<any>;
+    private resolveKeys(state, keys);
     private createFormHandle(state, {key, data});
     private updateItemDataHandle(state, {parentKeys, keys, data});
     private updateItemMetaHandle(state, {parentKeys, keys, data});

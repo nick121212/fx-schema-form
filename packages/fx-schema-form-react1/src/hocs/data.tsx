@@ -107,19 +107,18 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
                 const mapKeys = [...this.props.parentKeys, ...keys,
                 settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
 
-                if (maps[mapKeys]) {
-                    if (!this.ComponentWithHoc) {
-                        const hoc = maps[mapKeys];
-                        this.ComponentWithHoc = hoc(Component);
-                    }
-                } else {
-                    const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
-                    maps[mapKeys] = hoc;
+                // if (maps[mapKeys]) {
+                //     if (!this.ComponentWithHoc) {
+                //         const hoc = maps[mapKeys];
+                //         this.ComponentWithHoc = hoc(Component);
+                //     }
+                // } else {
+                const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
+                // maps[mapKeys] = hoc;
+                const ComponentWithHoc = hoc(Component);
+                // }
 
-                    this.ComponentWithHoc = hoc(Component);
-                }
-
-                const ComponentWithHoc = this.ComponentWithHoc;
+                // const ComponentWithHoc = this.ComponentWithHoc;
 
                 return <ComponentWithHoc {...this.props} />;
             }

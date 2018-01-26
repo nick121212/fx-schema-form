@@ -117,7 +117,7 @@ ReactDOM.render(
                         key: "designForm" + i,
                         data: {
                             name: "test",
-                            dsModelIds: [{}, {}, {}]
+                            dsModelIds: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, null]
                         }
                     });
                     return <SchemaForm

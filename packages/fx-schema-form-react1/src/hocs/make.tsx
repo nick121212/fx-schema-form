@@ -28,7 +28,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { uiSchema, getOptions } = this.props;
                 const { type } = uiSchema as FxUiSchema;
                 const fieldOptions = getOptions(this.props, "field", type as string);
-                const hocs = settings.hocs || uiSchema[this.fieldKey] || ["theme", "field", "array", "temp"];
+                const hocs = settings.hocs || uiSchema[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
 
                 let ComponentWithHocs = compose<DefaultProps & MakeHocOutProps, any>
                     (...["utils"].concat(hocs).map(hoc => {
