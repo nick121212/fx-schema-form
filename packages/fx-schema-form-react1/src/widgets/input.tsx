@@ -6,8 +6,9 @@ import { Input } from "antd";
 import { hocFactory } from "../factory";
 import { FxUiSchema } from "../components/index";
 import { schemaFormReducer } from "../reducer";
+import { ValidateHocOutProps } from "../hocs/validate";
 
-export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps {
+export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 
 export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
@@ -25,28 +26,22 @@ export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, a
     }
 
     public render(): JSX.Element {
-        const { getOptions, uiSchema, getTitle, parentKeys, schemaId } = this.props;
+        const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
         const { keys } = uiSchema as FxUiSchema;
         const { readonly = false } = uiSchema as any;
 
         return (
             <Input
                 onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
-                    schemaFormReducer.actions.updateItemMeta({
-                        parentKeys: parentKeys,
-                        keys: keys,
-                        data: {
-                            isValid: !!e.currentTarget.value,
-                            dirty: true
-                        }
-                    });
+                    updateItemMeta(this.props, e.currentTarget.value);
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
-                    schemaFormReducer.actions.updateItemData({
-                        parentKeys: parentKeys,
-                        keys: keys,
-                        data: e.currentTarget.value
-                    });
+                    updateItemData(this.props, e.currentTarget.value);
+                    // schemaFormReducer.actions.updateItemData({
+                    //     parentKeys: parentKeys,
+                    //     keys: keys,
+                    //     data: e.currentTarget.value
+                    // });
                 }}
                 disabled={readonly}
                 placeholder={getTitle(this.props)}

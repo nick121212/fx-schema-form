@@ -41,6 +41,7 @@ declare const design: {
                 properties: {
                     name: {
                         type: string;
+                        minLength: number;
                     };
                     password: {
                         type: string;

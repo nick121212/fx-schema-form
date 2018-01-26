@@ -2,7 +2,8 @@
 import React from "react";
 import { DefaultProps } from "../components";
 import { UtilsHocOutProps } from "../hocs/utils";
-export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps {
+import { ValidateHocOutProps } from "../hocs/validate";
+export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 export declare class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
     private setDefaultProps();

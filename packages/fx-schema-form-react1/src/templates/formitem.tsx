@@ -37,6 +37,7 @@ export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps,
                 label={getTitle(this.props)}
                 extra={uiSchema.description}
                 hasFeedback={dirty && hasFeedback}
+                help={isValid ? "" : errorText}
                 {...props}
                 {...tempOptions.options}>
                 {children}

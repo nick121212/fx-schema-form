@@ -43,7 +43,7 @@ const design = {
             items: {
                 type: "object",
                 properties: {
-                    name: { type: "string" },
+                    name: { type: "string", minLength: 10 },
                     password: { type: "string" }
                 }
             }
