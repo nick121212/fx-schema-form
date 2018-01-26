@@ -123,6 +123,8 @@ export class TreeMap {
             if (this.children.length > key) {
                 return this.children[key];
             }
+
+            return null;
         }
 
         // 如果当前节点的key===要搜索的key，则返回本身

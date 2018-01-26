@@ -1,6 +1,6 @@
 
 import React from "react";
-import { compose } from "recompose";
+import { compose, shouldUpdate } from 'recompose';
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 import { createSelector, createSelectorCreator, defaultMemoize } from "reselect";
@@ -99,6 +99,7 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
      * arrayItems
      */
     return (Component: any): RC<DataHocOutProps, any> => {
+        @shouldUpdate(() => false)
         class DataComponentHoc extends React.PureComponent<DataHocOutProps, any> {
             private ComponentWithHoc;
 

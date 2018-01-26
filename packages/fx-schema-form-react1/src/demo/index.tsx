@@ -63,19 +63,7 @@ actions.updateItemData.assignTo(store);
 actions.updateItemMeta.assignTo(store);
 
 let dsModelIds = [];
-
-// 加载10000个
-//  {
-//     type: "array",
-//     items: {
-//         type: "object",
-//         properties: {
-//             name: { type: "string" },
-//             password: { type: "string" }
-//         }
-//     }
-// }
-for (let i = 11; i > 0; i--) {
+for (let i = 200; i > 0; i--) {
     dsModelIds.unshift({
         name: "nick" + i,
         password: "password" + i + i
@@ -129,7 +117,7 @@ actions.createForm({
     key: "designForm",
     data: {
         name: "test",
-        dsModelIds: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, null]
+        dsModelIds: dsModelIds
     }
 });
 

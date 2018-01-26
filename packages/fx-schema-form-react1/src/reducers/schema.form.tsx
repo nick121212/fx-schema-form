@@ -1,6 +1,6 @@
 import { createAction, createReducer, SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux";
-import Immutable, { is } from "immutable";
+import { is, Map, List, fromJS } from "immutable";
 
 import { FxReducer } from "./reducer";
 import { TreeMap } from "../libs/tree";
@@ -43,7 +43,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         }, this.initialState);
     }
 
-    private resolveKeys(state: Immutable.Map<string, any>, keys: Array<string>) {
+    private resolveKeys(state: Map<string, any>, keys: Array<string>) {
         if (state.hasIn(keys)) {
             return state;
         }
@@ -51,24 +51,25 @@ export class SchemaFormReducer<T> implements FxReducer {
         for (let i = 0, n = keys.length; i < n; i++) {
             let mKeys = [].concat(keys).splice(0, i + 1);
 
-            // 如果key存在
+            // 如果key不存在，遍历生成数据结构
             if (!state.hasIn(mKeys)) {
                 mKeys.pop();
                 if (!state.hasIn(mKeys)) {
                     if (keys[i].constructor === Number) {
-                        state = state.setIn(mKeys, Immutable.List());
+                        state = state.setIn(mKeys, List());
                     } else {
-                        state = state.setIn(mKeys, Immutable.Map());
+                        state = state.setIn(mKeys, Map());
                     }
                 }
             } else if (i < n) {
+                // 如果key存在，则判断数据结构是否与结构一致
                 let data = state.getIn(mKeys);
 
-                if (!Immutable.Map.isMap(data) && !Immutable.List.isList(data)) {
+                if (!Map.isMap(data) && !List.isList(data)) {
                     if (keys[i + 1].constructor === Number) {
-                        state = state.setIn(mKeys, Immutable.List());
+                        state = state.setIn(mKeys, List());
                     } else {
-                        state = state.setIn(mKeys, Immutable.Map());
+                        state = state.setIn(mKeys, Map());
                     }
                 }
             }
@@ -82,15 +83,15 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state   当前的state
      * @param param1  参数值，key 和 data
      */
-    private createFormHandle(state: Immutable.Map<string, any>, { key, data }: any): Immutable.Map<string, any> {
+    private createFormHandle(state: Map<string, any>, { key, data }: any): Map<string, any> {
         if (state.has(key)) {
             state = state.remove(key);
         }
 
         const meta = new TreeMap(key, null);
-        const stateData = Immutable.Map<string, any>({
+        const stateData = Map<string, any>({
             meta: meta,
-            data: Immutable.fromJS(data)
+            data: fromJS(data)
         });
 
         return state.set(key, stateData);
@@ -101,12 +102,12 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 参数值，keys,parentKeys和data
      */
-    private updateItemDataHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data }: any): Immutable.Map<string, any> {
+    private updateItemDataHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         let dataKeys = parentKeys.concat(["data", ...keys]);
 
         state = this.resolveKeys(state, dataKeys);
 
-        return state.setIn(dataKeys, Immutable.fromJS(data));
+        return state.setIn(dataKeys, fromJS(data));
     }
     /**
      * 修改一个数据的元数据
@@ -115,7 +116,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 参数值，keys,parentKeys和data
      */
-    private updateItemMetaHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data }: any): Immutable.Map<string, any> {
+    private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys));
@@ -124,7 +125,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         if (childNode.value) {
             childNode.value = childNode.value.merge(data);
         } else {
-            childNode.value = Immutable.fromJS(data);
+            childNode.value = fromJS(data);
         }
 
         if (is(childNode.value, value)) {

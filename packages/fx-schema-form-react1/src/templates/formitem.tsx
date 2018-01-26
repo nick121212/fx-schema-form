@@ -32,7 +32,7 @@ export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps,
 
         return (
             <Form.Item
-                key={tempKey + isValid}
+                key={uiSchema.keys.join() + tempKey + isValid}
                 required={uiSchema.isRequired}
                 label={getTitle(this.props)}
                 extra={uiSchema.description}
