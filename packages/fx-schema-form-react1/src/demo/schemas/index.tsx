@@ -22,6 +22,7 @@ import { default as style } from "./dnd/style";
 
 
 const design = {
+    $async: true,
     type: "object",
     $id: "design",
     required: ["name", "dsModelIds"],
@@ -43,6 +44,7 @@ const design = {
             items: {
                 type: "object",
                 properties: {
+                    age: { $async: true, type: "string", idExists: { "table": "users" } },
                     name: { type: "string", minLength: 10 },
                     password: { type: "string" }
                 }

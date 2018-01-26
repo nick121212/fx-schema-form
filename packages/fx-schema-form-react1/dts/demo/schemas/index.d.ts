@@ -18,6 +18,7 @@ import { default as echartItemStyle } from "./dnd/echart.itemstyle";
 import { default as echartTimeline } from "./dnd/echart.timeline";
 import { default as style } from "./dnd/style";
 declare const design: {
+    $async: boolean;
     type: string;
     $id: string;
     required: string[];
@@ -39,6 +40,13 @@ declare const design: {
             items: {
                 type: string;
                 properties: {
+                    age: {
+                        $async: boolean;
+                        type: string;
+                        idExists: {
+                            "table": string;
+                        };
+                    };
                     name: {
                         type: string;
                         minLength: number;

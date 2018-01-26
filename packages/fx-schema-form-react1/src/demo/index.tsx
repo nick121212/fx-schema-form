@@ -27,6 +27,26 @@ const curAjv: ajv.Ajv = new ajv({
     removeAdditional: true,
 });
 
+curAjv.addKeyword("idExists", {
+    async: true,
+    type: "string",
+    validate: checkIdExists as any
+});
+
+function checkIdExists(schema, data) {
+    console.log("dfjkladjsklfklakdls");
+    return new Promise((resolve, reject) => {
+        console.log("object");
+        setTimeout(() => {
+            if (data === "nick") {
+                return resolve(true);
+            }
+            return reject(new Error("idExists不是nick"));
+        }, 2000);
+    });
+}
+
+
 let designResolve = new ResolveLib(curAjv, design as any);
 let actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
 
@@ -61,9 +81,6 @@ for (let i = 11; i > 0; i--) {
         password: "password" + i + i
     });
 }
-
-
-
 
 const gloabelOptions = Immutable.fromJS({
     field: {
