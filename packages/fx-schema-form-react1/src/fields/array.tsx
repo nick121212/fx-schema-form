@@ -14,6 +14,11 @@ let arrayFieldStyle = {
     height: "100%"
 };
 
+/**
+ * 数组结构的字段解析
+ * 这里需要数组元素的个数来做循环
+ * 循环生成元素个数的SchemaForm
+ */
 export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
     /**
      * 遍历数据，生成子表单
@@ -23,6 +28,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
         const { parentKeys, globalOptions, arrayLevel = [], ajv } = this.props,
             uiSchema = this.props.uiSchema as FxUiSchema;
 
+        // 如果不需要children，则跳出
         if (uiSchema.children === null) {
             return null;
         }
@@ -43,8 +49,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
      * 渲染页面
      */
     public render(): JSX.Element | null {
-        const { uiSchema, formItemData } = this.props,
-            child = [];
+        const { uiSchema, formItemData } = this.props, child = [];
 
         for (let i = 0; i < +formItemData; i++) {
             child.push(this.renderItem(i));

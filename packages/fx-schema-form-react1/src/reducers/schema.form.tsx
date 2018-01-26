@@ -71,7 +71,6 @@ export class SchemaFormReducer<T> implements FxReducer {
                         state = state.setIn(mKeys, Immutable.Map());
                     }
                 }
-                // state = state.setIn(mKeys, Immutable.List());
             }
         }
 

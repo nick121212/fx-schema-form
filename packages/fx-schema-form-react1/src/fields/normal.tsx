@@ -10,6 +10,10 @@ export interface NormalFieldProps extends DefaultProps, UtilsHocOutProps, FieldH
 
 }
 
+/**
+ * 普通数据字段类型
+ * 这里直接渲染[fieldHoc]中结算得出的WidgetComponent
+ */
 export class NormalField extends React.PureComponent<NormalFieldProps> {
 
     constructor(props: NormalFieldProps, context: any) {

@@ -24,6 +24,11 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps, any> => {
         @(compose(
             withHandlers({
+                /**
+                 * 验证单个数据
+                 * 使用当前组件中的uiSchema，以及传递过来的数据做验证
+                 * 这里可能有远程验证
+                 */
                 validate: (propsCur: DefaultProps) => {
                     return async (props: DefaultProps, data: any) => {
                         const result: any = { dirty: true, isValid: false, isLoading: false };
@@ -35,10 +40,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                             });
                         }, 200);
 
+                        // 这里做一层try catch处理
                         try {
                             let validateResult = await props.ajv.validate(props.uiSchema, data);
                             result.isValid = validateResult;
 
+                            // 如果验证出错，则抛出错误
                             if (!validateResult) {
                                 let error: any = new Error();
 
@@ -47,6 +54,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                                 throw error;
                             }
                         } catch (err) {
+                            // 处理错误消息
                             result.errorText = err.errors ?
                                 props.ajv.errorsText(err.errors, { dataVar: "/" + (props.uiSchema as any).keys.join("/") })
                                 : err.message;
@@ -60,6 +68,9 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 }
             }),
             withHandlers({
+                /**
+                 * 更新一个数据
+                 */
                 updateItemData: (propsCur: DefaultProps) => {
                     return (props: DefaultProps, data: any) => {
                         schemaFormReducer.actions.updateItemData({
@@ -69,6 +80,9 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                         });
                     };
                 },
+                /**
+                 * 更新一个元数据
+                 */
                 updateItemMeta: (propsCur: ValidateHocOutProps) => {
                     return async (props: DefaultProps, data: any, meta?: any) => {
                         schemaFormReducer.actions.updateItemMeta({
