@@ -9,7 +9,7 @@ import Immutable from "immutable";
 import { Provider } from "react-redux";
 import ajv from "ajv";
 
-import { Form } from "antd";
+import { Form, Button } from "antd";
 import { design } from "./schemas";
 
 import "antd/dist/antd.css";
@@ -59,18 +59,32 @@ actions.createForm({
 });
 
 @(schemaFormDec({
-    rootReducerKey: ["schemaForm", "designForm"]
+    rootReducerKey: ["schemaForm"],
+    parentKeys: ["designForm"]
 }) as any)
 class TestForm extends React.PureComponent<any> {
+
+    private _validateAll;
+
+    constructor(props: any) {
+        super(props);
+
+        this._validateAll = props.validateAll.bind(this);
+    }
+
     public render() {
         return <SchemaForm
             key={"designForm" + "design"}
             RootComponent={Form}
             schemaId="design"
-            uiSchemas={["infoOptions"]}
+            uiSchemas={["*"]}
             parentKeys={["designForm"]}
             globalOptions={gloabelOptions}
-            ajv={curAjv} />;
+            ajv={curAjv} >
+
+            <Button onClick={this._validateAll}>validate</Button>
+
+        </SchemaForm>;
     }
 }
 
@@ -78,7 +92,7 @@ ReactDOM.render(
     <Provider store={store}>
         <div>
             <TestForm ajv={curAjv} schemaId="design" />
-            <ReactPerfTool perf={Perf} />
+            {/*<ReactPerfTool perf={Perf} />*/}
         </div>
     </Provider>,
     document.getElementById("root"),

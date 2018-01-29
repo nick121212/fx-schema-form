@@ -1,9 +1,11 @@
 import { RC, DefaultProps } from "../components";
 import { TreeMap } from "./tree";
 export interface SchemaFormHocOutProps {
+    validateAll: () => Promise<any>;
 }
 export interface SchemaFormHocSettings {
     rootReducerKey?: string[];
+    parentKeys?: string[];
 }
 export interface SchemaFormProps extends DefaultProps {
     root?: TreeMap;

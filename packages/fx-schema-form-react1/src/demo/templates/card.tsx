@@ -21,6 +21,9 @@ export class AntdCardTemp extends React.PureComponent<AntdCardTempProps, any> {
                 {...tempOptions.options}
                 extra={initArrayComponent ? initArrayComponent(this.props) : null}>
                 {collapsing ? <span>折叠中</span> : children}
+
+
+                {isValid ? null : errorText}
             </Card>
         );
     }

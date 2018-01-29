@@ -38,9 +38,11 @@ declare const design: {
         dsModelIds: {
             type: string;
             maxItems: number;
+            minItems: number;
             items: {
                 type: string;
                 required: string[];
+                defualt: {};
                 properties: {
                     age: {
                         $async: boolean;

@@ -1,7 +1,7 @@
 import { BaseFactory, UiSchema } from "fx-schema-form-core";
 import { DefaultProps, RC, FxUiSchema } from "../components";
 export interface MergeHocOutProps {
-    mergeSchemaList: FxUiSchema[];
+    mergeSchemaList?: FxUiSchema[];
 }
 export interface MergeHocProps extends DefaultProps {
     uiSchemas: Array<string | UiSchema>;

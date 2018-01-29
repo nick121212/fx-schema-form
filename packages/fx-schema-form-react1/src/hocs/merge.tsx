@@ -10,7 +10,7 @@ import { DefaultProps, RC, FxUiSchema } from "../components";
  * MergeHoc 添加的属性
  */
 export interface MergeHocOutProps {
-    mergeSchemaList: FxUiSchema[];
+    mergeSchemaList?: FxUiSchema[];
 }
 
 export interface MergeHocProps extends DefaultProps {

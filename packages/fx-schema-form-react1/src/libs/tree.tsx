@@ -30,6 +30,10 @@ export class TreeMap {
         // 与当前路径多一次对比，去掉重复的部分
         keys = keys.splice(curKeys.length);
 
+        if (!keys.length) {
+            child = this;
+        }
+
         // 创建所有路径的节点
         while (keys.length) {
             let key = keys.shift();
@@ -228,5 +232,19 @@ export class TreeMap {
         // 将当前节点插入到制定的位置
         this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
             .concat(this.parent.children.splice(toIndex - offset));
+    }
+
+    /**
+     * 遍历所有节点的value数据
+     */
+    public forEach(clearFunc: (node: TreeMap) => any) {
+        if (!this.children) {
+            return;
+        }
+
+        for (let i = 0, n = this.children.length; i < n; i++) {
+            this.children[i].value = clearFunc(this.children[i]);
+            this.children[i].forEach(clearFunc);
+        }
     }
 }

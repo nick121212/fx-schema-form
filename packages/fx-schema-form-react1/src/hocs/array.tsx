@@ -37,7 +37,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     props.ajv.validate({
                         type: "object",
                         properteis: {
-                            defaultData: props.uiSchema
+                            defaultData: props.uiSchema.items
                         }
                     }, defaultValue);
 

@@ -1,7 +1,8 @@
 /// <reference types="react" />
 import React from "react";
 import { DefaultProps, FxUiSchema } from "../index";
-export interface Props extends DefaultProps {
+import { MergeHocOutProps } from "../../hocs/merge";
+export interface Props extends DefaultProps, MergeHocOutProps {
     RootComponent?: any;
     uiSchemas?: Array<string | FxUiSchema>;
 }

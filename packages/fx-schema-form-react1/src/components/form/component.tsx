@@ -5,7 +5,7 @@ import { hoc } from "./container";
 import { MergeHocOutProps } from "../../hocs/merge";
 import { SchemaFormItem } from "../formitem/index";
 
-export interface Props extends DefaultProps {
+export interface Props extends DefaultProps, MergeHocOutProps {
     RootComponent?: any;
     uiSchemas?: Array<string | FxUiSchema>;
 }
@@ -13,7 +13,7 @@ export interface Props extends DefaultProps {
 @hoc
 export class SchemaForm extends React.PureComponent<Props, any> {
     public render() {
-        const { schemaId, mergeSchemaList, arrayLevel, RootComponent, ...extraProps } = this.props as Props & MergeHocOutProps;
+        const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;
         const formItemList = mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {
             let arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
 
@@ -27,12 +27,16 @@ export class SchemaForm extends React.PureComponent<Props, any> {
         });
 
         if (RootComponent) {
-            return <RootComponent children={formItemList} />;
+            return <RootComponent >
+                {formItemList}
+                {children}
+            </RootComponent>;
         }
 
         return (
             <div>
                 {formItemList}
+                {children}
             </div>
         );
     }
