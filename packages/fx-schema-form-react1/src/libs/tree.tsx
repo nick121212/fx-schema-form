@@ -78,7 +78,7 @@ export class TreeMap {
      * time complexity = O(1) / Constant
      * @returns string[]
      */
-    public getCurrentKeys(): string[] {
+    public getCurrentKeys(): Array<string | number> {
         let keys = [];
 
         if (this.parent) {
@@ -211,14 +211,19 @@ export class TreeMap {
      */
     public insertToFromParent(toIndex: number): void {
         let curIndex = this.getIndexInParent();
-        let offset = (toIndex > curIndex ? 1 : 0);
+        let offset = (toIndex > curIndex && false ? 1 : 0);
 
         // 如果没有父亲，或者父亲没有子节点，或者当前位置小于0
-        if (!this.parent || !this.parent.children || curIndex < 0 || this.parent.children.length <= toIndex) {
+        if (!this.parent || !this.parent.children || curIndex < 0) {
             return;
         }
 
-        // 现充父亲节点中删除当前元素
+        // 如果超出了父亲的子节点数量，添加一个
+        if (this.parent.children.length <= toIndex) {
+            this.parent.addChild(this.parent.getCurrentKeys().concat([toIndex]));
+        }
+
+        // 父亲节点中删除当前元素
         this.removeFromParent();
         // 将当前节点插入到制定的位置
         this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)

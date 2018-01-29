@@ -1,6 +1,6 @@
 import React from "react";
-import { DefaultProps } from "../components/default.props";
-import { UtilsHocOutProps } from "../hocs/utils";
+import { DefaultProps, FxUiSchema } from "../../index";
+import { UtilsHocOutProps } from "../../hocs/utils";
 
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {
     tempKey: string;

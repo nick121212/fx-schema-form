@@ -7,6 +7,7 @@ import { SchemaFormItem } from "../formitem/index";
 
 export interface Props extends DefaultProps {
     RootComponent?: any;
+    uiSchemas?: Array<string | FxUiSchema>;
 }
 
 @hoc

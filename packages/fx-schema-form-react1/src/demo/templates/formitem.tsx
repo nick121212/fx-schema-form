@@ -4,9 +4,8 @@ import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
 import { Form, Input, Row, Col } from "antd";
 import { FormItemProps } from "antd/lib/form/FormItem";
 
-import { DefaultProps } from "../components";
-import { UtilsHocOutProps } from "../hocs/utils";
-import { FxUiSchema } from "../components/index";
+import { DefaultProps, FxUiSchema } from "../../index";
+import { UtilsHocOutProps } from "../../hocs/utils";
 
 
 export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps {

@@ -39,7 +39,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
                 arrayIndex={idx}
                 arrayLevel={arrayLevel.concat([idx])}
                 schemaId={uiSchema.schemaPath}
-                uiSchema={uiSchema.children || [uiSchema.keys.concat(["-"]).join("/")]}
+                uiSchemas={uiSchema.children || [uiSchema.keys.concat(["-"]).join("/")]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
                 ajv={ajv} />

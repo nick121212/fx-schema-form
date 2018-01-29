@@ -1,12 +1,9 @@
 import React, { SyntheticEvent } from "react";
-
-import { DefaultProps } from "../components";
-import { UtilsHocOutProps } from "../hocs/utils";
 import { Input } from "antd";
-import { hocFactory } from "../factory";
-import { FxUiSchema } from "../components/index";
-import { schemaFormReducer } from "../reducer";
-import { ValidateHocOutProps } from "../hocs/validate";
+
+import { DefaultProps, FxUiSchema } from "../../index";
+import { UtilsHocOutProps } from "../../hocs/utils";
+import { ValidateHocOutProps } from "../../hocs/validate";
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
@@ -19,7 +16,6 @@ export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, a
         if (this.props.formItemData !== undefined) {
             props.value = this.props.formItemData;
         } else {
-            // props.defaultValue = mergeSchema.default;
             props.value = "";
         }
 

@@ -37,6 +37,7 @@ declare const design: {
         };
         dsModelIds: {
             type: string;
+            maxItems: number;
             items: {
                 type: string;
                 properties: {
@@ -46,10 +47,14 @@ declare const design: {
                         idExists: {
                             "table": string;
                         };
+                        description: string;
                     };
                     name: {
                         type: string;
                         minLength: number;
+                        errorMessage: {
+                            minLength: string;
+                        };
                     };
                     password: {
                         type: string;

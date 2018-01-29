@@ -6,7 +6,7 @@ export declare class TreeMap {
     constructor(key: string, value: any, parent?: TreeMap);
     addChild(keys: Array<string | number>, value?: any): TreeMap;
     getKey(): string;
-    getCurrentKeys(): string[];
+    getCurrentKeys(): Array<string | number>;
     getIndexInParent(): number;
     contains(key: string | number): TreeMap | null;
     containPath(keys: Array<string | number>): TreeMap | null;

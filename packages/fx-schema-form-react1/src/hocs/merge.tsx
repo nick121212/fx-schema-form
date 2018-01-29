@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BaseFactory, MergeLib, FxJsonSchema } from "fx-schema-form-core";
+import { BaseFactory, MergeLib, FxJsonSchema, UiSchema } from "fx-schema-form-core";
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 
@@ -14,6 +14,7 @@ export interface MergeHocOutProps {
 }
 
 export interface MergeHocProps extends DefaultProps {
+    uiSchemas: Array<string | UiSchema>;
 }
 
 let totalTime = 0, timeid;
@@ -38,7 +39,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                 let start = performance.now();
 
-                this._merge = new MergeLib(props.ajv, props.schemaId, props.parentKeys, props.uiSchema as any);
+                this._merge = new MergeLib(props.ajv, props.schemaId, props.parentKeys, props.uiSchemas as any);
                 this._mergeUiSchemaList = this._merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);
                 });

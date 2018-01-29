@@ -41,11 +41,22 @@ const design = {
         },
         dsModelIds: {
             type: "array",
+            maxItems: 3,
             items: {
                 type: "object",
                 properties: {
-                    age: { $async: true, type: "string", idExists: { "table": "users" } },
-                    name: { type: "string", minLength: 10 },
+                    age: {
+                        $async: true, type: "string",
+                        idExists: { "table": "users" },
+                        description: "远程验证字段，输入nick试试看",
+                    },
+                    name: {
+                        type: "string",
+                        minLength: 10,
+                        errorMessage: {
+                            minLength: "必须10个字符及以上"
+                        }
+                    },
                     password: { type: "string" }
                 }
             }

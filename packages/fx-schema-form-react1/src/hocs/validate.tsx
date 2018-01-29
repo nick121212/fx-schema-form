@@ -9,8 +9,8 @@ import { DefaultProps, RC } from "../components";
 import { schemaFormReducer } from "../reducer";
 
 export interface ValidateHocOutProps extends DefaultProps, MakeHocOutProps {
-    updateItemData: (props: DefaultProps, data: any) => void;
-    updateItemMeta: (props: DefaultProps, meta: any) => void;
+    updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
+    updateItemMeta: (props: DefaultProps, data: any, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
 
@@ -30,7 +30,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                  * 这里可能有远程验证
                  */
                 validate: (propsCur: DefaultProps) => {
-                    return async (props: DefaultProps, data: any) => {
+                    return async (props: DefaultProps & UtilsHocOutProps, data: any) => {
                         const result: any = { dirty: true, isValid: false, isLoading: false };
                         const timeId = setTimeout(() => {
                             schemaFormReducer.actions.updateItemMeta({
@@ -56,7 +56,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                         } catch (err) {
                             // 处理错误消息
                             result.errorText = err.errors ?
-                                props.ajv.errorsText(err.errors, { dataVar: "/" + (props.uiSchema as any).keys.join("/") })
+                                props.ajv.errorsText(err.errors, { dataVar: props.getTitle(props).toString() })
                                 : err.message;
                         }
                         finally {
@@ -72,11 +72,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                  * 更新一个数据
                  */
                 updateItemData: (propsCur: DefaultProps) => {
-                    return (props: DefaultProps, data: any) => {
+                    return (props: DefaultProps, data: any, meta?: any) => {
                         schemaFormReducer.actions.updateItemData({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
-                            data: data
+                            data: data,
+                            meta
                         });
                     };
                 },

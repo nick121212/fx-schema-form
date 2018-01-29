@@ -8,6 +8,7 @@ import { RC, DefaultProps, FxUiSchema } from "../components";
 import { ThemeHocOutProps } from "./theme";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
+import { ArrayHocOutProps } from "./array";
 
 /**
  * 包装Template的组件HOC
@@ -24,7 +25,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         * 获取模板的components
         * @param uiSchema 合并后的数据
         */
-        class TempComponentHoc extends React.PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
+        class TempComponentHoc extends React.PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps & ArrayHocOutProps, any> {
             public render(): JSX.Element {
                 const { uiSchema, getOptions } = this.props;
                 const { options: uiSchemaOptions, keys } = uiSchema as FxUiSchema;
@@ -35,13 +36,17 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                         TempWithHoc = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
-                        tempKey={key}
                         key={keys.join(".") + key}
+                        tempKey={key}
+                        ajv={this.props.ajv}
                         uiSchema={this.props.uiSchema}
                         schemaId={this.props.schemaId}
                         arrayLevel={this.props.arrayLevel}
                         arrayIndex={this.props.arrayIndex}
                         globalOptions={this.props.globalOptions}
+                        ArrayComponent={this.props.ArrayComponent}
+                        ArrayItemComponent={this.props.ArrayItemComponent}
+                        initArrayComponent={this.props.initArrayComponent}
                         parentKeys={this.props.parentKeys}
                         getTitle={this.props.getTitle}
                         getOptions={this.props.getOptions}

@@ -10,11 +10,34 @@ export interface SchemaFormActions {
         parentKeys: string[];
         keys: string[];
         data: any;
+        meta?: any;
     }>;
     updateItemMeta: SimpleActionCreator<{
         parentKeys: string[];
         keys: string[];
         data: any;
+    }>;
+    addItem: SimpleActionCreator<{
+        parentKeys: string[];
+        keys: string[];
+        data: any;
+    }>;
+    removeItem: SimpleActionCreator<{
+        parentKeys: string[];
+        keys: string[];
+        index: number;
+    }>;
+    switchItem: SimpleActionCreator<{
+        parentKeys: string[];
+        keys: string[];
+        curIndex: number;
+        toIndex: number;
+    }>;
+    moveToItem: SimpleActionCreator<{
+        parentKeys: string[];
+        keys: string[];
+        curIndex: number;
+        toIndex: number;
     }>;
 }
 export declare class SchemaFormReducer<T> implements FxReducer {
@@ -22,11 +45,19 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private createForm;
     private updateItemData;
     private updateItemMeta;
+    private addItem;
+    private removeItem;
+    private switchItem;
+    private moveToItem;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     readonly reducer: Reducer<any>;
     private resolveKeys(state, keys);
     private createFormHandle(state, {key, data});
-    private updateItemDataHandle(state, {parentKeys, keys, data});
+    private updateItemDataHandle(state, {parentKeys, keys, data, meta});
+    private addItemDataHandle(state, {parentKeys, keys, data});
+    private removeItemDataHandle(state, {parentKeys, keys, index});
+    private switchItemHandle(state, {parentKeys, keys, curIndex, toIndex});
+    private moveItemHandle(state, {parentKeys, keys, curIndex, toIndex});
     private updateItemMetaHandle(state, {parentKeys, keys, data});
 }

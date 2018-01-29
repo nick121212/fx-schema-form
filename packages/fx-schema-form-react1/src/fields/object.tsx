@@ -21,12 +21,14 @@ export class ObjectField extends React.PureComponent<ObjectFieldProps, any> {
             return null;
         }
 
+        console.log(arrayIndex, arrayLevel);
+
         return (
             <SchemaForm
                 arrayIndex={arrayIndex}
                 arrayLevel={arrayLevel}
                 schemaId={uiSchema.schemaPath}
-                uiSchema={uiSchema.children || ["*"]}
+                uiSchemas={uiSchema.children || ["*"]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
                 ajv={ajv} />

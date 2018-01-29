@@ -13,7 +13,7 @@ export class TreeMap {
         while (keys.length) {
             let key = keys.shift();
             let isNumber = key.constructor === Number;
-            child = curNode.contains(isNumber ? "-" : key.toString());
+            child = curNode.contains(key);
             if (!child) {
                 if (isNumber) {
                     child = new TreeMap("-", null, curNode);
@@ -60,6 +60,7 @@ export class TreeMap {
             if (this.children.length > key) {
                 return this.children[key];
             }
+            return null;
         }
         if (this.getKey() === key) {
             return this;
@@ -78,7 +79,13 @@ export class TreeMap {
     containPath(keys) {
         let node = this;
         keys.forEach((key) => {
+            if (!node) {
+                return null;
+            }
             node = node.contains(key);
+            if (!node) {
+                return null;
+            }
         });
         return node;
     }
@@ -98,12 +105,16 @@ export class TreeMap {
     }
     insertToFromParent(toIndex) {
         let curIndex = this.getIndexInParent();
-        let offset = (toIndex > curIndex ? 1 : 0);
-        if (!this.parent || !this.parent.children || curIndex < 0 || this.parent.children.length <= toIndex) {
+        let offset = (toIndex > curIndex && false ? 1 : 0);
+        if (!this.parent || !this.parent.children || curIndex < 0) {
             return;
         }
+        if (this.parent.children.length <= toIndex) {
+            this.parent.addChild(this.parent.getCurrentKeys().concat([toIndex]));
+        }
         this.removeFromParent();
-        this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this).concat(this.parent.children.splice(toIndex - offset));
+        this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
+            .concat(this.parent.children.splice(toIndex - offset));
     }
 }
 //# sourceMappingURL=tree.js.map

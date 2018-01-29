@@ -4,11 +4,10 @@ import { SchemaFormReducer } from "./reducers/schema.form";
 import { reducerFactory, hocFactory, themeFactory } from "./factory";
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
-import { SchemaForm, DefaultProps, RC } from "./components";
+import { SchemaForm, DefaultProps, RC, FxUiSchema } from "./components";
 
 import { NormalField, ObjectField, ArrayField } from "./fields";
-import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
-import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
+import { TreeMap } from "./libs/tree";
 
 /**
  * 默认样式配置
@@ -24,20 +23,16 @@ defaultTheme.fieldFactory.add("default", NormalField as any);
 defaultTheme.fieldFactory.add("object", ObjectField as any);
 defaultTheme.fieldFactory.add("array", ArrayField as any);
 
-defaultTheme.tempFactory.add("default", NoneTemp as any);
-defaultTheme.tempFactory.add("card", AntdCardTemp as any);
-defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
-
-defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
-defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
-
 themeFactory.add("default", defaultTheme as any);
 
 export {
+    TreeMap,
     FxReducer,
+    FxUiSchema,
     SchemaFormActions,
     reducerFactory,
     SchemaForm,
     hocFactory,
     DefaultProps
 };
+

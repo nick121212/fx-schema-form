@@ -18,7 +18,7 @@ export interface DefaultProps {
     /**
      * uiSchema
      */
-    uiSchema?: Array<string | FxUiSchema> | FxUiSchema;
+    uiSchema?: FxUiSchema;
     /**
      * 父亲的路径
      */

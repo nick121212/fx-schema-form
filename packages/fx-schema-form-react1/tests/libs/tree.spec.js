@@ -107,7 +107,7 @@ describe("测试treemap", () => {
 
         nbc0.insertToFromParent(3);
 
-        expect(nbc.contains(2)).to.equal(nbc0);
+        expect(nbc.contains(3)).to.equal(nbc0);
     });
 
     it("移动位置,当前位置大于移动的位置", () => {
@@ -117,5 +117,15 @@ describe("测试treemap", () => {
         nbc4.insertToFromParent(1);
 
         expect(nbc.contains(1)).to.equal(nbc4);
+    });
+
+    it("移动位置,移动位置不存在节点,创建新的节点", () => {
+        let nbc = tree.contains("b").contains("c");
+        let nbc4 = nbc.contains(4);
+
+        nbc4.insertToFromParent(8);
+
+        expect(nbc.children.length).to.equal(9);
+        expect(nbc4).to.equal(nbc.contains(8));
     });
 });

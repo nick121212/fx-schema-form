@@ -89,7 +89,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * @param path 路径
              */
             private getPathKeys(keys: Array<string>, path: string): Array<string> {
-                let keysResolve: string[] = resolvePathname(path, "/" + keys.join("/")).split("/");
+                let keysCopy = [""].concat(keys.concat([""]));
+                let keysResolve: string[] = resolvePathname(path, keysCopy.join("/")).split("/");
 
                 keysResolve.shift();
 
