@@ -2,6 +2,7 @@ import { Ajv } from "ajv";
 import { UiSchema } from "../models/uischema";
 /**
  * 用来转换uiSchema的类
+ * 如果有$ref，则直接使用
  */
 export declare class MergeLib {
     private ajv;
@@ -23,11 +24,21 @@ export declare class MergeLib {
      * 3. 返回合并后的数据
      * @param ajv         当前的ajv实例
      * @param $id         schema的$id
-     * @param parentKeys  父亲的keys 暂时没用到
+     * @param parent      父亲的schema
      * @param uiSchemas   uiSchema
      */
     constructor(ajv: Ajv, schemaPath: string, parent: UiSchema, uiSchemas: Array<UiSchema | string>);
+    /**
+     * 获取父亲的keys
+     */
     private getParentSchemaKeys();
+    private getUiSchemaKeyRecursion(uiSchemaKeys, parentKeys);
+    /**
+     * 获取当前uiSchema的key
+     * 如果没有父亲节点
+     * 默认返回父亲的key+当前uiSchema的key
+     * @param uiSchema
+     */
     private getCurrentSchemaKey(uiSchema);
     /**
      * 初始化uiSchema

@@ -90,12 +90,12 @@ describe("测试MergeLib类", () => {
     });
 
     it("实例化MergeLib，返回正确的uiSchema", () => {
-        let merge = new MergeLib(ajv, "design", [], ["*"]);
+        let merge = new MergeLib(ajv, "design", null, ["*"]);
 
         expect(merge.mergeUiSchemaList).to.be.a("array");
         expect(merge.mergeUiSchemaList.length).to.equal(6);
 
-        merge = new MergeLib(ajv, "design", [], ["name", "dsModelIds"]);
+        merge = new MergeLib(ajv, "design", null, ["name", "dsModelIds"]);
 
         expect(merge.mergeUiSchemaList.length).to.equal(2);
         expect(merge.mergeUiSchemaList[0].key).to.equal("design/name");
@@ -110,7 +110,7 @@ describe("测试MergeLib类", () => {
     });
 
     it("实例化MergeLib，测试uiSchema的数据合并", () => {
-        let merge = new MergeLib(ajv, "design", [], ["name", {
+        let merge = new MergeLib(ajv, "design", null, ["name", {
             key: "dsModelIds",
             title: "测试Title"
         }]);
@@ -119,12 +119,26 @@ describe("测试MergeLib类", () => {
     });
 
     it("实例化MergeLib，schema取一个数组字段", () => {
-        let merge = new MergeLib(ajv, "design", [], ["dsModelIds/-"]);
-        let merge1 = new MergeLib(ajv, "design", [], ["*"]);
-        let merge2 = new MergeLib(ajv, "design", [], ["dsModelIds/-/name"]);
+        let merge = new MergeLib(ajv, "design", null, ["dsModelIds/-"]);
+        let merge1 = new MergeLib(ajv, "design", null, ["*"]);
+        let merge2 = new MergeLib(ajv, "design", null, ["dsModelIds/-/name"]);
 
         expect(merge.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-'].join());
         expect(merge2.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-', 'name'].join());
     });
 
+    it("实例化MergeLib，测试无限级数组", () => {
+        let merge = new MergeLib(ajv, "design", null, ["infoOptions/-"]);
+        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions"]);
+        let merge2 = new MergeLib(ajv, merge1.mergeUiSchemaList[0].schemaPath, merge1.mergeUiSchemaList[0], ["-"]);
+        let merge3 = new MergeLib(ajv, merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], ["*"]);
+        let merge4 = new MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions/-/label"]);
+
+        expect(merge3.mergeUiSchemaList.length).to.equal(3);
+        expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "label"].join());
+        expect(merge3.mergeUiSchemaList[1].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "data"].join());
+        expect(merge3.mergeUiSchemaList[2].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "infoOptions"].join());
+        expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal(merge4.mergeUiSchemaList[0].keys.join());
+    });
+    // design/infoOptions/-/name
 });

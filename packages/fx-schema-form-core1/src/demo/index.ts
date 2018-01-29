@@ -95,30 +95,11 @@ new ResolveLib(curAjv, {
 new ResolveLib(curAjv, schema)];
 
 
-console.log(schemaFieldFactory);
+let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
 
-let b = new MergeLib(curAjv, "design", null, [{
-    key: "infoOptions"
-}]);
+let merge4 = new MergeLib(curAjv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions/-/label"]);
 
-console.log(b.mergeUiSchemaList, schemaKeysFactory);
 
-b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["-"]);
+console.log(merge4.mergeUiSchemaList);
 
-console.log(b.mergeUiSchemaList);
 
-b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["*"]);
-
-console.log(b.mergeUiSchemaList, b.parent);
-
-b = new MergeLib(curAjv, b.mergeUiSchemaList[2].schemaPath, b.mergeUiSchemaList[2], ["-"]);
-
-console.log(b.mergeUiSchemaList, b.parent);
-
-b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["*"]);
-
-console.log(b.mergeUiSchemaList, b.parent);
-
-// b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, [], [b.mergeUiSchemaList[0].keys.concat(["-"]).join("-")]);
-
-// console.log(b.mergeUiSchemaList);

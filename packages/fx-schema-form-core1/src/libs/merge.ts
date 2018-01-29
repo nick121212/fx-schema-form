@@ -8,6 +8,7 @@ import { FxJsonSchema } from "../models/jsonschema";
 
 /**
  * 用来转换uiSchema的类
+ * 如果有$ref，则直接使用
  */
 export class MergeLib {
     /**
@@ -25,7 +26,7 @@ export class MergeLib {
      * 3. 返回合并后的数据
      * @param ajv         当前的ajv实例
      * @param $id         schema的$id
-     * @param parentKeys  父亲的keys 暂时没用到
+     * @param parent      父亲的schema
      * @param uiSchemas   uiSchema
      */
     constructor(private ajv: Ajv, private schemaPath: string, public parent: UiSchema, private uiSchemas: Array<UiSchema | string>) {
@@ -43,12 +44,11 @@ export class MergeLib {
         this.mergeUiSchemaList = this.mergeUiSchema();
     }
 
+    /**
+     * 获取父亲的keys
+     */
     private getParentSchemaKeys() {
         if (this.parent) {
-            // if (this.parent.refKeys) {
-            //     return this.parent.refKeys;
-            // }
-
             if (this.parent.keys) {
                 return this.parent.keys;
             }
@@ -57,20 +57,54 @@ export class MergeLib {
         return [];
     }
 
-    private getCurrentSchemaKey(uiSchema: UiSchema) {
-        const $id = ResolveLib.getSchemaId(this.schemaPath);
+    /**
+     * 根据给出的parentKeys和uiSchemaKeys来获取uiSchema的key
+     * 1. 遍历uiSchemaKeys，分别于parentKeys做合并
+     * 2. 合并后的keys去仓库里面找，如果为找到则报错
+     * 3. 判断找到的schema中是否带有 $ref
+     * 4. 如果有$ref，则更改parentKeys为$ref的路径
+     * 5. 如果没有，则更改parentKeys为当前合并的keys
+     * @param uiSchemaKeys 
+     * @param parentKeys 
+     */
+    private getUiSchemaKeyRecursion(uiSchemaKeys: string[], parentKeys: string[]) {
+        let keyRtn = "";
 
-        if (this.parent) {
+        while (uiSchemaKeys.length) {
+            let key = uiSchemaKeys.shift();
+            let keys = parentKeys.concat([key]);
 
-            if (this.parent.$ref) {
-                return ResolveLib.getDataKeys(this.parent.$ref, true).concat([uiSchema.key]).join("/");
+            if (!schemaKeysFactory.has(keys.join("/"))) {
+                throw new Error(`${keys.join("/")} did not found. do you forget to resolve schema first.`);
             }
 
+            let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
 
-            return this.parent.key + "/" + uiSchema.key;
+            if (schema.$ref) {
+                parentKeys = ResolveLib.getDataKeys(schema.$ref, true);
+            } else {
+                parentKeys = keys;
+            }
         }
 
-        return [$id, uiSchema.key].join("/");
+        return parentKeys.join("/");
+    }
+
+    /**
+     * 获取当前uiSchema的key
+     * 如果没有父亲节点
+     * 默认返回父亲的key+当前uiSchema的key
+     * @param uiSchema 
+     */
+    private getCurrentSchemaKey(uiSchema: UiSchema) {
+        const $id = ResolveLib.getSchemaId(this.schemaPath);
+        let uiSchemaKeys = uiSchema.key.split("/");
+
+        if (this.parent) {
+            return this.getUiSchemaKeyRecursion(uiSchemaKeys, this.parent.key.split("/"));
+        }
+
+        return this.getUiSchemaKeyRecursion(uiSchemaKeys, [$id]);
     }
 
     /**
@@ -83,21 +117,7 @@ export class MergeLib {
         let parentKeys = this.getParentSchemaKeys(),
             keys;
 
-        // if (uiSchema.constructor === String) {
-        //     keys = parentKeys.concat([uiSchema as string]);
-        //     if (!uiSchema) {
-        //         return {
-        //             key: [$id, ...parentKeys].join("/"),
-        //             keys
-        //         };
-        //     }
-        //     return {
-        //         key: [$id, ...parentKeys, uiSchema as string].join("/"),
-        //         keys
-        //     };
-        // }
-
-        keys = parentKeys.concat([uiSchema.key]);
+        keys = parentKeys.concat(uiSchema.key.split("/"));
 
         return Object.assign({}, uiSchema, {
             key: this.getCurrentSchemaKey(uiSchema),
