@@ -15,7 +15,7 @@ import { design } from "./schemas";
 import "antd/dist/antd.css";
 import "react-perf-tool/lib/styles.css";
 
-import { reducerFactory, SchemaFormActions, SchemaForm, hocFactory } from "../index";
+import { reducerFactory, SchemaFormActions, SchemaForm, hocFactory, schemaFormDec } from "../index";
 import { gloabelOptions, curAjv } from "./init";
 
 
@@ -54,21 +54,30 @@ let start = performance.now();
 actions.createForm({
     key: "designForm",
     data: {
-        name: "test",
         dsModelIds: dsModelIds
     }
 });
 
+@(schemaFormDec({
+    rootReducerKey: ["schemaForm", "designForm"]
+}) as any)
+class TestForm extends React.PureComponent<any> {
+    public render() {
+        return <SchemaForm
+            key={"designForm" + "design"}
+            RootComponent={Form}
+            schemaId="design"
+            uiSchemas={["infoOptions"]}
+            parentKeys={["designForm"]}
+            globalOptions={gloabelOptions}
+            ajv={curAjv} />;
+    }
+}
+
 ReactDOM.render(
     <Provider store={store}>
         <div>
-            <SchemaForm
-                RootComponent={Form}
-                schemaId="design"
-                uiSchemas={["*"]}
-                parentKeys={["designForm"]}
-                globalOptions={gloabelOptions}
-                ajv={curAjv} />
+            <TestForm ajv={curAjv} schemaId="design" />
             <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,

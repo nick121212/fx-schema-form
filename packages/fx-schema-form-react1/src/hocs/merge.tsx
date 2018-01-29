@@ -29,47 +29,53 @@ let totalTime = 0, timeid;
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: RC<any, any>): RC<MergeHocProps, any> => {
         class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
-            private _merge: MergeLib;
             private _mergeUiSchemaList: FxUiSchema[];
 
+            /**
+             * 合并schema和uiSchema生成 mergeUiSchemaList
+             * @param props props
+             */
             constructor(props: MergeHocProps) {
                 super(props);
 
-                clearTimeout(timeid);
+                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : null;
 
-                let start = performance.now();
+                if (uiSchema) {
+                    uiSchema.keys = uiSchema.originKeys;
+                }
 
-                this._merge = new MergeLib(props.ajv, props.schemaId, props.uiSchema, props.uiSchemas as any);
-                this._mergeUiSchemaList = this._merge.mergeUiSchemaList.map((v: any) => {
+                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas as any);
+
+                this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);
                 });
-
-                totalTime += (performance.now() - start);
-                timeid = setTimeout(() => {
-                    console.log("merge所用时间", totalTime, Date.now());
-                }, 1000);
-
             }
 
+            /**
+             * 解析keys
+             * 1. 遍历keys中的元素，如果遇到-，则替换成数字
+             * @param mergeSchema 合并过后的FxUiSchema
+             */
             private mergeKeys(mergeSchema: any) {
                 const { arrayLevel = [] } = this.props;
                 const arrayLevelCopy = arrayLevel.concat([]);
 
                 mergeSchema = Object.assign({}, mergeSchema);
-                mergeSchema.originKeys = mergeSchema.keys.concat([]);
-                mergeSchema.keys = mergeSchema.keys.map((key: string) => {
+                mergeSchema.originKeys = [].concat(mergeSchema.keys);
+                mergeSchema.keys = mergeSchema.keys.reverse().map((key: string) => {
                     if (key === "-") {
-                        return arrayLevelCopy.shift();
+                        return arrayLevelCopy.pop();
                     }
 
                     return key;
                 });
+                mergeSchema.keys.reverse();
 
                 return mergeSchema;
             }
 
             public render(): JSX.Element {
-                const { uiSchema, ...extraProps } = this.props;
+                const { uiSchemas, uiSchema, ...extraProps } = this.props;
 
                 return (
                     <Component

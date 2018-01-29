@@ -12,7 +12,7 @@ export interface AntdCardTempProps extends DefaultProps, UtilsHocOutProps, Array
 
 export class AntdCardTemp extends React.PureComponent<AntdCardTempProps, any> {
     public render(): JSX.Element {
-        const { children, tempKey, getOptions, getTitle, initArrayComponent, formItemMeta } = this.props;
+        const { children, tempKey, getOptions, getTitle, initArrayComponent, formItemMeta, uiSchema, arrayLevel } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);
         let { isValid = true, errorText = "", collapsing = false } = formItemMeta ? formItemMeta.toJS() : {};
 

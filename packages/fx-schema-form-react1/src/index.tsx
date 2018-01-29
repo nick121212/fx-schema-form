@@ -8,6 +8,7 @@ import { SchemaForm, DefaultProps, RC, FxUiSchema } from "./components";
 
 import { NormalField, ObjectField, ArrayField } from "./fields";
 import { TreeMap } from "./libs/tree";
+import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec } from "./libs/dec";
 
 /**
  * 默认样式配置
@@ -26,6 +27,7 @@ defaultTheme.fieldFactory.add("array", ArrayField as any);
 themeFactory.add("default", defaultTheme as any);
 
 export {
+    schemaFormDec,
     TreeMap,
     FxReducer,
     FxUiSchema,

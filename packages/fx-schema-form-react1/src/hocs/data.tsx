@@ -105,8 +105,8 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
 
             public render(): JSX.Element {
                 const { keys } = this.props.uiSchema as FxUiSchema;
-                const mapKeys = [...this.props.parentKeys, ...keys,
-                settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
+                // const mapKeys = [...this.props.parentKeys, ...keys,
+                // settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
 
                 // if (maps[mapKeys]) {
                 //     if (!this.ComponentWithHoc) {

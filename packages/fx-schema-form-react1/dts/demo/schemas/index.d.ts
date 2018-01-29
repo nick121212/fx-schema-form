@@ -40,6 +40,7 @@ declare const design: {
             maxItems: number;
             items: {
                 type: string;
+                required: string[];
                 properties: {
                     age: {
                         $async: boolean;

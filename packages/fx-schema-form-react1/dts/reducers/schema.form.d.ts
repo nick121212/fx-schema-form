@@ -49,6 +49,7 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private removeItem;
     private switchItem;
     private moveToItem;
+    private validateAll;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     readonly reducer: Reducer<any>;

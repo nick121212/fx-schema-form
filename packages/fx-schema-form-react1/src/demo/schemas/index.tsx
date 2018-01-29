@@ -42,8 +42,10 @@ const design = {
         dsModelIds: {
             type: "array",
             maxItems: 3,
+
             items: {
                 type: "object",
+                required: ["age", "name", "password"],
                 properties: {
                     age: {
                         $async: true, type: "string",

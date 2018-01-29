@@ -22,8 +22,7 @@ export const uiSchemaSchema = {
 
 export interface UiSchema extends FxJsonSchema {
     key: string;
-    keys?: string[];
-    // dataKeys?: string[];
+    keys?: Array<string | number>;
     children?: Array<UiSchema | string>;
     refKeys?: string[];
 }

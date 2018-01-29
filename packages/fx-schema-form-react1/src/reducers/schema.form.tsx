@@ -31,6 +31,8 @@ export class SchemaFormReducer<T> implements FxReducer {
         = createAction("元素22交换位置");
     private moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
         = createAction("元素移位");
+    private validateAll: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
+        = createAction("验证全部字段");
 
     /**
      * 构造
