@@ -23,6 +23,85 @@ export interface ArrayProps extends DefaultProps, UtilsHocOutProps {
 }
 
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+
+    const hoc = (compose(
+        withHandlers({
+            /**
+             * 更新一个数据
+             */
+            addItem: (propsCur: DefaultProps) => {
+                return (props: DefaultProps, data?: any) => {
+                    let defaultValue: { defaultValue?: any } = {};
+
+                    // 先获取默认的数据
+                    props.ajv.validate({
+                        type: "object",
+                        properteis: {
+                            defaultData: props.uiSchema
+                        }
+                    }, defaultValue);
+
+                    schemaFormReducer.actions.addItem({
+                        parentKeys: props.parentKeys,
+                        keys: (props.uiSchema as any).keys,
+                        data: defaultValue.defaultValue
+                    });
+                };
+            },
+            /**
+             * 删除一个数组元素
+             */
+            removeItem: (propsCur: DefaultProps) => {
+                return (parentKeys: any[], keys: any[], index: number) => {
+                    schemaFormReducer.actions.removeItem({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        index: index
+                    });
+                };
+            },
+            /**
+             * 与一个元素交换位置
+             */
+            switchItem: (propsCur: DefaultProps) => {
+                return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
+                    schemaFormReducer.actions.switchItem({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        curIndex: curIndex,
+                        toIndex: toIndex
+                    });
+                };
+            },
+            /**
+             * 移动到某个元素后面
+             */
+            moveItem: (propsCur: DefaultProps) => {
+                return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
+                    schemaFormReducer.actions.moveToItem({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        curIndex: curIndex,
+                        toIndex: toIndex
+                    });
+                };
+            },
+            /**
+             * 初始化array的操作组件
+             */
+            initArrayComponent: (propsCur: DefaultProps) => {
+                return (props: DefaultProps & ArrayHocOutProps, index?: number) => {
+                    const { ArrayComponent, ArrayItemComponent, ...extraProps } = props, uiSchema = props.uiSchema as FxUiSchema;
+
+                    if (uiSchema.type === "array") {
+                        return ArrayComponent ? <ArrayComponent {...extraProps} /> : null;
+                    }
+
+                    return ArrayItemComponent ? <ArrayItemComponent {...extraProps} /> : null;
+                };
+            }
+        })) as any);
+
     /**
      * 包装array的组件HOC
      * @param hocFactory  hoc的工厂方法
@@ -30,84 +109,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
      * 加入属性
      * arrayItems
      */
-    return (Component: any): RC<ArrayHocOutProps, any> => {
-        @(compose(
-            withHandlers({
-                /**
-                 * 更新一个数据
-                 */
-                addItem: (propsCur: DefaultProps) => {
-                    return (props: DefaultProps, data?: any) => {
-                        let defaultValue: { defaultValue?: any } = {};
-
-                        // 先获取默认的数据
-                        props.ajv.validate({
-                            type: "object",
-                            properteis: {
-                                defaultData: props.uiSchema
-                            }
-                        }, defaultValue);
-
-                        schemaFormReducer.actions.addItem({
-                            parentKeys: props.parentKeys,
-                            keys: (props.uiSchema as any).keys,
-                            data: defaultValue.defaultValue
-                        });
-                    };
-                },
-                /**
-                 * 删除一个数组元素
-                 */
-                removeItem: (propsCur: DefaultProps) => {
-                    return (parentKeys: any[], keys: any[], index: number) => {
-                        schemaFormReducer.actions.removeItem({
-                            parentKeys: parentKeys,
-                            keys: keys,
-                            index: index
-                        });
-                    };
-                },
-                /**
-                 * 与一个元素交换位置
-                 */
-                switchItem: (propsCur: DefaultProps) => {
-                    return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
-                        schemaFormReducer.actions.switchItem({
-                            parentKeys: parentKeys,
-                            keys: keys,
-                            curIndex: curIndex,
-                            toIndex: toIndex
-                        });
-                    };
-                },
-                /**
-                 * 移动到某个元素后面
-                 */
-                moveItem: (propsCur: DefaultProps) => {
-                    return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
-                        schemaFormReducer.actions.moveToItem({
-                            parentKeys: parentKeys,
-                            keys: keys,
-                            curIndex: curIndex,
-                            toIndex: toIndex
-                        });
-                    };
-                },
-                /**
-                 * 初始化array的操作组件
-                 */
-                initArrayComponent: (propsCur: DefaultProps) => {
-                    return (props: DefaultProps & ArrayHocOutProps, index?: number) => {
-                        const { ArrayComponent, ArrayItemComponent, ...extraProps } = props, uiSchema = props.uiSchema as FxUiSchema;
-
-                        if (uiSchema.type === "array") {
-                            return ArrayComponent ? <ArrayComponent {...extraProps} /> : null;
-                        }
-
-                        return ArrayItemComponent ? <ArrayItemComponent {...extraProps} /> : null;
-                    };
-                }
-            })) as any)
+    let arrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
+        @hoc
         class ArrayComponentHoc extends React.PureComponent<ArrayProps, any> {
             private ArrayComponent;
             private ArrayItemComponent;
@@ -148,4 +151,25 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
         return ArrayComponentHoc as any;
     };
+
+    let pureHoc = (Component: any): RC<ArrayHocOutProps, any> => {
+        @hoc
+        class ArrayPureComponentHoc extends React.PureComponent<ArrayProps, any> {
+            public render() {
+                return <Component {...this.props} />;
+            }
+        }
+
+        return ArrayPureComponentHoc as any;
+    };
+
+    return branch(
+        (props: ArrayProps) => {
+            const { uiSchema } = props;
+
+            return uiSchema.type === "array";
+        },
+        arrayHoc,
+        pureHoc
+    );
 };

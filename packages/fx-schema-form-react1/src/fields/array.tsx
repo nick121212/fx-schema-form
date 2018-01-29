@@ -25,7 +25,7 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
      * @param idx 数组的索引
      */
     private renderItem(idx: number): JSX.Element {
-        const { parentKeys, globalOptions, arrayLevel = [], ajv } = this.props,
+        const { parentKeys, globalOptions, arrayLevel = [], ajv, ArrayItemComponent } = this.props,
             uiSchema = this.props.uiSchema as FxUiSchema;
 
         // 如果不需要children，则跳出
@@ -37,9 +37,11 @@ export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
             <SchemaForm
                 key={idx}
                 arrayIndex={idx}
+                uiSchema={uiSchema}
+                ArrayItemComponent={ArrayItemComponent}
                 arrayLevel={arrayLevel.concat([idx])}
                 schemaId={uiSchema.schemaPath}
-                uiSchemas={uiSchema.children || [uiSchema.keys.concat(["-"]).join("/")]}
+                uiSchemas={uiSchema.children || ["-"]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
                 ajv={ajv} />

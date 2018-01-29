@@ -42,4 +42,9 @@ export interface DefaultProps {
 
     formItemData?: any;
     formItemMeta?: any;
+
+    /**
+     * 数组元素子项的操作
+     */
+    ArrayItemComponent?: new () => React.PureComponent<DefaultProps>;
 }

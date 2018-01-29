@@ -28,7 +28,7 @@ export class MergeLib {
      * @param parentKeys  父亲的keys 暂时没用到
      * @param uiSchemas   uiSchema
      */
-    constructor(private ajv: Ajv, private schemaPath: string, private parentKeys: string[], private uiSchemas: Array<UiSchema | string>) {
+    constructor(private ajv: Ajv, private schemaPath: string, public parent: UiSchema, private uiSchemas: Array<UiSchema | string>) {
         if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
             throw ajv.errors;
         }
@@ -43,26 +43,65 @@ export class MergeLib {
         this.mergeUiSchemaList = this.mergeUiSchema();
     }
 
+    private getParentSchemaKeys() {
+        if (this.parent) {
+            // if (this.parent.refKeys) {
+            //     return this.parent.refKeys;
+            // }
+
+            if (this.parent.keys) {
+                return this.parent.keys;
+            }
+        }
+
+        return [];
+    }
+
+    private getCurrentSchemaKey(uiSchema: UiSchema) {
+        const $id = ResolveLib.getSchemaId(this.schemaPath);
+
+        if (this.parent) {
+
+            if (this.parent.$ref) {
+                return ResolveLib.getDataKeys(this.parent.$ref, true).concat([uiSchema.key]).join("/");
+            }
+
+
+            return this.parent.key + "/" + uiSchema.key;
+        }
+
+        return [$id, uiSchema.key].join("/");
+    }
+
     /**
      * 初始化uiSchema
      * 如果是字符串；用$id合并之后，获取schema
      * 如果是【UiSchema】；合并key之后，获取schema
      * @param uiSchema uiSchema
      */
-    private initUiSchema(uiSchema: string | UiSchema): UiSchema {
-        let $id = ResolveLib.getSchemaId(this.schemaPath);
+    private initUiSchema(uiSchema: UiSchema): UiSchema {
+        let parentKeys = this.getParentSchemaKeys(),
+            keys;
 
-        if (uiSchema.constructor === String) {
-            if (!uiSchema) {
-                return { key: $id };
-            }
-            return {
-                key: [$id, uiSchema as string].join("/")
-            };
-        }
+        // if (uiSchema.constructor === String) {
+        //     keys = parentKeys.concat([uiSchema as string]);
+        //     if (!uiSchema) {
+        //         return {
+        //             key: [$id, ...parentKeys].join("/"),
+        //             keys
+        //         };
+        //     }
+        //     return {
+        //         key: [$id, ...parentKeys, uiSchema as string].join("/"),
+        //         keys
+        //     };
+        // }
+
+        keys = parentKeys.concat([uiSchema.key]);
 
         return Object.assign({}, uiSchema, {
-            key: [$id, (uiSchema as UiSchema).key].join("/")
+            key: this.getCurrentSchemaKey(uiSchema),
+            keys
         });
     }
 
@@ -103,7 +142,7 @@ export class MergeLib {
         // 不存在*号的情况
         if (idx < 0) {
             this.uiSchemas.slice(idx + 1).map((us: string | UiSchema) => {
-                let uiSchema = this.initUiSchema(us);
+                let uiSchema = this.initUiSchema(us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
 
                 uiSchemasFirst.push(this.mergeUiSchemaToArray(uiSchema));
             });
@@ -113,13 +152,13 @@ export class MergeLib {
 
         // 处理*之前的数据
         this.uiSchemas.slice(0, idx).forEach((us: string | UiSchema) => {
-            let uiSchema = this.initUiSchema(us);
+            let uiSchema = this.initUiSchema(us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
 
             uiSchemasFirst.push(this.mergeUiSchemaToArray(uiSchema));
         });
         // 处理*之后的数据
         this.uiSchemas.slice(idx + 1).forEach((us: string | UiSchema) => {
-            let uiSchema = this.initUiSchema(us);
+            let uiSchema = this.initUiSchema(us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
 
             uiSchemasLast.push(this.mergeUiSchemaToArray(uiSchema));
         });
@@ -127,7 +166,7 @@ export class MergeLib {
         // 如果是object类型，遍历properties属性，与之前的数据去重后添加到数组
         if (this.curSchema.type === "object" && this.curSchema.properties) {
             Object.keys(this.curSchema.properties).forEach((us: string) => {
-                let uiSchema = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat([us]).join("/"));
+                let uiSchema = this.initUiSchema({ key: us } as UiSchema);
 
                 if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
                     return val.key === uiSchema.key;
@@ -140,7 +179,9 @@ export class MergeLib {
 
         // 如果是数组，获取下一级的key，然后做对比处理
         if (this.curSchema.type === "array" && this.curSchema.items) {
-            let uiSchema = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).join("/"));
+            let uiSchema = this.initUiSchema({
+                key: ResolveLib.getDataKeys(this.curSchema.schemaPath).join("/")
+            });
             // let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
 
             if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {

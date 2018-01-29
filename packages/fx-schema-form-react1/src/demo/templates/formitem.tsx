@@ -6,15 +6,16 @@ import { FormItemProps } from "antd/lib/form/FormItem";
 
 import { DefaultProps, FxUiSchema } from "../../index";
 import { UtilsHocOutProps } from "../../hocs/utils";
+import { ArrayHocOutProps } from "../../hocs/array";
 
 
-export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps {
+export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {
     tempKey: string;
 }
 
 export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps, any> {
     public render(): JSX.Element {
-        const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta } = this.props;
+        const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta, initArrayComponent } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);
         const { hasFeedback = true } = tempOptions;
         const uiSchema = this.props.uiSchema as FxUiSchema;
@@ -39,7 +40,11 @@ export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps,
                 help={isValid ? "" : errorText}
                 {...props}
                 {...tempOptions.options}>
-                {children}
+
+                <Row>
+                    <Col span={20}>{children}</Col>
+                    <Col span={4}>{initArrayComponent ? initArrayComponent(this.props) : null}</Col>
+                </Row>
             </Form.Item>
         );
     }

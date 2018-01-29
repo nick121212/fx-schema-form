@@ -1,7 +1,8 @@
+import { schemaFieldFactory } from './../factory';
 import ajv from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaFieldFactory, schemaKeysFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib, MergeLib } from "../index";
+import { schemaKeysFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib, MergeLib } from "../index";
 
 import schemas from "./schemas";
 import { setInterval } from "timers";
@@ -60,13 +61,7 @@ const schema: JSONSchema6 = {
                         type: "string"
                     },
                     data: {
-                        oneOf: [{
-                            $id: "design-object",
-                            type: "object",
-                        }, {
-                            $id: "design-string",
-                            type: "string"
-                        }]
+                        type: "object"
                     },
                     infoOptions: {
                         $ref: "design#/properties/infoOptions"
@@ -99,42 +94,31 @@ new ResolveLib(curAjv, {
 }),
 new ResolveLib(curAjv, schema)];
 
-// let a = [
-//     new ResolveLib(curAjv, schema),
-// ];
 
-// console.log(schemaFieldFactory, schemaKeysFactory);
+console.log(schemaFieldFactory);
 
-let b = new MergeLib(curAjv, "design", [], [ {
-    key: "dsModelData", children: ["dsModelData/data"]
-}]).mergeUiSchemaList;
+let b = new MergeLib(curAjv, "design", null, [{
+    key: "infoOptions"
+}]);
 
-console.log(b);
+console.log(b.mergeUiSchemaList, schemaKeysFactory);
 
-// curAjv.validate(b[0], undefined);
+b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["-"]);
 
-// console.log(curAjv.errors, curAjv.errorsText());
+console.log(b.mergeUiSchemaList);
 
-// b.forEach((val: any) => {
-//     console.log(val);
-//     if (val.type === "object" || val.type === "array") {
-//         console.log(new MergeLib(curAjv, val.schemaPath, [], ["*"]).mergeUiSchemaList);
-//     }
-// });
+b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["*"]);
 
-// let c = new MergeLib(curAjv, "design", [], ["infoOptions"]).mergeUiSchemaList;
+console.log(b.mergeUiSchemaList, b.parent);
 
-// setInterval(() => {
-//     c = new MergeLib(curAjv, (c[0] as any).schemaPath, [], ["infoOptions"]).mergeUiSchemaList;
+b = new MergeLib(curAjv, b.mergeUiSchemaList[2].schemaPath, b.mergeUiSchemaList[2], ["-"]);
 
-//     console.log(c[0]);
-// }, 2000);
+console.log(b.mergeUiSchemaList, b.parent);
 
-// for (const key in schemas) {
-//     if (schemas.hasOwnProperty(key)) {
-//         const element = schemas[key];
+b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, b.mergeUiSchemaList[0], ["*"]);
 
-//         a.push(new ResolveLib(curAjv, element));
-//     }
-// }
+console.log(b.mergeUiSchemaList, b.parent);
 
+// b = new MergeLib(curAjv, b.mergeUiSchemaList[0].schemaPath, [], [b.mergeUiSchemaList[0].keys.concat(["-"]).join("-")]);
+
+// console.log(b.mergeUiSchemaList);

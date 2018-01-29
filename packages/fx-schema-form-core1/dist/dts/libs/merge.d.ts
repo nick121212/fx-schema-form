@@ -6,7 +6,7 @@ import { UiSchema } from "../models/uischema";
 export declare class MergeLib {
     private ajv;
     private schemaPath;
-    private parentKeys;
+    parent: UiSchema;
     private uiSchemas;
     /**
      * 合并过后的数据
@@ -26,7 +26,9 @@ export declare class MergeLib {
      * @param parentKeys  父亲的keys 暂时没用到
      * @param uiSchemas   uiSchema
      */
-    constructor(ajv: Ajv, schemaPath: string, parentKeys: string[], uiSchemas: Array<UiSchema | string>);
+    constructor(ajv: Ajv, schemaPath: string, parent: UiSchema, uiSchemas: Array<UiSchema | string>);
+    private getParentSchemaKeys();
+    private getCurrentSchemaKey(uiSchema);
     /**
      * 初始化uiSchema
      * 如果是字符串；用$id合并之后，获取schema

@@ -2,7 +2,7 @@
 import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 import { UtilsHocOutProps } from "./utils";
-import { DefaultProps, RC } from "../components";
+import { DefaultProps } from "../components";
 export interface ArrayHocOutProps extends DefaultProps {
     addItem: (props: DefaultProps, data?: any) => void;
     removeItem: (parentKeys: any[], keys: any[], index: number) => void;
@@ -14,5 +14,5 @@ export interface ArrayHocOutProps extends DefaultProps {
 }
 export interface ArrayProps extends DefaultProps, UtilsHocOutProps {
 }
-declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<ArrayHocOutProps, any>;
+declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => any;
 export default _default;

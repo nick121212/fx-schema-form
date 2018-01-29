@@ -58,9 +58,9 @@ export class ArrayComponent extends React.PureComponent<DefaultProps & ArrayHocO
         }
 
         return (
-            <Button.Group>
-                <Button type="primary" icon="plus" disabled={!canAdd} onClick={this.addItem} />
-                <Button type="primary" icon={collapsing ? "arrow-up" : "arrow-down"} onClick={() => {
+            <Button.Group key="opt">
+                <Button key={"add" + canAdd} type="primary" icon="plus" disabled={!canAdd} onClick={this.addItem} />
+                <Button key={"collapsing" + collapsing} type="primary" icon={collapsing ? "arrow-up" : "arrow-down"} onClick={() => {
                     this.hideItems(!collapsing);
                 }} />
             </Button.Group>
@@ -70,13 +70,7 @@ export class ArrayComponent extends React.PureComponent<DefaultProps & ArrayHocO
 
 @(compose(
     hocFactory.get("validate")(),
-    hocFactory.get("array")(),
-    hocFactory.get("data")({
-        rootReducerKey: ["schemaForm"],
-        data: true,
-        dataLength: true,
-        meta: true
-    })
+    hocFactory.get("array")()
 ))
 export class ArrayItemComponent extends React.PureComponent<DefaultProps & ArrayHocOutProps & UtilsHocOutProps> {
     private removeItem;
@@ -96,9 +90,9 @@ export class ArrayItemComponent extends React.PureComponent<DefaultProps & Array
     public render() {
         const { addItem } = this.props;
 
-        return <Button.Group>
-            <Button type="primary" icon="minus" onClick={this.removeItem} />
-            <Button type="primary" icon="swap-right" onClick={this.moveTo} />
+        return <Button.Group key="opt">
+            <Button key="remove" type="primary" icon="minus" onClick={this.removeItem} />
+            <Button key="moveTo" type="primary" icon="swap-right" onClick={this.moveTo} />
         </Button.Group>;
     }
 }
@@ -137,7 +131,17 @@ export const gloabelOptions = Immutable.fromJS({
             tempHocs: [hocFactory.get("data")({
                 rootReducerKey: ["schemaForm"],
                 meta: true
-            }), immutableRenderDecorator]
+            }), immutableRenderDecorator],
+            options: {
+                labelCol: {
+                    xs: { span: 24 },
+                    sm: { span: 8 },
+                },
+                wrapperCol: {
+                    xs: { span: 24 },
+                    sm: { span: 16 },
+                },
+            }
         }
     },
     hoc: {

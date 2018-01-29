@@ -70,6 +70,9 @@ declare const design: {
                 };
                 ids: {
                     type: string;
+                    items: {
+                        type: string;
+                    };
                 };
             };
         };

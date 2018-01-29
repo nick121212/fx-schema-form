@@ -39,7 +39,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                 let start = performance.now();
 
-                this._merge = new MergeLib(props.ajv, props.schemaId, props.parentKeys, props.uiSchemas as any);
+                this._merge = new MergeLib(props.ajv, props.schemaId, props.uiSchema, props.uiSchemas as any);
                 this._mergeUiSchemaList = this._merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);
                 });

@@ -72,7 +72,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 获取标题数据
              * title || key
              */
-            private getTitle(props: DefaultProps): any {
+            private getTitle(props: DefaultProps): string {
                 const { uiSchema } = props;
                 const { title, keys } = uiSchema as FxUiSchema;
 
@@ -80,7 +80,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     return title;
                 }
 
-                return [].concat(keys).pop();
+                return [].concat(keys).pop().toString();
             }
 
             /**

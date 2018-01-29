@@ -68,7 +68,10 @@ const design = {
                     type: "object"
                 },
                 ids: {
-                    type: "string"
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
                 }
             }
         },

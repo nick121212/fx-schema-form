@@ -17,7 +17,8 @@ export class SchemaForm extends React.PureComponent<Props, any> {
         const formItemList = mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {
             let arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
 
-            return <SchemaFormItem key={idx}
+            return <SchemaFormItem
+                key={idx}
                 {...extraProps}
                 schemaId={schemaId}
                 uiSchema={uiScehma}

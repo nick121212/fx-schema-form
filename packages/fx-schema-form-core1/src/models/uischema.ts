@@ -25,4 +25,5 @@ export interface UiSchema extends FxJsonSchema {
     keys?: string[];
     // dataKeys?: string[];
     children?: Array<UiSchema | string>;
+    refKeys?: string[];
 }

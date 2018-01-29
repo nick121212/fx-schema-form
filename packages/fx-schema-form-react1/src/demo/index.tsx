@@ -65,10 +65,7 @@ ReactDOM.render(
             <SchemaForm
                 RootComponent={Form}
                 schemaId="design"
-                uiSchemas={["name", {
-                    key: "dsModelIds",
-                    title: "测试title"
-                }]}
+                uiSchemas={["*"]}
                 parentKeys={["designForm"]}
                 globalOptions={gloabelOptions}
                 ajv={curAjv} />

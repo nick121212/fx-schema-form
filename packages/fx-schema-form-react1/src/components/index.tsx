@@ -22,5 +22,7 @@ export interface FxUiSchema extends UiSchema {
     widget?: string;
     temps?: string;
     isRequired?: boolean;
+    refKeys?: string[];
+    originKeys?: string[];
 }
 export type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
