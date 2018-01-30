@@ -1,7 +1,6 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
 import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
-import isEqual from "lodash.isequal";
 import { connect } from "react-redux";
 
 import { RC, DefaultProps, FxUiSchema } from "../components";
@@ -25,7 +24,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         * 获取模板的components
         * @param uiSchema 合并后的数据
         */
-        class TempComponentHoc extends React.PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps & ArrayHocOutProps, any> {
+        class TempComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps & ArrayHocOutProps, any> {
             public render(): JSX.Element {
                 const { uiSchema, getOptions } = this.props;
                 const { options: uiSchemaOptions, keys } = uiSchema as FxUiSchema;

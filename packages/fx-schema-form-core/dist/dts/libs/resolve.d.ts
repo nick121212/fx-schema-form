@@ -7,7 +7,6 @@ import { JSONSchema6 } from "json-schema";
  */
 export declare class ResolveLib {
     private ajv;
-    private schema;
     readonly $id: string;
     mergeSchema: JSONSchema6;
     constructor(ajv: Ajv, schema: JSONSchema6, $id?: string);

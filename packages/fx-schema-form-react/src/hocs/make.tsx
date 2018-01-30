@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { compose, shouldUpdate } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
@@ -21,7 +21,7 @@ export interface MakeHocOutProps extends UtilsHocOutProps {
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps & MakeHocOutProps, any> => {
         @(shouldUpdate(() => false) as any)
-        class MakeComponentHoc extends React.PureComponent<DefaultProps & MakeHocOutProps, any> {
+        class MakeComponentHoc extends PureComponent<DefaultProps & MakeHocOutProps, any> {
             private fieldKey = "hocs";
 
             public render(): JSX.Element {

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dts/index.d.ts",
   "scripts": {
-    "prd": "NODE_ENV=production atool-build",
+    "build": "NODE_ENV=production atool-build --hash",
     "lint": "eslint --ext .js,.jsx src/",
     "start": "dora --plugins webpack -p 8003",
     "test": "atool-test-mocha ./tests/**/*.spec.js"
@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
+    "dist": "^0.1.2",
     "fx-schema-form-core": "^3.0.0",
     "immutable": "^3.8.2",
     "react-immutable-render-mixin": "^0.9.7",

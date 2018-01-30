@@ -8,9 +8,16 @@ import { ResolveLib } from "../libs/resolve";
  * 解析schema中的关键字 oneOf
  * 如果发现有oneOf关键字，遍历替换成schema
  */
-export default (schema: JSONSchema6, ajv: Ajv) => {
-    if (schema && schema.oneOf && schema.oneOf.constructor === Array) {
-        schema.oneOf = schema.oneOf.map((schemaOfOne: JSONSchema6) => {
+export default (schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
+
+    if (!schema) {
+        return schema;
+    }
+
+    let oneOf = schema.oneOf;
+
+    if ( oneOf && oneOf.constructor === Array) {
+        schema.oneOf = oneOf.map((schemaOfOne: JSONSchema6) => {
             let resolve = new ResolveLib(ajv, schemaOfOne);
 
             return resolve.mergeSchema;

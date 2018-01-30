@@ -1,5 +1,5 @@
-import { ref, oneof } from "./keys";
-import { array, none, object } from "./types";
+import { ref, oneof } from "./keys/index";
+import { array, none, object } from "./types/index";
 import { BaseFactory } from "./libs/factory";
 import { schemaFieldFactory, schemaKeyWordFactory, schemaTypeFactory, schemaKeysFactory } from "./factory";
 import { FxJsonSchema } from "./models/jsonschema";

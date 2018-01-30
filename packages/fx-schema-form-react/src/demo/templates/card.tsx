@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Card } from "antd";
 import { shouldUpdate, onlyUpdateForKeys, compose } from "recompose";
@@ -10,7 +10,7 @@ export interface AntdCardTempProps extends DefaultProps, UtilsHocOutProps, Array
     tempKey: string;
 }
 
-export class AntdCardTemp extends React.PureComponent<AntdCardTempProps, any> {
+export class AntdCardTemp extends PureComponent<AntdCardTempProps, any> {
     public render(): JSX.Element {
         const { children, tempKey, getOptions, getTitle, initArrayComponent, formItemMeta, uiSchema, arrayLevel } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);

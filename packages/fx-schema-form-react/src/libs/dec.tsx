@@ -1,8 +1,8 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import { connect } from "react-redux";
-import { Map, fromJS } from "immutable";
+import Immutable from "immutable";
 import { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
@@ -38,7 +38,7 @@ const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
  */
 export default (settings: SchemaFormHocSettings = {}) => {
     return (Component: any): RC<SchemaFormProps, any> => {
-        @(connect((state: Map<string, any>) => {
+        @(connect((state: Immutable.Map<string, any>) => {
             let dataKeys = settings.rootReducerKey.concat(settings.parentKeys).concat(["data"]),
                 metaKeys = settings.rootReducerKey.concat(settings.parentKeys).concat(["meta"]),
                 root = state.getIn(metaKeys);
@@ -51,7 +51,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
                 isValidating: root.value.get("isLoading")
             };
         }) as any)
-        class SchemaFormComponentHoc extends React.PureComponent<SchemaFormProps, any> {
+        class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
             private _validateAll;
 
             constructor(props: SchemaFormProps) {
@@ -63,12 +63,12 @@ export default (settings: SchemaFormHocSettings = {}) => {
             private async validateAll() {
                 let root = this.props.root,
                     validate = this.props.ajv.getSchema(this.props.schemaId),
-                    $validateBeforeData = fromJS({
+                    $validateBeforeData = Immutable.fromJS({
                         dirty: true,
                         isValid: true,
                         isLoading: true
                     }),
-                    $validateAfterData = fromJS({ isLoading: false, dirty: true }),
+                    $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }),
                     normalizeDataPath = this.normalizeDataPath;
 
                 if (!validate) {
@@ -108,7 +108,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
 
                     e.errors.forEach((element: ErrorObject) => {
                         let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(this.props.schemaId, element.dataPath));
-                        let childNode = root.addChild(dataKeys, fromJS({}));
+                        let childNode = root.addChild(dataKeys, Immutable.fromJS({}));
 
                         childNode.value = childNode.value.merge($validateAfterData).merge({
                             isValid: false,

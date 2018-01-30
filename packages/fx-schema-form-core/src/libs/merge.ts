@@ -1,5 +1,4 @@
 import { Ajv } from "ajv";
-import { JSONSchema6 } from "json-schema";
 
 import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
@@ -29,7 +28,7 @@ export class MergeLib {
      * @param parent      父亲的schema
      * @param uiSchemas   uiSchema
      */
-    constructor(private ajv: Ajv, private schemaPath: string, public parent: UiSchema, private uiSchemas: Array<UiSchema | string>) {
+    constructor(ajv: Ajv, private schemaPath: string, public parent: UiSchema, private uiSchemas: Array<UiSchema | string>) {
         if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
             throw ajv.errors;
         }
@@ -68,8 +67,6 @@ export class MergeLib {
      * @param parentKeys 
      */
     private getUiSchemaKeyRecursion(uiSchemaKeys: string[], parentKeys: string[]) {
-        let keyRtn = "";
-
         while (uiSchemaKeys.length) {
             let key = uiSchemaKeys.shift();
             let keys = parentKeys.concat([key]);

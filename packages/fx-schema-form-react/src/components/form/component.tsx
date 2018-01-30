@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 
 import { DefaultProps, FxUiSchema } from "../index";
 import { hoc } from "./container";
@@ -11,7 +11,7 @@ export interface Props extends DefaultProps, MergeHocOutProps {
 }
 
 @hoc
-export class SchemaForm extends React.PureComponent<Props, any> {
+export class SchemaForm extends PureComponent<Props, any> {
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;
         const formItemList = mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {

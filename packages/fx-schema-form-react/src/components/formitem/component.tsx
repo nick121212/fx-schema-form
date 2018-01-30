@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { compose } from "redux";
 
 import { DefaultProps } from "../default.props";
@@ -11,7 +11,7 @@ export interface Props extends DefaultProps {
 }
 
 @hoc
-export class SchemaFormItem extends React.PureComponent<Props, any> {
+export class SchemaFormItem extends PureComponent<Props, any> {
 
     constructor(props: Props, context: any) {
         super(props, context);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 
 import { SchemaForm } from "../components/form";
 import { DefaultProps, FxUiSchema } from "../components";
@@ -11,7 +11,7 @@ export interface ObjectFieldProps extends DefaultProps {
  * Object类型的字段解析
  * 嵌套一层SchemaForm
  */
-export class ObjectField extends React.PureComponent<ObjectFieldProps, any> {
+export class ObjectField extends PureComponent<ObjectFieldProps, any> {
     public render(): JSX.Element {
         const uiSchema = this.props.uiSchema as FxUiSchema,
             { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, schemaId } = this.props;

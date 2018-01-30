@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { RC, NsFactory, DefaultProps, FxUiSchema } from "../components";
@@ -18,7 +18,7 @@ export interface ThemeHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps, any> => {
-        class ThemeComponentHoc extends React.PureComponent<DefaultProps, any> {
+        class ThemeComponentHoc extends PureComponent<DefaultProps, any> {
             public render(): JSX.Element {
                 const { theme, field } = this.props.uiSchema as FxUiSchema;
                 let nsFactory;

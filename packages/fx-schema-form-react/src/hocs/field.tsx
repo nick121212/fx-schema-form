@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
@@ -21,7 +21,7 @@ export interface FieldHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> => {
-        class FieldComponentHoc extends React.PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
+        class FieldComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element | null {
                 const { currentTheme, getOptions, uiSchema } = this.props,
                     { field, widget, type } = uiSchema as FxUiSchema;

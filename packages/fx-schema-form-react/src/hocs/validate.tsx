@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
@@ -94,7 +94,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     };
                 }
             })) as any)
-        class ArrayComponentHoc extends React.PureComponent<DefaultProps, any> {
+        class ArrayComponentHoc extends PureComponent<DefaultProps, any> {
             public render(): JSX.Element {
                 return <Component {...this.props} />;
             }

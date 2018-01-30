@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { branch, renderComponent, shouldUpdate, compose, withHandlers, renderNothing, onlyUpdateForKeys } from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
@@ -118,7 +118,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
      */
     let arrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
         @hoc
-        class ArrayComponentHoc extends React.PureComponent<ArrayProps, any> {
+        class ArrayComponentHoc extends PureComponent<ArrayProps, any> {
             private ArrayComponent;
             private ArrayItemComponent;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { shouldUpdate } from "recompose";
 
 import { SchemaForm } from "../components/form";
@@ -19,7 +19,7 @@ let arrayFieldStyle = {
  * 这里需要数组元素的个数来做循环
  * 循环生成元素个数的SchemaForm
  */
-export class ArrayField extends React.PureComponent<ArrayFieldProps, any> {
+export class ArrayField extends PureComponent<ArrayFieldProps, any> {
     /**
      * 遍历数据，生成子表单
      * @param idx 数组的索引

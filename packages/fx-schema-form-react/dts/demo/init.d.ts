@@ -1,20 +1,17 @@
 /// <reference types="react" />
-import ajv from "ajv";
-import React from "react";
-import { DefaultProps } from "../index";
-import { ArrayHocOutProps } from "../hocs/array";
-import { UtilsHocOutProps } from "../hocs/utils";
-import { ValidateHocOutProps } from "../hocs/validate";
-export declare class ArrayComponent extends React.PureComponent<DefaultProps & ArrayHocOutProps & ValidateHocOutProps> {
+import * as ajv from "ajv";
+import { PureComponent } from "react";
+import { DefaultProps } from "FxSchemaForm";
+export declare class ArrayComponent extends PureComponent<DefaultProps & any> {
     private addItem;
     private hideItems;
-    constructor(props: DefaultProps & ArrayHocOutProps & ValidateHocOutProps);
+    constructor(props: DefaultProps & any);
     render(): JSX.Element;
 }
-export declare class ArrayItemComponent extends React.PureComponent<DefaultProps & ArrayHocOutProps & UtilsHocOutProps> {
+export declare class ArrayItemComponent extends PureComponent<DefaultProps & any> {
     private removeItem;
     private moveTo;
-    constructor(props: DefaultProps & ArrayHocOutProps & UtilsHocOutProps);
+    constructor(props: DefaultProps & any);
     render(): JSX.Element;
 }
 export declare const gloabelOptions: any;

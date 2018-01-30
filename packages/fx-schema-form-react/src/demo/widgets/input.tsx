@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import React, { PureComponent, SyntheticEvent } from "react";
 import { Input } from "antd";
 
 import { DefaultProps, FxUiSchema } from "../../index";
@@ -8,7 +8,7 @@ import { ValidateHocOutProps } from "../../hocs/validate";
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 
-export class AntdInputWidget extends React.PureComponent<AntdInputWidgetProps, any> {
+export class AntdInputWidget extends PureComponent<AntdInputWidgetProps, any> {
     private _count = 0;
     private setDefaultProps(): any {
         const props: any = {};

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
 import { Form, Input, Row, Col } from "antd";
@@ -13,7 +13,7 @@ export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps, A
     tempKey: string;
 }
 
-export class AntdFormItemTemp extends React.PureComponent<AntdFormItemTempProps, any> {
+export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> {
     public render(): JSX.Element {
         const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta, initArrayComponent } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);

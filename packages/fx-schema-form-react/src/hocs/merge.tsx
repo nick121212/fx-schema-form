@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { BaseFactory, MergeLib, FxJsonSchema, UiSchema } from "fx-schema-form-core";
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
@@ -28,7 +28,7 @@ let totalTime = 0, timeid;
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: RC<any, any>): RC<MergeHocProps, any> => {
-        class MergeComponentHoc extends React.PureComponent<MergeHocProps, any> {
+        class MergeComponentHoc extends PureComponent<MergeHocProps, any> {
             private _mergeUiSchemaList: FxUiSchema[];
 
             /**

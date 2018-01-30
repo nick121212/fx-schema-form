@@ -1,7 +1,7 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaFieldFactory, schemaTypeFactory } from "../factory";
+import { schemaTypeFactory } from "../factory";
 
 // 去掉末尾的#正则
 const regexp = /#$/g;
@@ -14,7 +14,7 @@ const regexp = /#$/g;
 export class ResolveLib {
     public mergeSchema: JSONSchema6;
 
-    constructor(private ajv: Ajv, private schema: JSONSchema6, public readonly $id = "") {
+    constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "") {
         // 验证schema的完整性
         if (!$id) {
             this.initSchema(ajv, schema);
@@ -92,7 +92,6 @@ export class ResolveLib {
      * @param keepFirst 是否需要保留第一个
      */
     public static getDataKeys(schemaKey: string, keepFirst = false): string[] {
-        let filterKeyWords = ["items", "properties"];
         let keys = schemaKey.split("/").map((key: string, index: number) => {
             // 第一个替换末尾的#
             if (index === 0 && regexp.test(key)) {

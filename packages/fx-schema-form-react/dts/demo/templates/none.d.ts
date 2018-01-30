@@ -1,10 +1,10 @@
 /// <reference types="react" />
-import React from "react";
-import { DefaultProps } from "../../index";
+import { PureComponent } from "react";
+import { DefaultProps } from "../../../dist";
 import { UtilsHocOutProps } from "../../hocs/utils";
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {
     tempKey: string;
 }
-export declare class NoneTemp extends React.PureComponent<DivTempProps, any> {
+export declare class NoneTemp extends PureComponent<DivTempProps, any> {
     render(): any;
 }

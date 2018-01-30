@@ -1,6 +1,6 @@
 
 
-import React from "react";
+import React, { PureComponent } from "react";
 import { BaseFactory, MergeLib, FxJsonSchema } from "fx-schema-form-core";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import resolvePathname from "resolve-pathname";
@@ -25,7 +25,7 @@ export interface UtilsHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps, any> => {
-        class ComponentHoc extends React.PureComponent<UtilsHocOutProps, any> {
+        class ComponentHoc extends PureComponent<UtilsHocOutProps, any> {
             public render(): JSX.Element {
                 return <Component
                     getTitle={this.getTitle}

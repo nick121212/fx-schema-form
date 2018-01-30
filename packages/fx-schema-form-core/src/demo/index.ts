@@ -1,8 +1,8 @@
-import { schemaFieldFactory } from './../factory';
+import { schemaFieldFactory } from "../../dist/index.js";
 import ajv from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaKeysFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib, MergeLib } from "../index";
+import { schemaKeysFactory, schemaKeyWordFactory, schemaTypeFactory, ResolveLib, MergeLib } from "../../dist/index.js";
 
 import schemas from "./schemas";
 import { setInterval } from "timers";

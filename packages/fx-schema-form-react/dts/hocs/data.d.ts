@@ -3,7 +3,7 @@ import { DefaultProps, RC } from "../components";
 export interface DataHocOutProps extends DefaultProps {
 }
 export interface DataHocSettings {
-    rootReducerKey: string[];
+    rootReducerKey: Array<string | number>;
     data?: boolean;
     dataLength?: boolean;
     meta?: boolean;

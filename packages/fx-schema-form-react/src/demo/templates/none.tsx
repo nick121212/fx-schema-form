@@ -1,15 +1,15 @@
-import React from "react";
-import { DefaultProps, FxUiSchema } from "../../index";
+import React, { PureComponent } from "react";
+import { DefaultProps } from "../../../dist";
 import { UtilsHocOutProps } from "../../hocs/utils";
 
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {
     tempKey: string;
 }
 
-export class NoneTemp extends React.PureComponent<DivTempProps, any> {
+export class NoneTemp extends PureComponent<DivTempProps, any> {
     public render(): any {
         const { children, tempKey, getOptions } = this.props;
-        const { className, ...tempOptions } = getOptions(this.props, "temp", tempKey);
+        const { className, ...tempOptions } = getOptions(this.props as any, "temp", tempKey);
 
         return <div>
             {children}

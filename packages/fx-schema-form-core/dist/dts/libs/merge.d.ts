@@ -5,7 +5,6 @@ import { UiSchema } from "../models/uischema";
  * 如果有$ref，则直接使用
  */
 export declare class MergeLib {
-    private ajv;
     private schemaPath;
     parent: UiSchema;
     private uiSchemas;

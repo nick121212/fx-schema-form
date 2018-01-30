@@ -36,9 +36,9 @@ module.exports = (webpackConfig) => {
     }));
 
     // 处理html的loader，不然htmlwebpackplugin会有问题
-    retVal.module.loaders = webpackConfig.module.loaders.map((loader) => {
-        if (loader.test.toString() === "/\\.ts?$/") {
-            loader.loader = "awesome-typescript-loader"; //配置img的src属性和a的href属性
+     retVal.module.loaders = webpackConfig.module.loaders.map((loader) => {
+        if (loader.test.toString() === "/\\.ts$/") {
+            loader.loader = "babel-loader!awesome-typescript-loader"; //配置img的src属性和a的href属性
         }
 
         return loader;
@@ -60,7 +60,7 @@ module.exports = (webpackConfig) => {
             chunkFilename: "[name].min.js",
             libraryTarget: "umd",
             sourceMapFilename: "[file].map",
-            library: "fx-schema-form-core"
+            library: "FxSchemaFormCore"
         };
     }
 

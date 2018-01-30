@@ -1,11 +1,11 @@
 /// <reference types="react" />
-import React from "react";
+import { PureComponent } from "react";
 import { DefaultProps } from "../../components";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ArrayHocOutProps } from "../../hocs/array";
 export interface AntdCardTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {
     tempKey: string;
 }
-export declare class AntdCardTemp extends React.PureComponent<AntdCardTempProps, any> {
+export declare class AntdCardTemp extends PureComponent<AntdCardTempProps, any> {
     render(): JSX.Element;
 }

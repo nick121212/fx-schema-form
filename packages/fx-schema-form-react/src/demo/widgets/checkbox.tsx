@@ -1,13 +1,13 @@
-import React, { SyntheticEvent } from "react";
+import React, { PureComponent, SyntheticEvent } from "react";
 
 import { DefaultProps, FxUiSchema } from "../../index";
 import { UtilsHocOutProps } from "../../hocs/utils";
-import {Checkbox} from "antd";
+import { Checkbox } from "antd";
 
 export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps {
 }
 
-export class AntdCheckboxWidget extends React.PureComponent<AntdCheckBoxProps, any> {
+export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
     private setDefaultProps(): any {
         const { uiSchema } = this.props;
         const props: any = {};

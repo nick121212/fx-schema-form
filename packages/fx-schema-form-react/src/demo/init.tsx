@@ -1,17 +1,16 @@
-import Immutable from "immutable";
+import * as Immutable from "immutable";
 import { immutableRenderDecorator } from "react-immutable-render-mixin";
-import ajv from "ajv";
-import React from "react";
+import * as ajv from "ajv";
+import React, { PureComponent } from "react";
 import * as ajvErrors from "ajv-errors";
-
-import { defaultTheme, hocFactory, DefaultProps } from "../index";
-import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
-import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
 import { compose } from "recompose";
 import { Button } from "antd";
-import { ArrayHocOutProps } from "../hocs/array";
-import { UtilsHocOutProps } from "../hocs/utils";
-import { ValidateHocOutProps } from "../hocs/validate";
+
+import { defaultTheme, hocFactory, DefaultProps } from "FxSchemaForm";
+import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
+import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
+
+console.log(React, PureComponent);
 
 defaultTheme.tempFactory.add("default", NoneTemp as any);
 defaultTheme.tempFactory.add("card", AntdCardTemp as any);
@@ -30,11 +29,11 @@ defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
         meta: true
     })
 ))
-export class ArrayComponent extends React.PureComponent<DefaultProps & ArrayHocOutProps & ValidateHocOutProps> {
+export class ArrayComponent extends PureComponent<DefaultProps & any> {
     private addItem;
     private hideItems;
 
-    constructor(props: DefaultProps & ArrayHocOutProps & ValidateHocOutProps) {
+    constructor(props: DefaultProps & any) {
         super(props);
 
         this.addItem = () => {
@@ -72,11 +71,11 @@ export class ArrayComponent extends React.PureComponent<DefaultProps & ArrayHocO
     hocFactory.get("validate")(),
     hocFactory.get("array")()
 ))
-export class ArrayItemComponent extends React.PureComponent<DefaultProps & ArrayHocOutProps & UtilsHocOutProps> {
+export class ArrayItemComponent extends PureComponent<DefaultProps & any> {
     private removeItem;
     private moveTo;
 
-    constructor(props: DefaultProps & ArrayHocOutProps & UtilsHocOutProps) {
+    constructor(props: DefaultProps & any) {
         super(props);
 
         this.removeItem = () => {
@@ -162,7 +161,7 @@ export const curAjv: ajv.Ajv = new ajv({
     removeAdditional: true,
 });
 
-ajvErrors.default(curAjv, {
+ajvErrors(curAjv, {
     keepErrors: false,
     singleError: false
 });

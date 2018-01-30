@@ -1,7 +1,6 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { schemaFieldFactory, convertKeys } from "../factory";
 import { ResolveLib } from "../libs/resolve";
 
 /**
