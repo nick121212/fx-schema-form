@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "http",
-    "url": "https://github.com/nick121212/fx-schema-form/tree/3.0/packages/fx-schema-form-core1"
+    "url": "https://github.com/nick121212/fx-schema-form/tree/3.0/packages/fx-schema-form-core"
   },
   "author": "NICK",
   "license": "MIT",
