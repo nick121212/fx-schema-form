@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
 import { shouldUpdate } from "recompose";
 
+import { DefaultProps } from "../components";
+import { FxUiSchema } from "../models";
+
 import { SchemaForm } from "../components/form";
-import { DefaultProps, FxUiSchema } from "../components";
 import { hocFactory } from "../factory";
 
 export interface ArrayFieldProps extends DefaultProps {

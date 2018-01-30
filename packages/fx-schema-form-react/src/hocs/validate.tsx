@@ -5,10 +5,11 @@ import { BaseFactory } from "fx-schema-form-core";
 
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
-import { DefaultProps, RC } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 import { schemaFormReducer } from "../reducer";
 
-export interface ValidateHocOutProps extends DefaultProps, MakeHocOutProps {
+export interface ValidateHocOutProps  {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;

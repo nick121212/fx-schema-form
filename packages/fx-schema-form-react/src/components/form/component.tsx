@@ -1,16 +1,17 @@
 import React, { PureComponent } from "react";
 
-import { DefaultProps, FxUiSchema } from "../index";
+import { DefaultProps } from "../index";
 import { hoc } from "./container";
 import { MergeHocOutProps } from "../../hocs/merge";
 import { SchemaFormItem } from "../formitem/index";
+import { FxUiSchema } from "../../models/index";
 
 export interface Props extends DefaultProps, MergeHocOutProps {
     RootComponent?: any;
     uiSchemas?: Array<string | FxUiSchema>;
 }
 
-@hoc
+@(hoc as any)
 export class SchemaForm extends PureComponent<Props, any> {
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;

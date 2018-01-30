@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { PureComponent } from "react";
-import { DefaultProps } from "../../components";
+import { DefaultProps } from "../../../dts/components";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ArrayHocOutProps } from "../../hocs/array";
 export interface AntdCardTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {

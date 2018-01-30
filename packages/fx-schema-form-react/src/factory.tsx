@@ -3,12 +3,13 @@ import { BaseFactory } from "fx-schema-form-core";
 
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormReducer } from "./reducers/schema.form";
-import { RC, DefaultProps, NsFactory, SchemaFormNs } from "./components";
+import { DefaultProps } from "./components";
+import { FxUiSchema, RC, NsFactory, SchemaFormNs } from "./models";
 import { utils, merge, field, theme, array, validate, make, temp, data } from "./hocs";
 import { schemaFormReducer } from "./reducer";
 
 export const reducerFactory = new BaseFactory<FxReducer>();
-export const hocFactory = new BaseFactory<(settings?: any) => React.PureComponent<DefaultProps, any>>();
+export const hocFactory = new BaseFactory<(settings?: any) => new () => React.PureComponent<DefaultProps, any>>();
 export const themeFactory = new BaseFactory<NsFactory>();
 
 hocFactory.add("utils", utils.bind(utils, hocFactory));

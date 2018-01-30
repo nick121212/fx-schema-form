@@ -6,7 +6,8 @@ import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import resolvePathname from "resolve-pathname";
 import Immutable from "immutable";
 
-import { DefaultProps, RC, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string) => any;

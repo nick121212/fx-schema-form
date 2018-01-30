@@ -1,8 +1,8 @@
 /// <reference types="react" />
 import { PureComponent } from "react";
-import { DefaultProps } from "../../index";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ValidateHocOutProps } from "../../hocs/validate";
+import { DefaultProps } from "../../../dts/components";
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 export declare class AntdInputWidget extends PureComponent<AntdInputWidgetProps, any> {

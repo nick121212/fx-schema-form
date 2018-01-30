@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
+const { CheckerPlugin } = require('awesome-typescript-loader')
 
 const env = process.env.NODE_ENV || "dev";
 
@@ -13,11 +14,14 @@ const __PROD__ = env.toUpperCase() == "PRODUCTION";
 module.exports = {
     entry: __PROD__ ? "./src/index.tsx" : "./src/demo/index.tsx",
     devServer: devServer,
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,
-            loader: 'babel-loader!awesome-typescript-loader',
+            use: [
+                'babel-loader',
+                'awesome-typescript-loader',
+            ],
             exclude: /node_modules/
         }, {
             test: /\.css$/,
@@ -27,14 +31,8 @@ module.exports = {
             ]
         }]
     },
-    // dev-sourceMap
     externals: __PROD__ ? {
-        "react": {
-            root: 'React',
-            amd: 'react',
-            commonjs2: 'react',
-            commonjs: 'react'
-        },
+        "react": "React",
         "react-redux": {
             root: 'react-redux',
             amd: 'react-redux',
@@ -97,22 +95,27 @@ module.exports = {
         },
     } : {},
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.js']
     },
-    plugins: [
+    plugins: !__PROD__ ? [
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new CheckerPlugin(),
         new HtmlWebpackPlugin({
             template: "index.html"
-        }),
-        new webpack.HotModuleReplacementPlugin()
-    ],
-    output: {
+        })
+    ] : [],
+    output: __PROD__ ? {
         path: path.resolve('./dist'),
-        filename: '[name].js',
-        chunkFilename: "[name].min.js",
+        filename: '[name].prd.js',
+        // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        sourceMapFilename: "[file].map",
-        library: "fx-schema-form-react",
-        umdNamedDefine: true,
+        // sourceMapFilename: "[file].map",
+        // library: "fx-schema-form-react",
+        // umdNamedDefine: true,
         // libraryExport: "default"
-    }
+    } : {
+            path: path.resolve('./dist'),
+            filename: '[name].js',
+        }
 };

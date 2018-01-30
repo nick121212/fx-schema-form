@@ -3,7 +3,8 @@ import { BaseFactory } from "fx-schema-form-core";
 import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
 import { connect } from "react-redux";
 
-import { RC, DefaultProps, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 import { ThemeHocOutProps } from "./theme";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
@@ -32,7 +33,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
 
                 return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
                     const tempOptions = getOptions(this.props, "temp", key),
-                        TempWithHoc = compose(...(tempOptions.tempHocs || []))(Temp);
+                        TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
                         key={keys.join(".") + key}
@@ -61,8 +62,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                 const { uiSchema, currentTheme, getOptions } = this.props,
                     { keys, type } = uiSchema as FxUiSchema,
                     typeDefaultOptions = getOptions(this.props, "field", type as string),
-                    TempComponent = [];
-                let template;
+                    TempComponent: Array<{ key: string, Temp: RC<any, any> }> = [];
+                let template: Array<any>;
 
                 if (settings.templates && settings.templates.length > 0) {
                     template = settings.templates;

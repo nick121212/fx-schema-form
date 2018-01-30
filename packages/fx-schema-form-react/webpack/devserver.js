@@ -1,6 +1,6 @@
 //配置api 资料 ：https://doc.webpack-china.org/configuration/dev-server/
 module.exports = {
-    hot: true, // 启用 webpack 的模块热替换特性：
+    hot: false, // 启用 webpack 的模块热替换特性：
     inline: true, //设置为true，当源文件改变时会自动刷新页面
     stats: { colors: true, progress: true }, //此选项允许你精确控制 bundle 信息展示。这可以是一个很好的中间层，如果你想要只展示某些 bundle 信息，但不是所有的信息。
     compress: false, //一切服务都启用gzip 压缩：

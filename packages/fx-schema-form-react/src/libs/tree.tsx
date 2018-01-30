@@ -25,7 +25,7 @@ export class TreeMap {
     public addChild(keys: Array<string | number>, value?: any): TreeMap {
         let curKeys = this.getCurrentKeys();
         let curNode: TreeMap = this;
-        let child;
+        let child: TreeMap;
 
         // 与当前路径多一次对比，去掉重复的部分
         keys = keys.splice(curKeys.length);
@@ -36,7 +36,7 @@ export class TreeMap {
 
         // 创建所有路径的节点
         while (keys.length) {
-            let key = keys.shift();
+            let key: string | number = keys.shift();
             let isNumber = key.constructor === Number;
 
             child = curNode.contains(key);
@@ -48,7 +48,7 @@ export class TreeMap {
             if (!child) {
                 if (isNumber) {
                     child = new TreeMap("-", null, curNode);
-                    curNode.children[key] = child;
+                    curNode.children[key as number] = child;
                 } else {
                     child = new TreeMap(key.toString(), null, curNode);
                     curNode.children.push(child);
@@ -83,7 +83,7 @@ export class TreeMap {
      * @returns string[]
      */
     public getCurrentKeys(): Array<string | number> {
-        let keys = [];
+        let keys: Array<string | number> = [];
 
         if (this.parent) {
             keys = keys.concat(this.parent.getCurrentKeys());
@@ -125,7 +125,7 @@ export class TreeMap {
         // 如果是数字的话，直接返回children中对应下标的元素
         if (isNumber) {
             if (this.children.length > key) {
-                return this.children[key];
+                return this.children[key as number];
             }
 
             return null;

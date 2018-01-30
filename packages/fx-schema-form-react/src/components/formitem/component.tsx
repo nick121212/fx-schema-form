@@ -10,7 +10,7 @@ export interface Props extends DefaultProps {
 
 }
 
-@hoc
+@(hoc as any)
 export class SchemaFormItem extends PureComponent<Props, any> {
 
     constructor(props: Props, context: any) {

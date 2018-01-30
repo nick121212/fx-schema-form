@@ -1,23 +1,22 @@
-import * as Immutable from "immutable";
+import Immutable from "immutable";
 import { immutableRenderDecorator } from "react-immutable-render-mixin";
-import * as ajv from "ajv";
+import ajv from "ajv";
 import React, { PureComponent } from "react";
 import * as ajvErrors from "ajv-errors";
 import { compose } from "recompose";
 import { Button } from "antd";
 
-import fxSchemaForm, { DefaultProps } from "../../dist/main";
+import { defaultTheme, hocFactory } from "../../dist/index";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
+import { DefaultProps } from "../components/index";
 
-const { defaultTheme, hocFactory } = fxSchemaForm;
+defaultTheme.tempFactory.add("default", NoneTemp as any);
+defaultTheme.tempFactory.add("card", AntdCardTemp as any);
+defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
 
-fxSchemaForm.defaultTheme.tempFactory.add("default", NoneTemp as any);
-fxSchemaForm.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
-fxSchemaForm.defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
-
-fxSchemaForm.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
-fxSchemaForm.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
+defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
+defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 
 @(compose(
     hocFactory.get("validate")(),
@@ -28,7 +27,7 @@ fxSchemaForm.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
         dataLength: true,
         meta: true
     })
-))
+) as any)
 export class ArrayComponent extends PureComponent<DefaultProps & any> {
     private addItem;
     private hideItems;
@@ -70,7 +69,7 @@ export class ArrayComponent extends PureComponent<DefaultProps & any> {
 @(compose(
     hocFactory.get("validate")(),
     hocFactory.get("array")()
-))
+) as any)
 export class ArrayItemComponent extends PureComponent<DefaultProps & any> {
     private removeItem;
     private moveTo;

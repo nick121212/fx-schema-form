@@ -1,14 +1,18 @@
 
 import React, { PureComponent } from "react";
-import { branch, renderComponent, shouldUpdate, compose, withHandlers, renderNothing, onlyUpdateForKeys } from "recompose";
+import {
+    branch, shouldUpdate, compose,
+    withHandlers, renderNothing, onlyUpdateForKeys, ComponentEnhancer
+} from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { UtilsHocOutProps } from "./utils";
-import { DefaultProps, RC, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 import { schemaFormReducer } from "../reducer";
 
-export interface ArrayHocOutProps extends DefaultProps {
+export interface ArrayHocOutProps {
     addItem: (props: DefaultProps, data?: any) => Promise<void>;
     removeItem: (parentKeys: any[], keys: any[], index: number) => void;
     switchItem: (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => void;
@@ -24,7 +28,7 @@ export interface ArrayProps extends DefaultProps, UtilsHocOutProps {
 
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
-    const hoc = (compose(
+    const hoc = compose(
         withHandlers({
             /**
              * 更新一个数据
@@ -107,7 +111,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     return ArrayItemComponent ? <ArrayItemComponent {...extraProps} /> : null;
                 };
             }
-        })) as any);
+        })) as any;
 
     /**
      * 包装array的组件HOC

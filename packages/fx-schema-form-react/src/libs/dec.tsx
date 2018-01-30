@@ -6,7 +6,8 @@ import Immutable from "immutable";
 import { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
-import { RC, DefaultProps, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 import { hocFactory, reducerFactory } from "../factory";
 import { TreeMap } from "./tree";
 import { SchemaFormActions } from "../reducers/schema.form";
@@ -52,7 +53,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
             };
         }) as any)
         class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
-            private _validateAll;
+            private _validateAll: () => Promise<void>;
 
             constructor(props: SchemaFormProps) {
                 super(props);
@@ -178,7 +179,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
                         <Component validateAll={this._validateAll} {...this.props} />
                         {isValid.toString() + isValidating.toString()}
                         {
-                            isValid ? null : errors ? errors.map((e) => {
+                            isValid ? null : errors ? errors.map((e: Immutable.Map<string, any>) => {
                                 return <div key={e.get("dataPath")}>{e.get("message")}</div>;
                             }) : null
                         }

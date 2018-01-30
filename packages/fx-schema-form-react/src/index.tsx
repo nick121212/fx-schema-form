@@ -5,12 +5,15 @@ import { SchemaFormReducer } from "./reducers/schema.form";
 import { reducerFactory, hocFactory, themeFactory } from "./factory";
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
-import { SchemaForm, DefaultProps, RC, FxUiSchema } from "./components";
+import { SchemaForm, DefaultProps, props } from "./components";
+import { RC, models } from "./models";
 
 import { NormalField, ObjectField, ArrayField } from "./fields";
 import { TreeMap } from "./libs/tree";
 import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec } from "./libs/dec";
 import { SchemaFormProps } from "./libs/dec";
+
+let total = props + models;
 
 /**
  * 默认样式配置
@@ -29,14 +32,6 @@ defaultTheme.fieldFactory.add("array", ArrayField as any);
 themeFactory.add("default", defaultTheme as any);
 
 export {
-    SchemaFormProps,
-    FxReducer,
-    FxUiSchema,
-    SchemaFormActions,
-    DefaultProps
-};
-
-export default {
     defaultTheme,
     schemaFormDec,
     TreeMap,

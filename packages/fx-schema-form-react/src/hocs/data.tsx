@@ -6,7 +6,8 @@ import { BaseFactory } from "fx-schema-form-core";
 import { createSelector, createSelectorCreator, defaultMemoize } from "reselect";
 import Immutable, { is } from "immutable";
 
-import { DefaultProps, RC, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 
 export interface DataHocOutProps extends DefaultProps {
 
@@ -99,7 +100,7 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
      * arrayItems
      */
     return (Component: any): RC<DataHocOutProps, any> => {
-        @shouldUpdate(() => false)
+        @(shouldUpdate(() => false) as any)
         class DataComponentHoc extends PureComponent<DataHocOutProps, any> {
             private ComponentWithHoc;
 

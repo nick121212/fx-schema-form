@@ -1,10 +1,11 @@
 
 import React, { PureComponent } from "react";
-import { compose, shouldUpdate } from "recompose";
+import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { UtilsHocOutProps } from "./utils";
-import { RC, DefaultProps, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 
 export interface MakeHocOutProps extends UtilsHocOutProps {
 
@@ -28,10 +29,13 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { uiSchema, getOptions } = this.props;
                 const { type } = uiSchema as FxUiSchema;
                 const fieldOptions = getOptions(this.props, "field", type as string);
-                const hocs = settings.hocs || uiSchema[this.fieldKey] || ["theme", "field", "validate", "array", "temp"];
+                const hocs: Array<string | ComponentEnhancer<any, any>> = settings.hocs ||
+                    uiSchema[this.fieldKey] as Array<string> || ["theme", "field", "validate", "array", "temp"];
+
+                hocs.unshift("utils");
 
                 let ComponentWithHocs = compose<DefaultProps & MakeHocOutProps, any>
-                    (...["utils"].concat(hocs).map(hoc => {
+                    (...[].concat(hocs).map(hoc => {
                         if (typeof hoc !== "string") {
                             return hoc;
                         }

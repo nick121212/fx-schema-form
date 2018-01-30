@@ -1,6 +1,6 @@
 import { createAction, createReducer, SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux";
-import * as Immutable from "immutable";
+import { List, Map, fromJS } from "immutable";
 
 import { FxReducer } from "./reducer";
 import { TreeMap } from "../libs/tree";
@@ -73,7 +73,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state 当前的state
      * @param keys  数据路径
      */
-    private resolveKeys(state: Immutable.Map<string, any>, keys: Array<string>) {
+    private resolveKeys(state: Map<string, any>, keys: Array<string>) {
         if (state.hasIn(keys)) {
             return state;
         }
@@ -86,20 +86,20 @@ export class SchemaFormReducer<T> implements FxReducer {
                 mKeys.pop();
                 if (!state.hasIn(mKeys)) {
                     if (keys[i].constructor === Number) {
-                        state = state.setIn(mKeys, Immutable.List());
+                        state = state.setIn(mKeys, List());
                     } else {
-                        state = state.setIn(mKeys, Immutable.Map());
+                        state = state.setIn(mKeys, Map());
                     }
                 }
             } else if (i < n) {
                 // 如果key存在，则判断数据结构是否与结构一致
                 let data = state.getIn(mKeys);
 
-                if (!Immutable.Map.isMap(data) && !Immutable.List.isList(data)) {
+                if (!Map.isMap(data) && !List.isList(data)) {
                     if (keys[i + 1].constructor === Number) {
-                        state = state.setIn(mKeys, Immutable.List());
+                        state = state.setIn(mKeys, List());
                     } else {
-                        state = state.setIn(mKeys, Immutable.Map());
+                        state = state.setIn(mKeys, Map());
                     }
                 }
             }
@@ -113,15 +113,15 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state   当前的state
      * @param param1  参数值，key 和 data
      */
-    private createFormHandle(state: Immutable.Map<string, any>, { key, data }: any): Immutable.Map<string, any> {
+    private createFormHandle(state: Map<string, any>, { key, data }: any): Map<string, any> {
         if (state.has(key)) {
             state = state.remove(key);
         }
 
-        const meta = new TreeMap(key, Immutable.fromJS({}));
-        const stateData = Immutable.Map<string, any>({
+        const meta = new TreeMap(key, fromJS({}));
+        const stateData = Map<string, any>({
             meta: meta,
-            data: Immutable.fromJS(data)
+            data: fromJS(data)
         });
 
         return state.set(key, stateData);
@@ -132,11 +132,11 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 参数值，keys,parentKeys和data
      */
-    private updateItemDataHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data, meta }: any): Immutable.Map<string, any> {
+    private updateItemDataHandle(state: Map<string, any>, { parentKeys, keys, data, meta }: any): Map<string, any> {
         let dataKeys = parentKeys.concat(["data", ...keys]);
 
         state = this.resolveKeys(state, dataKeys);
-        state = state.setIn(dataKeys, Immutable.fromJS(data));
+        state = state.setIn(dataKeys, fromJS(data));
 
         if (meta) {
             state = this.updateItemMetaHandle(state, { parentKeys, keys, meta });
@@ -152,16 +152,16 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 keys,parentKeys和data
      */
-    private addItemDataHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data }: any): Immutable.Map<string, any> {
+    private addItemDataHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap = rootNode.containPath(parentKeys.concat(keys));
-        let formItemData: Immutable.List<any>;
+        let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
-        formItemData = state.getIn(dataKeys) || Immutable.List();
-        formItemData = formItemData.push(Immutable.fromJS(data));
+        formItemData = state.getIn(dataKeys) || List();
+        formItemData = formItemData.push(fromJS(data));
 
         if (childNode && childNode.value) {
             childNode.value = childNode.value.merge({
@@ -179,17 +179,17 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 keys,parentKeys和data
      */
-    private removeItemDataHandle(state: Immutable.Map<string, any>, { parentKeys, keys, index }: any): Immutable.Map<string, any> {
+    private removeItemDataHandle(state: Map<string, any>, { parentKeys, keys, index }: any): Map<string, any> {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys).concat([index]));
-        let formItemData: Immutable.List<any>;
+        let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
 
-        if (!formItemData || !Immutable.List.isList(formItemData)) {
+        if (!formItemData || !List.isList(formItemData)) {
             return state;
         }
 
@@ -211,11 +211,11 @@ export class SchemaFormReducer<T> implements FxReducer {
      *   curIndex      当前item的索引
      *   toIndex       需要交换的item索引
      */
-    private switchItemHandle(state: Immutable.Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Immutable.Map<string, any> {
+    private switchItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys);
-        let formItemData: Immutable.List<any>, childNode: TreeMap;
+        let formItemData: List<any>, childNode: TreeMap;
 
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
@@ -253,13 +253,13 @@ export class SchemaFormReducer<T> implements FxReducer {
      *   curIndex      当前item的索引
      *   toIndex       需要交换的item索引
      */
-    private moveItemHandle(state: Immutable.Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Immutable.Map<string, any> {
+    private moveItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys).concat([curIndex])),
             offset = (toIndex > curIndex && false ? 1 : 0);
-        let formItemData: Immutable.List<any>;
+        let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
@@ -285,7 +285,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 参数值，keys,parentKeys和data
      */
-    private updateItemMetaHandle(state: Immutable.Map<string, any>, { parentKeys, keys, data }: any): Immutable.Map<string, any> {
+    private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys));
@@ -294,7 +294,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         if (childNode.value) {
             childNode.value = childNode.value.merge(data);
         } else {
-            childNode.value = Immutable.fromJS(data);
+            childNode.value = fromJS(data);
         }
 
         // if (is(childNode.value, value)) {

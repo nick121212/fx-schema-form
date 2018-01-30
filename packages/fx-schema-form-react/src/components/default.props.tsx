@@ -2,7 +2,7 @@ import { UiSchema } from "fx-schema-form-core/dist/dts/models/uischema";
 import { Ajv } from "ajv";
 import Immutable from "immutable";
 
-import { FxUiSchema } from "./index";
+import { FxUiSchema } from "../models";
 /**
  * 默认的组件参数
  */
@@ -48,3 +48,5 @@ export interface DefaultProps {
      */
     ArrayItemComponent?: new () => React.PureComponent<DefaultProps>;
 }
+
+export const props = 1;

@@ -1,5 +1,9 @@
 {
-    "presets": ["react"],
+    "presets": [
+        "env", "react", "stage-2"
+    ],
     "plugins": [
+        "transform-object-rest-spread",
+        "syntax-dynamic-import"
     ]
 }

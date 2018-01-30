@@ -5,7 +5,7 @@ import {
 
 import {
     TreeMap
-} from "../../dts/libs/tree";
+} from "../../dist/main";
 
 describe("测试treemap", () => {
     let tree, treeValue = {

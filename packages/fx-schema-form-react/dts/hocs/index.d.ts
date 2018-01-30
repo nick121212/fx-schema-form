@@ -1,5 +1,5 @@
-export { default as merge } from "./merge";
-export { default as utils } from "./utils";
+export { default as merge, MergeHocOutProps } from "./merge";
+export { default as utils, UtilsHocOutProps } from "./utils";
 export { default as theme } from "./theme";
 export { default as field } from "./field";
 export { default as array } from "./array";

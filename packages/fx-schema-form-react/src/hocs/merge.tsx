@@ -4,7 +4,8 @@ import { BaseFactory, MergeLib, FxJsonSchema, UiSchema } from "fx-schema-form-co
 import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 
-import { DefaultProps, RC, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC } from "../models";
 
 /**
  * MergeHoc 添加的属性

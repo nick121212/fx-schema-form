@@ -2,7 +2,8 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
 
-import { DefaultProps, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema } from "../models";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { FieldHocOutProps } from "../hocs/field";
 
@@ -31,9 +32,9 @@ export class NormalField extends PureComponent<NormalFieldProps> {
         }
 
         if (fieldOptions.widgetHocs && fieldOptions.widgetHocs.length) {
-            WidgetComponentWithHoc = compose(
+            WidgetComponentWithHoc = (compose(
                 ...fieldOptions.widgetHocs
-            )(WidgetComponent);
+            ) as any)(WidgetComponent);
         }
 
         return (

@@ -1,4 +1,5 @@
-import { RC, DefaultProps } from "../components";
+import { DefaultProps } from "../components";
+import { RC } from "../models";
 import { TreeMap } from "./tree";
 export interface SchemaFormHocOutProps {
     validateAll: () => Promise<any>;

@@ -1,5 +1,6 @@
 import { BaseFactory } from "fx-schema-form-core";
-import { DefaultProps, RC } from "../components";
+import { DefaultProps } from "../components";
+import { RC } from "../models";
 export interface DataHocOutProps extends DefaultProps {
 }
 export interface DataHocSettings {

@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
-import { DefaultProps } from "../../index";
+import { DefaultProps } from "../../../dts/components";
+import { FxUiSchema } from "../../../dts/models";
+
 import { UtilsHocOutProps } from "../../hocs/utils";
 
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {

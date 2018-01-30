@@ -1,7 +1,8 @@
 import React, { PureComponent } from "react";
 
 import { SchemaForm } from "../components/form";
-import { DefaultProps, FxUiSchema } from "../components";
+import { DefaultProps } from "../components";
+import { FxUiSchema } from "../models";
 
 export interface ObjectFieldProps extends DefaultProps {
 
