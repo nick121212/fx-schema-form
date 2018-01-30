@@ -5,10 +5,11 @@ node_js:
   - "8"
   - "9"
 
-before_script:
+before_install:
   - cd packages/fx-schema-form-core
   - npm install
   - cd ../fx-schema-form-react
   - npm install
 
 after_script:
+  - echo "ok"
