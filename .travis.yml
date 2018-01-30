@@ -10,6 +10,7 @@ before_install:
   - npm install
   - cd ../fx-schema-form-react
   - npm install
+  - cd ../../
 
 after_script:
   - echo "ok"
