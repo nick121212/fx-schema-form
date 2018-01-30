@@ -19,5 +19,5 @@ notifications:
   email:
     recipients:
       - nick121212@126.com
-    on_success: never
+    on_success: change
     on_failure: always
