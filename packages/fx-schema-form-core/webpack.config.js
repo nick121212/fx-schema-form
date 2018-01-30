@@ -46,17 +46,6 @@ module.exports = (webpackConfig) => {
 
     retVal.plugins.shift();
 
-    // console.log(retVal.plugins);
-
-    // retVal.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    //     comments: false,
-    //     compress: {
-    //         unused: false,
-    //         dead_code: false,
-    //         warnings: false,
-    //     }
-    // }));
-
     if (__DEV__) {
         retVal.plugins.push(new HtmlWebpackPlugin({
             template: "index.html"

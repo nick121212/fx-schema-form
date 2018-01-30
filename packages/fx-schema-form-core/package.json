@@ -14,6 +14,10 @@
     "start": "dora --plugins \"webpack\" --port 8002",
     "test": "atool-test-mocha ./tests/**/*.spec.js"
   },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/nick121212/fx-schema-form/tree/3.0/packages/fx-schema-form-core1"
+  },
   "author": "NICK",
   "license": "MIT",
   "dependencies": {
