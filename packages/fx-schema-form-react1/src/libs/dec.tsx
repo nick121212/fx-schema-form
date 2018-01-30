@@ -3,7 +3,7 @@ import React from "react";
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import { Map, fromJS } from "immutable";
-import { Ajv, ErrorObject } from "ajv";
+import { Ajv, ErrorObject, ValidationError } from "ajv";
 
 import { RC, DefaultProps, FxUiSchema } from "../components";
 import { hocFactory, reducerFactory } from "../factory";
@@ -47,51 +47,63 @@ export default (settings: SchemaFormHocSettings = {}) => {
         class SchemaFormComponentHoc extends React.PureComponent<SchemaFormProps, any> {
 
             private async validateAll() {
-                let validate = this.props.ajv.getSchema(this.props.schemaId);
                 let root = this.props.root;
+                let validate = this.props.ajv.getSchema(this.props.schemaId);
+                let $validateBeforeData = fromJS({
+                    dirty: true,
+                    isValid: true,
+                    isLoading: true
+                }), $validateAfterData = fromJS({ isLoading: false, dirty: true });
+                if (!validate) {
+                    throw new Error(`没有找到对应的${this.props.schemaId};`);
+                }
 
-                if (validate) {
-                    try {
-                        root.forEach((node: TreeMap) => {
-                            if (node.value) {
-                                return node.value.merge({
-                                    dirty: true,
-                                    isValid: true
-                                });
-                            }
+                try {
+                    root.forEach((node: TreeMap) => {
+                        if (node.value) {
+                            return node.value.merge($validateBeforeData);
+                        }
 
-                            return fromJS({
-                                dirty: true,
-                                isValid: true
-                            });
-                        });
-                        await validate(this.props.data.toJS());
+                        return $validateBeforeData;
+                    });
+                    await validate(this.props.data.toJS());
 
-                        actions.updateItemMeta({
-                            parentKeys: settings.parentKeys,
-                            keys: [],
-                            data: root.value
-                        });
+                    actions.updateItemMeta({
+                        parentKeys: settings.parentKeys,
+                        keys: [],
+                        data: root.value
+                    });
 
-                    } catch (e) {
-                        console.log(e);
-                        e.errors.forEach((element: ErrorObject) => {
-                            let dataKeys = root.getCurrentKeys().concat(element.dataPath.substring(1).split("/"));
-                            let childNode = root.addChild(dataKeys, fromJS({}));
-
-                            childNode.value = childNode.value.merge({
-                                dirty: true,
-                                isValid: false,
-                                errorText: element.message
-                            });
-
-                            actions.updateItemMeta({
-                                parentKeys: settings.parentKeys,
-                                keys: [],
-                                data: root.value
-                            });
-                        });
+                } catch (e) {
+                    if (!(e instanceof (ValidationError as any))) {
+                        throw e;
                     }
+
+                    e.errors.forEach((element: ErrorObject) => {
+                        let dataKeys = root.getCurrentKeys().concat(element.dataPath.substring(1).split("/"));
+                        let childNode = root.addChild(dataKeys, fromJS({}));
+
+                        childNode.value = childNode.value.merge($validateAfterData).merge({
+                            isValid: false,
+                            errorText: element.message
+                        });
+
+                        console.log(childNode.value.toJS());
+                    });
+                } finally {
+                    root.forEach((node: TreeMap) => {
+                        if (node.value) {
+                            return node.value.merge($validateAfterData);
+                        }
+
+                        return node.value;
+                    });
+
+                    actions.updateItemMeta({
+                        parentKeys: settings.parentKeys,
+                        keys: [],
+                        data: root.value
+                    });
                 }
             }
 

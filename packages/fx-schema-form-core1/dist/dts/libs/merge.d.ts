@@ -32,6 +32,16 @@ export declare class MergeLib {
      * 获取父亲的keys
      */
     private getParentSchemaKeys();
+    /**
+     * 根据给出的parentKeys和uiSchemaKeys来获取uiSchema的key
+     * 1. 遍历uiSchemaKeys，分别于parentKeys做合并
+     * 2. 合并后的keys去仓库里面找，如果为找到则报错
+     * 3. 判断找到的schema中是否带有 $ref
+     * 4. 如果有$ref，则更改parentKeys为$ref的路径
+     * 5. 如果没有，则更改parentKeys为当前合并的keys
+     * @param uiSchemaKeys
+     * @param parentKeys
+     */
     private getUiSchemaKeyRecursion(uiSchemaKeys, parentKeys);
     /**
      * 获取当前uiSchema的key

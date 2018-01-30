@@ -29,7 +29,10 @@ const design = {
     properties: {
         name: {
             type: "string",
-            title: "面板名称"
+            title: "面板名称",
+            $async: true,
+            idExists: { "table": "users" },
+            description: "远程验证字段，输入nick试试看"
         },
         description: {
             type: "string",
@@ -46,12 +49,10 @@ const design = {
             items: {
                 type: "object",
                 required: ["age", "name", "password"],
-                defualt: {},
+                default: {},
                 properties: {
                     age: {
-                        $async: true, type: "string",
-                        idExists: { "table": "users" },
-                        description: "远程验证字段，输入nick试试看",
+                        type: "string"
                     },
                     name: {
                         type: "string",

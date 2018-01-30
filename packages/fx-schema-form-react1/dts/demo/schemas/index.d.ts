@@ -26,6 +26,11 @@ declare const design: {
         name: {
             type: string;
             title: string;
+            $async: boolean;
+            idExists: {
+                "table": string;
+            };
+            description: string;
         };
         description: {
             type: string;
@@ -42,15 +47,10 @@ declare const design: {
             items: {
                 type: string;
                 required: string[];
-                defualt: {};
+                default: {};
                 properties: {
                     age: {
-                        $async: boolean;
                         type: string;
-                        idExists: {
-                            "table": string;
-                        };
-                        description: string;
                     };
                     name: {
                         type: string;

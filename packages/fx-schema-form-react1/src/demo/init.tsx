@@ -156,6 +156,7 @@ export const curAjv: ajv.Ajv = new ajv({
     allErrors: true,
     jsonPointers: true,
     useDefaults: true,
+    format: "full",
     $data: true,
     errorDataPath: "property",
     removeAdditional: true,
@@ -175,12 +176,11 @@ curAjv.addKeyword("idExists", {
 function checkIdExists(schema, data) {
     console.log("dfjkladjsklfklakdls");
     return new Promise((resolve, reject) => {
-        console.log("object");
         setTimeout(() => {
             if (data === "nick") {
                 return resolve(true);
             }
-            return reject(new Error("idExists不是nick"));
+            reject(new (ajv.ValidationError as any)([new Error("idExists不是nick")] as any));
         }, 2000);
     });
 }

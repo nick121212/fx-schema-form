@@ -4,7 +4,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 export interface ArrayHocOutProps extends DefaultProps {
-    addItem: (props: DefaultProps, data?: any) => void;
+    addItem: (props: DefaultProps, data?: any) => Promise<void>;
     removeItem: (parentKeys: any[], keys: any[], index: number) => void;
     switchItem: (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => void;
     moveItem: (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => void;

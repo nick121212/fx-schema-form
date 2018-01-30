@@ -9,7 +9,7 @@ import { DefaultProps, RC, FxUiSchema } from "../components";
 import { schemaFormReducer } from "../reducer";
 
 export interface ArrayHocOutProps extends DefaultProps {
-    addItem: (props: DefaultProps, data?: any) => void;
+    addItem: (props: DefaultProps, data?: any) => Promise<void>;
     removeItem: (parentKeys: any[], keys: any[], index: number) => void;
     switchItem: (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => void;
     moveItem: (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => void;
@@ -30,22 +30,28 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 更新一个数据
              */
             addItem: (propsCur: DefaultProps) => {
-                return (props: DefaultProps, data?: any) => {
-                    let defaultValue: { defaultValue?: any } = {};
+                return async (props: DefaultProps, data?: any) => {
+                    let itemSchema: any = {},
+                        defaultValue: any = {},
+                        itemUiSchema: any = props.uiSchema.items;
 
-                    // 先获取默认的数据
-                    props.ajv.validate({
-                        type: "object",
-                        properteis: {
-                            defaultData: props.uiSchema.items
-                        }
-                    }, defaultValue);
-
-                    schemaFormReducer.actions.addItem({
-                        parentKeys: props.parentKeys,
-                        keys: (props.uiSchema as any).keys,
-                        data: defaultValue.defaultValue
-                    });
+                    try {
+                        // 先获取默认的数据
+                        await props.ajv.validate({
+                            type: "object",
+                            properties: {
+                                defaultData: itemUiSchema
+                            }
+                        }, defaultValue);
+                    } catch (e) {
+                        console.log(e);
+                    } finally {
+                        schemaFormReducer.actions.addItem({
+                            parentKeys: props.parentKeys,
+                            keys: (props.uiSchema as any).keys,
+                            data: defaultValue.defaultData
+                        });
+                    }
                 };
             },
             /**

@@ -99,7 +99,7 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
 
 let merge4 = new MergeLib(curAjv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions/-/label"]);
 
-
+console.log(JSON.stringify(merge.mergeUiSchemaList));
 console.log(merge4.mergeUiSchemaList);
 
 

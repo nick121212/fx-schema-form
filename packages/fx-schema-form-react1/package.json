@@ -28,7 +28,7 @@
     "url": "git+https://github.com/nick121212/fx-schema-form.git"
   },
   "dependencies": {
-    "ajv": "^5.5.2",
+    "ajv": "^6.1.0",
     "fx-schema-form-core": "^3.0.0",
     "immutable": "^3.8.2",
     "react-immutable-render-mixin": "^0.9.7",
