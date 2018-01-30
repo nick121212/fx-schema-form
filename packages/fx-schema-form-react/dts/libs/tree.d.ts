@@ -13,5 +13,5 @@ export declare class TreeMap {
     removeFromParent(): void;
     switchOneToOneFromParent(toIndex: number): void;
     insertToFromParent(toIndex: number): void;
-    forEach(clearFunc: (node: TreeMap) => any): void;
+    forEach(clearFunc: (node: TreeMap) => any, currentNode?: boolean): void;
 }

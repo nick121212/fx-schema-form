@@ -7,18 +7,6 @@ import {
     TreeMap
 } from "../../dts/libs/tree";
 
-// let data = {
-//     a: 1,
-//     b: {
-//         c: [1, 2, 3]
-//     },
-//     d: {
-//         e: 50,
-//         f: 60
-//     }
-// };
-
-
 describe("测试treemap", () => {
     let tree, treeValue = {
         test: true
@@ -57,8 +45,11 @@ describe("测试treemap", () => {
         let na = tree.addChild(["root", "a"], {
             valid: false
         });
-
         let na0 = tree.addChild(["root", "a", 0], {
+            valid: false
+        });
+
+        let nd0 = tree.addChild(["root", "d", 0], {
             valid: false
         });
 
@@ -67,6 +58,10 @@ describe("测试treemap", () => {
         expect(na.children.length).to.equal(1);
         expect(na0.parent).to.equal(na);
         expect(na0.children.length).to.equal(0);
+
+        expect(nd0.key).to.equal("-");
+        expect(nd0.parent.key).to.equal("d");
+        expect(nd0.children.length).to.equal(0);
     });
 
     it("删除节点", () => {
@@ -127,5 +122,15 @@ describe("测试treemap", () => {
 
         expect(nbc.children.length).to.equal(9);
         expect(nbc4).to.equal(nbc.contains(8));
+    });
+    it("遍历节点", () => {
+        let nodeCount = 0;
+
+        tree.forEach((node) => {
+            nodeCount++;
+            return node.value;
+        });
+
+        expect(nodeCount).to.equal(7);
     });
 });

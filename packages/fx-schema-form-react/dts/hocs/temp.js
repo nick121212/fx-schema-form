@@ -12,7 +12,7 @@ export default (hocFactory, settings = {
                 const TempComponents = this.getTemplates();
                 return TempComponents.reduce((prev, { key, Temp }) => {
                     const tempOptions = getOptions(this.props, "temp", key), TempWithHoc = compose(...(tempOptions.tempHocs || []))(Temp);
-                    return React.createElement(TempWithHoc, { tempKey: key, key: keys.join(".") + key, uiSchema: this.props.uiSchema, schemaId: this.props.schemaId, arrayLevel: this.props.arrayLevel, arrayIndex: this.props.arrayIndex, globalOptions: this.props.globalOptions, parentKeys: this.props.parentKeys, getTitle: this.props.getTitle, getOptions: this.props.getOptions, getPathKeys: this.props.getPathKeys, children: prev });
+                    return React.createElement(TempWithHoc, { key: keys.join(".") + key, tempKey: key, ajv: this.props.ajv, uiSchema: this.props.uiSchema, schemaId: this.props.schemaId, arrayLevel: this.props.arrayLevel, arrayIndex: this.props.arrayIndex, globalOptions: this.props.globalOptions, ArrayComponent: this.props.ArrayComponent, ArrayItemComponent: this.props.ArrayItemComponent, initArrayComponent: this.props.initArrayComponent, parentKeys: this.props.parentKeys, getTitle: this.props.getTitle, getOptions: this.props.getOptions, getPathKeys: this.props.getPathKeys, children: prev });
                 }, React.createElement(Component, Object.assign({ key: keys.join(".") }, this.props)));
             }
             getTemplates() {

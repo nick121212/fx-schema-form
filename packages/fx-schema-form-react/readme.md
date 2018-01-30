@@ -205,4 +205,4 @@ ReactDOM.render(
 
 ## [License](license)
 
-MIT
+[MIT](LICENSE.md)

@@ -10,6 +10,9 @@ export class TreeMap {
         let curNode = this;
         let child;
         keys = keys.splice(curKeys.length);
+        if (!keys.length) {
+            child = this;
+        }
         while (keys.length) {
             let key = keys.shift();
             let isNumber = key.constructor === Number;
@@ -115,6 +118,15 @@ export class TreeMap {
         this.removeFromParent();
         this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
             .concat(this.parent.children.splice(toIndex - offset));
+    }
+    forEach(clearFunc) {
+        if (!this.children) {
+            return;
+        }
+        for (let i = 0, n = this.children.length; i < n; i++) {
+            this.children[i].value = clearFunc(this.children[i]);
+            this.children[i].forEach(clearFunc);
+        }
     }
 }
 //# sourceMappingURL=tree.js.map

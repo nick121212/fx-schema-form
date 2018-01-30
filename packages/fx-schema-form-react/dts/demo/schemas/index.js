@@ -25,7 +25,10 @@ const design = {
     properties: {
         name: {
             type: "string",
-            title: "面板名称"
+            title: "面板名称",
+            $async: true,
+            idExists: { "table": "users" },
+            description: "远程验证字段，输入nick试试看"
         },
         description: {
             type: "string",
@@ -37,11 +40,23 @@ const design = {
         },
         dsModelIds: {
             type: "array",
+            maxItems: 3,
+            minItems: 1,
             items: {
                 type: "object",
+                required: ["age", "name", "password"],
+                default: {},
                 properties: {
-                    age: { $async: true, type: "string", idExists: { "table": "users" } },
-                    name: { type: "string", minLength: 10 },
+                    age: {
+                        type: "string"
+                    },
+                    name: {
+                        type: "string",
+                        minLength: 10,
+                        errorMessage: {
+                            minLength: "必须10个字符及以上"
+                        }
+                    },
                     password: { type: "string" }
                 }
             }
@@ -53,7 +68,10 @@ const design = {
                     type: "object"
                 },
                 ids: {
-                    type: "string"
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
                 }
             }
         },

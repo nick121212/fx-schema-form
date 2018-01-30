@@ -34,10 +34,11 @@ export default (hocFactory, settings = {}) => {
                 if (title !== undefined) {
                     return title;
                 }
-                return [].concat(keys).pop();
+                return [].concat(keys).pop().toString();
             }
             getPathKeys(keys, path) {
-                let keysResolve = resolvePathname(path, "/" + keys.join("/")).split("/");
+                let keysCopy = [""].concat(keys.concat([""]));
+                let keysResolve = resolvePathname(path, keysCopy.join("/")).split("/");
                 keysResolve.shift();
                 if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
                     keysResolve.pop();

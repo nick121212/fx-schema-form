@@ -18,15 +18,19 @@ import { hoc } from "./container";
 import { SchemaFormItem } from "../formitem/index";
 let SchemaForm = class SchemaForm extends React.PureComponent {
     render() {
-        const _a = this.props, { schemaId, mergeSchemaList, arrayLevel, RootComponent } = _a, extraProps = __rest(_a, ["schemaId", "mergeSchemaList", "arrayLevel", "RootComponent"]);
+        const _a = this.props, { schemaId, mergeSchemaList, arrayLevel, RootComponent, children } = _a, extraProps = __rest(_a, ["schemaId", "mergeSchemaList", "arrayLevel", "RootComponent", "children"]);
         const formItemList = mergeSchemaList.map((uiScehma, idx) => {
             let arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
             return React.createElement(SchemaFormItem, Object.assign({ key: idx }, extraProps, { schemaId: schemaId, uiSchema: uiScehma, arrayLevel: arrayLevelCopy }));
         });
         if (RootComponent) {
-            return React.createElement(RootComponent, { children: formItemList });
+            return React.createElement(RootComponent, null,
+                formItemList,
+                children);
         }
-        return (React.createElement("div", null, formItemList));
+        return (React.createElement("div", null,
+            formItemList,
+            children));
     }
 };
 SchemaForm = __decorate([

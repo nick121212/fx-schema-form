@@ -10,6 +10,9 @@ export interface SchemaFormHocSettings {
 export interface SchemaFormProps extends DefaultProps {
     root?: TreeMap;
     data?: any;
+    errors?: any;
+    isValid?: boolean;
+    isValidating?: boolean;
 }
 declare const _default: (settings?: SchemaFormHocSettings) => (Component: any) => RC<SchemaFormProps, any>;
 export default _default;

@@ -45,7 +45,7 @@ export default (hocFactory, settings = {}) => {
                         }
                         catch (err) {
                             result.errorText = err.errors ?
-                                props.ajv.errorsText(err.errors, { dataVar: "/" + props.uiSchema.keys.join("/") })
+                                props.ajv.errorsText(err.errors, { dataVar: props.getTitle(props).toString() })
                                 : err.message;
                         }
                         finally {
@@ -56,11 +56,12 @@ export default (hocFactory, settings = {}) => {
                 }
             }), withHandlers({
                 updateItemData: (propsCur) => {
-                    return (props, data) => {
+                    return (props, data, meta) => {
                         schemaFormReducer.actions.updateItemData({
                             parentKeys: props.parentKeys,
                             keys: props.uiSchema.keys,
-                            data: data
+                            data: data,
+                            meta
                         });
                     };
                 },

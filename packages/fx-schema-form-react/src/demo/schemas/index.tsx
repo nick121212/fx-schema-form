@@ -52,7 +52,8 @@ const design = {
                 default: {},
                 properties: {
                     age: {
-                        type: "string"
+                        type: "string",
+                        default: "25"
                     },
                     name: {
                         type: "string",
@@ -83,6 +84,7 @@ const design = {
             type: "array",
             items: {
                 type: "object",
+                default: {},
                 properties: {
                     label: {
                         type: "string"

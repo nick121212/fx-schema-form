@@ -55,8 +55,6 @@ export default (hocFactory, settings = {
         let DataComponentHoc = class DataComponentHoc extends React.PureComponent {
             render() {
                 const { keys } = this.props.uiSchema;
-                const mapKeys = [...this.props.parentKeys, ...keys,
-                    settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
                 const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
                 const ComponentWithHoc = hoc(Component);
                 return React.createElement(ComponentWithHoc, Object.assign({}, this.props));

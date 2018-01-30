@@ -15,32 +15,31 @@ export default (hocFactory, settings = {}) => {
         class MergeComponentHoc extends React.PureComponent {
             constructor(props) {
                 super(props);
-                clearTimeout(timeid);
-                let start = performance.now();
-                this._merge = new MergeLib(props.ajv, props.schemaId, props.parentKeys, props.uiSchema);
-                this._mergeUiSchemaList = this._merge.mergeUiSchemaList.map((v) => {
+                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : null;
+                if (uiSchema) {
+                    uiSchema.keys = uiSchema.originKeys;
+                }
+                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas);
+                this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v) => {
                     return this.mergeKeys(v);
                 });
-                totalTime += (performance.now() - start);
-                timeid = setTimeout(() => {
-                    console.log("merge所用时间", totalTime, Date.now());
-                }, 1000);
             }
             mergeKeys(mergeSchema) {
                 const { arrayLevel = [] } = this.props;
                 const arrayLevelCopy = arrayLevel.concat([]);
                 mergeSchema = Object.assign({}, mergeSchema);
-                mergeSchema.originKeys = mergeSchema.keys.concat([]);
-                mergeSchema.keys = mergeSchema.keys.map((key) => {
+                mergeSchema.originKeys = [].concat(mergeSchema.keys);
+                mergeSchema.keys = mergeSchema.keys.reverse().map((key) => {
                     if (key === "-") {
-                        return arrayLevelCopy.shift();
+                        return arrayLevelCopy.pop();
                     }
                     return key;
                 });
+                mergeSchema.keys.reverse();
                 return mergeSchema;
             }
             render() {
-                const _a = this.props, { uiSchema } = _a, extraProps = __rest(_a, ["uiSchema"]);
+                const _a = this.props, { uiSchemas, uiSchema } = _a, extraProps = __rest(_a, ["uiSchemas", "uiSchema"]);
                 return (React.createElement(Component, Object.assign({ mergeSchemaList: this._mergeUiSchemaList }, extraProps)));
             }
         }

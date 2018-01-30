@@ -118,7 +118,7 @@ export class SchemaFormReducer<T> implements FxReducer {
             state = state.remove(key);
         }
 
-        const meta = new TreeMap(key, null);
+        const meta = new TreeMap(key, fromJS({}));
         const stateData = Map<string, any>({
             meta: meta,
             data: fromJS(data)
@@ -297,9 +297,9 @@ export class SchemaFormReducer<T> implements FxReducer {
             childNode.value = fromJS(data);
         }
 
-        if (is(childNode.value, value)) {
-            return state;
-        }
+        // if (is(childNode.value, value)) {
+        //     return state;
+        // }
 
         let newRoot = Object.assign({}, rootNode, TreeMap.prototype);
 

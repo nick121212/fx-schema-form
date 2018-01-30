@@ -11,6 +11,7 @@ export class SchemaFormReducer {
         this.removeItem = createAction("删除一个数据");
         this.switchItem = createAction("元素22交换位置");
         this.moveToItem = createAction("元素移位");
+        this.validateAll = createAction("验证全部字段");
     }
     get actions() {
         return {
@@ -76,17 +77,26 @@ export class SchemaFormReducer {
         });
         return state.set(key, stateData);
     }
-    updateItemDataHandle(state, { parentKeys, keys, data }) {
+    updateItemDataHandle(state, { parentKeys, keys, data, meta }) {
         let dataKeys = parentKeys.concat(["data", ...keys]);
         state = this.resolveKeys(state, dataKeys);
-        return state.setIn(dataKeys, fromJS(data));
+        state = state.setIn(dataKeys, fromJS(data));
+        if (meta) {
+            state = this.updateItemMetaHandle(state, { parentKeys, keys, meta });
+        }
+        return state;
     }
     addItemDataHandle(state, { parentKeys, keys, data }) {
-        const dataKeys = parentKeys.concat(["data", ...keys]);
+        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), childNode = rootNode.containPath(parentKeys.concat(keys));
         let formItemData;
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys) || List();
         formItemData = formItemData.push(fromJS(data));
+        if (childNode && childNode.value) {
+            childNode.value = childNode.value.merge({
+                collapsing: false
+            });
+        }
         return state.setIn(dataKeys, formItemData);
     }
     removeItemDataHandle(state, { parentKeys, keys, index }) {
@@ -126,7 +136,7 @@ export class SchemaFormReducer {
         return state.setIn(dataKeys, formItemData);
     }
     moveItemHandle(state, { parentKeys, keys, curIndex, toIndex }) {
-        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), childNode = rootNode.addChild(parentKeys.concat(keys).concat([curIndex])), offset = (toIndex > curIndex ? 1 : 0);
+        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), childNode = rootNode.addChild(parentKeys.concat(keys).concat([curIndex])), offset = (toIndex > curIndex && false ? 1 : 0);
         let formItemData;
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);

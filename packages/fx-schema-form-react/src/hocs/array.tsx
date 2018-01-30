@@ -46,6 +46,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     } catch (e) {
                         console.log(e);
                     } finally {
+                        // if(defaultValue.defaultData)
                         schemaFormReducer.actions.addItem({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,

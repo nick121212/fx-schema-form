@@ -1,8 +1,8 @@
 import React from "react";
-import { Form } from "antd";
+import { Form, Row, Col } from "antd";
 export class AntdFormItemTemp extends React.PureComponent {
     render() {
-        const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta } = this.props;
+        const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta, initArrayComponent } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);
         const { hasFeedback = true } = tempOptions;
         const uiSchema = this.props.uiSchema;
@@ -14,7 +14,10 @@ export class AntdFormItemTemp extends React.PureComponent {
         if (isLoading) {
             props.validateStatus = "validating";
         }
-        return (React.createElement(Form.Item, Object.assign({ key: uiSchema.keys.join() + tempKey + isValid, required: uiSchema.isRequired, label: getTitle(this.props), extra: uiSchema.description, hasFeedback: dirty && hasFeedback, help: isValid ? "" : errorText }, props, tempOptions.options), children));
+        return (React.createElement(Form.Item, Object.assign({ key: uiSchema.keys.join() + tempKey + isValid, required: uiSchema.isRequired, label: getTitle(this.props), extra: uiSchema.description, hasFeedback: dirty && hasFeedback, help: isValid ? "" : errorText }, props, tempOptions.options),
+            React.createElement(Row, null,
+                React.createElement(Col, { span: 20 }, children),
+                React.createElement(Col, { span: 4 }, initArrayComponent ? initArrayComponent(this.props) : null))));
     }
 }
 //# sourceMappingURL=formitem.js.map

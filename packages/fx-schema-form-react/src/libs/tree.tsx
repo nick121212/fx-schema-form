@@ -31,7 +31,7 @@ export class TreeMap {
         keys = keys.splice(curKeys.length);
 
         if (!keys.length) {
-            child = this;
+            return this;
         }
 
         // 创建所有路径的节点
@@ -235,16 +235,23 @@ export class TreeMap {
     }
 
     /**
-     * 遍历所有节点的value数据
+     * 遍历指定节点下所有子节点的value数据,当前节点不计算在内
+     * @param node 指定的节点
      */
-    public forEach(clearFunc: (node: TreeMap) => any) {
+    public forEach(clearFunc: (node: TreeMap) => any, currentNode = false) {
+        if (currentNode) {
+            this.value = clearFunc(this);
+        }
+
         if (!this.children) {
             return;
         }
 
         for (let i = 0, n = this.children.length; i < n; i++) {
-            this.children[i].value = clearFunc(this.children[i]);
-            this.children[i].forEach(clearFunc);
+            if (this.children[i]) {
+                this.children[i].value = clearFunc(this.children[i]);
+                this.children[i].forEach(clearFunc);
+            }
         }
     }
 }

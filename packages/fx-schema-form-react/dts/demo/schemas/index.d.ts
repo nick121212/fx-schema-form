@@ -51,6 +51,7 @@ declare const design: {
                 properties: {
                     age: {
                         type: string;
+                        default: string;
                     };
                     name: {
                         type: string;
@@ -83,6 +84,7 @@ declare const design: {
             type: string;
             items: {
                 type: string;
+                default: {};
                 properties: {
                     label: {
                         type: string;

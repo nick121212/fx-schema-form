@@ -54,7 +54,8 @@ let start = performance.now();
 actions.createForm({
     key: "designForm",
     data: {
-        dsModelIds: dsModelIds
+        dsModelIds: dsModelIds,
+        name: "nick"
     }
 });
 
@@ -92,7 +93,7 @@ ReactDOM.render(
     <Provider store={store}>
         <div>
             <TestForm ajv={curAjv} schemaId="design" />
-            {/*<ReactPerfTool perf={Perf} />*/}
+            <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,
     document.getElementById("root"),

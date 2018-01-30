@@ -180,7 +180,7 @@ function checkIdExists(schema, data) {
             if (data === "nick") {
                 return resolve(true);
             }
-            reject(new (ajv.ValidationError as any)([new Error("idExists不是nick")] as any));
+            reject(new (ajv.ValidationError as any)([{ message: "idExists不是nick" }] as any));
         }, 2000);
     });
 }

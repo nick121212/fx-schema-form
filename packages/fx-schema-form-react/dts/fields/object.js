@@ -6,7 +6,7 @@ export class ObjectField extends React.PureComponent {
         if (uiSchema.children === null) {
             return null;
         }
-        return (React.createElement(SchemaForm, { arrayIndex: arrayIndex, arrayLevel: arrayLevel, schemaId: uiSchema.schemaPath, uiSchema: uiSchema.children || ["*"], parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv }));
+        return (React.createElement(SchemaForm, { arrayIndex: arrayIndex, arrayLevel: arrayLevel, schemaId: uiSchema.schemaPath, uiSchemas: uiSchema.children || ["*"], uiSchema: uiSchema, parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv }));
     }
 }
 //# sourceMappingURL=object.js.map
