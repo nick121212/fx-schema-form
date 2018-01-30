@@ -67,7 +67,7 @@ const schema: JSONSchema6 = {
 };
 ```
 
-> 解析上一步中定义的schema,curAjv是一个ajv的实例。
+> 解析上一步中定义的schema,curAjv是一个ajv的实例。
 
 ```js
 let b11dfd = new ResolveLib(curAjv, schema);
