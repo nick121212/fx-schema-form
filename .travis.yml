@@ -13,3 +13,10 @@ before_install:
 
 after_script:
   - echo "ok"
+
+notifications:
+  email:
+    recipients:
+      - nick121212@126.com
+    on_success: never
+    on_failure: always
