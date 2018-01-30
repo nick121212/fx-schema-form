@@ -3,6 +3,7 @@
 package-lock.json
 tsconfig.json
 tslint.json
+tsconfig.json
 webpack.config.js
 node_modules
 webpack
@@ -11,3 +12,5 @@ src
 .babelrc
 .jshintrc
 readme.md
+LICENSE.md
+index.html
