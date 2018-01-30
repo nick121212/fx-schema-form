@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dts/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack",
+    "build": "NODE_ENV=production atool-build --hash",
     "lint": "eslint --ext .js,.jsx src/",
-    "start": "webpack-dev-server --port=8003",
+    "start": "dora --plugins webpack -p 8003",
     "test": "atool-test-mocha ./tests/**/*.spec.js"
   },
   "author": "NICK",
@@ -46,6 +46,7 @@
     "@types/react-redux": "^5.0.14",
     "ajv-errors": "^1.0.0",
     "antd": "^2.0.0",
+    "atool-build": "^0.9.0",
     "atool-test-mocha": "^0.1.4",
     "awesome-typescript-loader": "^3.2.3",
     "babel-eslint": "^7.0.0",
@@ -77,7 +78,6 @@
     "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",
     "tslint-loader": "^3.5.3",
-    "typescript": "^2.6.2",
-    "webpack": "^3.10.0"
+    "typescript": "^2.6.2"
   }
 }

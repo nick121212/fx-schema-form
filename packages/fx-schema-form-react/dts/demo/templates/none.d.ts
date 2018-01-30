@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { PureComponent } from "react";
-import { DefaultProps } from "../../../dist";
+import { DefaultProps } from "../../index";
 import { UtilsHocOutProps } from "../../hocs/utils";
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {
     tempKey: string;

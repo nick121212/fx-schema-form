@@ -6,18 +6,18 @@ import * as ajvErrors from "ajv-errors";
 import { compose } from "recompose";
 import { Button } from "antd";
 
-import { defaultTheme, hocFactory, DefaultProps } from "FxSchemaForm";
+import fxSchemaForm, { DefaultProps } from "../../dist/main";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
 
-console.log(React, PureComponent);
+const { defaultTheme, hocFactory } = fxSchemaForm;
 
-defaultTheme.tempFactory.add("default", NoneTemp as any);
-defaultTheme.tempFactory.add("card", AntdCardTemp as any);
-defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
+fxSchemaForm.defaultTheme.tempFactory.add("default", NoneTemp as any);
+fxSchemaForm.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
+fxSchemaForm.defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
 
-defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
-defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
+fxSchemaForm.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
+fxSchemaForm.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 
 @(compose(
     hocFactory.get("validate")(),

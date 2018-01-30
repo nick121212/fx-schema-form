@@ -1,15 +1,5 @@
 {
-    "presets": [
-       
-    ],
-    "env": {
-        "plugins": [
-           
-        ],
-        "production": {
-            "plugins": [
-            ]
-        },
-        "comments": false
-    }
+    "presets": ["react"],
+    "plugins": [
+    ]
 }

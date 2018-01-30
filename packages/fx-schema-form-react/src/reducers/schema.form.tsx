@@ -1,6 +1,6 @@
 import { createAction, createReducer, SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux";
-import Immutable from "immutable";
+import * as Immutable from "immutable";
 
 import { FxReducer } from "./reducer";
 import { TreeMap } from "../libs/tree";

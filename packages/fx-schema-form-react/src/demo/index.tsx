@@ -16,7 +16,9 @@ import "antd/dist/antd.css";
 import "react-perf-tool/lib/styles.css";
 
 import { gloabelOptions, curAjv } from "./init";
-import { reducerFactory, SchemaFormActions, SchemaForm, hocFactory, schemaFormDec } from "FxSchemaForm";
+import fxSchemaForm, { DefaultProps, SchemaFormActions } from "../../dist/main";
+
+const { reducerFactory, SchemaForm, hocFactory, schemaFormDec } = fxSchemaForm;
 
 
 // 首先要解析一份schema

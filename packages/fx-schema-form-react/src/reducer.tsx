@@ -1,5 +1,5 @@
-import Immutable from "immutable";
+import Immutable, { fromJS } from "immutable";
 
 import { SchemaFormReducer } from "./reducers/schema.form";
 
-export const schemaFormReducer = new SchemaFormReducer(Immutable.fromJS({}));
+export const schemaFormReducer = new SchemaFormReducer(fromJS({}));
