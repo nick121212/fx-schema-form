@@ -2,10 +2,10 @@
   "name": "fx-schema-form-react",
   "version": "2.1.1",
   "description": "自动生成表单组件",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "types": "dts/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack ",
+    "build": "NODE_ENV=production webpack -p",
     "lint": "eslint --ext .js,.jsx src/",
     "start": "webpack-dev-server --port=8003",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
