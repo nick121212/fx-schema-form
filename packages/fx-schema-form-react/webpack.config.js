@@ -26,19 +26,12 @@ module.exports = {
                 "useBabel": true,
                 "babelOptions": {
                     "babelrc": false,
-                    /* Important line */
                     "presets": [
                         ["env"]
                     ]
                 },
                 "babelCore": "babel-core",
             },
-            exclude: /node_modules/
-        }, {
-            test: /\.jsx?$/,
-            use: [
-                'babel-loader'
-            ],
             exclude: /node_modules/
         }, {
             test: /\.css$/,
@@ -69,7 +62,7 @@ module.exports = {
             commonjs: 'redux'
         },
         "fx-schema-form-core": {
-            root: 'fx-schema-form-core',
+            root: 'SchemaFormCore',
             amd: 'fx-schema-form-core',
             commonjs2: 'fx-schema-form-core',
             commonjs: 'fx-schema-form-core'
@@ -128,11 +121,17 @@ module.exports = {
             template: "index.html"
         })
     ] : [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-              warnings: false
-            }
-          })
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false
+                },
+                output: {
+                    beautify: false
+                },
+                mangle: {
+                    eval: true
+                }
+            })
         ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
@@ -141,7 +140,7 @@ module.exports = {
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
         sourceMapFilename: "index.map",
-        library: "fx-schema-form-react",
+        library: "SchemaFormReact",
         umdNamedDefine: true,
         libraryExport: "default"
     } : {

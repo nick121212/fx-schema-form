@@ -72,7 +72,7 @@ module.exports = {
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
         sourceMapFilename: "index.map",
-        library: "fx-schema-form-core",
+        library: "SchemaFormCore",
         // umdNamedDefine: true,
         // libraryExport: "default"
     } : {
