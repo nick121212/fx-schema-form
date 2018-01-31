@@ -11,7 +11,7 @@ const regexp = /#$/g;
  * 1. 验证schema的合法性
  * 2. 提取成map
  */
-export class ResolveLib {
+export default class ResolveLib {
     public mergeSchema: JSONSchema6;
 
     constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "") {
@@ -20,7 +20,7 @@ export class ResolveLib {
             this.initSchema(ajv, schema);
         }
         // 生成map
-        this.compileSchema(schema, $id || schema.$ref);
+        this.compileSchema(schema, $id || schema.$ref || "");
     }
 
     /**
@@ -32,7 +32,7 @@ export class ResolveLib {
      * @param schema  schema
      */
     private initSchema(ajv: Ajv, schema: JSONSchema6): JSONSchema6 {
-        let $id: string = schema.$id;
+        let $id: string | undefined = schema.$id;
         // 如果没有$id, 同时没有$ref的情况下直接报错
         if (!$id && !schema.$ref) {
             throw new Error(`id is required by fx-schema-form-core.`);
@@ -116,9 +116,9 @@ export class ResolveLib {
         });
 
         // 提取其中不为空的项
-        return keys.filter((key: string) => {
-            return !!key;
-        });
+        return keys.filter((key: string | null) => {
+            return key !== null;
+        }) as string[];
     }
 
     /**

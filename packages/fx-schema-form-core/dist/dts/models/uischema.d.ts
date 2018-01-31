@@ -1,7 +1,4 @@
 import { FxJsonSchema } from "./jsonschema";
-/**
- * uiSchema的模型schema
- */
 export declare const uiSchemaSchema: {
     type: string;
     items: {
@@ -9,7 +6,6 @@ export declare const uiSchemaSchema: {
             type: string;
             minLength: number;
         } | {
-            additionalProperties: boolean;
             type: string;
             required: string[];
             properties: {

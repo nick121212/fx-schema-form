@@ -1,7 +1,7 @@
 import { Ajv, ValidateFunction } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { ResolveLib } from "../libs/resolve";
+import { default as ResolveLib } from "../libs/resolve";
 
 /**
  * 解析schema中的关键字 ref

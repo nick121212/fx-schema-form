@@ -117,7 +117,7 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
                 // } else {
                 const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
                 // maps[mapKeys] = hoc;
-                const ComponentWithHoc = hoc(Component);
+                const ComponentWithHoc: any = hoc(Component);
                 // }
 
                 // const ComponentWithHoc = this.ComponentWithHoc;

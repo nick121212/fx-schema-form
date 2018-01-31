@@ -9,9 +9,7 @@
     "test"
   ],
   "scripts": {
-    "build": "NODE_ENV=production atool-build",
-    "lint": "eslint --ext .js,.ts src/",
-    "start": "dora --plugins \"webpack\" --port 8002",
+    "build": "NODE_ENV=production webpack",
     "test": "mocha ./tests/**/*.spec.js  --require babel-register"
   },
   "repository": {
@@ -30,23 +28,22 @@
     "@types/chai": "^4.1.2",
     "@types/json-schema": "^6.0.0",
     "@types/mocha": "^2.2.47",
-    "@types/node": "^8.0.26",
-    "atool-build": "^1.0.2",
-    "atool-test-mocha": "^0.2.0",
-    "awesome-typescript-loader": "^3.2.3",
+    "@types/node": "^8.5.9",
+    "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "deep-is": "^0.1.3",
-    "dora": "^0.4.0",
-    "dora-plugin-webpack": "^1.0.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
     "eslint": "^4.16.0",
     "html-webpack-plugin": "^2.30.1",
     "ts-loader": "^3.1.1",
     "tslib": "^1.8.0",
     "tslint-loader": "^3.5.3",
-    "typescript": "^2.5.2"
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   }
 }

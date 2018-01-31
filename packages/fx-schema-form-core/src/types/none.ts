@@ -2,7 +2,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { schemaFieldFactory, schemaKeysFactory, convertKeys } from "../factory";
-import { ResolveLib } from "../libs/resolve";
+import { default as ResolveLib } from "../libs/resolve";
 
 /**
  * 解析schema中的type!=array && type!=object的结构
@@ -20,7 +20,7 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
         keys,
         schemaPath: schemaKey
     }));
-    schemaKeysFactory.add([$id].concat(keys).join("/"), schemaKey);
+    schemaKeysFactory.add([$id, ...keys].join("/"), schemaKey);
 
     return schema;
 };

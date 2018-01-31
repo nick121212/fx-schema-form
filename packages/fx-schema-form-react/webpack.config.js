@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require("webpack");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
@@ -27,13 +28,10 @@ module.exports = {
                     "babelrc": false,
                     /* Important line */
                     "presets": [
-                        ["env", {
-                            "targets": "last 2 versions, ie 11",
-                            "modules": false
-                        }]
+                        ["env"]
                     ]
                 },
-                "babelCore": "babel-core", 
+                "babelCore": "babel-core",
             },
             exclude: /node_modules/
         }, {
@@ -52,7 +50,7 @@ module.exports = {
     },
     target: "web",
     externals: __PROD__ ? {
-        "react":{
+        "react": {
             root: 'React',
             amd: 'react',
             commonjs2: 'react',
@@ -129,7 +127,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "index.html"
         })
-    ] : [],
+    ] : [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
+        ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
         filename: 'index.js',
@@ -141,7 +145,7 @@ module.exports = {
         umdNamedDefine: true,
         libraryExport: "default"
     } : {
-        path: path.resolve('./dist'),
-        filename: '[name].js',
-    }
+            path: path.resolve('./dist'),
+            filename: '[name].js',
+        }
 };

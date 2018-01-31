@@ -34,7 +34,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                 hocs.unshift("utils");
 
-                let ComponentWithHocs = compose<DefaultProps & MakeHocOutProps, any>
+                let ComponentWithHocs: any = compose<DefaultProps & MakeHocOutProps, any>
                     (...([...hocs].map(hoc => {
                         if (typeof hoc !== "string") {
                             return hoc;

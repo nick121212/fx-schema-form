@@ -2,14 +2,14 @@ import { Ajv } from "ajv";
 
 import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
-import { ResolveLib } from "./resolve";
+import { default as ResolveLib } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
 
 /**
  * 用来转换uiSchema的类
  * 如果有$ref，则直接使用
  */
-export class MergeLib {
+export default class MergeLib {
     /**
      * 合并过后的数据
      */
@@ -68,14 +68,14 @@ export class MergeLib {
      */
     private getUiSchemaKeyRecursion(uiSchemaKeys: string[], parentKeys: string[]) {
         while (uiSchemaKeys.length) {
-            let key = uiSchemaKeys.shift();
-            let keys = parentKeys.concat([key]);
+            let key: string = uiSchemaKeys.shift() || "";
+            let keys: string[] = [...parentKeys, key];
 
             if (!schemaKeysFactory.has(keys.join("/"))) {
                 throw new Error(`${keys.join("/")} did not found. do you forget to resolve schema first.`);
             }
 
-            let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+            let schema: FxJsonSchema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
 
             if (schema.$ref) {
                 parentKeys = ResolveLib.getDataKeys(schema.$ref, true);
@@ -147,9 +147,9 @@ export class MergeLib {
      *    如果是object，则遍历properties，然后合并数据
      *    如果是array，则直接返回items，然后合并数据
      */
-    private mergeUiSchema() {
+    private mergeUiSchema(): UiSchema[] {
         let idx: number = this.uiSchemas.indexOf("*");
-        let uiSchemasFirst = [], uiSchemasLast = [];
+        let uiSchemasFirst: UiSchema[] = [], uiSchemasLast: UiSchema[] = [];
 
         // 如果存在多个*，则报错
         if (this.uiSchemas.lastIndexOf("*") !== idx) {
@@ -197,7 +197,7 @@ export class MergeLib {
         // 如果是数组，获取下一级的key，然后做对比处理
         if (this.curSchema.type === "array" && this.curSchema.items) {
             let uiSchema = this.initUiSchema({
-                key: ResolveLib.getDataKeys(this.curSchema.schemaPath).join("/")
+                key: ResolveLib.getDataKeys(this.curSchema.schemaPath || "").join("/")
             });
             // let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
 

@@ -1,7 +1,7 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { ResolveLib } from "../libs/resolve";
+import { default as ResolveLib } from "../libs/resolve";
 
 /**
  * 解析schema中的type=object的结构
@@ -13,6 +13,10 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
 
             if (["properties", "items"].indexOf(key) >= 0) {
                 throw new Error(`${key}为保留关键字.`);
+            }
+
+            if (!schema.properties || !schema.properties[key]) {
+                return;
             }
 
             let propertySchemaResolve = new ResolveLib(ajv,
