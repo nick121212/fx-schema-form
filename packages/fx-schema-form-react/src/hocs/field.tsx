@@ -25,10 +25,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
         class FieldComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element | null {
                 const { currentTheme, getOptions, uiSchema } = this.props,
-                    { field, widget, type } = uiSchema as FxUiSchema;
+                    { field, widget, type } = uiSchema;
                 let FieldComponent, WidgetComponent;
-                let options = getOptions(this.props, "hoc", "field");
-
                 let calcField = field || type as string;
 
                 if (currentTheme.fieldFactory.has(calcField)) {

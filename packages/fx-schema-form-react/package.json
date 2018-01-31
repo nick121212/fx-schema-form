@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "types": "dts/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
+    "build": "NODE_ENV=production webpack ",
     "lint": "eslint --ext .js,.jsx src/",
     "start": "webpack-dev-server --port=8003",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
@@ -67,6 +67,8 @@
     "babel-runtime": "^6.9.2",
     "chai": "^4.1.2",
     "copy-webpack-plugin": "^4.2.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",

@@ -5,8 +5,11 @@ import {
 import { ResolveLib } from "fx-schema-form-core";
 import Ajv from "ajv";
 import Immutable from "immutable";
-import { createRenderer } from "react-test-renderer/shallow";
+import ShallowRenderer, { createRenderer } from "react-test-renderer/shallow";
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
 
+Enzyme.configure({ adapter: new Adapter() });
 
 export const design = {
     $async: true,
@@ -164,7 +167,13 @@ export const uiSchema = {};
 export const designResolve = new ResolveLib(curAjv, design);
 
 export const shallowRender = (Component, props) => {
-    const renderer = createRenderer();
+    const renderer = new ShallowRenderer();
     renderer.render(<Component {...props} />);
     return renderer.getRenderOutput();
+}
+
+export class AppCom extends React.PureComponent {
+    render() {
+        return <span>hello world</span>;
+    }
 }

@@ -21,7 +21,7 @@ export interface MakeHocOutProps extends UtilsHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     return (Component: any): RC<DefaultProps & MakeHocOutProps, any> => {
-        @(shouldUpdate(() => false) as any)
+        // @(shouldUpdate(() => false) as any)
         class MakeComponentHoc extends PureComponent<DefaultProps & MakeHocOutProps, any> {
             private fieldKey = "hocs";
 
@@ -35,12 +35,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 hocs.unshift("utils");
 
                 let ComponentWithHocs = compose<DefaultProps & MakeHocOutProps, any>
-                    (...[...hocs].map(hoc => {
+                    (...([...hocs].map(hoc => {
                         if (typeof hoc !== "string") {
                             return hoc;
                         }
                         return hocFactory.get(hoc)();
-                    }))(Component);
+                    })))(Component);
 
                 return <ComponentWithHocs {...this.props} />;
             }
