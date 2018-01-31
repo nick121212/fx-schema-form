@@ -1,5 +1,5 @@
 import { createAction, createReducer, SimpleActionCreator } from "redux-act";
-import { Reducer } from "redux";
+import { Reducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
 
 import { FxReducer } from "./reducer";
@@ -18,21 +18,21 @@ export interface SchemaFormActions {
 export class SchemaFormReducer<T> implements FxReducer {
 
     private createForm: SimpleActionCreator<{ key: string, data: any }>
-        = createAction("创建一个表单数据");
+        = createAction<{ key: string, data: any }>("创建一个表单数据");
     private updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>
-        = createAction("更新一个表单数据");
+        = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>("更新一个表单数据");
     private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
-        = createAction("更新一个表单元数据");
+        = createAction<{ parentKeys: string[], keys: string[], data: any }>("更新一个表单元数据");
     private addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
-        = createAction("添加一个数据");
+        = createAction<{ parentKeys: string[], keys: string[], data: any }>("添加一个数据");
     private removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>
-        = createAction("删除一个数据");
+        = createAction<{ parentKeys: string[], keys: string[], index: number }>("删除一个数据");
     private switchItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction("元素22交换位置");
+        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("元素22交换位置");
     private moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction("元素移位");
+        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("元素移位");
     private validateAll: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction("验证全部字段");
+        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("验证全部字段");
 
     /**
      * 构造
@@ -79,7 +79,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         }
 
         for (let i = 0, n = keys.length; i < n; i++) {
-            let mKeys = [].concat(keys).splice(0, i + 1);
+            let mKeys = [...keys].splice(0, i + 1);
 
             // 如果key不存在，遍历生成数据结构
             if (!state.hasIn(mKeys)) {
@@ -156,7 +156,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap = rootNode.containPath(parentKeys.concat(keys));
+            childNode: TreeMap | null = rootNode.containPath(parentKeys.concat(keys));
         let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
@@ -183,7 +183,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys).concat([index]));
+            childNode: TreeMap | null = rootNode.addChild(parentKeys.concat(keys).concat([index]));
         let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
@@ -215,7 +215,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys);
-        let formItemData: List<any>, childNode: TreeMap;
+        let formItemData: List<any>, childNode: TreeMap | null;
 
         state = this.resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
@@ -257,7 +257,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys).concat([curIndex])),
+            childNode: TreeMap | null = rootNode.containPath(parentKeys.concat(keys).concat([curIndex])),
             offset = (toIndex > curIndex && false ? 1 : 0);
         let formItemData: List<any>;
 
@@ -273,7 +273,9 @@ export class SchemaFormReducer<T> implements FxReducer {
         formItemData = formItemData.remove(curIndex);
         formItemData = formItemData.insert(toIndex - offset, curItemData);
 
-        childNode.insertToFromParent(toIndex);
+        if (childNode) {
+            childNode.insertToFromParent(toIndex);
+        }
 
         return state.setIn(dataKeys, formItemData);
     }
@@ -288,13 +290,15 @@ export class SchemaFormReducer<T> implements FxReducer {
     private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
-        let childNode: TreeMap = rootNode.addChild(parentKeys.concat(keys));
-        let value = childNode.value;
+        let childNode: TreeMap | null = rootNode.addChild(parentKeys.concat(keys));
+        let value = childNode ? childNode.value : null;
 
-        if (childNode.value) {
-            childNode.value = childNode.value.merge(data);
-        } else {
-            childNode.value = fromJS(data);
+        if (childNode) {
+            if (value) {
+                childNode.value = childNode.value.merge(data);
+            } else {
+                childNode.value = fromJS(data);
+            }
         }
 
         // if (is(childNode.value, value)) {

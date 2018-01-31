@@ -2,9 +2,10 @@ const path = require('path');
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
-const { CheckerPlugin } = require('awesome-typescript-loader')
+const {
+    CheckerPlugin
+} = require('awesome-typescript-loader');
 
 const env = process.env.NODE_ENV || "dev";
 
@@ -24,6 +25,12 @@ module.exports = {
             ],
             exclude: /node_modules/
         }, {
+            test: /\.jsx?$/,
+            use: [
+                'babel-loader'
+            ],
+            exclude: /node_modules/
+        }, {
             test: /\.css$/,
             use: [
                 'style-loader',
@@ -31,6 +38,7 @@ module.exports = {
             ]
         }]
     },
+    target: "web",
     externals: __PROD__ ? {
         "react": "React",
         "react-redux": {
@@ -110,12 +118,13 @@ module.exports = {
         filename: '[name].prd.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
+        strictModuleExceptionHandling: true,
         // sourceMapFilename: "[file].map",
         // library: "fx-schema-form-react",
         // umdNamedDefine: true,
         // libraryExport: "default"
     } : {
-            path: path.resolve('./dist'),
-            filename: '[name].js',
-        }
+        path: path.resolve('./dist'),
+        filename: '[name].js',
+    }
 };

@@ -3,11 +3,12 @@
 import React, { PureComponent } from "react";
 import { BaseFactory, MergeLib, FxJsonSchema } from "fx-schema-form-core";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
-import resolvePathname from "resolve-pathname";
 import Immutable from "immutable";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
+
+const resolvePathname = require("resolve-pathname");
 
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string) => any;
@@ -81,7 +82,17 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     return title;
                 }
 
-                return [].concat(keys).pop().toString();
+                if (keys && keys.length) {
+                    let keysCopy = [...keys], keyTitle = keysCopy.pop();
+
+                    return keyTitle ? keyTitle.toString() : "";
+                }
+
+                if (props.arrayIndex) {
+                    return props.arrayIndex.toString();
+                }
+
+                return "";
             }
 
             /**

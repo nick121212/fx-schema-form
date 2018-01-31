@@ -26,12 +26,12 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      * 遍历数据，生成子表单
      * @param idx 数组的索引
      */
-    private renderItem(idx: number): JSX.Element {
+    private renderItem(idx: number): JSX.Element | null {
         const { parentKeys, globalOptions, arrayLevel = [], ajv, ArrayItemComponent } = this.props,
             uiSchema = this.props.uiSchema as FxUiSchema;
 
         // 如果不需要children，则跳出
-        if (uiSchema.children === null) {
+        if (uiSchema.children === null || !uiSchema.schemaPath) {
             return null;
         }
 

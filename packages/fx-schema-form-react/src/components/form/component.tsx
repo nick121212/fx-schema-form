@@ -15,7 +15,7 @@ export interface Props extends DefaultProps, MergeHocOutProps {
 export class SchemaForm extends PureComponent<Props, any> {
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;
-        const formItemList = mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {
+        const formItemList = mergeSchemaList ? mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {
             let arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
 
             return <SchemaFormItem
@@ -25,7 +25,7 @@ export class SchemaForm extends PureComponent<Props, any> {
                 uiSchema={uiScehma}
                 arrayLevel={arrayLevelCopy}
             />;
-        });
+        }) : [];
 
         if (RootComponent) {
             return <RootComponent >

@@ -1,3 +1,6 @@
+
+export type Tsn = string | number;
+
 /**
  * tree map struct
  * 这里用来记录数据的元数据信息
@@ -22,10 +25,10 @@ export class TreeMap {
      * @param value 孩子的数据
      * @returns TreeMap
      */
-    public addChild(keys: Array<string | number>, value?: any): TreeMap {
+    public addChild(keys: Array<Tsn>, value?: any): TreeMap | null {
         let curKeys = this.getCurrentKeys();
         let curNode: TreeMap = this;
-        let child: TreeMap;
+        let child: TreeMap | null = null;
 
         // 与当前路径多一次对比，去掉重复的部分
         keys = keys.splice(curKeys.length);
@@ -36,7 +39,7 @@ export class TreeMap {
 
         // 创建所有路径的节点
         while (keys.length) {
-            let key: string | number = keys.shift();
+            let key: Tsn = keys.shift() as (Tsn);
             let isNumber = key.constructor === Number;
 
             child = curNode.contains(key);
@@ -58,7 +61,9 @@ export class TreeMap {
             curNode = child;
         }
 
-        child.value = value;
+        if (child) {
+            child.value = value;
+        }
 
         return child;
     }
@@ -82,8 +87,8 @@ export class TreeMap {
      * time complexity = O(1) / Constant
      * @returns string[]
      */
-    public getCurrentKeys(): Array<string | number> {
-        let keys: Array<string | number> = [];
+    public getCurrentKeys(): Array<Tsn> {
+        let keys: Array<Tsn> = [];
 
         if (this.parent) {
             keys = keys.concat(this.parent.getCurrentKeys());
@@ -98,9 +103,10 @@ export class TreeMap {
      * @returns number
      */
     public getIndexInParent(): number {
-        let children = this.parent.children;
 
         if (this.parent) {
+            let children = this.parent.children;
+
             for (let i = 0, n = children.length; i < n; i++) {
                 let child = children[i];
 
@@ -119,7 +125,7 @@ export class TreeMap {
      * @param key 节点的数据
      * @returns TreeMap
      */
-    public contains(key: string | number): TreeMap | null {
+    public contains(key: Tsn): TreeMap | null {
         let isNumber = key.constructor === Number;
 
         // 如果是数字的话，直接返回children中对应下标的元素
@@ -158,10 +164,10 @@ export class TreeMap {
      * @param keys 路径
      * @returns TreeMap | null
      */
-    public containPath(keys: Array<string | number>): TreeMap | null {
-        let node: TreeMap = this;
+    public containPath(keys: Array<Tsn>): TreeMap | null {
+        let node: TreeMap | null = this;
 
-        keys.forEach((key: string | number) => {
+        keys.forEach((key: Tsn) => {
             if (!node) {
                 return null;
             }
@@ -182,7 +188,9 @@ export class TreeMap {
     public removeFromParent(): void {
         let index = this.getIndexInParent();
 
-        this.parent.children.splice(index, 1);
+        if (this.parent) {
+            this.parent.children.splice(index, 1);
+        }
     }
 
     /**

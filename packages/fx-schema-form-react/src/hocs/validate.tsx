@@ -43,7 +43,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                         // 这里做一层try catch处理
                         try {
-                            let validateResult = await props.ajv.validate(props.uiSchema, data);
+                            let validateResult = await props.ajv.validate(props.uiSchema as Object, data);
                             result.isValid = validateResult;
 
                             // 如果验证出错，则抛出错误

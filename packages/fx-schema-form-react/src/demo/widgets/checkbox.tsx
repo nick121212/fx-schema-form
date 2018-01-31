@@ -1,9 +1,9 @@
 import React, { PureComponent, SyntheticEvent } from "react";
 
-import {  FxUiSchema } from "../../../dts/models/index";
+import {  FxUiSchema } from "../../../dist/dts/models/index";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { Checkbox } from "antd";
-import { DefaultProps } from "../../../dts/components";
+import { DefaultProps } from "../../../dist/dts/components";
 
 export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps {
 }

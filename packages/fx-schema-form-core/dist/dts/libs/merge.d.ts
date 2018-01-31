@@ -26,7 +26,7 @@ export declare class MergeLib {
      * @param parent      父亲的schema
      * @param uiSchemas   uiSchema
      */
-    constructor(ajv: Ajv, schemaPath: string, parent: UiSchema, uiSchemas: Array<UiSchema | string>);
+    constructor(ajv: Ajv, schemaPath: string, parent?: UiSchema, uiSchemas?: Array<UiSchema | string>);
     /**
      * 获取父亲的keys
      */

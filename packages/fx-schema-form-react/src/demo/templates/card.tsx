@@ -2,8 +2,8 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Card } from "antd";
 
-import { DefaultProps } from "../../../dts/components";
-import { FxUiSchema } from "../../../dts/models";
+import { DefaultProps } from "../../../dist/dts/components";
+import { FxUiSchema } from "../../../dist/dts/models";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ArrayHocOutProps } from "../../hocs/array";
 

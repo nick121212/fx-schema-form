@@ -2,7 +2,7 @@ declare const _default: {
     $id: string;
     title: string;
     type: string;
-    default: any[];
+    default: never[];
     items: {
         type: string;
         default: {};

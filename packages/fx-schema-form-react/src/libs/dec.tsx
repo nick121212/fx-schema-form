@@ -17,8 +17,8 @@ export interface SchemaFormHocOutProps {
 }
 
 export interface SchemaFormHocSettings {
-    rootReducerKey?: string[];
-    parentKeys?: string[];
+    rootReducerKey: string[];
+    parentKeys: string[];
 }
 
 export interface SchemaFormProps extends DefaultProps {
@@ -37,7 +37,7 @@ const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
  * 加入属性FieldComponent   schema对应的fieldcomponent
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
-export default (settings: SchemaFormHocSettings = {}) => {
+export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component: any): RC<SchemaFormProps, any> => {
         @(connect((state: Immutable.Map<string, any>) => {
             let dataKeys = settings.rootReducerKey.concat(settings.parentKeys).concat(["data"]),
@@ -62,7 +62,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
             }
 
             private async validateAll() {
-                let root = this.props.root,
+                let root = this.props.root as TreeMap,
                     validate = this.props.ajv.getSchema(this.props.schemaId),
                     $validateBeforeData = Immutable.fromJS({
                         dirty: true,
@@ -71,6 +71,10 @@ export default (settings: SchemaFormHocSettings = {}) => {
                     }),
                     $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }),
                     normalizeDataPath = this.normalizeDataPath;
+
+                if (!root) {
+                    return;
+                }
 
                 if (!validate) {
                     throw new Error(`没有找到对应的${this.props.schemaId};`);
@@ -106,15 +110,19 @@ export default (settings: SchemaFormHocSettings = {}) => {
                     if (!(e instanceof (ValidationError as any))) {
                         return console.error(e);
                     }
-
+                    if (!root) {
+                        return;
+                    }
                     e.errors.forEach((element: ErrorObject) => {
                         let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(this.props.schemaId, element.dataPath));
                         let childNode = root.addChild(dataKeys, Immutable.fromJS({}));
 
-                        childNode.value = childNode.value.merge($validateAfterData).merge({
-                            isValid: false,
-                            errorText: element.message
-                        });
+                        if (childNode) {
+                            childNode.value = childNode.value.merge($validateAfterData).merge({
+                                isValid: false,
+                                errorText: element.message
+                            });
+                        }
                     });
 
                     root.value = root.value.merge({
@@ -150,7 +158,7 @@ export default (settings: SchemaFormHocSettings = {}) => {
             private normalizeDataPath(schemaId: string, dataPath: string): Array<string | number> {
                 let dataKeys: Array<string | number> = dataPath.substring(1).split("/");
 
-                dataKeys = dataKeys.map((key: string, index: number) => {
+                dataKeys = dataKeys.map((key: string | number, index: number) => {
                     if (Number.isInteger(+key)) {
                         let keys: Array<string | number> = dataKeys.slice(0, index);
 

@@ -5,5 +5,5 @@ export interface Props extends DefaultProps {
 }
 export declare class SchemaFormItem extends PureComponent<Props, any> {
     constructor(props: Props, context: any);
-    render(): JSX.Element;
+    render(): JSX.Element | null;
 }

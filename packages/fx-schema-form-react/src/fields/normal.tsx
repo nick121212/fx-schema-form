@@ -21,13 +21,13 @@ export class NormalField extends PureComponent<NormalFieldProps> {
         super(props, context);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Element | null {
         const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props;
         const fieldOptions = extraProps.getOptions(this.props, "field", "normal");
         const { keys } = extraProps.uiSchema as FxUiSchema;
         let WidgetComponentWithHoc = WidgetComponent;
 
-        if (!WidgetComponent) {
+        if (!WidgetComponent || !keys) {
             return null;
         }
 

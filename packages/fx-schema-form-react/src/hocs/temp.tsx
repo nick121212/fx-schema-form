@@ -36,7 +36,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                         TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
-                        key={keys.join(".") + key}
                         tempKey={key}
                         ajv={this.props.ajv}
                         uiSchema={this.props.uiSchema}
@@ -52,7 +51,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                         getOptions={this.props.getOptions}
                         getPathKeys={this.props.getPathKeys}
                         children={prev} />;
-                }, <Component key={keys.join(".")} {...this.props} />);
+                }, <Component {...this.props} />);
             }
 
             /**
@@ -90,7 +89,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                             });
                             break;
                         case Array:
-                            [].concat(template).reverse().forEach((tml, idx) => {
+                            [...template].reverse().forEach((tml, idx) => {
                                 getTemplate(tml);
                             });
                             break;

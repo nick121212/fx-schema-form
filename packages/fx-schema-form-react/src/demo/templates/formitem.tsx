@@ -4,10 +4,10 @@ import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
 import { Form, Input, Row, Col } from "antd";
 import { FormItemProps } from "antd/lib/form/FormItem";
 
-import { DefaultProps } from "../../../dts/components/index";
+import { DefaultProps } from "../../../dist/dts/components/index";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ArrayHocOutProps } from "../../hocs/array";
-import { FxUiSchema } from "../../../dts/models/index";
+import { FxUiSchema } from "../../../dist/dts/models/index";
 
 
 export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {

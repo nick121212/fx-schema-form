@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import { DefaultProps } from "../../../dts/components";
-import { FxUiSchema } from "../../../dts/models";
+import { DefaultProps } from "../../../dist/dts/components";
+import { FxUiSchema } from "../../../dist/dts/models";
 
 import { UtilsHocOutProps } from "../../hocs/utils";
 

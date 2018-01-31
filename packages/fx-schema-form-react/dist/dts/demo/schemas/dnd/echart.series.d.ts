@@ -2,7 +2,7 @@ declare const _default: {
     type: string;
     $id: string;
     title: string;
-    default: any[];
+    default: never[];
     items: {
         type: string;
         default: {};
@@ -75,7 +75,7 @@ declare const _default: {
             };
             data: {
                 type: string;
-                default: any[];
+                default: never[];
             };
             dataDeg: {
                 type: string;

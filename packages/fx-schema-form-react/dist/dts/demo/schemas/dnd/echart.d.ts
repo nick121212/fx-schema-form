@@ -21,17 +21,17 @@ declare const _default: {
         };
         series: {
             type: string;
-            default: any[];
+            default: never[];
             $ref: string;
         };
         xAxis: {
             type: string;
-            default: any[];
+            default: never[];
             $ref: string;
         };
         yAxis: {
             type: string;
-            default: any[];
+            default: never[];
             $ref: string;
         };
     };

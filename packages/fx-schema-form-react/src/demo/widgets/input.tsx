@@ -1,10 +1,10 @@
 import React, { PureComponent, SyntheticEvent } from "react";
 import { Input } from "antd";
 
-import { FxUiSchema } from "../../../dts/models";
+import { FxUiSchema } from "../../../dist/dts/models";
 import { UtilsHocOutProps } from "../../hocs/utils";
 import { ValidateHocOutProps } from "../../hocs/validate";
-import { DefaultProps } from "../../../dts/components";
+import { DefaultProps } from "../../../dist/dts/components";
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
