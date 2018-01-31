@@ -1,15 +1,16 @@
+export declare type Tsn = string | number;
 export declare class TreeMap {
     private key;
     value: any;
     private parent;
     private children;
     constructor(key: string, value: any, parent?: TreeMap | undefined);
-    addChild(keys: Array<string | number>, value?: any): TreeMap;
+    addChild(keys: Array<Tsn>, value?: any): TreeMap | null;
     getKey(): string;
-    getCurrentKeys(): Array<string | number>;
+    getCurrentKeys(): Array<Tsn>;
     getIndexInParent(): number;
-    contains(key: string | number): TreeMap | null;
-    containPath(keys: Array<string | number>): TreeMap | null;
+    contains(key: Tsn): TreeMap | null;
+    containPath(keys: Array<Tsn>): TreeMap | null;
     removeFromParent(): void;
     switchOneToOneFromParent(toIndex: number): void;
     insertToFromParent(toIndex: number): void;

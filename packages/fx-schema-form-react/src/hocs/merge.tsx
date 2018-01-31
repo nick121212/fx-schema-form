@@ -45,7 +45,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     uiSchema.keys = uiSchema.originKeys;
                 }
 
-                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas as any);
+                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema as any, props.uiSchemas as any);
 
                 this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);

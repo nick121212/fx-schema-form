@@ -1,5 +1,5 @@
 import { SimpleActionCreator } from "redux-act";
-import { Reducer } from "redux";
+import { Reducer } from "redux-act";
 import { FxReducer } from "./reducer";
 export interface SchemaFormActions {
     createForm: SimpleActionCreator<{

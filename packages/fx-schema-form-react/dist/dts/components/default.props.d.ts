@@ -5,7 +5,7 @@ import { FxUiSchema } from "../models";
 export interface DefaultProps {
     schemaId: string;
     formId?: string;
-    uiSchema?: FxUiSchema;
+    uiSchema: FxUiSchema;
     parentKeys: string[];
     globalOptions: Immutable.Map<string, any>;
     ajv: Ajv;

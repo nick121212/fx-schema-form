@@ -30,12 +30,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 const { type } = uiSchema as FxUiSchema;
                 const fieldOptions = getOptions(this.props, "field", type as string);
                 const hocs: Array<string | ComponentEnhancer<any, any>> = settings.hocs ||
-                    uiSchema[this.fieldKey] as Array<string> || ["theme", "field", "validate", "array", "temp"];
+                    (uiSchema ? uiSchema.hocs : null) || ["theme", "field", "validate", "array", "temp"];
 
                 hocs.unshift("utils");
 
                 let ComponentWithHocs = compose<DefaultProps & MakeHocOutProps, any>
-                    (...[].concat(hocs).map(hoc => {
+                    (...[...hocs].map(hoc => {
                         if (typeof hoc !== "string") {
                             return hoc;
                         }

@@ -37,7 +37,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 return async (props: DefaultProps, data?: any) => {
                     let itemSchema: any = {},
                         defaultValue: any = {},
-                        itemUiSchema: any = props.uiSchema.items;
+                        itemUiSchema: any = props.uiSchema ? props.uiSchema.items : {};
 
                     try {
                         // 先获取默认的数据
@@ -123,8 +123,8 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
     let arrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
         @hoc
         class ArrayComponentHoc extends PureComponent<ArrayProps, any> {
-            private ArrayComponent;
-            private ArrayItemComponent;
+            private ArrayComponent: new () => React.PureComponent;
+            private ArrayItemComponent: new () => React.PureComponent;
 
             constructor(props: ArrayProps, context: any) {
                 super(props, context);
@@ -176,7 +176,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
     return branch(
         (props: ArrayProps) => {
-            const { uiSchema } = props;
+            const { uiSchema = { type: "" } } = props;
 
             return uiSchema.type === "array";
         },

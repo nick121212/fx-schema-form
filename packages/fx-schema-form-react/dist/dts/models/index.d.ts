@@ -19,6 +19,7 @@ export interface FxUiSchema extends UiSchema {
     isRequired?: boolean;
     refKeys?: string[];
     originKeys?: string[];
+    hocs?: any[];
 }
 export declare type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 export declare const models = 1;

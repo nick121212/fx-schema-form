@@ -6,7 +6,7 @@ import { reducerFactory, hocFactory, themeFactory } from "./factory";
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
 import { SchemaForm, DefaultProps, props } from "./components";
-import { RC, models } from "./models";
+import { RC, models, SchemaFormNs } from "./models";
 
 import { NormalField, ObjectField, ArrayField } from "./fields";
 import { TreeMap } from "./libs/tree";
@@ -31,7 +31,8 @@ defaultTheme.fieldFactory.add("array", ArrayField as any);
 
 themeFactory.add("default", defaultTheme as any);
 
-export {
+export default {
+    themeFactory,
     defaultTheme,
     schemaFormDec,
     TreeMap,

@@ -1,20 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var react_1 = require("react");
-exports.default = function (hocFactory, settings) {
-    if (settings === void 0) { settings = {}; }
-    return function (Component) {
-        var FieldComponentHoc = (function (_super) {
-            tslib_1.__extends(FieldComponentHoc, _super);
-            function FieldComponentHoc() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            FieldComponentHoc.prototype.render = function () {
-                var _a = this.props, currentTheme = _a.currentTheme, getOptions = _a.getOptions, uiSchema = _a.uiSchema, _b = uiSchema, field = _b.field, widget = _b.widget, type = _b.type;
-                var FieldComponent, WidgetComponent;
-                var options = getOptions(this.props, "hoc", "field");
-                var calcField = field || type;
+import React, { PureComponent } from "react";
+export default (hocFactory, settings = {}) => {
+    return (Component) => {
+        class FieldComponentHoc extends PureComponent {
+            render() {
+                const { currentTheme, getOptions, uiSchema } = this.props, { field, widget, type } = uiSchema;
+                let FieldComponent, WidgetComponent;
+                let options = getOptions(this.props, "hoc", "field");
+                let calcField = field || type;
                 if (currentTheme.fieldFactory.has(calcField)) {
                     FieldComponent = currentTheme.fieldFactory.get(calcField);
                 }
@@ -23,7 +15,7 @@ exports.default = function (hocFactory, settings) {
                         FieldComponent = currentTheme.fieldFactory.get("default");
                     }
                     else {
-                        console.error("\u627E\u4E0D\u5230field\uFF1A" + (field || type));
+                        console.error(`找不到field：${field || type}`);
                         return null;
                     }
                 }
@@ -35,13 +27,12 @@ exports.default = function (hocFactory, settings) {
                         WidgetComponent = currentTheme.widgetFactory.get("default");
                     }
                     else {
-                        console.warn("\u627E\u4E0D\u5230widget\uFF1A" + (widget || type), uiSchema);
+                        console.warn(`找不到widget：${widget || type}`, uiSchema);
                     }
                 }
-                return react_1.default.createElement(Component, tslib_1.__assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
-            };
-            return FieldComponentHoc;
-        }(react_1.PureComponent));
+                return React.createElement(Component, Object.assign({}, this.props, { FieldComponent: (FieldComponent), WidgetComponent: WidgetComponent }));
+            }
+        }
         return FieldComponentHoc;
     };
 };

@@ -57,7 +57,6 @@ npm install --save fx-schema-form-react
 - immutable
 - recompose
 - ajv
-- react-redux
 - reselect
 - redux-act
 - resolve-pathname

@@ -1,23 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var react_1 = require("react");
-var recompose_1 = require("recompose");
-var react_redux_1 = require("react-redux");
-var reselect_1 = require("reselect");
-var immutable_1 = require("immutable");
-var fxSelectorCreator = reselect_1.createSelectorCreator(reselect_1.defaultMemoize, immutable_1.is);
-var maps = {};
-exports.default = function (hocFactory, settings) {
-    if (settings === void 0) { settings = {
+import * as tslib_1 from "tslib";
+import React, { PureComponent } from "react";
+import { shouldUpdate } from "recompose";
+import { connect } from "react-redux";
+import { createSelectorCreator, defaultMemoize } from "reselect";
+import { is } from "immutable";
+const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
+const maps = {};
+export default (hocFactory, settings = {
         data: true,
         rootReducerKey: ["schemaForm"]
-    }; }
-    var getItemDataHoc = function (parentKeys, keys) {
-        var getFormItemData = function (state) {
-            var dataKeys = settings.rootReducerKey.concat(parentKeys.concat(["data"], keys));
+    }) => {
+    const getItemDataHoc = (parentKeys, keys) => {
+        let getFormItemData = (state) => {
+            let dataKeys = settings.rootReducerKey.concat([...parentKeys, "data", ...keys]);
             if (settings.data && state.hasIn(dataKeys)) {
-                var formItemData = state.getIn(dataKeys);
+                let formItemData = state.getIn(dataKeys);
                 if (formItemData !== undefined) {
                     if (!settings.dataLength) {
                         return formItemData;
@@ -28,18 +25,18 @@ exports.default = function (hocFactory, settings) {
                 }
             }
         };
-        var getFormItemMeta = function (state) {
-            var metaKeys = settings.rootReducerKey.concat(parentKeys.concat(["meta"]));
+        let getFormItemMeta = (state) => {
+            let metaKeys = settings.rootReducerKey.concat([...parentKeys, "meta"]);
             if (settings.meta && state.hasIn(metaKeys)) {
-                var rootNode = state.getIn(metaKeys);
-                var childNode = rootNode.containPath(parentKeys.concat(keys));
+                let rootNode = state.getIn(metaKeys);
+                let childNode = rootNode.containPath([...parentKeys, ...keys]);
                 if (childNode && childNode.value) {
                     return childNode.value;
                 }
             }
         };
-        return fxSelectorCreator([getFormItemData, getFormItemMeta], function (formItemData, formItemMeta) {
-            var rtn = {};
+        return fxSelectorCreator([getFormItemData, getFormItemMeta], (formItemData, formItemMeta) => {
+            const rtn = {};
             if (formItemData) {
                 rtn.formItemData = formItemData;
             }
@@ -49,23 +46,18 @@ exports.default = function (hocFactory, settings) {
             return rtn;
         });
     };
-    return function (Component) {
-        var DataComponentHoc = (function (_super) {
-            tslib_1.__extends(DataComponentHoc, _super);
-            function DataComponentHoc() {
-                return _super !== null && _super.apply(this, arguments) || this;
+    return (Component) => {
+        let DataComponentHoc = class DataComponentHoc extends PureComponent {
+            render() {
+                const { keys = [] } = this.props.uiSchema || {};
+                const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
+                const ComponentWithHoc = hoc(Component);
+                return React.createElement(ComponentWithHoc, Object.assign({}, this.props));
             }
-            DataComponentHoc.prototype.render = function () {
-                var keys = this.props.uiSchema.keys;
-                var hoc = react_redux_1.connect(getItemDataHoc(this.props.parentKeys, keys));
-                var ComponentWithHoc = hoc(Component);
-                return react_1.default.createElement(ComponentWithHoc, tslib_1.__assign({}, this.props));
-            };
-            DataComponentHoc = tslib_1.__decorate([
-                recompose_1.shouldUpdate(function () { return false; })
-            ], DataComponentHoc);
-            return DataComponentHoc;
-        }(react_1.PureComponent));
+        };
+        DataComponentHoc = tslib_1.__decorate([
+            shouldUpdate(() => false)
+        ], DataComponentHoc);
         return DataComponentHoc;
     };
 };

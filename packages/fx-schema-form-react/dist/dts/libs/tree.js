@@ -1,23 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var TreeMap = (function () {
-    function TreeMap(key, value, parent) {
+export class TreeMap {
+    constructor(key, value, parent) {
         this.key = key;
         this.value = value;
         this.parent = parent;
         this.children = [];
     }
-    TreeMap.prototype.addChild = function (keys, value) {
-        var curKeys = this.getCurrentKeys();
-        var curNode = this;
-        var child;
+    addChild(keys, value) {
+        let curKeys = this.getCurrentKeys();
+        let curNode = this;
+        let child = null;
         keys = keys.splice(curKeys.length);
         if (!keys.length) {
             return this;
         }
         while (keys.length) {
-            var key = keys.shift();
-            var isNumber = key.constructor === Number;
+            let key = keys.shift();
+            let isNumber = key.constructor === Number;
             child = curNode.contains(key);
             if (!child) {
                 if (isNumber) {
@@ -31,36 +29,38 @@ var TreeMap = (function () {
             }
             curNode = child;
         }
-        child.value = value;
+        if (child) {
+            child.value = value;
+        }
         return child;
-    };
-    TreeMap.prototype.getKey = function () {
+    }
+    getKey() {
         if (!this.key || this.key === "-") {
             return this.getIndexInParent().toString();
         }
         return this.key;
-    };
-    TreeMap.prototype.getCurrentKeys = function () {
-        var keys = [];
+    }
+    getCurrentKeys() {
+        let keys = [];
         if (this.parent) {
             keys = keys.concat(this.parent.getCurrentKeys());
         }
         return keys.concat([this.key]);
-    };
-    TreeMap.prototype.getIndexInParent = function () {
-        var children = this.parent.children;
+    }
+    getIndexInParent() {
         if (this.parent) {
-            for (var i = 0, n = children.length; i < n; i++) {
-                var child = children[i];
+            let children = this.parent.children;
+            for (let i = 0, n = children.length; i < n; i++) {
+                let child = children[i];
                 if (child && child === this) {
                     return i;
                 }
             }
         }
         return -1;
-    };
-    TreeMap.prototype.contains = function (key) {
-        var isNumber = key.constructor === Number;
+    }
+    contains(key) {
+        let isNumber = key.constructor === Number;
         if (isNumber) {
             if (this.children.length > key) {
                 return this.children[key];
@@ -73,17 +73,17 @@ var TreeMap = (function () {
         if (!this.children || this.children.length === 0) {
             return null;
         }
-        for (var i = 0; i < this.children.length; i++) {
-            var child = this.children[i];
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
             if (child && child.contains(key)) {
                 return child;
             }
         }
         return null;
-    };
-    TreeMap.prototype.containPath = function (keys) {
-        var node = this;
-        keys.forEach(function (key) {
+    }
+    containPath(keys) {
+        let node = this;
+        keys.forEach((key) => {
             if (!node) {
                 return null;
             }
@@ -93,25 +93,26 @@ var TreeMap = (function () {
             }
         });
         return node;
-    };
-    TreeMap.prototype.removeFromParent = function () {
-        var index = this.getIndexInParent();
-        this.parent.children.splice(index, 1);
-    };
-    TreeMap.prototype.switchOneToOneFromParent = function (toIndex) {
-        var curIndex = this.getIndexInParent();
+    }
+    removeFromParent() {
+        let index = this.getIndexInParent();
+        if (this.parent) {
+            this.parent.children.splice(index, 1);
+        }
+    }
+    switchOneToOneFromParent(toIndex) {
+        let curIndex = this.getIndexInParent();
         if (!this.parent || !this.parent.children || curIndex < 0) {
             return;
         }
         if (this.parent.children.length < (curIndex > toIndex ? curIndex : toIndex)) {
             return;
         }
-        _a = [this.parent.children[toIndex], this.parent.children[curIndex]], this.parent.children[curIndex] = _a[0], this.parent.children[toIndex] = _a[1];
-        var _a;
-    };
-    TreeMap.prototype.insertToFromParent = function (toIndex) {
-        var curIndex = this.getIndexInParent();
-        var offset = (toIndex > curIndex && false ? 1 : 0);
+        [this.parent.children[curIndex], this.parent.children[toIndex]] = [this.parent.children[toIndex], this.parent.children[curIndex]];
+    }
+    insertToFromParent(toIndex) {
+        let curIndex = this.getIndexInParent();
+        let offset = (toIndex > curIndex && false ? 1 : 0);
         if (!this.parent || !this.parent.children || curIndex < 0) {
             return;
         }
@@ -121,23 +122,20 @@ var TreeMap = (function () {
         this.removeFromParent();
         this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
             .concat(this.parent.children.splice(toIndex - offset));
-    };
-    TreeMap.prototype.forEach = function (clearFunc, currentNode) {
-        if (currentNode === void 0) { currentNode = false; }
+    }
+    forEach(clearFunc, currentNode = false) {
         if (currentNode) {
             this.value = clearFunc(this);
         }
         if (!this.children) {
             return;
         }
-        for (var i = 0, n = this.children.length; i < n; i++) {
+        for (let i = 0, n = this.children.length; i < n; i++) {
             if (this.children[i]) {
                 this.children[i].value = clearFunc(this.children[i]);
                 this.children[i].forEach(clearFunc);
             }
         }
-    };
-    return TreeMap;
-}());
-exports.TreeMap = TreeMap;
+    }
+}
 //# sourceMappingURL=tree.js.map

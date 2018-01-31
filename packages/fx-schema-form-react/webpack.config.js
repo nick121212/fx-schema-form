@@ -19,10 +19,22 @@ module.exports = {
     module: {
         rules: [{
             test: /\.tsx?$/,
-            use: [
-                'babel-loader',
-                'awesome-typescript-loader',
-            ],
+            loader: 'awesome-typescript-loader',
+            options: {
+                "transpileOnly": false,
+                "useBabel": true,
+                "babelOptions": {
+                    "babelrc": false,
+                    /* Important line */
+                    "presets": [
+                        ["env", {
+                            "targets": "last 2 versions, ie 11",
+                            "modules": false
+                        }]
+                    ]
+                },
+                "babelCore": "babel-core", 
+            },
             exclude: /node_modules/
         }, {
             test: /\.jsx?$/,
@@ -115,14 +127,14 @@ module.exports = {
     ] : [],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
-        filename: '[name].prd.js',
+        filename: 'index.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
-        // sourceMapFilename: "[file].map",
-        // library: "fx-schema-form-react",
-        // umdNamedDefine: true,
-        // libraryExport: "default"
+        sourceMapFilename: "index.map",
+        library: "fx-schema-form-react",
+        umdNamedDefine: true,
+        libraryExport: "default"
     } : {
         path: path.resolve('./dist'),
         filename: '[name].js',

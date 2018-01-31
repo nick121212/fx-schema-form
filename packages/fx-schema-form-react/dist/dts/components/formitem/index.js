@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var component_1 = require("./component");
-exports.SchemaFormItem = component_1.SchemaFormItem;
+import { SchemaFormItem } from "./component";
+export { SchemaFormItem };
 //# sourceMappingURL=index.js.map

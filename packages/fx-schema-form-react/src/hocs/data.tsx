@@ -99,13 +99,13 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
      * 加入属性
      * arrayItems
      */
-    return (Component: any): RC<DataHocOutProps, any> => {
+    return (Component: any): RC<DefaultProps, any> => {
         @(shouldUpdate(() => false) as any)
-        class DataComponentHoc extends PureComponent<DataHocOutProps, any> {
-            private ComponentWithHoc;
+        class DataComponentHoc extends PureComponent<DefaultProps, any> {
+            // private ComponentWithHoc;
 
             public render(): JSX.Element {
-                const { keys } = this.props.uiSchema as FxUiSchema;
+                const { keys = [] } = this.props.uiSchema || {};
                 // const mapKeys = [...this.props.parentKeys, ...keys,
                 // settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
 

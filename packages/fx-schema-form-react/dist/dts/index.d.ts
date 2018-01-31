@@ -1,12 +1,23 @@
+/// <reference types="react" />
+import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
-import { reducerFactory, hocFactory } from "./factory";
+import { FxReducer } from "./reducers/reducer";
 import { SchemaForm, DefaultProps } from "./components";
-import { RC } from "./models";
+import { RC, SchemaFormNs } from "./models";
 import { TreeMap } from "./libs/tree";
-import { default as schemaFormDec } from "./libs/dec";
-declare const defaultTheme: {
-    tempFactory: BaseFactory<RC<DefaultProps, any>>;
-    fieldFactory: BaseFactory<RC<DefaultProps, any>>;
-    widgetFactory: BaseFactory<RC<DefaultProps, any>>;
+import { SchemaFormHocSettings } from "./libs/dec";
+import { SchemaFormProps } from "./libs/dec";
+declare const _default: {
+    themeFactory: BaseFactory<SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>>;
+    defaultTheme: {
+        tempFactory: BaseFactory<RC<DefaultProps, any>>;
+        fieldFactory: BaseFactory<RC<DefaultProps, any>>;
+        widgetFactory: BaseFactory<RC<DefaultProps, any>>;
+    };
+    schemaFormDec: (settings?: SchemaFormHocSettings) => (Component: any) => RC<SchemaFormProps, any>;
+    TreeMap: typeof TreeMap;
+    reducerFactory: BaseFactory<FxReducer>;
+    SchemaForm: typeof SchemaForm;
+    hocFactory: BaseFactory<(settings?: any) => new () => React.PureComponent<DefaultProps, any>>;
 };
-export { defaultTheme, schemaFormDec, TreeMap, reducerFactory, SchemaForm, hocFactory };
+export default _default;

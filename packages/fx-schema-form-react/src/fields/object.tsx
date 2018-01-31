@@ -13,12 +13,12 @@ export interface ObjectFieldProps extends DefaultProps {
  * 嵌套一层SchemaForm
  */
 export class ObjectField extends PureComponent<ObjectFieldProps, any> {
-    public render(): JSX.Element {
+    public render(): JSX.Element | null {
         const uiSchema = this.props.uiSchema as FxUiSchema,
             { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, schemaId } = this.props;
 
         // 如果children设置成null，则返回空
-        if (uiSchema.children === null) {
+        if (uiSchema.children === null || !uiSchema.schemaPath) {
             return null;
         }
 

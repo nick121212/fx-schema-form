@@ -4,11 +4,11 @@ import React, { PureComponent } from "react";
 import { BaseFactory, MergeLib, FxJsonSchema } from "fx-schema-form-core";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import Immutable from "immutable";
-
+import resolvePathname from "resolve-pathname";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
 
-const resolvePathname = require("resolve-pathname");
+// const resolvePathname = require("resolve-pathname");
 
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string) => any;

@@ -28,7 +28,7 @@ export class MergeLib {
      * @param parent      父亲的schema
      * @param uiSchemas   uiSchema
      */
-    constructor(ajv: Ajv, private schemaPath: string, public parent?: UiSchema, private uiSchemas: Array<UiSchema | string> = ["*"]) {
+    constructor(ajv: Ajv, private schemaPath: string, public parent: UiSchema | null = null, private uiSchemas: Array<UiSchema | string> = ["*"]) {
         if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
             throw ajv.errors;
         }

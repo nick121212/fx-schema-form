@@ -1,60 +1,44 @@
-"use strict";
-var _this = this;
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
-var react_1 = require("react");
-var recompose_1 = require("recompose");
-var reducer_1 = require("../reducer");
-exports.default = function (hocFactory, settings) {
-    if (settings === void 0) { settings = {}; }
-    var hoc = recompose_1.compose(recompose_1.withHandlers({
-        addItem: function (propsCur) {
-            return function (props, data) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                var itemSchema, defaultValue, itemUiSchema, e_1;
-                return tslib_1.__generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            itemSchema = {}, defaultValue = {}, itemUiSchema = props.uiSchema.items;
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, 4, 5]);
-                            return [4, props.ajv.validate({
-                                    type: "object",
-                                    properties: {
-                                        defaultData: itemUiSchema
-                                    }
-                                }, defaultValue)];
-                        case 2:
-                            _a.sent();
-                            return [3, 5];
-                        case 3:
-                            e_1 = _a.sent();
-                            console.log(e_1);
-                            return [3, 5];
-                        case 4:
-                            reducer_1.schemaFormReducer.actions.addItem({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
-                                data: defaultValue.defaultData
-                            });
-                            return [7];
-                        case 5: return [2];
-                    }
-                });
-            }); };
+import * as tslib_1 from "tslib";
+import React, { PureComponent } from "react";
+import { branch, compose, withHandlers } from "recompose";
+import { schemaFormReducer } from "../reducer";
+export default (hocFactory, settings = {}) => {
+    const hoc = compose(withHandlers({
+        addItem: (propsCur) => {
+            return (props, data) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                let itemSchema = {}, defaultValue = {}, itemUiSchema = props.uiSchema ? props.uiSchema.items : {};
+                try {
+                    yield props.ajv.validate({
+                        type: "object",
+                        properties: {
+                            defaultData: itemUiSchema
+                        }
+                    }, defaultValue);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+                finally {
+                    schemaFormReducer.actions.addItem({
+                        parentKeys: props.parentKeys,
+                        keys: props.uiSchema.keys,
+                        data: defaultValue.defaultData
+                    });
+                }
+            });
         },
-        removeItem: function (propsCur) {
-            return function (parentKeys, keys, index) {
-                reducer_1.schemaFormReducer.actions.removeItem({
+        removeItem: (propsCur) => {
+            return (parentKeys, keys, index) => {
+                schemaFormReducer.actions.removeItem({
                     parentKeys: parentKeys,
                     keys: keys,
                     index: index
                 });
             };
         },
-        switchItem: function (propsCur) {
-            return function (parentKeys, keys, curIndex, toIndex) {
-                reducer_1.schemaFormReducer.actions.switchItem({
+        switchItem: (propsCur) => {
+            return (parentKeys, keys, curIndex, toIndex) => {
+                schemaFormReducer.actions.switchItem({
                     parentKeys: parentKeys,
                     keys: keys,
                     curIndex: curIndex,
@@ -62,9 +46,9 @@ exports.default = function (hocFactory, settings) {
                 });
             };
         },
-        moveItem: function (propsCur) {
-            return function (parentKeys, keys, curIndex, toIndex) {
-                reducer_1.schemaFormReducer.actions.moveToItem({
+        moveItem: (propsCur) => {
+            return (parentKeys, keys, curIndex, toIndex) => {
+                schemaFormReducer.actions.moveToItem({
                     parentKeys: parentKeys,
                     keys: keys,
                     curIndex: curIndex,
@@ -72,70 +56,62 @@ exports.default = function (hocFactory, settings) {
                 });
             };
         },
-        initArrayComponent: function (propsCur) {
-            return function (props, index) {
-                var ArrayComponent = props.ArrayComponent, ArrayItemComponent = props.ArrayItemComponent, extraProps = tslib_1.__rest(props, ["ArrayComponent", "ArrayItemComponent"]), uiSchema = props.uiSchema;
+        initArrayComponent: (propsCur) => {
+            return (props, index) => {
+                const { ArrayComponent, ArrayItemComponent } = props, extraProps = tslib_1.__rest(props, ["ArrayComponent", "ArrayItemComponent"]), uiSchema = props.uiSchema;
                 if (uiSchema.type === "array") {
-                    return ArrayComponent ? react_1.default.createElement(ArrayComponent, tslib_1.__assign({}, extraProps)) : null;
+                    return ArrayComponent ? React.createElement(ArrayComponent, Object.assign({}, extraProps)) : null;
                 }
-                return ArrayItemComponent ? react_1.default.createElement(ArrayItemComponent, tslib_1.__assign({}, extraProps)) : null;
+                return ArrayItemComponent ? React.createElement(ArrayItemComponent, Object.assign({}, extraProps)) : null;
             };
         }
     }));
-    var arrayHoc = function (Component) {
-        var ArrayComponentHoc = (function (_super) {
-            tslib_1.__extends(ArrayComponentHoc, _super);
-            function ArrayComponentHoc(props, context) {
-                var _this = _super.call(this, props, context) || this;
-                _this.initArrayComponents();
-                return _this;
+    let arrayHoc = (Component) => {
+        let ArrayComponentHoc = class ArrayComponentHoc extends PureComponent {
+            constructor(props, context) {
+                super(props, context);
+                this.initArrayComponents();
             }
-            ArrayComponentHoc.prototype.initArrayComponents = function () {
-                var getOptions = this.props.getOptions;
-                var hocOptions = getOptions(this.props, "hoc", "array");
+            initArrayComponents() {
+                const { getOptions } = this.props;
+                const hocOptions = getOptions(this.props, "hoc", "array");
                 if (hocOptions.ArrayComponent) {
                     this.ArrayComponent = hocOptions.ArrayComponent;
                 }
                 if (hocOptions.ArrayItemComponent) {
                     this.ArrayItemComponent = hocOptions.ArrayItemComponent;
                 }
-            };
-            ArrayComponentHoc.prototype.render = function () {
-                var props = {};
+            }
+            render() {
+                let props = {};
                 if (this.ArrayComponent) {
                     props.ArrayComponent = this.ArrayComponent;
                 }
                 if (this.ArrayItemComponent) {
                     props.ArrayItemComponent = this.ArrayItemComponent;
                 }
-                return react_1.default.createElement(Component, tslib_1.__assign({}, this.props, props));
-            };
-            ArrayComponentHoc = tslib_1.__decorate([
-                hoc,
-                tslib_1.__metadata("design:paramtypes", [Object, Object])
-            ], ArrayComponentHoc);
-            return ArrayComponentHoc;
-        }(react_1.PureComponent));
+                return React.createElement(Component, Object.assign({}, this.props, props));
+            }
+        };
+        ArrayComponentHoc = tslib_1.__decorate([
+            hoc,
+            tslib_1.__metadata("design:paramtypes", [Object, Object])
+        ], ArrayComponentHoc);
         return ArrayComponentHoc;
     };
-    var pureHoc = function (Component) {
-        var ArrayPureComponentHoc = (function (_super) {
-            tslib_1.__extends(ArrayPureComponentHoc, _super);
-            function ArrayPureComponentHoc() {
-                return _super !== null && _super.apply(this, arguments) || this;
+    let pureHoc = (Component) => {
+        let ArrayPureComponentHoc = class ArrayPureComponentHoc extends React.PureComponent {
+            render() {
+                return React.createElement(Component, Object.assign({}, this.props));
             }
-            ArrayPureComponentHoc.prototype.render = function () {
-                return react_1.default.createElement(Component, tslib_1.__assign({}, this.props));
-            };
-            ArrayPureComponentHoc = tslib_1.__decorate([
-                hoc
-            ], ArrayPureComponentHoc);
-            return ArrayPureComponentHoc;
-        }(react_1.default.PureComponent));
+        };
+        ArrayPureComponentHoc = tslib_1.__decorate([
+            hoc
+        ], ArrayPureComponentHoc);
         return ArrayPureComponentHoc;
     };
-    return recompose_1.branch(function (props) {
-        var uiSchema = props.uiSchema;
+    return branch((props) => {
+        const { uiSchema = { type: "" } } = props;
         return uiSchema.type === "array";
     }, arrayHoc, pureHoc);
 };
