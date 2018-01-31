@@ -121,17 +121,17 @@ module.exports = {
             template: "index.html"
         })
     ] : [
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false
-                },
-                output: {
-                    beautify: false
-                },
-                mangle: {
-                    eval: true
-                }
-            })
+            // new webpack.optimize.UglifyJsPlugin({
+            //     compress: {
+            //         warnings: false
+            //     },
+            //     output: {
+            //         beautify: false
+            //     },
+            //     mangle: {
+            //         eval: true
+            //     }
+            // })
         ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),

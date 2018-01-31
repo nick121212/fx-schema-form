@@ -39,13 +39,13 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             constructor(props: MergeHocProps) {
                 super(props);
 
-                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : null;
+                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : undefined;
 
                 if (uiSchema) {
                     uiSchema.keys = uiSchema.originKeys;
                 }
 
-                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema as any, props.uiSchemas as any);
+                const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas as any);
 
                 this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v: any) => {
                     return this.mergeKeys(v);

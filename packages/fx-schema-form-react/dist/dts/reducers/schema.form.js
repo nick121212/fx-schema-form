@@ -1,6 +1,8 @@
 import { createAction, createReducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
+import { a } from "./reducer";
 import { TreeMap } from "../libs/tree";
+const b = a;
 export class SchemaFormReducer {
     constructor(initialState) {
         this.initialState = initialState;

@@ -1,11 +1,11 @@
 import React, { PureComponent, SyntheticEvent } from "react";
 
-import {  FxUiSchema } from "../../../dist/dts/models/index";
-import { UtilsHocOutProps } from "../../hocs/utils";
 import { Checkbox } from "antd";
-import { DefaultProps } from "../../../dist/dts/components";
+import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/dts/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/dist/dts/hocs/validate";
 
-export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps {
+export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 
 export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
@@ -23,14 +23,13 @@ export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
     }
 
     public render(): JSX.Element {
-        const { getOptions, uiSchema } = this.props;
+        const { getOptions, uiSchema, updateItemMeta } = this.props;
         const { keys } = uiSchema;
         const { readonly = false } = uiSchema as any;
 
         return (
             <Checkbox onChange={(e: SyntheticEvent<HTMLInputElement>) => {
-                // updateItemData((e.target as any).checked);
-                // validate((e.target as any).checked);
+                updateItemMeta(this.props, (e.target as any).checked);
             }}
                 disabled={readonly}
                 {...getOptions(this.props, "widget", "checkbox") }

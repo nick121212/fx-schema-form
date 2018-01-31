@@ -7,7 +7,7 @@ export type Tsn = string | number;
  * 元数据信息包括，isValid，isLoading，isShow，...etc
  */
 export class TreeMap {
-    private children: TreeMap[] = [];
+    public children: TreeMap[] = [];
 
     /**
      * 构造函数

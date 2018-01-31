@@ -15,5 +15,13 @@ defaultTheme.fieldFactory.add("default", NormalField);
 defaultTheme.fieldFactory.add("object", ObjectField);
 defaultTheme.fieldFactory.add("array", ArrayField);
 themeFactory.add("default", defaultTheme);
-export { defaultTheme, schemaFormDec, TreeMap, reducerFactory, SchemaForm, hocFactory };
+export default {
+    themeFactory,
+    defaultTheme,
+    schemaFormDec,
+    TreeMap,
+    reducerFactory,
+    SchemaForm,
+    hocFactory
+};
 //# sourceMappingURL=index.js.map

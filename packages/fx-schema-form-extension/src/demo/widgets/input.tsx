@@ -1,10 +1,9 @@
 import React, { PureComponent, SyntheticEvent } from "react";
 import { Input } from "antd";
+import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/dts/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/dist/dts/hocs/validate";
 
-import { FxUiSchema } from "../../../dist/dts/models";
-import { UtilsHocOutProps } from "../../hocs/utils";
-import { ValidateHocOutProps } from "../../hocs/validate";
-import { DefaultProps } from "../../../dist/dts/components";
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
@@ -25,7 +24,7 @@ export class AntdInputWidget extends PureComponent<AntdInputWidgetProps, any> {
 
     public render(): JSX.Element {
         const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
-        const { keys } = uiSchema as FxUiSchema;
+        const { keys } = uiSchema;
         const { readonly = false } = uiSchema as any;
 
         return (

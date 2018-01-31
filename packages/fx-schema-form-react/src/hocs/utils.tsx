@@ -85,7 +85,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 if (keys && keys.length) {
                     let keysCopy = [...keys], keyTitle = keysCopy.pop();
 
-                    return keyTitle ? keyTitle.toString() : "";
+                    return keyTitle !== undefined ? keyTitle.toString() : "";
                 }
 
                 if (props.arrayIndex) {

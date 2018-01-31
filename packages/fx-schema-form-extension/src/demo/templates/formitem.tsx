@@ -3,11 +3,10 @@ import { connect } from "react-redux";
 import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
 import { Form, Input, Row, Col } from "antd";
 import { FormItemProps } from "antd/lib/form/FormItem";
+import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/dts/hocs/utils";
+import { ArrayHocOutProps } from "fx-schema-form-react/dist/dts/hocs/array";
 
-import { DefaultProps } from "../../../dist/dts/components/index";
-import { UtilsHocOutProps } from "../../hocs/utils";
-import { ArrayHocOutProps } from "../../hocs/array";
-import { FxUiSchema } from "../../../dist/dts/models/index";
 
 
 export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {
@@ -19,7 +18,7 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
         const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta, initArrayComponent } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);
         const { hasFeedback = true } = tempOptions;
-        const uiSchema = this.props.uiSchema as FxUiSchema;
+        const uiSchema = this.props.uiSchema;
         let props: FormItemProps = {};
         let { dirty = false, isValid = true, errorText = "", isLoading = false } = formItemMeta ? formItemMeta.toJS() : {};
 
@@ -33,7 +32,7 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
 
         return (
             <Form.Item
-                key={uiSchema.keys.join() + tempKey + isValid}
+                key={(uiSchema.keys || []).join() + tempKey + isValid}
                 required={uiSchema.isRequired}
                 label={getTitle(this.props)}
                 extra={uiSchema.description}

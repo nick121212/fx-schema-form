@@ -138,8 +138,6 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         return node.value;
                     }, true);
 
-                    console.log(root.value);
-
                     actions.updateItemMeta({
                         parentKeys: settings.parentKeys,
                         keys: [],
@@ -184,7 +182,10 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                 return (
                     <div>
-                        <Component validateAll={this._validateAll} {...this.props} />
+                        <Component
+                            validateAll={this._validateAll}
+                            parentKeys={settings.parentKeys}
+                            {...this.props} />
                         {isValid.toString() + isValidating.toString()}
                         {
                             isValid ? null : errors ? errors.map((e: Immutable.Map<string, any>) => {

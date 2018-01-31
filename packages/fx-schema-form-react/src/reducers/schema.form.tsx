@@ -2,8 +2,10 @@ import { createAction, createReducer, SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
 
-import { FxReducer } from "./reducer";
+import { FxReducer, a } from "./reducer";
 import { TreeMap } from "../libs/tree";
+
+const b = a;
 
 export interface SchemaFormActions {
     createForm: SimpleActionCreator<{ key: string, data: any }>;
@@ -304,8 +306,9 @@ export class SchemaFormReducer<T> implements FxReducer {
         // if (is(childNode.value, value)) {
         //     return state;
         // }
+        let newRoot = new TreeMap(rootNode.getKey(), rootNode.value);
 
-        let newRoot = Object.assign({}, rootNode, TreeMap.prototype);
+        newRoot.children = rootNode.children;
 
         return state.setIn(metaKeys, newRoot);
     }

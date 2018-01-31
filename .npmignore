@@ -8,3 +8,6 @@
 /packages/**/tslint.json
 /packages/**/webpack.config.js
 /packages/**/src
+/packages/**/dts
+/packages/**/readme.md
+/packages/**/images

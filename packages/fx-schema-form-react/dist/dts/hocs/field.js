@@ -5,7 +5,6 @@ export default (hocFactory, settings = {}) => {
             render() {
                 const { currentTheme, getOptions, uiSchema } = this.props, { field, widget, type } = uiSchema;
                 let FieldComponent, WidgetComponent;
-                let options = getOptions(this.props, "hoc", "field");
                 let calcField = field || type;
                 if (currentTheme.fieldFactory.has(calcField)) {
                     FieldComponent = currentTheme.fieldFactory.get(calcField);

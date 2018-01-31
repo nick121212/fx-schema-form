@@ -1,9 +1,8 @@
-import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
-import { compose, shouldUpdate } from "recompose";
+import { compose } from "recompose";
 export default (hocFactory, settings = {}) => {
     return (Component) => {
-        let MakeComponentHoc = class MakeComponentHoc extends PureComponent {
+        class MakeComponentHoc extends PureComponent {
             constructor() {
                 super(...arguments);
                 this.fieldKey = "hocs";
@@ -15,18 +14,15 @@ export default (hocFactory, settings = {}) => {
                 const hocs = settings.hocs ||
                     (uiSchema ? uiSchema.hocs : null) || ["theme", "field", "validate", "array", "temp"];
                 hocs.unshift("utils");
-                let ComponentWithHocs = compose(...[...hocs].map(hoc => {
+                let ComponentWithHocs = compose(...([...hocs].map(hoc => {
                     if (typeof hoc !== "string") {
                         return hoc;
                     }
                     return hocFactory.get(hoc)();
-                }))(Component);
+                })))(Component);
                 return React.createElement(ComponentWithHocs, Object.assign({}, this.props));
             }
-        };
-        MakeComponentHoc = tslib_1.__decorate([
-            shouldUpdate(() => false)
-        ], MakeComponentHoc);
+        }
         return MakeComponentHoc;
     };
 };

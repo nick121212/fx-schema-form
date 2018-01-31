@@ -4,3 +4,5 @@ export interface FxReducer {
     actions: any;
     reducer: Reducer<any>;
 }
+
+export const a = 1;

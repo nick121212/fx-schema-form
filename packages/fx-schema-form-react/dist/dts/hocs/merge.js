@@ -7,7 +7,7 @@ export default (hocFactory, settings = {}) => {
         class MergeComponentHoc extends PureComponent {
             constructor(props) {
                 super(props);
-                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : null;
+                const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : undefined;
                 if (uiSchema) {
                     uiSchema.keys = uiSchema.originKeys;
                 }

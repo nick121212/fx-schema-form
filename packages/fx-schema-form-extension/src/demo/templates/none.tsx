@@ -1,8 +1,6 @@
 import React, { PureComponent } from "react";
-import { DefaultProps } from "../../../dist/dts/components";
-import { FxUiSchema } from "../../../dist/dts/models";
-
-import { UtilsHocOutProps } from "../../hocs/utils";
+import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/dts/hocs/utils";
 
 export interface DivTempProps extends DefaultProps, UtilsHocOutProps {
     tempKey: string;
