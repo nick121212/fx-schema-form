@@ -1,11 +1,11 @@
 {
   "name": "fx-schema-form-react",
-  "version": "2.1.1",
+  "version": "3.0.9",
   "description": "自动生成表单组件",
   "main": "dist/index.js",
   "types": "dts/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
+    "build": "NODE_ENV=production webpack",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
   },
   "author": "NICK",
@@ -29,7 +29,7 @@
     "ajv": "^6.1.0",
     "babel-preset-react": "^6.24.1",
     "dist": "^0.1.2",
-    "fx-schema-form-core": "^3.0.0",
+    "fx-schema-form-core": "^3.0.9",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-immutable-render-mixin": "^0.9.7",
