@@ -52,7 +52,12 @@ module.exports = {
     },
     target: "web",
     externals: __PROD__ ? {
-        "react": "React",
+        "react":{
+            root: 'React',
+            amd: 'react',
+            commonjs2: 'react',
+            commonjs: 'react'
+        },
         "react-redux": {
             root: 'react-redux',
             amd: 'react-redux',
