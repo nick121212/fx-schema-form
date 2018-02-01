@@ -12,7 +12,7 @@ const regexp = /#$/g;
  * 2. 提取成map
  */
 export default class ResolveLib {
-    public mergeSchema: JSONSchema6;
+    public mergeSchema: JSONSchema6 = {};
 
     constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "") {
         // 验证schema的完整性

@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import ajv from "ajv";
 import { PureComponent } from "react";
-import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 export declare class ArrayComponent extends PureComponent<DefaultProps & any> {
     private addItem;
     private hideItems;

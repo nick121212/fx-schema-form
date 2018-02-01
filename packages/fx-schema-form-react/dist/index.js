@@ -1142,6 +1142,32 @@ exports.default = function (hocFactory) {
                                 case 9:
                                     _context.prev = 9;
 
+                                    if (!(propsCur.uiSchema && propsCur.uiSchema.items)) {
+                                        _context.next = 20;
+                                        break;
+                                    }
+
+                                    _context.t1 = propsCur.uiSchema.items.type;
+                                    _context.next = _context.t1 === "object" ? 14 : _context.t1 === "array" ? 17 : 19;
+                                    break;
+
+                                case 14:
+                                    if (!defaultValue.defaultData) {
+                                        defaultValue.defaultData = data || {};
+                                    }
+                                    Object.assign(defaultValue.defaultData, data);
+                                    return _context.abrupt("break", 20);
+
+                                case 17:
+                                    if (!defaultValue.defaultData) {
+                                        defaultValue.defaultData = data || [];
+                                    }
+                                    return _context.abrupt("break", 20);
+
+                                case 19:
+                                    return _context.abrupt("break", 20);
+
+                                case 20:
                                     _reducer.schemaFormReducer.actions.addItem({
                                         parentKeys: props.parentKeys,
                                         keys: props.uiSchema.keys,
@@ -1149,12 +1175,12 @@ exports.default = function (hocFactory) {
                                     });
                                     return _context.finish(9);
 
-                                case 12:
+                                case 22:
                                 case "end":
                                     return _context.stop();
                             }
                         }
-                    }, _callee, this, [[1, 6, 9, 12]]);
+                    }, _callee, this, [[1, 6, 9, 22]]);
                 }));
             };
         },
@@ -2757,9 +2783,7 @@ exports.default = function () {
                         _props$isValidating = _props.isValidating,
                         isValidating = _props$isValidating === undefined ? false : _props$isValidating;
 
-                    return _react2.default.createElement("div", null, _react2.default.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys }, this.props)), isValid.toString() + isValidating.toString(), isValid ? null : errors ? errors.map(function (e) {
-                        return _react2.default.createElement("div", { key: e.get("dataPath") }, e.get("message"));
-                    }) : null);
+                    return _react2.default.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys }, this.props));
                 }
             }]);
 

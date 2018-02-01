@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require("webpack");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
 const {
     CheckerPlugin
@@ -12,7 +11,7 @@ const __DEV__ = env.toUpperCase() == "DEV" || env.toUpperCase() == "DEVELOPMENT"
 const __PROD__ = env.toUpperCase() == "PRODUCTION";
 
 module.exports = {
-    entry: __PROD__ ? "./src/index.ts" : "./src/demo/index.ts",
+    entry: __PROD__ ? path.resolve("./src/index.ts") : "./src/demo/index.ts",
     devServer: devServer,
     devtool: 'source-map',
     module: {
@@ -45,9 +44,8 @@ module.exports = {
             ]
         }]
     },
-    target: "web",
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts']
     },
     plugins: !__PROD__ ? [
         new webpack.optimize.ModuleConcatenationPlugin(),

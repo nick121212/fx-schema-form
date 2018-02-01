@@ -1,4 +1,4 @@
-import { FxJsonSchema } from "./jsonschema";
+import { FxJsonSchema , a } from "./jsonschema";
 
 let string = "string";
 
@@ -10,7 +10,7 @@ export const uiSchemaSchema = {
     items: {
         anyOf: [{
             type: string,
-            minLength: 1
+            minLength: a
         }, {
             type: "object",
             required: ["key"],

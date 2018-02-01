@@ -11,6 +11,7 @@ import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
 import { schemaFormReducer } from "../reducer";
+import { JSONSchema6 } from "json-schema";
 
 export interface ArrayHocOutProps {
     addItem: (props: DefaultProps, data?: any) => Promise<void>;
@@ -50,7 +51,24 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     } catch (e) {
                         console.log(e);
                     } finally {
-                        // if(defaultValue.defaultData)
+                        if (propsCur.uiSchema && propsCur.uiSchema.items) {
+                            switch ((propsCur.uiSchema.items as JSONSchema6).type) {
+                                case "object":
+                                    if (!defaultValue.defaultData) {
+                                        defaultValue.defaultData = data || {};
+                                    }
+                                    Object.assign(defaultValue.defaultData, data);
+                                    break;
+                                case "array":
+                                    if (!defaultValue.defaultData) {
+                                        defaultValue.defaultData = data || [];
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
                         schemaFormReducer.actions.addItem({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,

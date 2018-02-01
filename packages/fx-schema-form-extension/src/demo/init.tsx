@@ -9,7 +9,7 @@ import { Button } from "antd";
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
-import { DefaultProps } from "fx-schema-form-react/dist/dts/components";
+import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 
 
 schemaFormReact.defaultTheme.tempFactory.add("default", NoneTemp as any);

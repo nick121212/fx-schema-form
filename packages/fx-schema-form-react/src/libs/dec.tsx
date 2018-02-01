@@ -12,9 +12,7 @@ import { hocFactory, reducerFactory } from "../factory";
 import { TreeMap } from "./tree";
 import { SchemaFormActions } from "../reducers/schema.form";
 
-export interface SchemaFormHocOutProps {
-    validateAll: () => Promise<any>;
-}
+
 
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
@@ -27,6 +25,10 @@ export interface SchemaFormProps extends DefaultProps {
     errors?: any;
     isValid?: boolean;
     isValidating?: boolean;
+}
+
+export interface SchemaFormHocOutProps extends SchemaFormProps {
+    validateAll?: () => Promise<any>;
 }
 
 const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
@@ -181,18 +183,10 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 const { errors, isValid = false, isValidating = false } = this.props;
 
                 return (
-                    <div>
-                        <Component
-                            validateAll={this._validateAll}
-                            parentKeys={settings.parentKeys}
-                            {...this.props} />
-                        {isValid.toString() + isValidating.toString()}
-                        {
-                            isValid ? null : errors ? errors.map((e: Immutable.Map<string, any>) => {
-                                return <div key={e.get("dataPath")}>{e.get("message")}</div>;
-                            }) : null
-                        }
-                    </div>
+                    <Component
+                        validateAll={this._validateAll}
+                        parentKeys={settings.parentKeys}
+                        {...this.props} />
                 );
             }
         }
