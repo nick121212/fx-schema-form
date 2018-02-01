@@ -4,7 +4,6 @@ images
 tsconfig.json
 tslint.json
 webpack.config.js
-src
 node_modules
 global.d.ts
 package-lock.json

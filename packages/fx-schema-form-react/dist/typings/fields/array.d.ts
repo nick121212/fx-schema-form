@@ -1,7 +1,8 @@
 /// <reference types="react" />
 import { PureComponent } from "react";
 import { DefaultProps } from "../components";
-export interface ArrayFieldProps extends DefaultProps {
+import { UtilsHocOutProps } from "../hocs/utils";
+export interface ArrayFieldProps extends DefaultProps, UtilsHocOutProps {
 }
 export declare class ArrayField extends PureComponent<ArrayFieldProps, any> {
     private renderItem(idx);

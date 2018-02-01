@@ -42,8 +42,9 @@ const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
 export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component: any): RC<SchemaFormProps, any> => {
         @(connect((state: Immutable.Map<string, any>) => {
-            let dataKeys = settings.rootReducerKey.concat(settings.parentKeys).concat(["data"]),
-                metaKeys = settings.rootReducerKey.concat(settings.parentKeys).concat(["meta"]),
+            let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
+                dataKeys = rootKeys.concat(["data"]),
+                metaKeys = rootKeys.concat(["meta"]),
                 root = state.getIn(metaKeys);
 
             return {

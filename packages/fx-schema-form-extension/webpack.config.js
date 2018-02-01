@@ -16,7 +16,7 @@ const __PROD__ = env.toUpperCase() == "PRODUCTION";
 module.exports = {
     entry: __PROD__ ? "./src/index.tsx" : ["babel-polyfill", "./src/demo/index.tsx"],
     devServer: devServer,
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,
@@ -140,9 +140,9 @@ module.exports = {
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
         sourceMapFilename: "index.map",
-        library: "SchemaFormReact",
-        umdNamedDefine: true,
-        libraryExport: "default"
+        library: "SchemaFormReactExtendsion",
+        // umdNamedDefine: true,
+        // libraryExport: "default"
     } : {
             path: path.resolve('./dist'),
             filename: '[name].js',

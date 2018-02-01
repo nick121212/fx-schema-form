@@ -13,7 +13,6 @@ export interface SchemaFormActions {
     updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
     addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
     removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>;
-    switchItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
     moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
 }
 
@@ -29,8 +28,6 @@ export class SchemaFormReducer<T> implements FxReducer {
         = createAction<{ parentKeys: string[], keys: string[], data: any }>("添加一个数据");
     private removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>
         = createAction<{ parentKeys: string[], keys: string[], index: number }>("删除一个数据");
-    private switchItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("元素22交换位置");
     private moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
         = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("元素移位");
     private validateAll: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
@@ -51,8 +48,7 @@ export class SchemaFormReducer<T> implements FxReducer {
             updateItemMeta: this.updateItemMeta,
             addItem: this.addItem,
             removeItem: this.removeItem,
-            moveToItem: this.moveToItem,
-            switchItem: this.switchItem
+            moveToItem: this.moveToItem
         };
     }
     /**
@@ -65,7 +61,6 @@ export class SchemaFormReducer<T> implements FxReducer {
             [this.updateItemMeta as any]: this.updateItemMetaHandle.bind(this),
             [this.addItem as any]: this.addItemDataHandle.bind(this),
             [this.removeItem as any]: this.removeItemDataHandle.bind(this),
-            [this.switchItem as any]: this.switchItemHandle.bind(this),
             [this.moveToItem as any]: this.moveItemHandle.bind(this),
         }, this.initialState);
     }
@@ -158,7 +153,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap | null = rootNode.containPath(parentKeys.concat(keys));
+            childNode: TreeMap | null = rootNode.containPath(keys);
         let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
@@ -185,7 +180,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap | null = rootNode.addChild(parentKeys.concat(keys).concat([index]));
+            childNode: TreeMap | null = rootNode.addChild(keys.concat([index]));
         let formItemData: List<any>;
 
         state = this.resolveKeys(state, dataKeys);
@@ -213,60 +208,19 @@ export class SchemaFormReducer<T> implements FxReducer {
      *   curIndex      当前item的索引
      *   toIndex       需要交换的item索引
      */
-    private switchItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
-        const dataKeys = parentKeys.concat(["data", ...keys]),
-            metaKeys: string[] = parentKeys.concat(["meta"]),
-            rootNode: TreeMap = state.getIn(metaKeys);
-        let formItemData: List<any>, childNode: TreeMap | null;
-
-        state = this.resolveKeys(state, dataKeys);
-        formItemData = state.getIn(dataKeys);
-
-        if (!formItemData || formItemData.size <= toIndex || toIndex < 0) {
-            return state;
-        }
-
-        let curItemData = formItemData.get(curIndex);
-
-        formItemData = formItemData.set(curIndex, formItemData.get(toIndex));
-        formItemData = formItemData.set(toIndex, curItemData);
-
-        childNode = rootNode.containPath(parentKeys.concat(keys).concat([curIndex]));
-        if (childNode) {
-            childNode.switchOneToOneFromParent(toIndex);
-        } else {
-            childNode = rootNode.containPath(parentKeys.concat(keys).concat([toIndex]));
-            if (childNode) {
-                childNode.switchOneToOneFromParent(curIndex);
-            }
-        }
-
-        return state.setIn(dataKeys, formItemData);
-    }
-
-    /**
-     * 交换2个数组的位置
-     * 1. 交换数组数据
-     * 2. 交换meta中的位置信息
-     * @param state   当前的state
-     * @param param1  参数
-     *   parentKeys    父亲的keys
-     *   keys          当前item的keys
-     *   curIndex      当前item的索引
-     *   toIndex       需要交换的item索引
-     */
     private moveItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
         const dataKeys = parentKeys.concat(["data", ...keys]),
             metaKeys: string[] = parentKeys.concat(["meta"]),
             rootNode: TreeMap = state.getIn(metaKeys),
-            childNode: TreeMap | null = rootNode.containPath(parentKeys.concat(keys).concat([curIndex])),
             offset = (toIndex > curIndex && false ? 1 : 0);
-        let formItemData: List<any>;
+        let oldFormItemData: List<any> = state.getIn(dataKeys),
+            formItemData: List<any> = state.getIn(dataKeys),
+            childNode: TreeMap | null = rootNode.containPath(keys.concat([curIndex])),
+            childNodeTo: TreeMap | null = rootNode.containPath(keys.concat([toIndex]));
 
         state = this.resolveKeys(state, dataKeys);
-        formItemData = state.getIn(dataKeys);
 
-        if (!formItemData || formItemData.size <= toIndex || toIndex < 0) {
+        if (!formItemData || toIndex < 0) {
             return state;
         }
 
@@ -275,8 +229,16 @@ export class SchemaFormReducer<T> implements FxReducer {
         formItemData = formItemData.remove(curIndex);
         formItemData = formItemData.insert(toIndex - offset, curItemData);
 
+        // if (formItemData.equals(oldFormItemData)) {
+        //     return state;
+        // }
+
         if (childNode) {
             childNode.insertToFromParent(toIndex);
+        } else {
+            if (childNodeTo) {
+                childNodeTo.insertToFromParent(curIndex);
+            }
         }
 
         return state.setIn(dataKeys, formItemData);
@@ -292,7 +254,7 @@ export class SchemaFormReducer<T> implements FxReducer {
     private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
-        let childNode: TreeMap | null = rootNode.addChild(parentKeys.concat(keys));
+        let childNode: TreeMap | null = rootNode.addChild(keys);
         let value = childNode ? childNode.value : null;
 
         if (childNode) {

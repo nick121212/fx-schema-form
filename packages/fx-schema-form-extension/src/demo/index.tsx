@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import Perf from "react-addons-perf";
-// import ReactPerfTool from "react-perf-tool";
+import Perf from "react-addons-perf";
+import ReactPerfTool from "react-perf-tool";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
 import { ResolveLib } from "fx-schema-form-core";
@@ -15,10 +15,12 @@ import Button from "antd/lib/button";
 import Form from "antd/lib/form";
 
 import "antd/dist/antd.css";
-// import "react-perf-tool/lib/styles.css";
+import "react-perf-tool/lib/styles.css";
+
+import "../";
 
 import { gloabelOptions, curAjv } from "./init";
-// import { reducerFactory, SchemaForm, hocFactory, schemaFormDec } from "../../dist/index";
+
 
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
@@ -30,6 +32,10 @@ let actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
 let store = createStore<any>(combineReducers({
     "schemaForm": schemaFormReact.reducerFactory.get("schemaForm").reducer as any
 }), Immutable.fromJS({}));
+
+store.subscribe(() => {
+    console.log(store.getState().toJS().schemaForm.designForm.meta);
+});
 
 // actions要assign到store
 for (const key in actions) {
@@ -63,17 +69,34 @@ class TestForm extends React.PureComponent<any> {
     }
 
     public render() {
-        return <SchemaForm
-            key={"designForm" + "design"}
-            RootComponent={Form}
-            schemaId="design"
-            uiSchemas={["*"]}
-            uiSchema={null as any}
-            parentKeys={this.props.parentKeys}
-            globalOptions={gloabelOptions}
-            ajv={curAjv} >
-            <Button onClick={this._validateAll}>validate</Button>
-        </SchemaForm>;
+        return <div>
+            <SchemaForm
+                key={"designForm" + "design"}
+                RootComponent={Form}
+                schemaId="design"
+                uiSchemas={[{
+                    key: "name",
+                    hocs: ["theme", "field", "validate", "condition", "temp"],
+                    options: Immutable.fromJS({
+                        hoc: {
+                            condition: {
+                                paths: [{
+                                    path: "/description"
+                                }, {
+                                    path: "/name"
+                                }],
+                                hoc: hocFactory.get("console")()
+                            }
+                        }
+                    })
+                }, "dsModelData/ids"]}
+                uiSchema={null as any}
+                parentKeys={this.props.parentKeys}
+                globalOptions={gloabelOptions}
+                ajv={curAjv} >
+            </SchemaForm>
+            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>validate</Button>
+        </div>;
     }
 }
 
@@ -81,6 +104,7 @@ ReactDOM.render(
     <Provider store={store}>
         <div>
             <TestForm ajv={curAjv} schemaId="design" />
+            <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,
     document.getElementById("root"),

@@ -78,31 +78,12 @@ describe("测试treemap", () => {
         expect(tree.contains("b")).to.equal(null);
     });
 
-    it("交换位置", () => {
-        let nbc = tree.contains("b").contains("c");
-        let nbc0 = nbc.contains(0);
-
-        expect(nbc.contains(0)).to.equal(nbc0);
-
-        nbc0.switchOneToOneFromParent(3);
-
-        expect(nbc.contains(0)).to.not.equal(nbc0);
-        expect(nbc.contains(3)).to.equal(nbc0);
-
-        // 不做交换处理，6大于了children的索引
-        nbc0.switchOneToOneFromParent(6);
-
-        expect(nbc.contains(0)).to.not.equal(nbc0);
-        expect(nbc.contains(3)).to.equal(nbc0);
-    });
-
     it("移动位置,当前位置小于移动的位置", () => {
         let nbc = tree.contains("b").contains("c");
         let nbc0 = nbc.contains(0);
 
         nbc0.insertToFromParent(3);
-
-        expect(nbc.contains(3)).to.equal(nbc0);
+        expect(nbc.contains(3).value).to.equal(nbc0.value);
     });
 
     it("移动位置,当前位置大于移动的位置", () => {
@@ -115,14 +96,32 @@ describe("测试treemap", () => {
     });
 
     it("移动位置,移动位置不存在节点,创建新的节点", () => {
-        let nbc = tree.contains("b").contains("c");
-        let nbc4 = nbc.contains(4);
+        tree = new TreeMap("root", treeValue);
+        let dsModelData = tree.addChild(["dsModelData"]);
+        let child;
 
-        nbc4.insertToFromParent(8);
+        dsModelData.addChild([2], 2);
 
-        expect(nbc.children.length).to.equal(9);
-        expect(nbc4).to.equal(nbc.contains(8));
+        child = dsModelData.containPath([1]);
+
+        console.log(dsModelData);
+
+        // console.log(dsModelData);
+
+        // child.insertToFromParent(0);
+
+        // console.log(dsModelData);
+
+
+        // child1.insertToFromParent(0);
+        // expect(tree.contains("dsModelData").children[0]).to.equal(child1);
+        // child1.insertToFromParent(0);
+        // expect(tree.contains("dsModelData").children[0]).to.equal(child1);
+        // child.insertToFromParent(0);
+        // expect(tree.contains("dsModelData").children[1]).to.equal(child1);
     });
+
+
     it("遍历节点", () => {
         let nodeCount = 0;
 

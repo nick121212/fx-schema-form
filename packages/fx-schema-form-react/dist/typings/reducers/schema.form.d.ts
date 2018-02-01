@@ -27,12 +27,6 @@ export interface SchemaFormActions {
         keys: string[];
         index: number;
     }>;
-    switchItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
-        curIndex: number;
-        toIndex: number;
-    }>;
     moveToItem: SimpleActionCreator<{
         parentKeys: string[];
         keys: string[];
@@ -47,7 +41,6 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private updateItemMeta;
     private addItem;
     private removeItem;
-    private switchItem;
     private moveToItem;
     private validateAll;
     constructor(initialState: any);
@@ -58,7 +51,6 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private updateItemDataHandle(state, {parentKeys, keys, data, meta});
     private addItemDataHandle(state, {parentKeys, keys, data});
     private removeItemDataHandle(state, {parentKeys, keys, index});
-    private switchItemHandle(state, {parentKeys, keys, curIndex, toIndex});
     private moveItemHandle(state, {parentKeys, keys, curIndex, toIndex});
     private updateItemMetaHandle(state, {parentKeys, keys, data});
 }

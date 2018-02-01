@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "./dist/typings/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
+    "build": "NODE_ENV=production webpack ",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
   },
   "author": "NICK",

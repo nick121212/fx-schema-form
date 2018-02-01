@@ -26,16 +26,14 @@ export class TreeMap {
      * @returns TreeMap
      */
     public addChild(keys: Array<Tsn>, value?: any): TreeMap | null {
-        let curKeys = this.getCurrentKeys();
         let curNode: TreeMap = this;
         let child: TreeMap | null = null;
-
-        // 与当前路径多一次对比，去掉重复的部分
-        keys = keys.splice(curKeys.length);
 
         if (!keys.length) {
             return this;
         }
+
+        keys = [...keys];
 
         // 创建所有路径的节点
         while (keys.length) {
@@ -131,7 +129,15 @@ export class TreeMap {
         // 如果是数字的话，直接返回children中对应下标的元素
         if (isNumber) {
             if (this.children.length > key) {
-                return this.children[key as number];
+                let child = this.children[key as number];
+
+                if (!child) {
+                    this.children[key as number] = new TreeMap("-", null, this);
+
+                    child = this.children[key as number];
+                }
+
+                return child;
             }
 
             return null;
@@ -194,36 +200,14 @@ export class TreeMap {
     }
 
     /**
-     * 22交换位置
-     * time complexity = O(1) / Linear
-     * @param toIndex 交换位置的元素
-     */
-    public switchOneToOneFromParent(toIndex: number): void {
-        let curIndex = this.getIndexInParent();
-
-        // 如果没有父亲，获取父亲没有元素则返回
-        if (!this.parent || !this.parent.children || curIndex < 0) {
-            return;
-        }
-
-        // 如果父亲中不存在当前或者需要交换的索引，则返回
-        if (this.parent.children.length < (curIndex > toIndex ? curIndex : toIndex)) {
-            return;
-        }
-
-        // 22交换位置
-        [this.parent.children[curIndex], this.parent.children[toIndex]] = [this.parent.children[toIndex], this.parent.children[curIndex]];
-
-    }
-
-    /**
      * 移动到某个位置
      * time complexity = O(1) / Linear
      * @param toIndex 需要移动到的位置
      */
     public insertToFromParent(toIndex: number): void {
         let curIndex = this.getIndexInParent();
-        let offset = (toIndex > curIndex && false ? 1 : 0);
+        let offset = (toIndex > curIndex && false) ? 1 : 0;
+        let splitIndex = toIndex;
 
         // 如果没有父亲，或者父亲没有子节点，或者当前位置小于0
         if (!this.parent || !this.parent.children || curIndex < 0) {
@@ -232,14 +216,14 @@ export class TreeMap {
 
         // 如果超出了父亲的子节点数量，添加一个
         if (this.parent.children.length <= toIndex) {
-            this.parent.addChild(this.parent.getCurrentKeys().concat([toIndex]));
+            this.parent.addChild([toIndex]);
         }
 
         // 父亲节点中删除当前元素
         this.removeFromParent();
         // 将当前节点插入到制定的位置
-        this.parent.children = this.parent.children.concat([]).splice(0, toIndex - offset).concat(this)
-            .concat(this.parent.children.splice(toIndex - offset));
+        this.parent.children = this.parent.children.concat([]).splice(0, splitIndex - offset).concat([this])
+            .concat(this.parent.children.splice(splitIndex - offset));
     }
 
     /**

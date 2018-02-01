@@ -8,24 +8,21 @@ import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
+import { UtilsHocOutProps } from "./utils";
 
 export interface DataHocOutProps extends DefaultProps {
 
 }
 
 export interface DataHocSettings {
-    rootReducerKey: Array<string | number>;
     data?: boolean;
     dataLength?: boolean;
-
     meta?: boolean;
+    metaKeys?: string[];
 }
 
 // 自定义选择器创建函数
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
-
-const maps: any = {};
-
 
 /**
  * 与reduce相关的数据操作
@@ -33,17 +30,16 @@ const maps: any = {};
  * 获取formItemMeta数据
  */
 export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHocSettings = {
-    data: true,
-    rootReducerKey: ["schemaForm"]
+    data: true
 }) => {
 
-    const getItemDataHoc = (parentKeys: string[], keys: Array<string | number>) => {
+    const getItemDataHoc = (parentKeys: string[], rootReducerKey: string[], keys: Array<string | number>) => {
         /**
          * 获取FormItemData的数据
          * @param state 当前的state树
          */
         let getFormItemData = (state: Immutable.Map<string, any>) => {
-            let dataKeys = settings.rootReducerKey.concat([...parentKeys, "data", ...keys]);
+            let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
 
             if (settings.data && state.hasIn(dataKeys)) {
                 let formItemData = state.getIn(dataKeys);
@@ -63,13 +59,18 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
         * @param state 当前的state树
         */
         let getFormItemMeta = (state: Immutable.Map<string, any>) => {
-            let metaKeys = settings.rootReducerKey.concat([...parentKeys, "meta"]);
+            let metaKeys = [...rootReducerKey, ...parentKeys, "meta"];
 
             if (settings.meta && state.hasIn(metaKeys)) {
                 let rootNode = state.getIn(metaKeys);
                 let childNode = rootNode.containPath([...parentKeys, ...keys]);
 
                 if (childNode && childNode.value) {
+                    if (settings.metaKeys) {
+                        return childNode.value.filter((val: any, key: string) => {
+                            return settings.metaKeys.indexOf(key) >= 0;
+                        });
+                    }
                     return childNode.value;
                 }
             }
@@ -101,26 +102,21 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
      */
     return (Component: any): RC<DefaultProps, any> => {
         @(shouldUpdate(() => false) as any)
-        class DataComponentHoc extends PureComponent<DefaultProps, any> {
+        class DataComponentHoc extends PureComponent<DefaultProps & UtilsHocOutProps, any> {
             // private ComponentWithHoc;
 
             public render(): JSX.Element {
-                const { keys = [] } = this.props.uiSchema || {};
-                // const mapKeys = [...this.props.parentKeys, ...keys,
-                // settings.data, settings.dataLength, settings.meta, ...settings.rootReducerKey].join();
+                const { uiSchema, getOptions } = this.props,
+                    { keys = [] } = this.props.uiSchema || {},
+                    options = getOptions(this.props, "hoc", "data");
 
-                // if (maps[mapKeys]) {
-                //     if (!this.ComponentWithHoc) {
-                //         const hoc = maps[mapKeys];
-                //         this.ComponentWithHoc = hoc(Component);
-                //     }
-                // } else {
-                const hoc = connect(getItemDataHoc(this.props.parentKeys, keys));
-                // maps[mapKeys] = hoc;
-                const ComponentWithHoc: any = hoc(Component);
-                // }
 
-                // const ComponentWithHoc = this.ComponentWithHoc;
+                if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
+                    console.error("dataHoc missing property rootReducerKey.should be a Array.");
+                }
+
+                const hoc = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
+                    ComponentWithHoc: any = hoc(Component);
 
                 return <ComponentWithHoc {...this.props} />;
             }

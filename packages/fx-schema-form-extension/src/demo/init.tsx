@@ -3,8 +3,9 @@ import { immutableRenderDecorator } from "react-immutable-render-mixin";
 import ajv from "ajv";
 import React, { PureComponent } from "react";
 import ajvErrors from "ajv-errors";
-import { compose } from "recompose";
+import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import { Button } from "antd";
+import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
@@ -20,6 +21,7 @@ schemaFormReact.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as
 schemaFormReact.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 
 @(compose(
+    shouldUpdate(() => false),
     schemaFormReact.hocFactory.get("validate")(),
     schemaFormReact.hocFactory.get("array")(),
     schemaFormReact.hocFactory.get("data")({
@@ -65,9 +67,7 @@ export class ArrayComponent extends PureComponent<DefaultProps & any> {
             </Button.Group>
         );
     }
-}
-
-@(compose(
+} @(compose(
     schemaFormReact.hocFactory.get("validate")(),
     schemaFormReact.hocFactory.get("array")()
 ) as any)
@@ -77,17 +77,18 @@ export class ArrayItemComponent extends PureComponent<DefaultProps & any> {
 
     constructor(props: DefaultProps & any) {
         super(props);
-
-        this.removeItem = () => {
-            props.removeItem(this.props.parentKeys, this.props.getPathKeys(this.props.uiSchema.keys, "../"), this.props.arrayIndex);
-        };
-        this.moveTo = () => {
-            props.moveItem(this.props.parentKeys, this.props.getPathKeys(this.props.uiSchema.keys, "../"), this.props.arrayIndex, 0);
-        };
     }
 
     public render() {
         const { addItem } = this.props;
+
+        this.removeItem = () => {
+            this.props.removeItem(this.props.parentKeys, this.props.getPathKeys(this.props.uiSchema.keys, "../"), this.props.arrayIndex);
+        };
+        this.moveTo = () => {
+            console.log(this.props.arrayIndex);
+            this.props.moveItem(this.props.parentKeys, this.props.getPathKeys(this.props.uiSchema.keys, "../"), this.props.arrayIndex, 0);
+        };
 
         return <Button.Group key="opt">
             <Button key="remove" type="primary" icon="minus" onClick={this.removeItem} />
@@ -101,14 +102,39 @@ export const gloabelOptions = Immutable.fromJS({
         default: {
             temps: ["formitem"],
             widgetHocs: [schemaFormReact.hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
                 data: true
             })]
         },
         array: {
             temps: ["card"],
+            formHocs: [(Component: any) => {
+                class EEEE extends React.PureComponent<any> {
+                    private _onSortEnd: any;
+
+                    constructor(props: any) {
+                        super(props);
+
+                        this._onSortEnd = this.onSortEnd.bind(this);
+                    }
+
+                    private onSortEnd({ oldIndex, newIndex }: { oldIndex: number; newIndex: number; }) {
+                        const { uiSchema, parentKeys } = this.props;
+
+                        if (oldIndex === newIndex) {
+                            return;
+                        }
+                        this.props.moveItem(parentKeys, uiSchema.keys, oldIndex, newIndex);
+                    }
+
+                    public render() {
+                        return <Component pressDelay={300} onSortEnd={this._onSortEnd}  {...this.props} />;
+                    }
+                }
+
+                return EEEE;
+            }, SortableContainer, shouldUpdate(() => false)],
+            formItemHocs: [SortableElement, shouldUpdate(() => false)],
             fieldHocs: [schemaFormReact.hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
                 data: true,
                 dataLength: true
             })]
@@ -122,14 +148,14 @@ export const gloabelOptions = Immutable.fromJS({
     temp: {
         card: {
             tempHocs: [schemaFormReact.hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                meta: true
+                meta: true,
+                metaKeys: ["errorText", "isValid", "collapsing"]
             }), immutableRenderDecorator]
         },
         formitem: {
             tempHocs: [schemaFormReact.hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                meta: true
+                meta: true,
+                metaKeys: ["isLoading", "errorText", "isValid", "dirty"]
             }), immutableRenderDecorator],
             options: {
                 labelCol: {
@@ -144,6 +170,9 @@ export const gloabelOptions = Immutable.fromJS({
         }
     },
     hoc: {
+        data: {
+            rootReducerKey: ["schemaForm"]
+        },
         array: {
             ArrayComponent: ArrayComponent,
             ArrayItemComponent: ArrayItemComponent

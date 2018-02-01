@@ -12,7 +12,6 @@ export declare class TreeMap {
     contains(key: Tsn): TreeMap | null;
     containPath(keys: Array<Tsn>): TreeMap | null;
     removeFromParent(): void;
-    switchOneToOneFromParent(toIndex: number): void;
     insertToFromParent(toIndex: number): void;
     forEach(clearFunc: (node: TreeMap) => any, currentNode?: boolean): void;
 }

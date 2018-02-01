@@ -90,19 +90,6 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                 };
             },
             /**
-             * 与一个元素交换位置
-             */
-            switchItem: (propsCur: DefaultProps) => {
-                return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
-                    schemaFormReducer.actions.switchItem({
-                        parentKeys: parentKeys,
-                        keys: keys,
-                        curIndex: curIndex,
-                        toIndex: toIndex
-                    });
-                };
-            },
-            /**
              * 移动到某个元素后面
              */
             moveItem: (propsCur: DefaultProps) => {
