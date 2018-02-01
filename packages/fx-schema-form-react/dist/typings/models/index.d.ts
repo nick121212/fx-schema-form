@@ -2,7 +2,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { BaseFactory } from "fx-schema-form-core";
-import { UiSchema } from "fx-schema-form-core/dist/dts/models/uischema";
+import { UiSchema } from "fx-schema-form-core/dist/typings/models/uischema";
 export interface SchemaFormNs<F, T, W> {
     fieldFactory: BaseFactory<F>;
     tempFactory: BaseFactory<T>;

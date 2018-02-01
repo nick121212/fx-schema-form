@@ -1,4 +1,5 @@
 /// <reference types="react" />
+/// <reference types="recompose" />
 import React from "react";
 import { ComponentEnhancer } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";

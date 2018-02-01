@@ -6,6 +6,7 @@ node_js:
   - "9"
 
 before_install:
+  - npm install
   - cd packages/fx-schema-form-core
   - npm install
   - cd ../fx-schema-form-react

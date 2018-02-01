@@ -50,7 +50,7 @@
     "@types/recompose": "^0.24.4",
     "@types/redux-immutable": "^3.0.38",
     "ajv-errors": "^1.0.0",
-    "antd": "2.0.0",
+    "antd": "^2.13.11",
     "awesome-typescript-loader": "^3.2.3",
     "babel": "^6.0.0",
     "babel-core": "^6.26.0",

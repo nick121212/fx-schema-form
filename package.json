@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test-core;npm run test-react",
-    "test-core": "cd packages/fx-schema-form-core;npm test;",
-    "test-react": "cd packages/fx-schema-form-react;npm test;",
+    "test": "lerna run test",
     "publish": "lerna publish"
   },
   "repository": {

@@ -9,8 +9,10 @@ import schemaFormReact from "fx-schema-form-react";
 import Immutable from "immutable";
 import { Provider } from "react-redux";
 
-import { Form, Button } from "antd";
 import { design } from "./schemas";
+
+import Button from "antd/lib/button";
+import Form from "antd/lib/form";
 
 import "antd/dist/antd.css";
 // import "react-perf-tool/lib/styles.css";

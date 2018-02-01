@@ -1,4 +1,4 @@
-import { UiSchema } from "fx-schema-form-core/dist/dts/models/uischema";
+import { UiSchema } from "fx-schema-form-core/dist/typings/models/uischema";
 import { Ajv } from "ajv";
 import Immutable from "immutable";
 

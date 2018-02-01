@@ -20,7 +20,7 @@ export class SchemaFormItem extends PureComponent<Props, any> {
     public render() {
         const { FieldComponent, uiSchema, ...extraProps } = this.props as Props & FieldHocOutProps & UtilsHocOutProps;
         const options = extraProps.getOptions(this.props, "field", (uiSchema as any).field || (uiSchema as any).type);
-        let FieldComponentWithHoc = FieldComponent;
+        let FieldComponentWithHoc: any = FieldComponent;
 
         if (!FieldComponent) {
             console.log(uiSchema, "没有找到匹配的field");
