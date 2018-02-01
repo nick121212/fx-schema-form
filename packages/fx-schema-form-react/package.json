@@ -1,9 +1,9 @@
 {
   "name": "fx-schema-form-react",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "自动生成表单组件",
   "main": "dist/index.js",
-  "types": "./dist/dts/index.d.ts",
+  "types": "./dist/typings/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
-    "fx-schema-form-core": "^3.0.12",
+    "fx-schema-form-core": "^3.0.14",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-redux": "^5.0.6",

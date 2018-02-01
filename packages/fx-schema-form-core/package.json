@@ -1,9 +1,9 @@
 {
   "name": "fx-schema-form-core",
-  "version": "3.0.12",
+  "version": "3.0.14",
   "description": "",
   "main": "dist/index.js",
-  "types": "dist/dts/index.d.ts",
+  "types": "dist/typings/index.d.ts",
   "pre-commit": [
     "lint",
     "test"
@@ -18,14 +18,12 @@
   },
   "author": "NICK",
   "license": "MIT",
-  "dependencies": {
-    "ajv": "^5.2.2"
-  },
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/json-schema": "^6.0.0",
     "@types/mocha": "^2.2.47",
     "@types/node": "^8.5.9",
+    "ajv": "^5.2.2",
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
