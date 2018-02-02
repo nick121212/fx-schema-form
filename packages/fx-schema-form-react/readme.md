@@ -355,7 +355,54 @@ uiSchema的参数配置：
 
 ### HOCS
 
+1. ThemeHoc: 解决主题样式。
+
+2. FieldHoc: 解决从jsonschema中取得FieldComponent和WidgetComponent。
+
+3. ValidateHoc: 验证以及数据操作相关。
+
+4. ArrayHoc: 数组的相关操作。
+
+5. TempHoc: 模板的归并。
+
+6. DataHoc: 用于从reducer中获取数据。
+
+7. MakeHoc: 用于FormItem的包裹Hoc合并。
+
+8. UtilsHoc: 工具类Hoc。
+
+9. MergeHoc: jsonschema和uischema的合并操作。
+
 ### 字段
+
+字段决定了如何渲染一个数据结构。举个栗子：
+
+```json
+{
+    "type":"object",
+    "title": "表示一个点的坐标",
+    "properties":{
+        "x":{
+            "type":"number"
+        },
+        "y":{
+            "type":"number"
+        }
+    }
+}
+```
+
+这里的结构是一个ObjectField对象，所以默认会嵌套一层SchemaForm，然后渲染出x和y的文本框。
+![默认的ObjectField](./images/point.png)
+如果我想x和y在一行上显示；那这里就要用到自定义的Field，参照自定义Field一节；这里我们自定义一个PointField，在里面直接放入2个文本框，当文本框更改的时候，我们更新相对应的值就可以了，so easy。
+
+***默认字段：***
+
+1. NormalField: 普通数据类型字段，直接渲染WidgetComponent。
+
+2. ArrayField: 根据数组元素的个数，嵌套渲染N个ShemaForm。
+
+3. ObjectField: 直接嵌套一层SchemaForm。
 
 ## 高级配置
 

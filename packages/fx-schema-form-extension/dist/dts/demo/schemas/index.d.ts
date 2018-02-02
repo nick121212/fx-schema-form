@@ -30,6 +30,18 @@ declare const design: {
             idExists: {};
             description: string;
         };
+        point: {
+            "type": string;
+            "title": string;
+            "properties": {
+                "x": {
+                    "type": string;
+                };
+                "y": {
+                    "type": string;
+                };
+            };
+        };
         description: {
             type: string;
             title: string;

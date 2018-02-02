@@ -71,39 +71,39 @@ class TestForm extends React.PureComponent<any> {
                 key={"designForm" + "design"}
                 RootComponent={Form}
                 schemaId="design"
-                uiSchemas={[{
+                uiSchemas={["point", {
                     key: "name"
                 }, {
-                    key: "appType",
-                    hocs: ["theme", "condition", "field", "validate", "temp"],
-                    options: Immutable.fromJS({
-                        hoc: {
-                            condition: {
-                                paths: [{
-                                    path: "/name"
-                                }],
-                                hoc: hocFactory.get("oneof")({
-                                    path: "/name",
-                                    key: "anyOf",
-                                    uiSchemas: {
-                                        "nick": {
-                                            index: 0,
-                                            uiSchema: {
-                                                children: ["a"]
-                                            }
-                                        },
-                                        "nora": {
-                                            index: 1,
-                                            uiSchema: {
-                                                children: ["b"]
+                        key: "appType",
+                        hocs: ["theme", "condition", "field", "validate", "temp"],
+                        options: Immutable.fromJS({
+                            hoc: {
+                                condition: {
+                                    paths: [{
+                                        path: "/name"
+                                    }],
+                                    hoc: hocFactory.get("oneof")({
+                                        path: "/name",
+                                        key: "anyOf",
+                                        uiSchemas: {
+                                            "nick": {
+                                                index: 0,
+                                                uiSchema: {
+                                                    children: ["a"]
+                                                }
+                                            },
+                                            "nora": {
+                                                index: 1,
+                                                uiSchema: {
+                                                    children: ["b"]
+                                                }
                                             }
                                         }
-                                    }
-                                })
+                                    })
+                                }
                             }
-                        }
-                    })
-                }]}
+                        })
+                    }]}
                 uiSchema={null as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={gloabelOptions}

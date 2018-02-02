@@ -34,6 +34,18 @@ const design = {
             idExists: {},
             description: "远程验证字段，输入nick试试看"
         },
+        point: {
+            "type": "object",
+            "title": "表示一个点的坐标",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                }
+            }
+        },
         description: {
             type: "string",
             title: "面板详情"
