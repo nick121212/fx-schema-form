@@ -46,8 +46,8 @@ describe("key word of oneof", () => {
 
         expect(schema).to.be.a("object");
         expect(schema.oneOf.length).to.equal(2);
-        expect(schema.oneOf[0].$id).to.equal("test2");
-        expect(schema.oneOf[1].$id).to.equal("test1");
+        expect(schema.oneOf[0].$ref).to.equal("test2#");
+        expect(schema.oneOf[1].$ref).to.equal("test1#");
     });
 
 });

@@ -5,7 +5,7 @@ import { connect, Dispatch } from "react-redux";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models";
+import { FxUiSchema, RC } from "../models/index";
 
 /**
  * MergeHoc 添加的属性

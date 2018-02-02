@@ -11,11 +11,12 @@ import { default as ResolveLib } from "../libs/resolve";
 export default (schema: JSONSchema6, ajv: Ajv) => {
     if (schema && schema.$ref) {
         let validate: ValidateFunction = ajv.getSchema(schema.$ref);
-        
+
         if (validate && validate.schema) {
-            let schemaAjv = validate.schema as JSONSchema6;
+            let schemaAjv = Object.assign({}, validate.schema) as JSONSchema6;
 
             schemaAjv.$ref = schema.$ref;
+            delete schemaAjv.$id;
 
             Object.assign(schemaAjv, {
                 refKeys: ResolveLib.getDataKeys(schema.$ref)

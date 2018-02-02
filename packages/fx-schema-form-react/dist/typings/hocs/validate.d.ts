@@ -1,6 +1,6 @@
 import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "../components";
-import { RC } from "../models";
+import { RC } from "../models/index";
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any) => void;

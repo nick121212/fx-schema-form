@@ -9,7 +9,7 @@ import { SortableContainer, SortableElement, arrayMove } from "react-sortable-ho
 
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
-import { AntdCheckboxWidget, AntdInputWidget } from "./widgets";
+import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 
 
@@ -19,6 +19,7 @@ schemaFormReact.defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any
 
 schemaFormReact.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
+schemaFormReact.defaultTheme.widgetFactory.add("number", AntdInputNumberWidget as any);
 
 @(compose(
     shouldUpdate(() => false),
@@ -107,6 +108,7 @@ export const gloabelOptions = Immutable.fromJS({
         },
         array: {
             temps: ["card"],
+            // 这里为array字段添加sort排序功能
             formHocs: [(Component: any) => {
                 class EEEE extends React.PureComponent<any> {
                     private _onSortEnd: any;
@@ -133,7 +135,11 @@ export const gloabelOptions = Immutable.fromJS({
                 }
 
                 return EEEE;
-            }, SortableContainer, shouldUpdate(() => false)],
+            }, SortableContainer, schemaFormReact.hocFactory.get("resetKey")({
+                category: "field",
+                field: "array",
+                key: "keys"
+            })],
             formItemHocs: [SortableElement, shouldUpdate(() => false)],
             fieldHocs: [schemaFormReact.hocFactory.get("data")({
                 data: true,

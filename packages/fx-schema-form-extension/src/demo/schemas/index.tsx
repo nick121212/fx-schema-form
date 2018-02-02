@@ -39,8 +39,25 @@ const design = {
             title: "面板详情"
         },
         appType: {
-            type: "string",
-            title: "应用类型"
+            oneOf: [{
+                $id: "design-app-type-1",
+                type: "object",
+                properties: {
+                    a: {
+                        type: "string"
+                    }
+                },
+                title: "应用类型"
+            }, {
+                $id: "design-app-type-2",
+                type: "object",
+                properties: {
+                    b: {
+                        type: "string"
+                    }
+                },
+                title: "应用类型"
+            }]
         },
         dsModelIds: {
             type: "array",

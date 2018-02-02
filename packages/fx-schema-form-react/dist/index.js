@@ -596,6 +596,7 @@ defaultTheme.fieldFactory.add("default", _fields.NormalField);
 defaultTheme.fieldFactory.add("object", _fields.ObjectField);
 defaultTheme.fieldFactory.add("array", _fields.ArrayField);
 _factory.themeFactory.add("default", defaultTheme);
+_factory.hocFactory.add("schemaFormDec", _dec2.default.bind(_dec2.default, _factory.hocFactory));
 exports.default = {
     themeFactory: _factory.themeFactory,
     defaultTheme: defaultTheme,
@@ -812,6 +813,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _fxSchemaFormCore = __webpack_require__(5);
+
 var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
@@ -846,12 +849,57 @@ exports.default = function (hocFactory) {
             _createClass(ComponentHoc, [{
                 key: "render",
                 value: function render() {
-                    return _react2.default.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions }, this.props));
+                    return _react2.default.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys }, this.props));
+                }
+            }, {
+                key: "getRequiredKeys",
+                value: function getRequiredKeys(props) {
+                    var includeKeys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+                    var excludeKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+
+                    var extraProps = {};
+                    if (includeKeys && includeKeys.constructor === Array && includeKeys.length) {
+                        includeKeys.forEach(function (key) {
+                            if (props.hasOwnProperty(key)) {
+                                extraProps[key] = props[key];
+                            }
+                        });
+                    } else {
+                        extraProps = Object.assign({}, props);
+                    }
+                    if (excludeKeys && excludeKeys.constructor === Array && excludeKeys.length) {
+                        excludeKeys.forEach(function (key) {
+                            if (extraProps.hasOwnProperty(key)) {
+                                delete extraProps[key];
+                            }
+                        });
+                    }
+                    return extraProps;
+                }
+            }, {
+                key: "normalizeDataPath",
+                value: function normalizeDataPath(schemaId, dataPath) {
+                    var dataKeys = dataPath.replace(/^\//g, "").split("/");
+                    dataKeys = dataKeys.map(function (key, index) {
+                        if (Number.isInteger(+key)) {
+                            var keys = dataKeys.slice(0, index);
+                            keys.unshift(schemaId);
+                            if (_fxSchemaFormCore.schemaKeysFactory.has(keys.join("/"))) {
+                                var schema = _fxSchemaFormCore.schemaFieldFactory.get(_fxSchemaFormCore.schemaKeysFactory.get(keys.join("/")));
+                                if (schema.type === "array") {
+                                    return +key;
+                                }
+                            }
+                        }
+                        return key;
+                    });
+                    return dataKeys;
                 }
             }, {
                 key: "getOptions",
                 value: function getOptions(props, category, field) {
-                    var uiSchema = props.uiSchema,
+                    var _props$uiSchema = props.uiSchema,
+                        uiSchema = _props$uiSchema === undefined ? {} : _props$uiSchema,
                         globalOptions = props.globalOptions;
                     var options = uiSchema.options;
 
@@ -865,8 +913,17 @@ exports.default = function (hocFactory) {
                     if (options && options.hasIn([category, field])) {
                         optionsArray.push(options.getIn([category, field]));
                     }
+
+                    for (var _len = arguments.length, extraSettings = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+                        extraSettings[_key - 3] = arguments[_key];
+                    }
+
+                    optionsArray = optionsArray.concat(extraSettings);
                     var opts = optionsArray.reverse().reduce(function (prev, next) {
                         if (next) {
+                            if (!_immutable2.default.Map.isMap(next)) {
+                                next = _immutable2.default.fromJS(next);
+                            }
                             return next.merge(prev);
                         }
                         return prev;
@@ -1606,16 +1663,33 @@ exports.default = function (hocFactory) {
                                             });
                                         }, 200);
                                         _context.prev = 2;
-                                        _context.next = 5;
+                                        validateResult = void 0;
+
+                                        if (!props.uiSchema.$id) {
+                                            _context.next = 10;
+                                            break;
+                                        }
+
+                                        _context.next = 7;
+                                        return props.ajv.getSchema(props.uiSchema.$id)(data);
+
+                                    case 7:
+                                        validateResult = _context.sent;
+                                        _context.next = 13;
+                                        break;
+
+                                    case 10:
+                                        _context.next = 12;
                                         return props.ajv.validate(props.uiSchema, data);
 
-                                    case 5:
+                                    case 12:
                                         validateResult = _context.sent;
 
+                                    case 13:
                                         result.isValid = validateResult;
 
                                         if (validateResult) {
-                                            _context.next = 11;
+                                            _context.next = 18;
                                             break;
                                         }
 
@@ -1624,31 +1698,31 @@ exports.default = function (hocFactory) {
                                         error.errors = props.ajv.errors;
                                         throw error;
 
-                                    case 11:
-                                        _context.next = 16;
+                                    case 18:
+                                        _context.next = 23;
                                         break;
 
-                                    case 13:
-                                        _context.prev = 13;
+                                    case 20:
+                                        _context.prev = 20;
                                         _context.t0 = _context["catch"](2);
 
                                         result.errorText = _context.t0.errors ? props.ajv.errorsText(_context.t0.errors, { dataVar: props.getTitle(props).toString() }) : _context.t0.message;
 
-                                    case 16:
-                                        _context.prev = 16;
+                                    case 23:
+                                        _context.prev = 23;
 
                                         clearTimeout(timeId);
-                                        return _context.finish(16);
+                                        return _context.finish(23);
 
-                                    case 19:
+                                    case 26:
                                         return _context.abrupt("return", result);
 
-                                    case 20:
+                                    case 27:
                                     case "end":
                                         return _context.stop();
                                 }
                             }
-                        }, _callee, this, [[2, 13, 16, 19]]);
+                        }, _callee, this, [[2, 20, 23, 26]]);
                     }));
                 };
             }
@@ -2507,61 +2581,95 @@ var arrayFieldStyle = {
     height: "100%"
 };
 
+var ArrayFieldComponent = function (_React$PureComponent) {
+    _inherits(ArrayFieldComponent, _React$PureComponent);
+
+    function ArrayFieldComponent() {
+        _classCallCheck(this, ArrayFieldComponent);
+
+        return _possibleConstructorReturn(this, (ArrayFieldComponent.__proto__ || Object.getPrototypeOf(ArrayFieldComponent)).apply(this, arguments));
+    }
+
+    _createClass(ArrayFieldComponent, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement("div", { style: arrayFieldStyle }, this.props.children);
+        }
+    }]);
+
+    return ArrayFieldComponent;
+}(_react2.default.PureComponent);
+
 var ArrayField = exports.ArrayField = function (_PureComponent) {
     _inherits(ArrayField, _PureComponent);
 
-    function ArrayField() {
+    function ArrayField(props) {
         _classCallCheck(this, ArrayField);
 
-        return _possibleConstructorReturn(this, (ArrayField.__proto__ || Object.getPrototypeOf(ArrayField)).apply(this, arguments));
+        var _this2 = _possibleConstructorReturn(this, (ArrayField.__proto__ || Object.getPrototypeOf(ArrayField)).call(this, props));
+
+        _this2.SchemaFormWithHoc = ArrayFieldComponent;
+        _this2.initComponent();
+        return _this2;
     }
 
     _createClass(ArrayField, [{
-        key: "renderItem",
-        value: function renderItem(idx) {
+        key: "initComponent",
+        value: function initComponent() {
             var _props = this.props,
-                parentKeys = _props.parentKeys,
-                globalOptions = _props.globalOptions,
+                uiSchema = _props.uiSchema,
+                formItemData = _props.formItemData,
                 getOptions = _props.getOptions,
-                _props$arrayLevel = _props.arrayLevel,
-                arrayLevel = _props$arrayLevel === undefined ? [] : _props$arrayLevel,
-                ajv = _props.ajv,
-                ArrayItemComponent = _props.ArrayItemComponent,
-                uiSchema = this.props.uiSchema,
                 options = getOptions(this.props, "field", "array");
 
-            var SchemaFormWithHoc = _form.SchemaForm;
-            if (uiSchema.children === null || !uiSchema.schemaPath) {
-                return null;
+            var SchemaFormWithHoc = null,
+                SchemaFormItemWithHoc = null;
+            if (options.formHocs && options.formHocs.constructor === Array) {
+                SchemaFormWithHoc = _recompose.compose.apply(undefined, _toConsumableArray(options.formHocs))(ArrayFieldComponent);
             }
             if (options.formItemHocs && options.formItemHocs.constructor === Array) {
-                SchemaFormWithHoc = _recompose.compose.apply(undefined, _toConsumableArray(options.formItemHocs))(_form.SchemaForm);
+                SchemaFormItemWithHoc = _recompose.compose.apply(undefined, _toConsumableArray(options.formItemHocs))(_form.SchemaForm);
+            }
+            this.SchemaFormWithHoc = SchemaFormWithHoc;
+            this.SchemaFormItemWithHoc = SchemaFormItemWithHoc;
+        }
+    }, {
+        key: "renderItem",
+        value: function renderItem(idx) {
+            var _props2 = this.props,
+                parentKeys = _props2.parentKeys,
+                globalOptions = _props2.globalOptions,
+                getOptions = _props2.getOptions,
+                _props2$arrayLevel = _props2.arrayLevel,
+                arrayLevel = _props2$arrayLevel === undefined ? [] : _props2$arrayLevel,
+                getRequiredKeys = _props2.getRequiredKeys,
+                ajv = _props2.ajv,
+                ArrayItemComponent = _props2.ArrayItemComponent,
+                uiSchema = this.props.uiSchema;
+
+            var SchemaFormWithHoc = this.SchemaFormItemWithHoc || _form.SchemaForm;
+            if (uiSchema.children === null || !uiSchema.schemaPath) {
+                return null;
             }
             return _react2.default.createElement(SchemaFormWithHoc, { key: idx, index: idx, arrayIndex: idx, uiSchema: uiSchema, ArrayItemComponent: ArrayItemComponent, arrayLevel: arrayLevel.concat([idx]), schemaId: uiSchema.schemaPath, uiSchemas: uiSchema.children || ["-"], parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv });
         }
     }, {
         key: "render",
         value: function render() {
-            var _props2 = this.props,
-                uiSchema = _props2.uiSchema,
-                formItemData = _props2.formItemData,
-                getOptions = _props2.getOptions,
+            var _props3 = this.props,
+                uiSchema = _props3.uiSchema,
+                formItemData = _props3.formItemData,
+                getOptions = _props3.getOptions,
+                getRequiredKeys = _props3.getRequiredKeys,
                 child = [],
                 options = getOptions(this.props, "field", "array");
 
-            var SchemaFormWithHoc = void 0;
+            var SchemaFormWithHoc = this.SchemaFormWithHoc;
+            var extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
             for (var i = 0; i < +formItemData; i++) {
                 child.push(this.renderItem(i));
             }
-            if (options.formHocs && options.formHocs.constructor === Array) {
-                SchemaFormWithHoc = _recompose.compose.apply(undefined, _toConsumableArray(options.formHocs))(function (_ref) {
-                    var children = _ref.children;
-
-                    return _react2.default.createElement("div", { style: arrayFieldStyle }, children);
-                });
-                return _react2.default.createElement(SchemaFormWithHoc, Object.assign({}, this.props, { children: child }));
-            }
-            return _react2.default.createElement("div", { style: arrayFieldStyle }, child);
+            return _react2.default.createElement(SchemaFormWithHoc, Object.assign({ children: child }, extraProps));
         }
     }]);
 
@@ -2589,6 +2697,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _recompose = __webpack_require__(1);
+
 var _reactRedux = __webpack_require__(9);
 
 var _immutable = __webpack_require__(4);
@@ -2596,8 +2706,6 @@ var _immutable = __webpack_require__(4);
 var _immutable2 = _interopRequireDefault(_immutable);
 
 var _ajv = __webpack_require__(40);
-
-var _fxSchemaFormCore = __webpack_require__(5);
 
 var _factory = __webpack_require__(3);
 
@@ -2631,7 +2739,7 @@ exports.default = function () {
 
             _createClass(SchemaFormComponentHoc, [{
                 key: "validateAll",
-                value: function validateAll() {
+                value: function validateAll(async) {
                     return tslib_1.__awaiter(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                         var _this2 = this;
 
@@ -2644,7 +2752,7 @@ exports.default = function () {
                                             dirty: true,
                                             isValid: true,
                                             isLoading: true
-                                        }), $validateAfterData = _immutable2.default.fromJS({ isLoading: false, dirty: true }), normalizeDataPath = this.normalizeDataPath;
+                                        }), $validateAfterData = _immutable2.default.fromJS({ isLoading: false, dirty: true }), normalizeDataPath = this.props.normalizeDataPath;
 
                                         if (root) {
                                             _context.next = 3;
@@ -2675,10 +2783,11 @@ exports.default = function () {
                                             keys: [],
                                             data: root.value
                                         });
-                                        _context.next = 10;
+                                        validate.$async = !!async;
+                                        _context.next = 11;
                                         return validate(this.props.data.toJS());
 
-                                    case 10:
+                                    case 11:
                                         root.value = root.value.merge({
                                             isValid: true
                                         });
@@ -2687,29 +2796,29 @@ exports.default = function () {
                                             keys: [],
                                             data: root.value
                                         });
-                                        _context.next = 22;
+                                        _context.next = 23;
                                         break;
 
-                                    case 14:
-                                        _context.prev = 14;
+                                    case 15:
+                                        _context.prev = 15;
                                         _context.t0 = _context["catch"](5);
 
                                         if (_context.t0 instanceof _ajv.ValidationError) {
-                                            _context.next = 18;
+                                            _context.next = 19;
                                             break;
                                         }
 
                                         return _context.abrupt("return", console.error(_context.t0));
 
-                                    case 18:
+                                    case 19:
                                         if (root) {
-                                            _context.next = 20;
+                                            _context.next = 21;
                                             break;
                                         }
 
                                         return _context.abrupt("return");
 
-                                    case 20:
+                                    case 21:
                                         _context.t0.errors.forEach(function (element) {
                                             var dataKeys = root.getCurrentKeys().concat(normalizeDataPath(_this2.props.schemaId, element.dataPath));
                                             var childNode = root.addChild(dataKeys, _immutable2.default.fromJS({}));
@@ -2725,8 +2834,8 @@ exports.default = function () {
                                             errors: _context.t0.errors
                                         });
 
-                                    case 22:
-                                        _context.prev = 22;
+                                    case 23:
+                                        _context.prev = 23;
 
                                         root.forEach(function (node) {
                                             if (node.value) {
@@ -2739,34 +2848,15 @@ exports.default = function () {
                                             keys: [],
                                             data: root.value
                                         });
-                                        return _context.finish(22);
+                                        return _context.finish(23);
 
-                                    case 26:
+                                    case 27:
                                     case "end":
                                         return _context.stop();
                                 }
                             }
-                        }, _callee, this, [[5, 14, 22, 26]]);
+                        }, _callee, this, [[5, 15, 23, 27]]);
                     }));
-                }
-            }, {
-                key: "normalizeDataPath",
-                value: function normalizeDataPath(schemaId, dataPath) {
-                    var dataKeys = dataPath.substring(1).split("/");
-                    dataKeys = dataKeys.map(function (key, index) {
-                        if (Number.isInteger(+key)) {
-                            var keys = dataKeys.slice(0, index);
-                            keys.unshift(schemaId);
-                            if (_fxSchemaFormCore.schemaKeysFactory.has(keys.join("/"))) {
-                                var schema = _fxSchemaFormCore.schemaFieldFactory.get(_fxSchemaFormCore.schemaKeysFactory.get(keys.join("/")));
-                                if (schema.type === "array") {
-                                    return +key;
-                                }
-                            }
-                        }
-                        return key;
-                    });
-                    return dataKeys;
                 }
             }, {
                 key: "render",
@@ -2776,15 +2866,19 @@ exports.default = function () {
                         _props$isValid = _props.isValid,
                         isValid = _props$isValid === undefined ? false : _props$isValid,
                         _props$isValidating = _props.isValidating,
-                        isValidating = _props$isValidating === undefined ? false : _props$isValidating;
+                        isValidating = _props$isValidating === undefined ? false : _props$isValidating,
+                        getRequiredKeys = _props.getRequiredKeys,
+                        getOptions = _props.getOptions;
 
-                    return _react2.default.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys }, this.props));
+                    var options = getOptions(this.props, "hoc", "schemaFormDec");
+                    var extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
+                    return _react2.default.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys }, extraProps));
                 }
             }]);
 
             return SchemaFormComponentHoc;
         }(_react.PureComponent);
-        SchemaFormComponentHoc = tslib_1.__decorate([(0, _reactRedux.connect)(function (state) {
+        SchemaFormComponentHoc = tslib_1.__decorate([(0, _recompose.compose)(_factory.hocFactory.get("utils")(), (0, _reactRedux.connect)(function (state) {
             var rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
                 dataKeys = rootKeys.concat(["data"]),
                 metaKeys = rootKeys.concat(["meta"]),
@@ -2796,7 +2890,7 @@ exports.default = function () {
                 errors: root.value.get("errors"),
                 isValidating: root.value.get("isLoading")
             };
-        }), tslib_1.__metadata("design:paramtypes", [Object])], SchemaFormComponentHoc);
+        })), tslib_1.__metadata("design:paramtypes", [Object])], SchemaFormComponentHoc);
         return SchemaFormComponentHoc;
     };
 };
@@ -2810,4 +2904,4 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_40__;
 /***/ })
 /******/ ])["default"];
 });
-//# sourceMappingURL=index.map
+//# sourceMappingURL=index.js.map

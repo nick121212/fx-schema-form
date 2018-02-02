@@ -37,8 +37,27 @@ declare const design: {
             title: string;
         };
         appType: {
-            type: string;
-            title: string;
+            oneOf: ({
+                $id: string;
+                type: string;
+                properties: {
+                    a: {
+                        type: string;
+                    };
+                    b?: undefined;
+                };
+                title: string;
+            } | {
+                $id: string;
+                type: string;
+                properties: {
+                    b: {
+                        type: string;
+                    };
+                    a?: undefined;
+                };
+                title: string;
+            })[];
         };
         dsModelIds: {
             type: string;

@@ -9,12 +9,9 @@ import { createSelector, createSelectorCreator, defaultMemoize, Selector } from 
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models";
+import { ConditionHocOutProps } from "./condition";
 
-export interface ConditionHocSettings {
-    keys?: string[];
-}
-
-export interface ClearHocProps extends DefaultProps, UtilsHocOutProps {
+export interface ConsoleHocProps extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps {
 
 }
 
@@ -27,13 +24,15 @@ export interface ClearHocProps extends DefaultProps, UtilsHocOutProps {
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>, settings: ConditionHocSettings = {}) => {
-    return (Component: any): RC<ClearHocProps, any> => {
-        class ComponentHoc extends React.PureComponent<ClearHocProps, any> {
+export default (hocFactory: BaseFactory<any>) => {
+    return (Component: any): RC<ConsoleHocProps, any> => {
+        class ComponentHoc extends React.PureComponent<ConsoleHocProps, any> {
             public render(): JSX.Element {
                 const extraProps: { [key: string]: any } = Object.assign({}, this.props);
 
-                console.log(extraProps);
+                if (this.props.condition) {
+                    console.log(this.props.condition.toJS());
+                }
 
                 return <Component {...extraProps} />;
             }

@@ -51,17 +51,17 @@ module.exports = {
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HotModuleReplacementPlugin(),
     ] : [
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false
-                },
-                output: {
-                    beautify: false
-                },
-                mangle: {
-                    eval: true
-                }
-            })
+            // new webpack.optimize.UglifyJsPlugin({
+            //     compress: {
+            //         warnings: false
+            //     },
+            //     output: {
+            //         beautify: false
+            //     },
+            //     mangle: {
+            //         eval: true
+            //     }
+            // })
         ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
@@ -69,7 +69,7 @@ module.exports = {
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
-        sourceMapFilename: "index.map",
+        // sourceMapFilename: "index.map",
         library: "SchemaFormCore",
         // umdNamedDefine: true,
         // libraryExport: "default"

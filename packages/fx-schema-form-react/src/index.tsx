@@ -31,6 +31,8 @@ defaultTheme.fieldFactory.add("array", ArrayField as any);
 
 themeFactory.add("default", defaultTheme as any);
 
+hocFactory.add("schemaFormDec", schemaFormDec.bind(schemaFormDec, hocFactory));
+
 export default {
     themeFactory,
     defaultTheme,

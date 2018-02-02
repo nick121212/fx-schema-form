@@ -7,19 +7,18 @@ import { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models";
+import { FxUiSchema, RC } from "../models/index";
 import { hocFactory, reducerFactory } from "../factory";
 import { TreeMap } from "./tree";
 import { SchemaFormActions } from "../reducers/schema.form";
-
-
+import { UtilsHocOutProps } from "../hocs/utils";
 
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
     parentKeys: string[];
 }
 
-export interface SchemaFormProps extends DefaultProps {
+export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
@@ -41,22 +40,24 @@ const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
  */
 export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component: any): RC<SchemaFormProps, any> => {
-        @(connect((state: Immutable.Map<string, any>) => {
-            let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
-                dataKeys = rootKeys.concat(["data"]),
-                metaKeys = rootKeys.concat(["meta"]),
-                root = state.getIn(metaKeys);
+        @(compose(
+            hocFactory.get("utils")(),
+            connect((state: Immutable.Map<string, any>) => {
+                let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
+                    dataKeys = rootKeys.concat(["data"]),
+                    metaKeys = rootKeys.concat(["meta"]),
+                    root = state.getIn(metaKeys);
 
-            return {
-                data: state.getIn(dataKeys),
-                root: root,
-                isValid: root.value.get("isValid"),
-                errors: root.value.get("errors"),
-                isValidating: root.value.get("isLoading")
-            };
-        }) as any)
+                return {
+                    data: state.getIn(dataKeys),
+                    root: root,
+                    isValid: root.value.get("isValid"),
+                    errors: root.value.get("errors"),
+                    isValidating: root.value.get("isLoading")
+                };
+            })) as any)
         class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
-            private _validateAll: () => Promise<void>;
+            private _validateAll: (async?: boolean) => Promise<void>;
 
             constructor(props: SchemaFormProps) {
                 super(props);
@@ -64,7 +65,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 this._validateAll = this.validateAll.bind(this);
             }
 
-            private async validateAll() {
+            private async validateAll(async?: boolean) {
                 let root = this.props.root as TreeMap,
                     validate = this.props.ajv.getSchema(this.props.schemaId),
                     $validateBeforeData = Immutable.fromJS({
@@ -73,7 +74,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         isLoading: true
                     }),
                     $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }),
-                    normalizeDataPath = this.normalizeDataPath;
+                    normalizeDataPath = this.props.normalizeDataPath;
 
                 if (!root) {
                     return;
@@ -96,6 +97,8 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         keys: [],
                         data: root.value
                     });
+
+                    (validate as any).$async = !!async;
 
                     await validate(this.props.data.toJS());
 
@@ -149,45 +152,16 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 }
             }
 
-            /**
-             * dataPath中的key格式化；
-             * dataPath中可能有数组的格式，所以需要把数字转换成数字，而不是字符换
-             * 遍历所有的key，发现是数字字符，则查找父级的schema，如果父级的type是array，则把当前key转换成数字
-             * @param schemaId schemaId
-             * @param dataPath 当前的数据路径字符串
-             */
-            private normalizeDataPath(schemaId: string, dataPath: string): Array<string | number> {
-                let dataKeys: Array<string | number> = dataPath.substring(1).split("/");
-
-                dataKeys = dataKeys.map((key: string | number, index: number) => {
-                    if (Number.isInteger(+key)) {
-                        let keys: Array<string | number> = dataKeys.slice(0, index);
-
-                        keys.unshift(schemaId);
-
-                        if (schemaKeysFactory.has(keys.join("/"))) {
-                            let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
-
-                            if (schema.type === "array") {
-                                return +key;
-                            }
-                        }
-                    }
-
-                    return key;
-                });
-
-                return dataKeys;
-            }
-
             public render(): JSX.Element | null {
-                const { errors, isValid = false, isValidating = false } = this.props;
+                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions } = this.props;
+                const options = getOptions(this.props, "hoc", "schemaFormDec");
+                const extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
 
                 return (
                     <Component
                         validateAll={this._validateAll}
                         parentKeys={settings.parentKeys}
-                        {...this.props} />
+                        {...extraProps} />
                 );
             }
         }

@@ -13,6 +13,9 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
     const $id = ResolveLib.getSchemaId(schemaKey);
 
     if (schemaFieldFactory.has(schemaKey)) {
+        if (currentSchema) {
+            (currentSchema as any).resolve = true;
+        }
         return currentSchema || schema;
     }
 
@@ -22,5 +25,5 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
     }));
     schemaKeysFactory.add([$id, ...keys].join("/"), schemaKey);
 
-    return schema;
+    return currentSchema || schema;
 };

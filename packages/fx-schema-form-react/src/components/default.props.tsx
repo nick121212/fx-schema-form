@@ -2,7 +2,7 @@ import { UiSchema } from "fx-schema-form-core/dist/typings/models/uischema";
 import { Ajv } from "ajv";
 import Immutable from "immutable";
 
-import { FxUiSchema } from "../models";
+import { FxUiSchema } from "../models/index";
 /**
  * 默认的组件参数
  */

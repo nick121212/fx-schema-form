@@ -8,7 +8,7 @@ import { default as ResolveLib } from "../libs/resolve";
  * 如果存在schema.properties,则遍历properties，继续解析schema.properties[key]
  */
 export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
-    if (schema.properties) {
+    if (schema.properties && !schema.$ref) {
         Object.keys(schema.properties).forEach((key: string) => {
 
             if (["properties", "items"].indexOf(key) >= 0) {

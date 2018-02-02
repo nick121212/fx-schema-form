@@ -37,8 +37,13 @@ describe("测试MergeLib类", () => {
                     title: "面板详情"
                 },
                 appType: {
-                    type: "string",
-                    title: "应用类型"
+                    oneOf: [{
+                        title: "应用类型",
+                        $ref: "design-object#"
+                    }, {
+                        $ref: "design-string#",
+                        title: "应用类型"
+                    }]
                 },
                 dsModelIds: {
                     type: "array",
@@ -74,6 +79,14 @@ describe("测试MergeLib类", () => {
                                 oneOf: [{
                                     $id: "design-object",
                                     type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string"
+                                        },
+                                        password: {
+                                            type: "string"
+                                        }
+                                    }
                                 }, {
                                     $id: "design-string",
                                     type: "string"
@@ -140,5 +153,13 @@ describe("测试MergeLib类", () => {
         expect(merge3.mergeUiSchemaList[2].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "infoOptions"].join());
         expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal(merge4.mergeUiSchemaList[0].keys.join());
     });
-    // design/infoOptions/-/name
+
+    it("实例化MergeLib，测试oneOf的合并", () => {
+        let merge = new MergeLib(ajv, "design", null, ["appType"]);
+        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
+            merge.mergeUiSchemaList[0], ["name", "password"]);
+
+        expect(merge1.mergeUiSchemaList.length).to.equal(2);
+        expect(merge1.mergeUiSchemaList[0].keys.join()).to.equal(["appType", "name"].join());
+    });
 });

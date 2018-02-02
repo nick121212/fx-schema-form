@@ -9,7 +9,7 @@ import { BaseFactory } from "fx-schema-form-core";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models";
+import { FxUiSchema, RC } from "../models/index";
 import { schemaFormReducer } from "../reducer";
 import { JSONSchema6 } from "json-schema";
 

@@ -104,7 +104,7 @@ describe("测试treemap", () => {
 
         child = dsModelData.containPath([1]);
 
-        console.log(dsModelData);
+        // console.log(dsModelData);
 
         // console.log(dsModelData);
 

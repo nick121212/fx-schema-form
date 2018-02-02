@@ -139,7 +139,7 @@ module.exports = {
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
-        sourceMapFilename: "index.map",
+        // sourceMapFilename: "index.map",
         library: "SchemaFormReact",
         umdNamedDefine: true,
         libraryExport: "default"

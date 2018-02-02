@@ -63,7 +63,7 @@ export default class ResolveLib {
         this.mergeSchema = schema;
 
         // 如果不存在type，则直接返回
-        if (!schema.type) {
+        if (!schema.type || schema.$ref) {
             return;
         }
 

@@ -6,10 +6,10 @@ import { BaseFactory } from "fx-schema-form-core";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models";
+import { FxUiSchema, RC } from "../models/index";
 import { schemaFormReducer } from "../reducer";
 
-export interface ValidateHocOutProps  {
+export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
@@ -43,7 +43,14 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
 
                         // 这里做一层try catch处理
                         try {
-                            let validateResult = await props.ajv.validate(props.uiSchema as Object, data);
+                            let validateResult;
+
+                            if (props.uiSchema.$id) {
+                                validateResult = await props.ajv.getSchema(props.uiSchema.$id)(data);
+                            } else {
+                                validateResult = await props.ajv.validate(props.uiSchema, data);
+                            }
+
                             result.isValid = validateResult;
 
                             // 如果验证出错，则抛出错误

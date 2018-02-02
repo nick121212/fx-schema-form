@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { Ajv } from "ajv";
 import Immutable from "immutable";
-import { FxUiSchema } from "../models";
+import { FxUiSchema } from "../models/index";
 export interface DefaultProps {
     schemaId: string;
     formId?: string;

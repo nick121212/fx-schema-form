@@ -4,6 +4,7 @@ import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { default as ResolveLib } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
+import { JSONSchema6 } from "json-schema";
 
 /**
  * 用来转换uiSchema的类
@@ -40,7 +41,17 @@ export default class MergeLib {
         }
 
         this.curSchema = schemaFieldFactory.get(schemaKeysFactory.get(keyPath));
+        if (this.curSchema.$id) {
+            this.curSchema.$ref = this.curSchema.$id;
+            this.curSchema.$id = undefined;
+        }
         this.mergeUiSchemaList = this.mergeUiSchema();
+
+        // if (this.curSchema.oneOf) {
+        //     this.curSchema.oneOf.map((oneOf: JSONSchema6) => {
+        //         return new merge
+        //     });
+        // }
     }
 
     /**
@@ -63,19 +74,21 @@ export default class MergeLib {
      * 3. 判断找到的schema中是否带有 $ref
      * 4. 如果有$ref，则更改parentKeys为$ref的路径
      * 5. 如果没有，则更改parentKeys为当前合并的keys
-     * @param uiSchemaKeys 
-     * @param parentKeys 
+     * @param uiSchemaKeys 当前的keys
+     * @param parentKeys   父亲的keys
      */
     private getUiSchemaKeyRecursion(uiSchemaKeys: string[], parentKeys: string[]) {
         while (uiSchemaKeys.length) {
             let key: string = uiSchemaKeys.shift() || "";
-            let keys: string[] = [...parentKeys, key];
+            let keys: string[] = key ? [...parentKeys, key] : parentKeys;
+            let keysStr = keys.join("/").replace(/\/$/, "");
 
-            if (!schemaKeysFactory.has(keys.join("/"))) {
+            if (!schemaKeysFactory.has(keysStr)) {
+                console.log(schemaKeysFactory);
                 throw new Error(`${keys.join("/")} did not found. do you forget to resolve schema first.`);
             }
 
-            let schema: FxJsonSchema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+            let schema: FxJsonSchema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
 
             if (schema.$ref) {
                 parentKeys = ResolveLib.getDataKeys(schema.$ref, true);
@@ -91,13 +104,14 @@ export default class MergeLib {
      * 获取当前uiSchema的key
      * 如果没有父亲节点
      * 默认返回父亲的key+当前uiSchema的key
-     * @param uiSchema 
+     * @param uiSchema uiSchma
      */
     private getCurrentSchemaKey(uiSchema: UiSchema) {
         const $id = ResolveLib.getSchemaId(this.schemaPath);
         let uiSchemaKeys = uiSchema.key.split("/");
 
-        if (this.parent) {
+        // 如果父亲节点的shcemaId不是传入的schemaId，则不适用父亲的key做计算
+        if (this.parent && ResolveLib.getSchemaId(this.parent.key) === $id) {
             return this.getUiSchemaKeyRecursion(uiSchemaKeys, this.parent.key.split("/"));
         }
 
@@ -114,7 +128,7 @@ export default class MergeLib {
         let parentKeys = this.getParentSchemaKeys(),
             keys;
 
-        keys = parentKeys.concat(uiSchema.key.split("/"));
+        keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
 
         return Object.assign({}, uiSchema, {
             key: this.getCurrentSchemaKey(uiSchema),
@@ -150,6 +164,7 @@ export default class MergeLib {
     private mergeUiSchema(): UiSchema[] {
         let idx: number = this.uiSchemas.indexOf("*");
         let uiSchemasFirst: UiSchema[] = [], uiSchemasLast: UiSchema[] = [];
+        let curSchema = this.curSchema, types = ["object", "array"];
 
         // 如果存在多个*，则报错
         if (this.uiSchemas.lastIndexOf("*") !== idx) {
@@ -181,8 +196,8 @@ export default class MergeLib {
         });
 
         // 如果是object类型，遍历properties属性，与之前的数据去重后添加到数组
-        if (this.curSchema.type === "object" && this.curSchema.properties) {
-            Object.keys(this.curSchema.properties).forEach((us: string) => {
+        if (curSchema.type === types[0] && curSchema.properties) {
+            Object.keys(curSchema.properties).forEach((us: string) => {
                 let uiSchema = this.initUiSchema({ key: us } as UiSchema);
 
                 if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
@@ -195,9 +210,9 @@ export default class MergeLib {
         }
 
         // 如果是数组，获取下一级的key，然后做对比处理
-        if (this.curSchema.type === "array" && this.curSchema.items) {
+        if (curSchema.type === types[1] && curSchema.items) {
             let uiSchema = this.initUiSchema({
-                key: ResolveLib.getDataKeys(this.curSchema.schemaPath || "").join("/")
+                key: ResolveLib.getDataKeys(curSchema.schemaPath || "").join("/")
             });
             // let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
 
@@ -214,6 +229,24 @@ export default class MergeLib {
             //     uiSchemaItems = this.mergeUiSchemaToArray(uiSchemaItems);
             //     uiSchemasFirst.push(uiSchemaItems);
             // }
+        }
+
+        // 是普通对象
+        if (types.indexOf(curSchema.type as string) < 0) {
+
+            console.log(curSchema, ResolveLib.getDataKeys(curSchema.schemaPath || "").join("/"));
+            let uiSchema = this.initUiSchema({
+                key: ResolveLib.getDataKeys(curSchema.schemaPath || "", false).join("/")
+            });
+
+            console.log(uiSchema);
+
+            if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
+                return val.key === uiSchema.key;
+            }).length) {
+                uiSchema = this.mergeUiSchemaToArray(uiSchema);
+                uiSchemasFirst.push(uiSchema);
+            }
         }
 
         return uiSchemasFirst.concat(uiSchemasLast);

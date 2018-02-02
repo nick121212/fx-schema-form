@@ -35,6 +35,6 @@ describe("key word of ref", () => {
         }, ajv);
 
         expect(schema).to.be.a("object");
-        expect(schema.$id).to.equal("test");
+        expect(schema.$ref).to.equal("test#");
     });
 });

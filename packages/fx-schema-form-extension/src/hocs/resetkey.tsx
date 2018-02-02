@@ -10,12 +10,13 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models";
 
-export interface ConditionHocSettings {
-    keys?: string[];
+export interface ResetKeysHocProps extends DefaultProps, UtilsHocOutProps {
+
 }
 
-export interface ClearHocProps extends DefaultProps, UtilsHocOutProps {
-
+export interface ResetKeysHocOutSettings {
+    excludeKeys: string[];
+    includeKeys: string[];
 }
 
 /**
@@ -27,19 +28,13 @@ export interface ClearHocProps extends DefaultProps, UtilsHocOutProps {
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>, settings: ConditionHocSettings = {}) => {
-    return (Component: any): RC<ClearHocProps, any> => {
-        class ComponentHoc extends React.PureComponent<ClearHocProps, any> {
+export default (hocFactory: BaseFactory<any>, settings: ResetKeysHocOutSettings = { excludeKeys: [], includeKeys: [] }) => {
+    return (Component: any): RC<ResetKeysHocProps, any> => {
+        class ComponentHoc extends React.PureComponent<ResetKeysHocProps, any> {
             public render(): JSX.Element {
-                const extraProps: { [key: string]: any } = Object.assign({}, this.props);
-
-                if (settings.keys) {
-                    settings.keys.forEach((key: string) => {
-                        if (extraProps.hasOwnProperty(key)) {
-                            delete extraProps[key];
-                        }
-                    });
-                }
+                const { getOptions, getRequiredKeys } = this.props;
+                const normalOptions = getOptions(this.props, "hoc", "resetkeys", Immutable.fromJS(settings || {}));
+                const extraProps = getRequiredKeys(this.props, normalOptions.includeKeys, normalOptions.excludeKeys);
 
                 return <Component {...extraProps} />;
             }

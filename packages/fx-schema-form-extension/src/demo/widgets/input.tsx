@@ -31,7 +31,7 @@ export class AntdInputWidget extends PureComponent<AntdInputWidgetProps, any> {
             <Input
                 onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
                     if (this._count > 0) {
-                        updateItemMeta(this.props, e.currentTarget.value);
+                        updateItemMeta(this.props, this.props.formItemData);
                     }
                 }}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {

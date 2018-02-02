@@ -75,17 +75,33 @@ class TestForm extends React.PureComponent<any> {
                 RootComponent={Form}
                 schemaId="design"
                 uiSchemas={[{
-                    key: "name",
-                    hocs: ["theme", "field", "validate", "condition", "temp"],
+                    key: "name"
+                }, {
+                    key: "appType",
+                    hocs: ["theme", "condition", "field", "validate", "temp"],
                     options: Immutable.fromJS({
                         hoc: {
                             condition: {
                                 paths: [{
-                                    path: "/description"
-                                }, {
                                     path: "/name"
                                 }],
-                                hoc: hocFactory.get("console")()
+                                hoc: hocFactory.get("oneof")({
+                                    path: "/name",
+                                    uiSchemas: {
+                                        "nick": {
+                                            index: 0,
+                                            uiSchema: {
+                                                children: ["*"]
+                                            }
+                                        },
+                                        "nora": {
+                                            index: 1,
+                                            uiSchema: {
+                                                children: ["*"]
+                                            }
+                                        }
+                                    }
+                                })
                             }
                         }
                     })

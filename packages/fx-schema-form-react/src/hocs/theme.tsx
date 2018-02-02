@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, NsFactory } from "../models";
+import { FxUiSchema, RC, NsFactory } from "../models/index";
 import { themeFactory } from "../factory";
 
 export interface ThemeHocOutProps {

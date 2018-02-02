@@ -3,6 +3,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib } from "../libs/resolve";
+import MergeLib from "../libs/merge";
 
 /**
  * 解析schema中的关键字 oneOf
@@ -16,11 +17,16 @@ export default (schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
 
     let oneOf = schema.oneOf;
 
-    if ( oneOf && oneOf.constructor === Array) {
+    if (oneOf && oneOf.constructor === Array) {
         schema.oneOf = oneOf.map((schemaOfOne: JSONSchema6) => {
-            let resolve = new ResolveLib(ajv, schemaOfOne);
+            let { mergeSchema } = new ResolveLib(ajv, schemaOfOne);
 
-            return resolve.mergeSchema;
+            // if (mergeSchema.$id) {
+            //     mergeSchema.$ref = mergeSchema.$id;
+            //     delete mergeSchema.$id;
+            // }
+
+            return mergeSchema;
         });
     }
 

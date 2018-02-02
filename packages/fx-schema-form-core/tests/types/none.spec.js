@@ -49,8 +49,8 @@ describe("普通类型的解析", () => {
     it("oneOf中的schema被替换成了正确的schema;数量为2；$ids = [test2,test1]", () => {
         expect(schema).to.be.a("object");
         expect(schema.oneOf.length).to.equal(2);
-        expect(schema.oneOf[0].$id).to.equal("test2");
-        expect(schema.oneOf[1].$id).to.equal("test1");
+        expect(schema.oneOf[0].$ref).to.equal("test2#");
+        expect(schema.oneOf[1].$ref).to.equal("test1#");
     });
 
     it("验证schemaFieldFactory中的key是否正确", () => {

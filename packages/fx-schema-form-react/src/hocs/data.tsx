@@ -7,7 +7,7 @@ import { createSelector, createSelectorCreator, defaultMemoize } from "reselect"
 import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models";
+import { FxUiSchema, RC } from "../models/index";
 import { UtilsHocOutProps } from "./utils";
 
 export interface DataHocOutProps extends DefaultProps {

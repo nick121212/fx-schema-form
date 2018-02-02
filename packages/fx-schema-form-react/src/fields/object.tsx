@@ -2,9 +2,9 @@ import React, { PureComponent } from "react";
 
 import { SchemaForm } from "../components/form";
 import { DefaultProps } from "../components";
-import { FxUiSchema } from "../models";
+import { FxUiSchema } from "../models/index";
 import { UtilsHocOutProps } from "../hocs/utils";
-import { compose } from 'recompose';
+import { compose } from "recompose";
 
 export interface ObjectFieldProps extends DefaultProps, UtilsHocOutProps {
 
