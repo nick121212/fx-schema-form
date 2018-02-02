@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
-    "fx-schema-form-core": "^3.0.16",
-    "fx-schema-form-react": "^3.0.22",
+    "fx-schema-form-core": "^3.0.23",
+    "fx-schema-form-react": "^3.0.23",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-immutable-render-mixin": "^0.9.7",

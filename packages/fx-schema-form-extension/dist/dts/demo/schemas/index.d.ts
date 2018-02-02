@@ -43,6 +43,7 @@ declare const design: {
                 properties: {
                     a: {
                         type: string;
+                        title: string;
                     };
                     b?: undefined;
                 };
@@ -53,6 +54,7 @@ declare const design: {
                 properties: {
                     b: {
                         type: string;
+                        title: string;
                     };
                     a?: undefined;
                 };

@@ -46,8 +46,14 @@ export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { pa
 
                 if (uiSchema.oneOf && options.uiSchemas[data]) {
                     let { index, uiSchema: uiSchemaInOneof } = options.uiSchemas[data];
+
+                    if (!uiSchema.oneOf[index]) {
+                        return null;
+                    }
+
                     uiSchemaInOneof = Object.assign({}, uiSchema, uiSchemaInOneof, uiSchema.oneOf[index], {
-                        keys: keys
+                        keys: keys,
+                        schemaPath: uiSchema.oneOf[index].$id || uiSchema.oneOf[index].$ref || uiSchema.schemaPath
                     });
 
                     return <Component {...extraProps} uiSchema={uiSchemaInOneof} />;

@@ -44,7 +44,8 @@ const design = {
                 type: "object",
                 properties: {
                     a: {
-                        type: "string"
+                        type: "string",
+                        title: "test-oneof-1"
                     }
                 },
                 title: "应用类型"
@@ -53,7 +54,8 @@ const design = {
                 type: "object",
                 properties: {
                     b: {
-                        type: "string"
+                        type: "string",
+                        title: "test-oneof-2"
                     }
                 },
                 title: "应用类型"

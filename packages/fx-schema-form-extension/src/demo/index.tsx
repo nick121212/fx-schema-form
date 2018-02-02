@@ -26,6 +26,7 @@ const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
 // 首先要解析一份schema
 let designResolve = new ResolveLib(curAjv, design as any);
+
 // 获取actions
 let actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
 // 将schemaForm加入到store
@@ -91,13 +92,13 @@ class TestForm extends React.PureComponent<any> {
                                         "nick": {
                                             index: 0,
                                             uiSchema: {
-                                                children: ["*"]
+                                                children: ["a"]
                                             }
                                         },
                                         "nora": {
                                             index: 1,
                                             uiSchema: {
-                                                children: ["*"]
+                                                children: ["b"]
                                             }
                                         }
                                     }
@@ -105,7 +106,7 @@ class TestForm extends React.PureComponent<any> {
                             }
                         }
                     })
-                }, "dsModelData/ids"]}
+                }]}
                 uiSchema={null as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={gloabelOptions}
