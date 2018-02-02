@@ -7,6 +7,7 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
 }
 export interface OneHocOutSettings {
     path: string;
+    key: "anyOf" | "oneOf";
     uiSchemas?: {
         [key: string]: FxUiSchema;
     };

@@ -14,11 +14,11 @@ export class BaseFactory<T> {
      */
     public add(name: string, intance: T, override = false): boolean | void {
         if (this.protectedInstances.hasOwnProperty(name)) {
-            return console.error(`name=【${name}】has locked!`);
+            return;//console.error(`name=【${name}】has locked!`);
         }
 
         if (!override && this.has(name)) {
-            return console.error(`【${name}】exist!`);
+            return;//console.error(`【${name}】exist!`);
         }
         this.instances[name] = intance;
 
