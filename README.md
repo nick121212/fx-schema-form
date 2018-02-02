@@ -10,7 +10,7 @@
 
 用于生成表单的组件。
 
-## [fx-schema-form-extendsion](./packages/fx-schema-form-extendsion/readme.md)
+## [fx-schema-form-extendsion](./packages/fx-schema-form-extension/readme.md)
 
 fx-schema-form-react的扩展。
 
