@@ -132,7 +132,7 @@ for (const key in actions) {
 
 ### 加入template和widget
 
-默认没有[template](自定义模板)和[widget](自定义组件)，所有需要加入一些组件。
+默认没有[template](自定义模板)和[widget](自定义组件)，需要加入一些组件。
 
 ```jsx
 defaultTheme.tempFactory.add("default", NoneTemp as any);
@@ -223,8 +223,6 @@ ReactDOM.render(
 ## 表单定制化
 
 ### 全局配置参数
-
-全局参数配置：
 
 默认分为3块内容：
 
