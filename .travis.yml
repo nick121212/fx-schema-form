@@ -1,17 +1,12 @@
 language: node_js
 node_js:
-  - "4"
-  - "6"
+  - "7"
   - "8"
   - "9"
 
 before_install:
   - npm install
-  - cd packages/fx-schema-form-core
-  - npm install
-  - cd ../fx-schema-form-react
-  - npm install
-  - cd ../../
+  - lerna bootstrap
 
 after_script:
   - echo "ok"
@@ -21,4 +16,4 @@ notifications:
     recipients:
       - nick121212@126.com
     on_success: change
-    on_failure: always
+    on_failure: always.

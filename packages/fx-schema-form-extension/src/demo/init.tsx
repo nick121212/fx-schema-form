@@ -127,7 +127,8 @@ export const gloabelOptions = Immutable.fromJS({
                     }
 
                     public render() {
-                        return <Component pressDelay={300} onSortEnd={this._onSortEnd}  {...this.props} />;
+                        return <Component useWindowAsScrollContainer={true}
+                            pressDelay={300} onSortEnd={this._onSortEnd}  {...this.props} />;
                     }
                 }
 
