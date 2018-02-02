@@ -174,7 +174,6 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
 ## 命令
 
 * ```npm test``` 测试命令
-* ```npm start``` 开发命令
 * ```npm run build``` 打包命令
 
 ## License
