@@ -108,7 +108,7 @@ const { reducerFactory, schemaFormDec, hocFactory, defaultTheme } = schemaFormRe
 
 ### 创建store，初始化schemaform的reducer
 
-这里的reducer的key是可以自定义的。从工厂类中获取schemaForm这个类；schemaForm是默认定义的reducer，可以自定义reducer来覆盖；
+这里的reducer的key是可以自定义的。从工厂类中获取schemaForm这个类；schemaForm是默认定义的reducer，可以自定义reducer来覆盖；
 
 ```tsx
 let store = createStore<any>(combineReducers({
@@ -150,7 +150,7 @@ defaultTheme.widgetFactory.add("number", AntdInputNumberWidget as any);
 ```jsx
 /**
  * SchemaForm的Hoc
- * 加入了
+ * 加入了
  * data           当前表单的数据，实时更新。
  * root           当前表单的meta根节点。
  * isValid        当前表单验证是否正确。
@@ -253,7 +253,7 @@ const gloabelOptions = Immutable.fromJS({
             // 与【fieldHocs】的区别在于
             // 包裹的位置不同，formHocs是包裹在field组件内部的根元素上；fieldHocs是包裹在field组件上
             formHocs: [(Component: any) => {
-                class SortableComponentWrapper extends React.PureComponent<any> {
+                class SortableComponentWrapper extends React.PureComponent<any> {
                     private _onSortEnd: any;
 
                     constructor(props: any) {
@@ -342,9 +342,9 @@ const gloabelOptions = Immutable.fromJS({
 uiSchema的参数配置：
 
 - **options?: Immutable.Map<string, any>;** 定义参数，与全局的配置参数格式一致；会覆盖全局的配置参数，用于单个FormSchemaItem的配置。
-- **children?: Array<UiSchema | string>;** 一般用于object和array的对象；用于渲染下级显示的key。
+- **children?: Array<UiSchema | string>;** 一般用于object和array的对象；用于渲染下级显示的key。
 - **theme?: string;** 主题样式配置（default: default）。
-- **field?: string;** 定义字段。默认使用JsonSchema的type来确定field，也可以使用这个来指定字段。
+- **field?: string;** 定义字段。默认使用JsonSchema的type来确定field，也可以使用这个来指定字段。
 - **widget?: string;** 定义显示组件。每种数据类型都可以使用不同的组件来渲染。
 - **temps?: string[];** 定义包裹的模板数组。
 - **isRequired?: boolean;** 是否是required，自动添加。
