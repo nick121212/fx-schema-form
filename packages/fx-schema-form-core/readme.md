@@ -9,7 +9,7 @@ schemaForm的核心组件。用于解析JsonSchema，为SchemaForm提供支持�
 
 ## 重要的概念
 
-jsonschema；用于描述json的结构。
+jsonschema；用于描述json的结构。
 uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
 ## API
@@ -46,14 +46,14 @@ uischema；用于描述界面的表现形式，是jsonschema的增强属性。
  * 构造函数
  * @param ajv      Ajv的一个实例
  * @param schema   jsonschema
- * @param $id      schema的$id字段，用于找到schema
+ * @param $id      schema的$id字段，用于找到schema
  */
 constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "")
 ```
 
 ### MergeLib
 
-> 解析uiSchama，与对应的schema合并
+> 解析uiSchama，与对应的schema合并
 
 ``` typescript
 /**
@@ -61,7 +61,7 @@ constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "")
  * @param ajv        Ajv的一个实例
  * @param schema     schemaPath
  * @param parent     父亲schema
- * @param uiSchemas  uiSchemas
+ * @param uiSchemas  uiSchemas
  */
 constructor(ajv: Ajv, private schemaPath: string, public parent: UiSchema | null = null, private uiSchemas: Array<UiSchema | string> = ["*"]) {
 ```
