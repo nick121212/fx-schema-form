@@ -7,6 +7,65 @@ schemaForm的核心组件。用于解析JsonSchema，为SchemaForm提供支持�
 * ajv
 * jsonschema
 
+## 重要的概念
+
+jsonschema；用于描述json的结构。
+uischema；用于描述界面的表现形式，是jsonschema的增强属性。
+
+## API
+
+### schemaKeysFactory
+
+> 存储了所有key与schemaKey的对应关系
+
+### schemaFieldFactory
+
+> 存储了schemaKey对应的schema
+
+### schemaKeyWordFactory
+
+> 所有的keyword处理方式。目前有ref和oneOf；
+
+* ref；处理schema中的$ref关键字
+* oneOf；处理schema中的oneOf关键字
+
+### schemaTypeFactory
+
+> schema类型的处理方式
+
+* array     schema中数组类型
+* object    schema中的对象类型
+* undefined schema中的其他简单类型
+
+### ResolveLib
+
+> 解析schema中的所有字段，存储到【schemaFieldFactory】中
+
+``` typescript
+/**
+ * 构造函数
+ * @param ajv      Ajv的一个实例
+ * @param schema   jsonschema
+ * @param $id      schema的$id字段，用于找到schema
+ */
+constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "")
+```
+
+### MergeLib
+
+> 解析uiSchama，与对应的schema合并
+
+``` typescript
+/**
+ * 构造函数
+ * @param ajv        Ajv的一个实例
+ * @param schema     schemaPath
+ * @param parent     父亲schema
+ * @param uiSchemas  uiSchemas
+ */
+constructor(ajv: Ajv, private schemaPath: string, public parent: UiSchema | null = null, private uiSchemas: Array<UiSchema | string> = ["*"]) {
+```
+
 ## 基础使用
 
 > 定义Schema
