@@ -2,6 +2,8 @@
 
 爬虫前端核心组件。用于生成静态或者动态表单；
 
+[![Build Status](https://travis-ci.org/nick121212/fx-schema-form.svg?branch=master)](https://travis-ci.org/nick121212/fx-schema-form)
+
 ## 一个一直有想法但并没有花时间去实现的功能
 
 <!-- 表单交给后端来渲染生成，想怎么改怎么改。当然不是让后端去拼接html代码。而是通过配置文件，生成出强大的表单； -->
