@@ -1,8 +1,6 @@
-# react-schema-form
+# react-schema-form [![Build Status](https://travis-ci.org/nick121212/fx-schema-form.svg?branch=master)](https://travis-ci.org/nick121212/fx-schema-form)
 
 爬虫前端核心组件。用于生成静态或者动态表单；
-
-[![Build Status](https://travis-ci.org/nick121212/fx-schema-form.svg?branch=master)](https://travis-ci.org/nick121212/fx-schema-form)
 
 ## 一个一直有想法但并没有花时间去实现的功能
 
