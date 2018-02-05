@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { compose } from "redux";
+import { ValidationMap } from "prop-types";
 
 import { DefaultProps } from "../default.props";
 import { hoc } from "./container";
@@ -12,10 +13,7 @@ export interface Props extends DefaultProps {
 
 @(hoc as any)
 export class SchemaFormItem extends PureComponent<Props, any> {
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-    }
+    public static propTypes: ValidationMap<Props>;
 
     public render() {
         const { FieldComponent, uiSchema, ...extraProps } = this.props as Props & FieldHocOutProps & UtilsHocOutProps;

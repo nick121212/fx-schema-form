@@ -1,10 +1,10 @@
 /// <reference types="react" />
 import { Ajv } from "ajv";
 import Immutable from "immutable";
+import { ValidationMap } from "prop-types";
 import { FxUiSchema } from "../models/index";
 export interface DefaultProps {
     schemaId: string;
-    formId?: string;
     uiSchema?: FxUiSchema;
     parentKeys: string[];
     globalOptions: Immutable.Map<string, any>;
@@ -15,4 +15,6 @@ export interface DefaultProps {
     formItemMeta?: any;
     ArrayItemComponent?: new () => React.PureComponent<DefaultProps>;
 }
-export declare const props = 1;
+export declare const DefaultPropsTypeCheck: ValidationMap<DefaultProps & {
+    customProp: Function;
+}>;

@@ -103,6 +103,12 @@ module.exports = {
             commonjs2: 'ajv',
             commonjs: 'ajv'
         },
+        "prop-types": {
+            root: 'prop-types',
+            amd: 'prop-typese',
+            commonjs2: 'prop-types',
+            commonjs: 'prop-types'
+        },
         "resolve-pathname": {
             root: 'resolve-pathname',
             amd: 'resolve-pathname',

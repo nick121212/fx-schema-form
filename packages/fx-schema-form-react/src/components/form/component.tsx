@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes, { ValidationMap } from "prop-types";
 
 import { DefaultProps } from "../index";
 import { hoc } from "./container";
@@ -13,6 +14,8 @@ export interface Props extends DefaultProps, MergeHocOutProps {
 
 @(hoc as any)
 export class SchemaForm extends PureComponent<Props, any> {
+    public static propTypes: ValidationMap<Props>;
+
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;
         const formItemList = mergeSchemaList ? mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {

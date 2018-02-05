@@ -10,16 +10,13 @@ import Immutable from "immutable";
 import { Provider } from "react-redux";
 
 import { design } from "./schemas";
-
-import Button from "antd/lib/button";
-import Form from "antd/lib/form";
-
 import "antd/dist/antd.css";
 import "react-perf-tool/lib/styles.css";
 
 import "../";
 
-import { gloabelOptions, curAjv } from "./init";
+import { curAjv } from "./init";
+import { TestForm } from "./form";
 
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
@@ -45,8 +42,26 @@ for (const key in actions) {
 actions.createForm({
     key: "designForm",
     data: {
-        dsModelIds: [],
-        name: "nick"
+        name: "nick",
+        children: [{
+            data: {
+                label: "DIV",
+                uiSchema: {
+                    field: {
+                        temps: ["div"]
+                    }
+                }
+            }
+        }, {
+            data: {
+                label: "DIV",
+                uiSchema: {
+                    field: {
+                        temps: ["div"]
+                    }
+                }
+            }
+        }]
     }
 });
 
@@ -54,76 +69,11 @@ store.subscribe(() => {
     console.log(store.getState().toJS());
 });
 
-@(schemaFormDec({
-    rootReducerKey: ["schemaForm"],
-    parentKeys: ["designForm"]
-}) as any)
-class TestForm extends React.PureComponent<any> {
-
-    private _validateAll: () => Promise<void>;
-
-    constructor(props: any) {
-        super(props);
-
-        this._validateAll = props.validateAll.bind(this);
-    }
-
-    public render() {
-        return <div>
-            <SchemaForm
-                key={"designForm" + "design"}
-                RootComponent={Form}
-                schemaId="design"
-                uiSchemas={["point", {
-                    key: "name"
-                }, {
-                        key: "appType",
-                        hocs: ["theme", "validate", "condition", "field", "temp"],
-                        options: Immutable.fromJS({
-                            hoc: {
-                                condition: {
-                                    paths: [{
-                                        path: "/name"
-                                    }],
-                                    hoc: hocFactory.get("oneof")({
-                                        path: "/name",
-                                        key: "anyOf",
-                                        uiSchemas: {
-                                            "nick": {
-                                                index: 0,
-                                                uiSchema: {
-                                                    children: ["a"]
-                                                }
-                                            },
-                                            "nora": {
-                                                index: 1,
-                                                uiSchema: {
-                                                    children: ["b"]
-                                                }
-                                            }
-                                        }
-                                    })
-                                }
-                            }
-                        })
-                    }]}
-                uiSchema={null as any}
-                parentKeys={this.props.parentKeys}
-                globalOptions={gloabelOptions}
-                ajv={curAjv} >
-            </SchemaForm>
-            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>
-                validate is {this.props.isValid ? this.props.isValid.toString() : "false"}
-            </Button>
-        </div>;
-    }
-}
-
 ReactDOM.render(
     <Provider store={store}>
         <div>
             <TestForm ajv={curAjv} schemaId="design" />
-            <ReactPerfTool perf={Perf} />
+            {/*<ReactPerfTool perf={Perf} />*/}
         </div>
     </Provider>,
     document.getElementById("root"),

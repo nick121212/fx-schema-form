@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("redux-act"), require("reselect"), require("redux"), require("ajv"));
+		module.exports = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("redux-act"), require("reselect"), require("redux"), require("prop-types"), require("ajv"));
 	else if(typeof define === 'function' && define.amd)
-		define("SchemaFormReact", ["react", "recompose", "immutable", "fx-schema-form-core", "react-redux", "resolve-pathname", "redux-act", "reselect", "redux", "ajv"], factory);
+		define("SchemaFormReact", ["react", "recompose", "immutable", "fx-schema-form-core", "react-redux", "resolve-pathname", "redux-act", "reselect", "redux", "prop-typese", "ajv"], factory);
 	else if(typeof exports === 'object')
-		exports["SchemaFormReact"] = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("redux-act"), require("reselect"), require("redux"), require("ajv"));
+		exports["SchemaFormReact"] = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("redux-act"), require("reselect"), require("redux"), require("prop-types"), require("ajv"));
 	else
-		root["SchemaFormReact"] = factory(root["React"], root["recompose"], root["Immutable"], root["SchemaFormCore"], root["react-redux"], root["resolve-pathname"], root["redux-act"], root["reselect"], root["Redux"], root["Ajv"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_14__, __WEBPACK_EXTERNAL_MODULE_19__, __WEBPACK_EXTERNAL_MODULE_25__, __WEBPACK_EXTERNAL_MODULE_31__, __WEBPACK_EXTERNAL_MODULE_40__) {
+		root["SchemaFormReact"] = factory(root["React"], root["recompose"], root["Immutable"], root["SchemaFormCore"], root["react-redux"], root["resolve-pathname"], root["redux-act"], root["reselect"], root["Redux"], root["prop-types"], root["Ajv"]);
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_15__, __WEBPACK_EXTERNAL_MODULE_20__, __WEBPACK_EXTERNAL_MODULE_26__, __WEBPACK_EXTERNAL_MODULE_32__, __WEBPACK_EXTERNAL_MODULE_34__, __WEBPACK_EXTERNAL_MODULE_41__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -316,7 +316,7 @@ exports.themeFactory = exports.hocFactory = exports.reducerFactory = undefined;
 
 var _fxSchemaFormCore = __webpack_require__(5);
 
-var _hocs = __webpack_require__(11);
+var _hocs = __webpack_require__(12);
 
 var _reducer = __webpack_require__(6);
 
@@ -354,7 +354,7 @@ exports.schemaFormReducer = undefined;
 
 var _immutable = __webpack_require__(3);
 
-var _schema = __webpack_require__(18);
+var _schema = __webpack_require__(19);
 
 var schemaFormReducer = exports.schemaFormReducer = new _schema.SchemaFormReducer((0, _immutable.fromJS)({}));
 
@@ -370,8 +370,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaForm = undefined;
 
-var _component = __webpack_require__(27);
+var _component = __webpack_require__(28);
 
+var _default = __webpack_require__(10);
+
+_component.SchemaForm.propTypes = Object.assign({}, _default.DefaultPropsTypeCheck);
 exports.SchemaForm = _component.SchemaForm;
 
 /***/ }),
@@ -567,26 +570,57 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.DefaultPropsTypeCheck = undefined;
+
+var _propTypes = __webpack_require__(34);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DefaultPropsTypeCheck = exports.DefaultPropsTypeCheck = {
+    schemaId: _propTypes2.default.string.isRequired,
+    uiSchema: _propTypes2.default.object,
+    parentKeys: _propTypes2.default.array.isRequired,
+    globalOptions: _propTypes2.default.object.isRequired,
+    ajv: _propTypes2.default.object.isRequired,
+    arrayIndex: _propTypes2.default.number,
+    arrayLevel: _propTypes2.default.array,
+    formItemData: _propTypes2.default.any,
+    formItemMeta: _propTypes2.default.any,
+    ArrayItemComponent: _propTypes2.default.any
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _fxSchemaFormCore = __webpack_require__(5);
 
 var _factory = __webpack_require__(4);
 
-var _components = __webpack_require__(26);
+var _components = __webpack_require__(27);
 
-var _models = __webpack_require__(34);
+var _models = __webpack_require__(35);
 
-var _fields = __webpack_require__(35);
+var _fields = __webpack_require__(36);
 
 var _tree = __webpack_require__(8);
 
-var _dec = __webpack_require__(39);
+var _dec = __webpack_require__(40);
 
 var _dec2 = _interopRequireDefault(_dec);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var total = _components.props + _models.models;
+var total = _models.models;
 var defaultTheme = {
     tempFactory: new _fxSchemaFormCore.BaseFactory(),
     fieldFactory: new _fxSchemaFormCore.BaseFactory(),
@@ -608,7 +642,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -618,7 +652,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _merge = __webpack_require__(12);
+var _merge = __webpack_require__(13);
 
 Object.defineProperty(exports, "merge", {
   enumerable: true,
@@ -627,7 +661,7 @@ Object.defineProperty(exports, "merge", {
   }
 });
 
-var _utils = __webpack_require__(13);
+var _utils = __webpack_require__(14);
 
 Object.defineProperty(exports, "utils", {
   enumerable: true,
@@ -636,7 +670,7 @@ Object.defineProperty(exports, "utils", {
   }
 });
 
-var _theme = __webpack_require__(15);
+var _theme = __webpack_require__(16);
 
 Object.defineProperty(exports, "theme", {
   enumerable: true,
@@ -645,7 +679,7 @@ Object.defineProperty(exports, "theme", {
   }
 });
 
-var _field = __webpack_require__(16);
+var _field = __webpack_require__(17);
 
 Object.defineProperty(exports, "field", {
   enumerable: true,
@@ -654,7 +688,7 @@ Object.defineProperty(exports, "field", {
   }
 });
 
-var _array = __webpack_require__(17);
+var _array = __webpack_require__(18);
 
 Object.defineProperty(exports, "array", {
   enumerable: true,
@@ -663,7 +697,7 @@ Object.defineProperty(exports, "array", {
   }
 });
 
-var _validate = __webpack_require__(21);
+var _validate = __webpack_require__(22);
 
 Object.defineProperty(exports, "validate", {
   enumerable: true,
@@ -672,7 +706,7 @@ Object.defineProperty(exports, "validate", {
   }
 });
 
-var _make = __webpack_require__(22);
+var _make = __webpack_require__(23);
 
 Object.defineProperty(exports, "make", {
   enumerable: true,
@@ -681,7 +715,7 @@ Object.defineProperty(exports, "make", {
   }
 });
 
-var _temp = __webpack_require__(23);
+var _temp = __webpack_require__(24);
 
 Object.defineProperty(exports, "temp", {
   enumerable: true,
@@ -690,7 +724,7 @@ Object.defineProperty(exports, "temp", {
   }
 });
 
-var _data = __webpack_require__(24);
+var _data = __webpack_require__(25);
 
 Object.defineProperty(exports, "data", {
   enumerable: true,
@@ -702,7 +736,7 @@ Object.defineProperty(exports, "data", {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -797,7 +831,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -819,7 +853,7 @@ var _immutable = __webpack_require__(3);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _resolvePathname = __webpack_require__(14);
+var _resolvePathname = __webpack_require__(15);
 
 var _resolvePathname2 = _interopRequireDefault(_resolvePathname);
 
@@ -971,13 +1005,13 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_14__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1041,7 +1075,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1123,7 +1157,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1343,7 +1377,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1356,11 +1390,11 @@ exports.SchemaFormReducer = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _reduxAct = __webpack_require__(19);
+var _reduxAct = __webpack_require__(20);
 
 var _immutable = __webpack_require__(3);
 
-var _reducer = __webpack_require__(20);
+var _reducer = __webpack_require__(21);
 
 var _tree = __webpack_require__(8);
 
@@ -1604,13 +1638,13 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
 }();
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_19__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1622,7 +1656,7 @@ Object.defineProperty(exports, "__esModule", {
 var a = exports.a = 1;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1818,7 +1852,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1869,9 +1903,10 @@ exports.default = function (hocFactory) {
                     var _props = this.props,
                         uiSchema = _props.uiSchema,
                         getOptions = _props.getOptions;
-                    var type = uiSchema.type;
+                    var type = uiSchema.type,
+                        field = uiSchema.field;
 
-                    var fieldOptions = getOptions(this.props, "field", type, _immutable2.default.fromJS({ hocs: uiSchema.hocs }), _immutable2.default.fromJS(settings || {}));
+                    var fieldOptions = getOptions(this.props, "field", field || type, _immutable2.default.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}), _immutable2.default.fromJS(settings || {}));
                     var hocs = fieldOptions.hocs || ["theme", "field", "validate", "array", "temp"];
                     hocs.unshift("utils");
                     var ComponentWithHocs = _recompose.compose.apply(undefined, _toConsumableArray([].concat(_toConsumableArray(hocs)).map(function (hoc) {
@@ -1892,7 +1927,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2013,7 +2048,7 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2037,7 +2072,7 @@ var _recompose = __webpack_require__(1);
 
 var _reactRedux = __webpack_require__(9);
 
-var _reselect = __webpack_require__(25);
+var _reselect = __webpack_require__(26);
 
 var _immutable = __webpack_require__(3);
 
@@ -2140,13 +2175,13 @@ exports.default = function (hocFactory) {
 };
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_25__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_26__;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2165,17 +2200,8 @@ Object.defineProperty(exports, "SchemaForm", {
   }
 });
 
-var _default = __webpack_require__(33);
-
-Object.defineProperty(exports, "props", {
-  enumerable: true,
-  get: function get() {
-    return _default.props;
-  }
-});
-
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2196,9 +2222,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _container = __webpack_require__(28);
+var _container = __webpack_require__(29);
 
-var _index = __webpack_require__(29);
+var _index = __webpack_require__(30);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2246,7 +2272,7 @@ exports.SchemaForm = SchemaForm = tslib_1.__decorate([_container.hoc], SchemaFor
 exports.SchemaForm = SchemaForm;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2266,7 +2292,7 @@ var hoc = exports.hoc = (0, _recompose.compose)((0, _recompose.shouldUpdate)(fun
 }), _factory.hocFactory.get("utils")(), _factory.hocFactory.get("merge")());
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2277,12 +2303,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaFormItem = undefined;
 
-var _component = __webpack_require__(30);
+var _component = __webpack_require__(31);
 
+var _default = __webpack_require__(10);
+
+_component.SchemaFormItem.propTypes = Object.assign({}, _default.DefaultPropsTypeCheck);
 exports.SchemaFormItem = _component.SchemaFormItem;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2303,9 +2332,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _redux = __webpack_require__(31);
+var _redux = __webpack_require__(32);
 
-var _container = __webpack_require__(32);
+var _container = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2322,10 +2351,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SchemaFormItem = function (_PureComponent) {
     _inherits(SchemaFormItem, _PureComponent);
 
-    function SchemaFormItem(props, context) {
+    function SchemaFormItem() {
         _classCallCheck(this, SchemaFormItem);
 
-        return _possibleConstructorReturn(this, (SchemaFormItem.__proto__ || Object.getPrototypeOf(SchemaFormItem)).call(this, props, context));
+        return _possibleConstructorReturn(this, (SchemaFormItem.__proto__ || Object.getPrototypeOf(SchemaFormItem)).apply(this, arguments));
     }
 
     _createClass(SchemaFormItem, [{
@@ -2350,17 +2379,17 @@ var SchemaFormItem = function (_PureComponent) {
 
     return SchemaFormItem;
 }(_react.PureComponent);
-exports.SchemaFormItem = SchemaFormItem = tslib_1.__decorate([_container.hoc, tslib_1.__metadata("design:paramtypes", [Object, Object])], SchemaFormItem);
+exports.SchemaFormItem = SchemaFormItem = tslib_1.__decorate([_container.hoc], SchemaFormItem);
 exports.SchemaFormItem = SchemaFormItem;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2378,28 +2407,10 @@ var _factory = __webpack_require__(4);
 var hoc = exports.hoc = (0, _recompose.compose)(_factory.hocFactory.get("utils")(), _factory.hocFactory.get("make")());
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var props = exports.props = 1;
-
-/***/ }),
 /* 34 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var models = exports.models = 1;
+module.exports = __WEBPACK_EXTERNAL_MODULE_34__;
 
 /***/ }),
 /* 35 */
@@ -2411,8 +2422,20 @@ var models = exports.models = 1;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var models = exports.models = 1;
 
-var _normal = __webpack_require__(36);
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _normal = __webpack_require__(37);
 
 Object.defineProperty(exports, "NormalField", {
   enumerable: true,
@@ -2421,7 +2444,7 @@ Object.defineProperty(exports, "NormalField", {
   }
 });
 
-var _object = __webpack_require__(37);
+var _object = __webpack_require__(38);
 
 Object.defineProperty(exports, "ObjectField", {
   enumerable: true,
@@ -2430,7 +2453,7 @@ Object.defineProperty(exports, "ObjectField", {
   }
 });
 
-var _array = __webpack_require__(38);
+var _array = __webpack_require__(39);
 
 Object.defineProperty(exports, "ArrayField", {
   enumerable: true,
@@ -2440,7 +2463,7 @@ Object.defineProperty(exports, "ArrayField", {
 });
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2511,7 +2534,7 @@ var NormalField = exports.NormalField = function (_PureComponent) {
 }(_react.PureComponent);
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2579,7 +2602,7 @@ var ObjectField = exports.ObjectField = function (_PureComponent) {
 }(_react.PureComponent);
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2711,7 +2734,7 @@ var ArrayField = exports.ArrayField = function (_PureComponent) {
 }(_react.PureComponent);
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2739,7 +2762,7 @@ var _immutable = __webpack_require__(3);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _ajv = __webpack_require__(40);
+var _ajv = __webpack_require__(41);
 
 var _factory = __webpack_require__(4);
 
@@ -2930,10 +2953,10 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_40__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_41__;
 
 /***/ })
 /******/ ])["default"];

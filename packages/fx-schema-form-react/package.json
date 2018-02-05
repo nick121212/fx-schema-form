@@ -29,6 +29,7 @@
     "ajv": "^6.1.0",
     "fx-schema-form-core": "^3.0.25",
     "immutable": "^3.8.2",
+    "prop-types": "^15.6.0",
     "react": "^15.6.2",
     "react-redux": "^5.0.6",
     "recompose": "^0.26.0",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/json-schema": "^6.0.0",
     "@types/node": "^9.4.0",
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^15.0.0",
     "@types/react-dom": "^15.0.0",
     "@types/react-redux": "^5.0.14",

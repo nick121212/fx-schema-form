@@ -24,9 +24,9 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
         class MakeComponentHoc extends PureComponent<DefaultProps & MakeHocOutProps, any> {
             public render(): JSX.Element {
                 const { uiSchema, getOptions } = this.props;
-                const { type } = uiSchema as FxUiSchema;
-                const fieldOptions = getOptions(this.props, "field", type as string,
-                    Immutable.fromJS({ hocs: uiSchema.hocs }),
+                const { type, field } = uiSchema as FxUiSchema;
+                const fieldOptions = getOptions(this.props, "field", field || type as string,
+                    Immutable.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}),
                     Immutable.fromJS(settings || {}));
                 const hocs: Array<string | ComponentEnhancer<any, any>> = fieldOptions.hocs
                     || ["theme", "field", "validate", "array", "temp"];

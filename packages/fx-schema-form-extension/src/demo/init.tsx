@@ -93,7 +93,6 @@ export class ArrayItemComponent extends PureComponent<DefaultProps & any> {
 
         return <Button.Group key="opt">
             <Button key="remove" type="primary" icon="minus" onClick={this.removeItem} />
-            <Button key="moveTo" type="primary" icon="swap-right" onClick={this.moveTo} />
         </Button.Group>;
     }
 }
@@ -186,6 +185,68 @@ export const gloabelOptions = Immutable.fromJS({
         }
     }
 });
+
+export const globalOptionsOfDesign = Immutable.fromJS({
+    field: {
+        design: {
+            temps: ["card"],
+            hocs: ["theme", "field", "validate", "extraTemp"],
+            globalOptions: gloabelOptions,
+            // 这里为array字段添加sort排序功能
+            formHocs: [(Component: any) => {
+                class EEEE extends React.PureComponent<any> {
+                    private _onSortEnd: any;
+
+                    constructor(props: any) {
+                        super(props);
+
+                        this._onSortEnd = this.onSortEnd.bind(this);
+                    }
+
+                    private onSortEnd({ oldIndex, newIndex }: { oldIndex: number; newIndex: number; }) {
+                        const { uiSchema, parentKeys } = this.props;
+
+                        if (oldIndex === newIndex) {
+                            return;
+                        }
+                        this.props.moveItem(parentKeys, uiSchema.keys, oldIndex, newIndex);
+                    }
+
+                    public render() {
+                        return <span>
+                            EEEE
+                            <Component useWindowAsScrollContainer={true}
+                                pressDelay={300} onSortEnd={this._onSortEnd}  {...this.props} />
+                        </span>;
+                    }
+                }
+
+                return EEEE;
+            }, SortableContainer, schemaFormReact.hocFactory.get("resetKey")({
+                category: "field",
+                field: "array",
+                key: "keys"
+            })],
+            formItemHocs: [SortableElement, shouldUpdate(() => false)],
+            fieldHocs: [schemaFormReact.hocFactory.get("data")({
+                data: true,
+                dataLength: true
+            })]
+        }
+    },
+    temp: {
+    },
+    hoc: {
+        data: {
+            rootReducerKey: ["schemaForm"]
+        },
+        array: {
+            ArrayComponent: ArrayComponent,
+            ArrayItemComponent: ArrayItemComponent
+        }
+    }
+});
+
 
 export const curAjv: ajv.Ajv = new ajv({
     allErrors: true,
