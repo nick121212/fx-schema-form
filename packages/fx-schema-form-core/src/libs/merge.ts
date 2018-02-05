@@ -233,13 +233,9 @@ export default class MergeLib {
 
         // 是普通对象
         if (types.indexOf(curSchema.type as string) < 0) {
-
-            console.log(curSchema, ResolveLib.getDataKeys(curSchema.schemaPath || "").join("/"));
             let uiSchema = this.initUiSchema({
                 key: ResolveLib.getDataKeys(curSchema.schemaPath || "", false).join("/")
             });
-
-            console.log(uiSchema);
 
             if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
                 return val.key === uiSchema.key;

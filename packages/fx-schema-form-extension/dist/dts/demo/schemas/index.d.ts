@@ -27,36 +27,46 @@ declare const design: {
             type: string;
             title: string;
             $async: boolean;
-            idExists: {
-                "table": string;
-            };
+            idExists: {};
             description: string;
+        };
+        point: {
+            "type": string;
+            "title": string;
+            "properties": {
+                "x": {
+                    "type": string;
+                };
+                "y": {
+                    "type": string;
+                };
+            };
         };
         description: {
             type: string;
             title: string;
         };
         appType: {
-            oneOf: ({
+            anyOf: ({
                 $id: string;
                 type: string;
+                required: string[];
                 properties: {
                     a: {
                         type: string;
                         title: string;
                     };
-                    b?: undefined;
                 };
                 title: string;
             } | {
                 $id: string;
                 type: string;
+                required: string[];
                 properties: {
                     b: {
                         type: string;
                         title: string;
                     };
-                    a?: undefined;
                 };
                 title: string;
             })[];
@@ -64,7 +74,6 @@ declare const design: {
         dsModelIds: {
             type: string;
             maxItems: number;
-            minItems: number;
             items: {
                 type: string;
                 required: string[];

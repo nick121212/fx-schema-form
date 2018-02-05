@@ -1,4 +1,4 @@
-import { ref, oneof } from "./keys/index";
+import { ref, oneof, anyof } from "./keys/index";
 import { array, none, object } from "./types/index";
 import { BaseFactory } from "./libs/factory";
 import { schemaFieldFactory, schemaKeyWordFactory, schemaTypeFactory, schemaKeysFactory } from "./factory";
@@ -9,6 +9,8 @@ export { default as MergeLib } from "./libs/merge";
 
 schemaKeyWordFactory.add("ref", ref);
 schemaKeyWordFactory.add("oneof", oneof);
+schemaKeyWordFactory.add("anyof", anyof);
+
 
 schemaTypeFactory.add("array", array);
 schemaTypeFactory.add("string", none);

@@ -31,17 +31,30 @@ const design = {
             type: "string",
             title: "面板名称",
             $async: true,
-            idExists: { "table": "users" },
+            idExists: {},
             description: "远程验证字段，输入nick试试看"
+        },
+        point: {
+            "type": "object",
+            "title": "表示一个点的坐标",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                }
+            }
         },
         description: {
             type: "string",
             title: "面板详情"
         },
         appType: {
-            oneOf: [{
+            anyOf: [{
                 $id: "design-app-type-1",
                 type: "object",
+                required: ["a"],
                 properties: {
                     a: {
                         type: "string",
@@ -52,6 +65,7 @@ const design = {
             }, {
                 $id: "design-app-type-2",
                 type: "object",
+                required: ["b"],
                 properties: {
                     b: {
                         type: "string",
@@ -64,7 +78,6 @@ const design = {
         dsModelIds: {
             type: "array",
             maxItems: 3,
-            minItems: 1,
             items: {
                 type: "object",
                 required: ["age", "name", "password"],

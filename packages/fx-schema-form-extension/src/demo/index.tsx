@@ -21,11 +21,12 @@ import "../";
 
 import { gloabelOptions, curAjv } from "./init";
 
-
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
 // 首先要解析一份schema
 let designResolve = new ResolveLib(curAjv, design as any);
+
+
 
 // 获取actions
 let actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
@@ -34,10 +35,6 @@ let store = createStore<any>(combineReducers({
     "schemaForm": schemaFormReact.reducerFactory.get("schemaForm").reducer as any
 }), Immutable.fromJS({}));
 
-store.subscribe(() => {
-    console.log(store.getState().toJS().schemaForm.designForm.meta);
-});
-
 // actions要assign到store
 for (const key in actions) {
     if (actions.hasOwnProperty(key)) {
@@ -45,7 +42,6 @@ for (const key in actions) {
         element.assignTo(store);
     }
 }
-
 // 创建一个form
 actions.createForm({
     key: "designForm",
@@ -75,38 +71,39 @@ class TestForm extends React.PureComponent<any> {
                 key={"designForm" + "design"}
                 RootComponent={Form}
                 schemaId="design"
-                uiSchemas={[{
+                uiSchemas={["point", {
                     key: "name"
                 }, {
-                    key: "appType",
-                    hocs: ["theme", "condition", "field", "validate", "temp"],
-                    options: Immutable.fromJS({
-                        hoc: {
-                            condition: {
-                                paths: [{
-                                    path: "/name"
-                                }],
-                                hoc: hocFactory.get("oneof")({
-                                    path: "/name",
-                                    uiSchemas: {
-                                        "nick": {
-                                            index: 0,
-                                            uiSchema: {
-                                                children: ["a"]
-                                            }
-                                        },
-                                        "nora": {
-                                            index: 1,
-                                            uiSchema: {
-                                                children: ["b"]
+                        key: "appType",
+                        hocs: ["theme", "condition", "field", "validate", "temp"],
+                        options: Immutable.fromJS({
+                            hoc: {
+                                condition: {
+                                    paths: [{
+                                        path: "/name"
+                                    }],
+                                    hoc: hocFactory.get("oneof")({
+                                        path: "/name",
+                                        key: "anyOf",
+                                        uiSchemas: {
+                                            "nick": {
+                                                index: 0,
+                                                uiSchema: {
+                                                    children: ["a"]
+                                                }
+                                            },
+                                            "nora": {
+                                                index: 1,
+                                                uiSchema: {
+                                                    children: ["b"]
+                                                }
                                             }
                                         }
-                                    }
-                                })
+                                    })
+                                }
                             }
-                        }
-                    })
-                }]}
+                        })
+                    }]}
                 uiSchema={null as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={gloabelOptions}

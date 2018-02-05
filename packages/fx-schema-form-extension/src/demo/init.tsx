@@ -197,10 +197,10 @@ export const curAjv: ajv.Ajv = new ajv({
     removeAdditional: true,
 });
 
-ajvErrors(curAjv, {
-    keepErrors: false,
-    singleError: false
-});
+// ajvErrors(curAjv, {
+//     keepErrors: false,
+//     singleError: false
+// });
 
 curAjv.addKeyword("idExists", {
     async: true,
@@ -211,7 +211,7 @@ curAjv.addKeyword("idExists", {
 function checkIdExists(schema: any, data: any) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            if (data === "nick") {
+            if (data === "nick" || data === "nora") {
                 return resolve(true);
             }
             reject(new (ajv.ValidationError as any)([{ message: "idExists不是nick" }] as any));

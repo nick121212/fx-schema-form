@@ -14,6 +14,7 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
 
 export interface OneHocOutSettings {
     path: string;
+    key: "anyOf" | "oneOf";
     uiSchemas?: { [key: string]: FxUiSchema };
 }
 
@@ -31,7 +32,7 @@ export interface OneHocOutSettings {
  * @param hocFactory  hoc的工厂方法
  * @param Component   需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { path: "" }) => {
+export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { path: "", key: "oneOf" }) => {
     return (Component: any): RC<Props, any> => {
         class ComponentHoc extends React.PureComponent<Props, any> {
             public componentWillUpdate(props: Props) {
@@ -46,23 +47,28 @@ export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { pa
                     { keys = null } = uiSchema || {},
                     options = getOptions(this.props, "hoc", "oneof", Immutable.fromJS(settings || {}));
 
-                if (!options.path || !condition || !keys || !uiSchema || !uiSchema.oneOf || !options.uiSchemas) {
+                if (!options.path || !condition || !keys || !uiSchema || !options.uiSchemas) {
                     return null;
                 }
 
                 let pathKeys = getPathKeys(keys as string[], options.path);
                 let data = condition.get(pathKeys.join("/"));
+                let someOf: Array<any> = (uiSchema as any)[options.key || "oneOf"];
 
-                if (uiSchema.oneOf && options.uiSchemas[data]) {
+                if (!someOf) {
+                    return null;
+                }
+
+                if (someOf && options.uiSchemas[data]) {
                     let { index, uiSchema: uiSchemaInOneof } = options.uiSchemas[data];
 
-                    if (!uiSchema.oneOf[index]) {
+                    if (!someOf[index]) {
                         return null;
                     }
 
-                    uiSchemaInOneof = Object.assign({}, uiSchema, uiSchemaInOneof, uiSchema.oneOf[index], {
+                    uiSchemaInOneof = Object.assign({}, uiSchema, uiSchemaInOneof, someOf[index], {
                         keys: keys,
-                        schemaPath: uiSchema.oneOf[index].$id || uiSchema.oneOf[index].$ref || uiSchema.schemaPath
+                        schemaPath: someOf[index].$id || someOf[index].$ref || uiSchema.schemaPath
                     });
 
                     return <Component {...extraProps} uiSchema={uiSchemaInOneof} />;
