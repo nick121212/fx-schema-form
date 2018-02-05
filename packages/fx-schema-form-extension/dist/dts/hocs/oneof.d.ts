@@ -3,7 +3,8 @@ import { ConditionHocOutProps } from "./condition";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/dist/typings/models/index";
-export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps {
+import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
+export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps {
 }
 export interface OneHocOutSettings {
     path: string;

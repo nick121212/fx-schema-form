@@ -1,13 +1,17 @@
 import React from "react";
 import {
-    hocFactory
-} from "../../dist";
+    hocFactory,
+    reducerFactory
+} from "../dist";
 import { ResolveLib } from "fx-schema-form-core";
 import Ajv from "ajv";
 import Immutable from "immutable";
 import ShallowRenderer, { createRenderer } from "react-test-renderer/shallow";
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
+import { createStore } from "redux";
+import { combineReducers } from "redux-immutable";
+import undoable from "redux-undo-immutable";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -177,3 +181,14 @@ export class AppCom extends React.PureComponent {
         return <span>hello world</span>;
     }
 }
+
+export const store = createStore(combineReducers({
+    "schemaForm1": undoable(reducerFactory.get("schemaForm").reducer, {
+
+    }),
+}), Immutable.fromJS({}));
+
+reducerFactory.get("schemaForm").init(store);
+
+export const actions = reducerFactory.get("schemaForm").actions;
+

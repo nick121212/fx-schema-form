@@ -1384,9 +1384,42 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         this.removeItem = (0, _reduxAct.createAction)("删除一个数据");
         this.moveToItem = (0, _reduxAct.createAction)("元素移位");
         this.validateAll = (0, _reduxAct.createAction)("验证全部字段");
+        this.removeItemData = (0, _reduxAct.createAction)("删除一个字段的数据以及meta数据");
     }
 
     _createClass(SchemaFormReducer, [{
+        key: "init",
+        value: function init(store) {
+            for (var key in this.actions) {
+                if (this.actions.hasOwnProperty(key)) {
+                    var action = this.actions[key];
+                    if (!action.assigned()) {
+                        action.assignTo(store);
+                    }
+                }
+            }
+        }
+    }, {
+        key: "removeItemDataMetaHandle",
+        value: function removeItemDataMetaHandle(state, _ref) {
+            var parentKeys = _ref.parentKeys,
+                keys = _ref.keys,
+                meta = _ref.meta;
+
+            var dataKeys = parentKeys.concat(["data"].concat(_toConsumableArray(keys)));
+            var metaKeys = parentKeys.concat(["meta"]);
+            var rootNode = state.getIn(metaKeys);
+            var childNode = rootNode.containPath(keys);
+            state = this.resolveKeys(state, dataKeys);
+            if (state.hasIn(dataKeys)) {
+                state = state.removeIn(dataKeys);
+            }
+            if (childNode && meta) {
+                childNode.removeFromParent();
+            }
+            return state;
+        }
+    }, {
         key: "resolveKeys",
         value: function resolveKeys(state, keys) {
             if (state.hasIn(keys)) {
@@ -1418,9 +1451,9 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         }
     }, {
         key: "createFormHandle",
-        value: function createFormHandle(state, _ref) {
-            var key = _ref.key,
-                data = _ref.data;
+        value: function createFormHandle(state, _ref2) {
+            var key = _ref2.key,
+                data = _ref2.data;
 
             if (state.has(key)) {
                 state = state.remove(key);
@@ -1434,11 +1467,11 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         }
     }, {
         key: "updateItemDataHandle",
-        value: function updateItemDataHandle(state, _ref2) {
-            var parentKeys = _ref2.parentKeys,
-                keys = _ref2.keys,
-                data = _ref2.data,
-                meta = _ref2.meta;
+        value: function updateItemDataHandle(state, _ref3) {
+            var parentKeys = _ref3.parentKeys,
+                keys = _ref3.keys,
+                data = _ref3.data,
+                meta = _ref3.meta;
 
             var dataKeys = parentKeys.concat(["data"].concat(_toConsumableArray(keys)));
             state = this.resolveKeys(state, dataKeys);
@@ -1450,10 +1483,10 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         }
     }, {
         key: "addItemDataHandle",
-        value: function addItemDataHandle(state, _ref3) {
-            var parentKeys = _ref3.parentKeys,
-                keys = _ref3.keys,
-                data = _ref3.data;
+        value: function addItemDataHandle(state, _ref4) {
+            var parentKeys = _ref4.parentKeys,
+                keys = _ref4.keys,
+                data = _ref4.data;
 
             var dataKeys = parentKeys.concat(["data"].concat(_toConsumableArray(keys))),
                 metaKeys = parentKeys.concat(["meta"]),
@@ -1471,11 +1504,11 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
             return state.setIn(dataKeys, formItemData);
         }
     }, {
-        key: "removeItemDataHandle",
-        value: function removeItemDataHandle(state, _ref4) {
-            var parentKeys = _ref4.parentKeys,
-                keys = _ref4.keys,
-                index = _ref4.index;
+        key: "removeItemHandle",
+        value: function removeItemHandle(state, _ref5) {
+            var parentKeys = _ref5.parentKeys,
+                keys = _ref5.keys,
+                index = _ref5.index;
 
             var dataKeys = parentKeys.concat(["data"].concat(_toConsumableArray(keys))),
                 metaKeys = parentKeys.concat(["meta"]),
@@ -1494,11 +1527,11 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         }
     }, {
         key: "moveItemHandle",
-        value: function moveItemHandle(state, _ref5) {
-            var parentKeys = _ref5.parentKeys,
-                keys = _ref5.keys,
-                curIndex = _ref5.curIndex,
-                toIndex = _ref5.toIndex;
+        value: function moveItemHandle(state, _ref6) {
+            var parentKeys = _ref6.parentKeys,
+                keys = _ref6.keys,
+                curIndex = _ref6.curIndex,
+                toIndex = _ref6.toIndex;
 
             var dataKeys = parentKeys.concat(["data"].concat(_toConsumableArray(keys))),
                 metaKeys = parentKeys.concat(["meta"]),
@@ -1526,10 +1559,10 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         }
     }, {
         key: "updateItemMetaHandle",
-        value: function updateItemMetaHandle(state, _ref6) {
-            var parentKeys = _ref6.parentKeys,
-                keys = _ref6.keys,
-                data = _ref6.data;
+        value: function updateItemMetaHandle(state, _ref7) {
+            var parentKeys = _ref7.parentKeys,
+                keys = _ref7.keys,
+                meta = _ref7.meta;
 
             var metaKeys = parentKeys.concat(["meta"]);
             var rootNode = state.getIn(metaKeys);
@@ -1537,9 +1570,9 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
             var value = childNode ? childNode.value : null;
             if (childNode) {
                 if (value) {
-                    childNode.value = childNode.value.merge(data);
+                    childNode.value = childNode.value.merge(meta);
                 } else {
-                    childNode.value = (0, _immutable.fromJS)(data);
+                    childNode.value = (0, _immutable.fromJS)(meta);
                 }
             }
             var newRoot = new _tree.TreeMap(rootNode.getKey(), rootNode.value);
@@ -1555,7 +1588,8 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
                 updateItemMeta: this.updateItemMeta,
                 addItem: this.addItem,
                 removeItem: this.removeItem,
-                moveToItem: this.moveToItem
+                moveToItem: this.moveToItem,
+                removeItemData: this.removeItemData
             };
         }
     }, {
@@ -1563,7 +1597,7 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         get: function get() {
             var _createReducer;
 
-            return (0, _reduxAct.createReducer)((_createReducer = {}, _defineProperty(_createReducer, this.createForm, this.createFormHandle.bind(this)), _defineProperty(_createReducer, this.updateItemData, this.updateItemDataHandle.bind(this)), _defineProperty(_createReducer, this.updateItemMeta, this.updateItemMetaHandle.bind(this)), _defineProperty(_createReducer, this.addItem, this.addItemDataHandle.bind(this)), _defineProperty(_createReducer, this.removeItem, this.removeItemDataHandle.bind(this)), _defineProperty(_createReducer, this.moveToItem, this.moveItemHandle.bind(this)), _createReducer), this.initialState);
+            return (0, _reduxAct.createReducer)((_createReducer = {}, _defineProperty(_createReducer, this.createForm, this.createFormHandle.bind(this)), _defineProperty(_createReducer, this.updateItemData, this.updateItemDataHandle.bind(this)), _defineProperty(_createReducer, this.updateItemMeta, this.updateItemMetaHandle.bind(this)), _defineProperty(_createReducer, this.addItem, this.addItemDataHandle.bind(this)), _defineProperty(_createReducer, this.removeItem, this.removeItemHandle.bind(this)), _defineProperty(_createReducer, this.moveToItem, this.moveItemHandle.bind(this)), _defineProperty(_createReducer, this.removeItemData, this.removeItemDataMetaHandle.bind(this)), _createReducer), this.initialState);
         }
     }]);
 

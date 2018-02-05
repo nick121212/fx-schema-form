@@ -7,8 +7,9 @@ import { ConditionHocOutProps } from "./condition";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/dist/typings/models/index";
+import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 
-export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps {
+export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps {
 }
 
 export interface OneHocOutSettings {
@@ -21,7 +22,9 @@ export interface OneHocOutSettings {
  * 这里解析一种特殊的schema字段oneof
  * {
  *  "name":{
- *      "oneof":[{"type":"string"},{"type":"number"}]
+ *      "oneOf":[{"type":"string"},{"type":"number"}]
+ *                   or
+ *      "anyOf":[{"type":"string"},{"type":"number"}]
  *  }
  * }
  * 必须接口conditionHoc使用
@@ -31,6 +34,12 @@ export interface OneHocOutSettings {
 export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { path: "" }) => {
     return (Component: any): RC<Props, any> => {
         class ComponentHoc extends React.PureComponent<Props, any> {
+            public componentWillUpdate(props: Props) {
+                const { uiSchema, updateItemData } = props;
+
+                updateItemData(props, null, null);
+            }
+
             public render(): JSX.Element | null {
                 const { getPathKeys, uiSchema, getOptions } = this.props,
                     { condition, ...extraProps } = this.props,

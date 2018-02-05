@@ -7,7 +7,7 @@ import { MergeLib } from "fx-schema-form-core";
 import {
     hocFactory
 } from "../../dist";
-import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "./data"
+import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
 import { shallow, render, mount } from 'enzyme';
 
 describe("merge的hoc", () => {

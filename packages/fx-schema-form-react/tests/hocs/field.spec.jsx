@@ -9,7 +9,7 @@ import {
     hocFactory,
     defaultTheme
 } from "../../dist";
-import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "./data"
+import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
 import { shallow, render, mount } from 'enzyme';
 
 describe("field的hoc", () => {

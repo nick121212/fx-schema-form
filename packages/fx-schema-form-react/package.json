@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
-    "fx-schema-form-core": "^3.0.23",
+    "fx-schema-form-core": "^3.0.24",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-redux": "^5.0.6",
@@ -84,6 +84,7 @@
     "react-hot-loader": "^3.1.1",
     "react-perf-tool": "^0.2.2",
     "react-test-renderer": "^15.0.0",
+    "redux-undo-immutable": "^0.2.0",
     "style-loader": "^0.19.0",
     "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",
