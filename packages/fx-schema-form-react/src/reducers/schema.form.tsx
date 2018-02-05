@@ -12,7 +12,7 @@ export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     createForm: SimpleActionCreator<{ key: string, data: any }>;
     updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>;
-    updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
+    updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any }>;
     addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
     removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>;
     moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
@@ -25,8 +25,8 @@ export class SchemaFormReducer<T> implements FxReducer {
         = createAction<{ key: string, data: any }>("创建一个表单数据");
     private updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>
         = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>("更新一个表单数据");
-    private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
-        = createAction<{ parentKeys: string[], keys: string[], data: any }>("更新一个表单元数据");
+    private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any }>
+        = createAction<{ parentKeys: string[], keys: string[], meta: any }>("更新一个表单元数据");
     private addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
         = createAction<{ parentKeys: string[], keys: string[], data: any }>("添加一个数据");
     private removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>

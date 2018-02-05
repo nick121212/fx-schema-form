@@ -1,8 +1,7 @@
 /// <reference types="react" />
 import React from "react";
 import { Map } from "immutable";
-import { BaseFactory } from "fx-schema-form-core";
-import { UiSchema } from "fx-schema-form-core/dist/typings/models/uischema";
+import { BaseFactory, UiSchema } from "fx-schema-form-core";
 export interface SchemaFormNs<F, T, W> {
     fieldFactory: BaseFactory<F>;
     tempFactory: BaseFactory<T>;
@@ -15,7 +14,7 @@ export interface FxUiSchema extends UiSchema {
     theme?: string;
     field?: string;
     widget?: string;
-    temps?: string;
+    temps?: string[];
     isRequired?: boolean;
     refKeys?: string[];
     originKeys?: string[];

@@ -37,7 +37,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                             schemaFormReducer.actions.updateItemMeta({
                                 parentKeys: props.parentKeys,
                                 keys: (props.uiSchema as any).keys,
-                                data: { isLoading: true, isValid: false, errorText: false }
+                                meta: { isLoading: true, isValid: false, errorText: false }
                             });
                         }, 200);
 
@@ -97,7 +97,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                         schemaFormReducer.actions.updateItemMeta({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
-                            data: meta || await propsCur.validate(props, data)
+                            meta: meta || await propsCur.validate(props, data)
                         });
                     };
                 }

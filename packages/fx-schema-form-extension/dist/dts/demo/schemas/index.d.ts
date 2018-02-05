@@ -26,6 +26,7 @@ declare const design: {
         name: {
             type: string;
             title: string;
+            minLength: number;
             $async: boolean;
             idExists: {};
             description: string;

@@ -30,9 +30,10 @@ const design = {
         name: {
             type: "string",
             title: "面板名称",
+            minLength: 2,
             $async: true,
             idExists: {},
-            description: "远程验证字段，输入nick试试看"
+            description: "远程验证字段，输入nick或者nora试试看"
         },
         point: {
             "type": "object",

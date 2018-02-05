@@ -7,7 +7,7 @@
 		exports["SchemaFormReact"] = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("redux-act"), require("reselect"), require("redux"), require("ajv"));
 	else
 		root["SchemaFormReact"] = factory(root["React"], root["recompose"], root["Immutable"], root["SchemaFormCore"], root["react-redux"], root["resolve-pathname"], root["redux-act"], root["reselect"], root["Redux"], root["Ajv"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_14__, __WEBPACK_EXTERNAL_MODULE_19__, __WEBPACK_EXTERNAL_MODULE_25__, __WEBPACK_EXTERNAL_MODULE_31__, __WEBPACK_EXTERNAL_MODULE_40__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_14__, __WEBPACK_EXTERNAL_MODULE_19__, __WEBPACK_EXTERNAL_MODULE_25__, __WEBPACK_EXTERNAL_MODULE_31__, __WEBPACK_EXTERNAL_MODULE_40__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -298,6 +298,12 @@ function __importDefault(mod) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -329,12 +335,6 @@ hocFactory.add("data", _hocs.data.bind(_hocs.data, hocFactory));
 reducerFactory.add("schemaForm", _reducer.schemaFormReducer);
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
@@ -352,7 +352,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.schemaFormReducer = undefined;
 
-var _immutable = __webpack_require__(4);
+var _immutable = __webpack_require__(3);
 
 var _schema = __webpack_require__(18);
 
@@ -570,7 +570,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _fxSchemaFormCore = __webpack_require__(5);
 
-var _factory = __webpack_require__(3);
+var _factory = __webpack_require__(4);
 
 var _components = __webpack_require__(26);
 
@@ -815,7 +815,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _fxSchemaFormCore = __webpack_require__(5);
 
-var _immutable = __webpack_require__(4);
+var _immutable = __webpack_require__(3);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -993,7 +993,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _factory = __webpack_require__(3);
+var _factory = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1358,7 +1358,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _reduxAct = __webpack_require__(19);
 
-var _immutable = __webpack_require__(4);
+var _immutable = __webpack_require__(3);
 
 var _reducer = __webpack_require__(20);
 
@@ -1383,7 +1383,6 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         this.addItem = (0, _reduxAct.createAction)("添加一个数据");
         this.removeItem = (0, _reduxAct.createAction)("删除一个数据");
         this.moveToItem = (0, _reduxAct.createAction)("元素移位");
-        this.validateAll = (0, _reduxAct.createAction)("验证全部字段");
         this.removeItemData = (0, _reduxAct.createAction)("删除一个字段的数据以及meta数据");
     }
 
@@ -1693,7 +1692,7 @@ exports.default = function (hocFactory) {
                                             _reducer.schemaFormReducer.actions.updateItemMeta({
                                                 parentKeys: props.parentKeys,
                                                 keys: props.uiSchema.keys,
-                                                data: { isLoading: true, isValid: false, errorText: false }
+                                                meta: { isLoading: true, isValid: false, errorText: false }
                                             });
                                         }, 200);
                                         _context.prev = 2;
@@ -1799,7 +1798,7 @@ exports.default = function (hocFactory) {
                                         _context2.t5 = {
                                             parentKeys: _context2.t1,
                                             keys: _context2.t2,
-                                            data: _context2.t4
+                                            meta: _context2.t4
                                         };
 
                                         _context2.t0.updateItemMeta.call(_context2.t0, _context2.t5);
@@ -1837,6 +1836,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _recompose = __webpack_require__(1);
 
+var _immutable = __webpack_require__(3);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -1857,10 +1860,7 @@ exports.default = function (hocFactory) {
             function MakeComponentHoc() {
                 _classCallCheck(this, MakeComponentHoc);
 
-                var _this = _possibleConstructorReturn(this, (MakeComponentHoc.__proto__ || Object.getPrototypeOf(MakeComponentHoc)).apply(this, arguments));
-
-                _this.fieldKey = "hocs";
-                return _this;
+                return _possibleConstructorReturn(this, (MakeComponentHoc.__proto__ || Object.getPrototypeOf(MakeComponentHoc)).apply(this, arguments));
             }
 
             _createClass(MakeComponentHoc, [{
@@ -1871,8 +1871,8 @@ exports.default = function (hocFactory) {
                         getOptions = _props.getOptions;
                     var type = uiSchema.type;
 
-                    var fieldOptions = getOptions(this.props, "field", type);
-                    var hocs = settings.hocs || (uiSchema ? uiSchema.hocs : null) || ["theme", "field", "validate", "array", "temp"];
+                    var fieldOptions = getOptions(this.props, "field", type, _immutable2.default.fromJS({ hocs: uiSchema.hocs }), _immutable2.default.fromJS(settings || {}));
+                    var hocs = fieldOptions.hocs || ["theme", "field", "validate", "array", "temp"];
                     hocs.unshift("utils");
                     var ComponentWithHocs = _recompose.compose.apply(undefined, _toConsumableArray([].concat(_toConsumableArray(hocs)).map(function (hoc) {
                         if (typeof hoc !== "string") {
@@ -2039,7 +2039,7 @@ var _reactRedux = __webpack_require__(9);
 
 var _reselect = __webpack_require__(25);
 
-var _immutable = __webpack_require__(4);
+var _immutable = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2259,7 +2259,7 @@ exports.hoc = undefined;
 
 var _recompose = __webpack_require__(1);
 
-var _factory = __webpack_require__(3);
+var _factory = __webpack_require__(4);
 
 var hoc = exports.hoc = (0, _recompose.compose)((0, _recompose.shouldUpdate)(function () {
   return false;
@@ -2373,7 +2373,7 @@ exports.hoc = undefined;
 
 var _recompose = __webpack_require__(1);
 
-var _factory = __webpack_require__(3);
+var _factory = __webpack_require__(4);
 
 var hoc = exports.hoc = (0, _recompose.compose)(_factory.hocFactory.get("utils")(), _factory.hocFactory.get("make")());
 
@@ -2735,13 +2735,13 @@ var _recompose = __webpack_require__(1);
 
 var _reactRedux = __webpack_require__(9);
 
-var _immutable = __webpack_require__(4);
+var _immutable = __webpack_require__(3);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
 var _ajv = __webpack_require__(40);
 
-var _factory = __webpack_require__(3);
+var _factory = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2815,7 +2815,7 @@ exports.default = function () {
                                         actions.updateItemMeta({
                                             parentKeys: settings.parentKeys,
                                             keys: [],
-                                            data: root.value
+                                            meta: root.value
                                         });
                                         validate.$async = !!async;
                                         _context.next = 11;
@@ -2828,7 +2828,7 @@ exports.default = function () {
                                         actions.updateItemMeta({
                                             parentKeys: settings.parentKeys,
                                             keys: [],
-                                            data: root.value
+                                            meta: root.value
                                         });
                                         _context.next = 23;
                                         break;
@@ -2880,7 +2880,7 @@ exports.default = function () {
                                         actions.updateItemMeta({
                                             parentKeys: settings.parentKeys,
                                             keys: [],
-                                            data: root.value
+                                            meta: root.value
                                         });
                                         return _context.finish(23);
 

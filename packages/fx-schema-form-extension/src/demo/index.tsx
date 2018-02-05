@@ -27,7 +27,6 @@ const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 let designResolve = new ResolveLib(curAjv, design as any);
 
 
-
 // 获取actions
 let actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
 // 将schemaForm加入到store
@@ -49,6 +48,10 @@ actions.createForm({
         dsModelIds: [],
         name: "nick"
     }
+});
+
+store.subscribe(() => {
+    console.log(store.getState().toJS());
 });
 
 @(schemaFormDec({
@@ -75,7 +78,7 @@ class TestForm extends React.PureComponent<any> {
                     key: "name"
                 }, {
                         key: "appType",
-                        hocs: ["theme", "condition", "field", "validate", "temp"],
+                        hocs: ["theme", "validate", "condition", "field", "temp"],
                         options: Immutable.fromJS({
                             hoc: {
                                 condition: {
@@ -109,7 +112,9 @@ class TestForm extends React.PureComponent<any> {
                 globalOptions={gloabelOptions}
                 ajv={curAjv} >
             </SchemaForm>
-            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>validate</Button>
+            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>
+                validate is {this.props.isValid ? this.props.isValid.toString() : "false"}
+            </Button>
         </div>;
     }
 }

@@ -95,7 +95,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     actions.updateItemMeta({
                         parentKeys: settings.parentKeys,
                         keys: [],
-                        data: root.value
+                        meta: root.value
                     });
 
                     (validate as any).$async = !!async;
@@ -109,7 +109,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     actions.updateItemMeta({
                         parentKeys: settings.parentKeys,
                         keys: [],
-                        data: root.value
+                        meta: root.value
                     });
 
                 } catch (e) {
@@ -147,7 +147,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     actions.updateItemMeta({
                         parentKeys: settings.parentKeys,
                         keys: [],
-                        data: root.value
+                        meta: root.value
                     });
                 }
             }

@@ -18,7 +18,7 @@ export interface SchemaFormActions {
     updateItemMeta: SimpleActionCreator<{
         parentKeys: string[];
         keys: string[];
-        data: any;
+        meta: any;
     }>;
     addItem: SimpleActionCreator<{
         parentKeys: string[];
@@ -50,7 +50,6 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private addItem;
     private removeItem;
     private moveToItem;
-    private validateAll;
     private removeItemData;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
