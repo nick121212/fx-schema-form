@@ -56,6 +56,7 @@ declare const design: {
                         type: string;
                         title: string;
                     };
+                    b?: undefined;
                 };
                 title: string;
             } | {
@@ -67,6 +68,7 @@ declare const design: {
                         type: string;
                         title: string;
                     };
+                    a?: undefined;
                 };
                 title: string;
             })[];
