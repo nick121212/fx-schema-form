@@ -3,7 +3,7 @@ import { compose, shouldUpdate } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/src/hocs/validate";
+import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 
 export interface DesignFieldProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 
@@ -14,20 +14,40 @@ let arrayFieldStyle = {
     height: "100%"
 };
 
-class ArrayFieldComponent extends React.PureComponent {
+class DesignFieldComponent extends React.PureComponent {
     public render() {
         return <div style={arrayFieldStyle}>{this.props.children}</div>;
     }
 }
 
 /**
- * 数组字段的生成规则
- * 用于
+ * Design字段的生成规则
+ * 用于自定义数据类型：无限极树形结构
+ * {
+ *  children:[{
+ *      children:[{
+ *          children:[{}]
+ *      }]
+ * }]
+ * }
+ * 依赖的hoc
+ *  1. data
  */
 export class DesignField extends React.PureComponent<DesignFieldProps, any> {
-    private SchemaFormWithHoc: new () => React.PureComponent = ArrayFieldComponent;
+    /**
+     * 包装之后的字段组件
+     */
+    private SchemaFormWithHoc: new () => React.PureComponent = DesignFieldComponent;
+    /**
+     * 包装之后的子元素组件
+     */
     private SchemaFormItemWithHoc: new () => React.PureComponent = schemaFormReact.SchemaForm;
 
+    /**
+     * 构造函数
+     * @param props   属性
+     * @param context context
+     */
     constructor(props: DesignFieldProps, context: any) {
         super(props, context);
         this.initComponent();
@@ -35,22 +55,20 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
 
     /**
      * 初始化Component
+     * 包装配置参数formHocs中的hoc
+     * 包装配置参数formItemHocs中的hoc
      */
     private initComponent() {
         const { uiSchema, formItemData, getOptions } = this.props,
             options = getOptions(this.props, "field", "design");
-        let SchemaFormWithHoc = null, SchemaFormItemWithHoc = null;
 
         if (options.formHocs && options.formHocs.constructor === Array) {
-            SchemaFormWithHoc = compose(...options.formHocs)(ArrayFieldComponent);
-            this.SchemaFormWithHoc = SchemaFormWithHoc;
+            this.SchemaFormWithHoc = compose(...options.formHocs)(DesignFieldComponent);
         }
 
         if (options.formItemHocs && options.formItemHocs.constructor === Array) {
-            SchemaFormItemWithHoc = compose(...options.formItemHocs)(schemaFormReact.SchemaForm as any);
-            this.SchemaFormItemWithHoc = SchemaFormItemWithHoc;
+            this.SchemaFormItemWithHoc = compose(...options.formItemHocs)(schemaFormReact.SchemaForm as any);
         }
-
     }
     /**
      * 遍历数据，生成子表单
@@ -61,10 +79,6 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
             uiSchema = this.props.uiSchema as any;
         let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc;
 
-        // 如果不需要children，则跳出
-        // if (uiSchema.children === null || !uiSchema.schemaPath) {
-        //     return null;
-        // }
         return (
             <SchemaFormWithHoc
                 key={idx}
@@ -96,15 +110,6 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
         for (let i = 0; i < +formItemData; i++) {
             child.push(this.renderItem(i));
         }
-
-        // 如果需要对schemaform对hoc包装
-        // if (options.formHocs && options.formHocs.constructor === Array) {
-        //     SchemaFormWithHoc = compose(...options.formHocs)(({ children }) => {
-        //         return <div style={arrayFieldStyle}>{children}</div>;
-        //     });
-
-        //     return <SchemaFormWithHoc {...this.props} children={child} />;
-        // }
 
         return <SchemaFormWithHoc children={[...child, children]} {...extraProps} />;
     }

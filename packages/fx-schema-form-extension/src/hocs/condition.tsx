@@ -10,25 +10,44 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models/index";
 
+const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
+
+/**
+ * 下层组件添加一个condition属性
+ * @param condition { Immutable.Map<string,any> } 解析出来的数据
+ */
 export interface ConditionHocOutProps {
     condition?: Immutable.Map<string, any>;
 }
-
+/**
+ * condition的配置类
+ */
 export interface ConditionPath {
+    /**
+     * 数据的路径，可是是相对路径，也可以是绝对路径
+     */
     path: string;
+    /**
+     * 数据的简单处理，（暂时没用到）
+     */
     jsonata?: string;
 }
 
 export interface ConditionHocSettings {
+    /**
+     * 路径数组
+     */
     paths?: ConditionPath[];
+    /**
+     * 需要用到condition的hoc
+     * 包装在condition的后面
+     */
     hoc?: ComponentEnhancer<any, any>;
 }
 
 export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
 
 }
-
-const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 
 /**
  * condition

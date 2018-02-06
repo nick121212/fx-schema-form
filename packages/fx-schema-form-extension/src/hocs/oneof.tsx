@@ -35,12 +35,26 @@ export interface OneHocOutSettings {
 export default (hocFactory: BaseFactory<any>, settings: OneHocOutSettings = { path: "", key: "oneOf" }) => {
     return (Component: any): RC<Props, any> => {
         class ComponentHoc extends React.PureComponent<Props, any> {
+
+            /**
+             * 数据更改的时候清除掉当前数据
+             * @param props props
+             */
             public componentWillUpdate(props: Props) {
                 const { uiSchema, updateItemData } = props;
 
+                // 清除当前数据
                 updateItemData(props, null, null);
             }
 
+            /**
+             * 渲染组件
+             * 1. 获取参数
+             * 2. 如果【path，condition，keys，uiSchema，options.uiSchemas】中任何一个不存在，则返回空
+             * 3. 从condition属性中查找配置的path的数据
+             * 4. 根据数据获得配置uiSchemas的uiSchema
+             * 5. 更改当前的uiSchema，渲染Component组件
+             */
             public render(): JSX.Element | null {
                 const { getPathKeys, uiSchema, getOptions } = this.props,
                     { condition, ...extraProps } = this.props,

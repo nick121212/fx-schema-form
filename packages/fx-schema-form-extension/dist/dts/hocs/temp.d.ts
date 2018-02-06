@@ -5,5 +5,5 @@ import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ThemeHocOutProps } from "fx-schema-form-react/dist/typings/hocs/theme";
 export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps {
 }
-declare const _default: (hocFactory: BaseFactory<any>, settings?: any) => (Component: any) => RC<Props, any>;
+declare const _default: (hocFactory: BaseFactory<any>) => (Component: any) => RC<Props, any>;
 export default _default;

@@ -17,10 +17,7 @@ export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps 
  * @param Component 需要包装的组件
  */
 
-export default (hocFactory: BaseFactory<any>, settings: any = {
-    tempField: "temps",
-    templates: []
-}) => {
+export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<Props, any> => {
         /**
         * 获取模板的components
@@ -31,6 +28,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             metaKeys: ["temps"]
         }))
         class TempComponentHoc extends PureComponent<Props, any> {
+            /**
+             * 渲染组件
+             * 1. 获取meta数据中的temps字段
+             * 2. 遍历temps，拼接temps，渲染temps组件
+             * 3. 渲染Component组件作为temps的children
+             */
             public render(): JSX.Element {
                 const { uiSchema, getOptions, formItemMeta, currentTheme } = this.props;
                 const { temps = [] } = formItemMeta ? formItemMeta.toJS() : {};

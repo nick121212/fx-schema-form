@@ -9,11 +9,11 @@ import { createSelector, createSelectorCreator, defaultMemoize, Selector } from 
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models";
-import { ConditionHocOutProps } from "./condition";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-
+import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
-import { TreeMap } from "fx-schema-form-react/src/libs/tree";
+
+import { ConditionHocOutProps } from "./condition";
 
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
     formItemNode?: TreeMap;

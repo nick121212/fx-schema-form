@@ -2138,6 +2138,10 @@ exports.default = function (hocFactory) {
             }
             var metaKeys = [].concat(_toConsumableArray(rootReducerKey), _toConsumableArray(parentKeys), ["meta"]);
             var rootNode = state.getIn(metaKeys);
+            var childNode = rootNode.containPath([].concat(_toConsumableArray(keys)));
+            if (childNode) {
+                return childNode;
+            }
             return rootNode.addChild([].concat(_toConsumableArray(keys)));
         };
         return fxSelectorCreator([getFormItemData, getFormItemMeta, getRoot], function (formItemData, formItemMeta, formItemNode) {

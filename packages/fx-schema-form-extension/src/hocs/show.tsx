@@ -36,6 +36,12 @@ export default (hocFactory: BaseFactory<any>, settings: ResetKeysHocOutSettings 
     };
     return (Component: any): RC<Props, any> => {
         class ComponentHoc extends React.PureComponent<Props, any> {
+            /**
+             * 渲染组件
+             * 1. 如果配置中【paths，condition，uiSchema，uiSchema.keys】中的任何一项不存在，直接返回null
+             * 2. 如果paths中的任何一项为false，则隐藏组件
+             * 3. 否则正常显示组件
+             */
             public render(): JSX.Element | null {
                 const { getOptions, getPathKeys, condition, uiSchema } = this.props;
                 const normalOptions = getOptions(this.props, "hoc", "show", Immutable.fromJS(settings || {}));

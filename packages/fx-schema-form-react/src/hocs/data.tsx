@@ -89,6 +89,11 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
 
             let metaKeys = [...rootReducerKey, ...parentKeys, "meta"];
             let rootNode: TreeMap = state.getIn(metaKeys);
+            let childNode = rootNode.containPath([...keys]);
+
+            if (childNode) {
+                return childNode;
+            }
 
             return rootNode.addChild([...keys]);
         };
