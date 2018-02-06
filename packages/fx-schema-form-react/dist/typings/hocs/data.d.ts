@@ -8,6 +8,7 @@ export interface DataHocSettings {
     dataLength?: boolean;
     meta?: boolean;
     metaKeys?: string[];
+    treeNode?: boolean;
 }
 declare const _default: (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings?: DataHocSettings) => (Component: any) => RC<DefaultProps, any>;
 export default _default;

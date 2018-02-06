@@ -38,30 +38,33 @@ for (const key in actions) {
         element.assignTo(store);
     }
 }
+
+let children = [];
+
+for (let i = 0; i < 100; i++) {
+    children.push({
+        data: {
+            label: "DIV",
+            temps: ["div"],
+            options: {
+                temp: {
+                    div: {
+                        options: {
+                            className: "ba pa1 ma1" + (i % 2 === 0 ? " bg-red" : "")
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 // 创建一个form
 actions.createForm({
     key: "designForm",
     data: {
         name: "nick",
-        children: [{
-            data: {
-                label: "DIV",
-                uiSchema: {
-                    field: {
-                        temps: ["div"]
-                    }
-                }
-            }
-        }, {
-            data: {
-                label: "DIV",
-                uiSchema: {
-                    field: {
-                        temps: ["div"]
-                    }
-                }
-            }
-        }]
+        children: children
     }
 });
 

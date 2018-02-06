@@ -26,6 +26,10 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         * 获取模板的components
         * @param uiSchema 合并后的数据
         */
+        @(hocFactory.get("data")({
+            meta: true,
+            metaKeys: ["temps"]
+        }))
         class TempComponentHoc extends PureComponent<Props, any> {
             public render(): JSX.Element {
                 const { uiSchema, getOptions, formItemMeta, currentTheme } = this.props;

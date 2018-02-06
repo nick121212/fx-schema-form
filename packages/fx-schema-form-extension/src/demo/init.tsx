@@ -8,7 +8,7 @@ import { Button } from "antd";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 
 import schemaFormReact from "fx-schema-form-react";
-import { NoneTemp, AntdCardTemp, AntdFormItemTemp } from "./templates";
+import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 
@@ -16,6 +16,7 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 schemaFormReact.defaultTheme.tempFactory.add("default", NoneTemp as any);
 schemaFormReact.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
 schemaFormReact.defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any);
+schemaFormReact.defaultTheme.tempFactory.add("div", DivTemp as any);
 
 schemaFormReact.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
@@ -188,9 +189,10 @@ export const gloabelOptions = Immutable.fromJS({
 
 export const globalOptionsOfDesign = Immutable.fromJS({
     field: {
+        object: {
+        },
         design: {
-            temps: ["card"],
-            hocs: ["theme", "field", "validate", "extraTemp"],
+            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraTemp"],
             globalOptions: gloabelOptions,
             // 这里为array字段添加sort排序功能
             formHocs: [(Component: any) => {
@@ -213,11 +215,8 @@ export const globalOptionsOfDesign = Immutable.fromJS({
                     }
 
                     public render() {
-                        return <span>
-                            EEEE
-                            <Component useWindowAsScrollContainer={true}
-                                pressDelay={300} onSortEnd={this._onSortEnd}  {...this.props} />
-                        </span>;
+                        return <Component useWindowAsScrollContainer={true}
+                            pressDelay={300} onSortEnd={this._onSortEnd} {...this.props} />;
                     }
                 }
 
@@ -235,10 +234,22 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         }
     },
     temp: {
+        div: {
+            tempHocs: [schemaFormReact.hocFactory.get("data")({
+                meta: true,
+                metaKeys: ["options"]
+            }), immutableRenderDecorator],
+            options: {
+                className: "ba b--dashed"
+            }
+        }
     },
     hoc: {
         data: {
             rootReducerKey: ["schemaForm"]
+        },
+        dataToMeta: {
+            excludeKeys: ["formItemData", "formItemMeta"]
         },
         array: {
             ArrayComponent: ArrayComponent,

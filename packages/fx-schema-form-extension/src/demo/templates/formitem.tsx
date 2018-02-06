@@ -1,7 +1,11 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
-import { Form, Input, Row, Col } from "antd";
+
+import Form from "antd/lib/form";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
+
 import { FormItemProps } from "antd/lib/form/FormItem";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";

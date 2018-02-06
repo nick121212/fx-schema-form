@@ -12,7 +12,7 @@ export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     createForm: SimpleActionCreator<{ key: string, data: any }>;
     updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>;
-    updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any }>;
+    updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any, noChange?: boolean; }>;
     addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
     removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>;
     moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
@@ -25,7 +25,7 @@ export class SchemaFormReducer<T> implements FxReducer {
         = createAction<{ key: string, data: any }>("创建一个表单数据");
     private updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>
         = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>("更新一个表单数据");
-    private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any }>
+    private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any, noChange?: boolean; }>
         = createAction<{ parentKeys: string[], keys: string[], meta: any }>("更新一个表单元数据");
     private addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
         = createAction<{ parentKeys: string[], keys: string[], data: any }>("添加一个数据");
@@ -300,7 +300,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state  当前的state
      * @param param1 参数值，keys,parentKeys和data
      */
-    private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, meta }: any): Map<string, any> {
+    private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, meta, noChange }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap | null = rootNode.addChild(keys);
@@ -312,6 +312,10 @@ export class SchemaFormReducer<T> implements FxReducer {
             } else {
                 childNode.value = fromJS(meta);
             }
+        }
+
+        if (noChange) {
+            return state;
         }
 
         // if (is(childNode.value, value)) {

@@ -3,8 +3,9 @@ import { compose, shouldUpdate } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/src/hocs/validate";
 
-export interface DesignFieldProps extends DefaultProps, UtilsHocOutProps {
+export interface DesignFieldProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 
 }
 
@@ -25,10 +26,10 @@ class ArrayFieldComponent extends React.PureComponent {
  */
 export class DesignField extends React.PureComponent<DesignFieldProps, any> {
     private SchemaFormWithHoc: new () => React.PureComponent = ArrayFieldComponent;
-    private SchemaFormItemWithHoc: new () => React.PureComponent;
+    private SchemaFormItemWithHoc: new () => React.PureComponent = schemaFormReact.SchemaForm;
 
-    constructor(props: DesignFieldProps) {
-        super(props);
+    constructor(props: DesignFieldProps, context: any) {
+        super(props, context);
         this.initComponent();
     }
 
@@ -58,32 +59,28 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
     private renderItem(idx: number): JSX.Element | null {
         const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent } = this.props,
             uiSchema = this.props.uiSchema as any;
-        let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc || schemaFormReact.SchemaForm;
+        let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc;
 
         // 如果不需要children，则跳出
         // if (uiSchema.children === null || !uiSchema.schemaPath) {
         //     return null;
         // }
-
         return (
-            <div  key={idx}>
-                {arrayLevel.concat([idx]).join("-")}
-                <SchemaFormWithHoc
-                    key={idx}
-                    index={idx}
-                    arrayIndex={idx}
-                    uiSchema={uiSchema}
-                    ArrayItemComponent={ArrayItemComponent}
-                    arrayLevel={arrayLevel.concat([idx])}
-                    schemaId={uiSchema.schemaPath}
-                    uiSchemas={[{
-                        key: "-/children",
-                        field: "design"
-                    }]}
-                    parentKeys={parentKeys}
-                    globalOptions={globalOptions}
-                    ajv={ajv} />
-            </div>
+            <SchemaFormWithHoc
+                key={idx}
+                index={idx}
+                arrayIndex={idx}
+                uiSchema={uiSchema}
+                ArrayItemComponent={ArrayItemComponent}
+                arrayLevel={arrayLevel.concat([idx])}
+                schemaId={uiSchema.schemaPath}
+                uiSchemas={[{
+                    key: "-/children",
+                    field: "design"
+                }]}
+                parentKeys={parentKeys}
+                globalOptions={globalOptions}
+                ajv={ajv} />
         );
     }
 

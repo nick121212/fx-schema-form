@@ -1595,7 +1595,8 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
         value: function updateItemMetaHandle(state, _ref7) {
             var parentKeys = _ref7.parentKeys,
                 keys = _ref7.keys,
-                meta = _ref7.meta;
+                meta = _ref7.meta,
+                noChange = _ref7.noChange;
 
             var metaKeys = parentKeys.concat(["meta"]);
             var rootNode = state.getIn(metaKeys);
@@ -1607,6 +1608,9 @@ var SchemaFormReducer = exports.SchemaFormReducer = function () {
                 } else {
                     childNode.value = (0, _immutable.fromJS)(meta);
                 }
+            }
+            if (noChange) {
+                return state;
             }
             var newRoot = new _tree.TreeMap(rootNode.getKey(), rootNode.value);
             newRoot.children = rootNode.children;
@@ -1805,7 +1809,9 @@ exports.default = function (hocFactory) {
                 };
             },
             updateItemMeta: function updateItemMeta(propsCur) {
-                return function (props, data, meta) {
+                return function (props, data) {
+                    var meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+                    var noChange = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
                     return tslib_1.__awaiter(undefined, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
                         return regeneratorRuntime.wrap(function _callee2$(_context2) {
                             while (1) {
@@ -1829,15 +1835,17 @@ exports.default = function (hocFactory) {
 
                                     case 8:
                                         _context2.t4 = _context2.t3;
-                                        _context2.t5 = {
+                                        _context2.t5 = noChange;
+                                        _context2.t6 = {
                                             parentKeys: _context2.t1,
                                             keys: _context2.t2,
-                                            meta: _context2.t4
+                                            meta: _context2.t4,
+                                            noChange: _context2.t5
                                         };
 
-                                        _context2.t0.updateItemMeta.call(_context2.t0, _context2.t5);
+                                        _context2.t0.updateItemMeta.call(_context2.t0, _context2.t6);
 
-                                    case 11:
+                                    case 12:
                                     case "end":
                                         return _context2.stop();
                                 }
@@ -2112,8 +2120,8 @@ exports.default = function (hocFactory) {
         var getFormItemMeta = function getFormItemMeta(state) {
             var metaKeys = [].concat(_toConsumableArray(rootReducerKey), _toConsumableArray(parentKeys), ["meta"]);
             if (settings.meta && state.hasIn(metaKeys)) {
-                var rootNode = state.getIn(metaKeys);
-                var childNode = rootNode.containPath([].concat(_toConsumableArray(parentKeys), _toConsumableArray(keys)));
+                var rootNode = state.getIn(metaKeys),
+                    childNode = rootNode.containPath([].concat(_toConsumableArray(keys)));
                 if (childNode && childNode.value) {
                     if (settings.metaKeys) {
                         return childNode.value.filter(function (val, key) {
@@ -2124,13 +2132,24 @@ exports.default = function (hocFactory) {
                 }
             }
         };
-        return fxSelectorCreator([getFormItemData, getFormItemMeta], function (formItemData, formItemMeta) {
+        var getRoot = function getRoot(state) {
+            if (!settings.treeNode) {
+                return null;
+            }
+            var metaKeys = [].concat(_toConsumableArray(rootReducerKey), _toConsumableArray(parentKeys), ["meta"]);
+            var rootNode = state.getIn(metaKeys);
+            return rootNode.addChild([].concat(_toConsumableArray(keys)));
+        };
+        return fxSelectorCreator([getFormItemData, getFormItemMeta, getRoot], function (formItemData, formItemMeta, formItemNode) {
             var rtn = {};
             if (formItemData) {
                 rtn.formItemData = formItemData;
             }
             if (formItemMeta) {
                 rtn.formItemMeta = formItemMeta;
+            }
+            if (formItemNode) {
+                rtn.formItemNode = formItemNode;
             }
             return rtn;
         });

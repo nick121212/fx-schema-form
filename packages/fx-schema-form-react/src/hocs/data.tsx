@@ -9,6 +9,7 @@ import Immutable, { is } from "immutable";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models/index";
 import { UtilsHocOutProps } from "./utils";
+import { TreeMap } from "../libs/tree";
 
 export interface DataHocOutProps extends DefaultProps {
 
@@ -19,6 +20,7 @@ export interface DataHocSettings {
     dataLength?: boolean;
     meta?: boolean;
     metaKeys?: string[];
+    treeNode?: boolean;
 }
 
 // 自定义选择器创建函数
@@ -62,8 +64,8 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
             let metaKeys = [...rootReducerKey, ...parentKeys, "meta"];
 
             if (settings.meta && state.hasIn(metaKeys)) {
-                let rootNode = state.getIn(metaKeys);
-                let childNode = rootNode.containPath([...parentKeys, ...keys]);
+                let rootNode = state.getIn(metaKeys),
+                    childNode = rootNode.containPath([...keys]);
 
                 if (childNode && childNode.value) {
                     if (settings.metaKeys) {
@@ -76,16 +78,34 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
             }
         };
 
+        /**
+        * 获取FormItemMeta的根数据
+        * @param state 当前的state树
+        */
+        let getRoot = (state: Immutable.Map<string, any>) => {
+            if (!settings.treeNode) {
+                return null;
+            }
+
+            let metaKeys = [...rootReducerKey, ...parentKeys, "meta"];
+            let rootNode: TreeMap = state.getIn(metaKeys);
+
+            return rootNode.addChild([...keys]);
+        };
+
         return fxSelectorCreator(
-            [getFormItemData, getFormItemMeta],
-            (formItemData: any, formItemMeta: any) => {
-                const rtn: { formItemData?: any, formItemMeta?: any } = {};
+            [getFormItemData, getFormItemMeta, getRoot],
+            (formItemData: any, formItemMeta: any, formItemNode: TreeMap) => {
+                const rtn: { formItemData?: any, formItemMeta?: any, formItemNode?: TreeMap } = {};
 
                 if (formItemData) {
                     rtn.formItemData = formItemData;
                 }
                 if (formItemMeta) {
                     rtn.formItemMeta = formItemMeta;
+                }
+                if (formItemNode) {
+                    rtn.formItemNode = formItemNode;
                 }
 
                 return rtn;

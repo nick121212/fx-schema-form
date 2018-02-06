@@ -11,7 +11,7 @@ import { schemaFormReducer } from "../reducer";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
-    updateItemMeta: (props: DefaultProps, data: any, meta?: any) => void;
+    updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
 
@@ -93,11 +93,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                  * 更新一个元数据
                  */
                 updateItemMeta: (propsCur: ValidateHocOutProps) => {
-                    return async (props: DefaultProps, data: any, meta?: any) => {
+                    return async (props: DefaultProps, data: any, meta: any = null, noChange = false) => {
                         schemaFormReducer.actions.updateItemMeta({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
-                            meta: meta || await propsCur.validate(props, data)
+                            meta: meta || await propsCur.validate(props, data),
+                            noChange: noChange
                         });
                     };
                 }

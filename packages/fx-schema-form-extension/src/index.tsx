@@ -6,10 +6,9 @@ import consoleHoc from "./hocs/console";
 import oneOfHoc from "./hocs/oneof";
 import showHoc from "./hocs/show";
 import tempHoc from "./hocs/temp";
+import dataToMetaHoc from "./hocs/datatometa";
 
 import { DesignField } from "./fields/design";
-
-
 
 const { hocFactory, defaultTheme } = schemaFormReact;
 
@@ -19,5 +18,6 @@ hocFactory.add("console", consoleHoc.bind(consoleHoc, hocFactory));
 hocFactory.add("oneof", oneOfHoc.bind(oneOfHoc, hocFactory));
 hocFactory.add("show", showHoc.bind(showHoc, hocFactory));
 hocFactory.add("extraTemp", tempHoc.bind(tempHoc, hocFactory));
+hocFactory.add("dataToMeta", dataToMetaHoc.bind(dataToMetaHoc, hocFactory));
 
 defaultTheme.fieldFactory.add("design", DesignField as any);
