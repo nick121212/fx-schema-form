@@ -40,8 +40,6 @@ export default (hocFactory: BaseFactory<any>) => {
                     extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys),
                     { temps = [] } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {};
 
-                console.log(uiSchema.keys, formItemNode, temps);
-
                 return temps.map((temp: string) => {
                     return {
                         key: temp,
