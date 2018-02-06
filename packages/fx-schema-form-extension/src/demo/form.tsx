@@ -8,6 +8,12 @@ import propTypes from "prop-types";
 import { gloabelOptions, curAjv, globalOptionsOfDesign } from "./init";
 
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
+
+const uiSchema = [{
+    key: "children",
+    field: "design"
+}];
+
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
     parentKeys: ["designForm"]
@@ -30,10 +36,7 @@ export class TestForm extends React.PureComponent<any> {
                 key={"designForm" + "design"}
                 RootComponent={Form}
                 schemaId="design"
-                uiSchemas={[{
-                    key: "children",
-                    field: "design"
-                }]}
+                uiSchemas={uiSchema}
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptionsOfDesign}
                 ajv={curAjv} >

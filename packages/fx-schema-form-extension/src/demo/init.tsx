@@ -222,9 +222,7 @@ export const globalOptionsOfDesign = Immutable.fromJS({
 
                 return EEEE;
             }, SortableContainer, schemaFormReact.hocFactory.get("resetKey")({
-                category: "field",
-                field: "array",
-                key: "keys"
+                excludeKeys: ["formItemData", "formItemMeta"]
             })],
             formItemHocs: [SortableElement, shouldUpdate(() => false)],
             fieldHocs: [schemaFormReact.hocFactory.get("data")({
@@ -245,15 +243,14 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         }
     },
     hoc: {
+        extraTemp: {
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
         data: {
             rootReducerKey: ["schemaForm"]
         },
         dataToMeta: {
-            excludeKeys: ["formItemData", "formItemMeta"]
-        },
-        array: {
-            ArrayComponent: ArrayComponent,
-            ArrayItemComponent: ArrayItemComponent
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
         }
     }
 });

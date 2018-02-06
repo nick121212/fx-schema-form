@@ -37,8 +37,8 @@ export default (hocFactory: BaseFactory<any>) => {
         ) as any)
         class ComponentHoc extends React.PureComponent<Props, any> {
 
-            public dataToMeta() {
-                const { formItemData, uiSchema, parentKeys, formItemNode } = this.props,
+            public dataToMeta(props: Props) {
+                const { formItemData, uiSchema, parentKeys, formItemNode } = props,
                     { keys = [] } = uiSchema || {};
 
                 if (formItemData && formItemNode) {
@@ -57,22 +57,21 @@ export default (hocFactory: BaseFactory<any>) => {
                         }
                     });
 
-                    actions.updateItemMeta({
-                        keys: keys,
-                        parentKeys: parentKeys,
-                        meta: {}
-                    });
+                    // actions.updateItemMeta({
+                    //     keys: keys,
+                    //     parentKeys: parentKeys,
+                    //     meta: Immutable.fromJS({})
+                    // });
                 }
             }
 
-            public componentDidMount() {
-                this.dataToMeta();
+            public componentWillMount() {
+                this.dataToMeta(this.props);
             }
 
-            public componentDidUpdate() {
-                this.dataToMeta();
+            public componentWillUpdate(props: Props) {
+                this.dataToMeta(props);
             }
-
             public render(): JSX.Element {
                 const { getOptions, getRequiredKeys, uiSchema } = this.props,
                     options = getOptions(this.props, "hoc", "dataToMeta"),

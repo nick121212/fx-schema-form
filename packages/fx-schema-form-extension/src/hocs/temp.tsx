@@ -6,9 +6,10 @@ import { RC } from "fx-schema-form-react/dist/typings/models";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ThemeHocOutProps } from "fx-schema-form-react/dist/typings/hocs/theme";
+import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
 
 export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps {
-
+    formItemNode?: TreeMap;
 }
 
 /**
@@ -24,8 +25,7 @@ export default (hocFactory: BaseFactory<any>) => {
         * @param uiSchema 合并后的数据
         */
         @(hocFactory.get("data")({
-            meta: true,
-            metaKeys: ["temps"]
+            treeNode: true
         }))
         class TempComponentHoc extends PureComponent<Props, any> {
             /**
@@ -35,8 +35,12 @@ export default (hocFactory: BaseFactory<any>) => {
              * 3. 渲染Component组件作为temps的children
              */
             public render(): JSX.Element {
-                const { uiSchema, getOptions, formItemMeta, currentTheme } = this.props;
-                const { temps = [] } = formItemMeta ? formItemMeta.toJS() : {};
+                const { uiSchema, getOptions, currentTheme, formItemNode, getRequiredKeys } = this.props,
+                    options = getOptions(this.props, "hoc", "extraTemp"),
+                    extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys),
+                    { temps = [] } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {};
+
+                console.log(uiSchema.keys, formItemNode, temps);
 
                 return temps.map((temp: string) => {
                     return {
@@ -48,6 +52,7 @@ export default (hocFactory: BaseFactory<any>) => {
                         TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
+                        key={key}
                         tempKey={key}
                         ajv={this.props.ajv}
                         uiSchema={this.props.uiSchema}
@@ -60,7 +65,7 @@ export default (hocFactory: BaseFactory<any>) => {
                         getOptions={this.props.getOptions}
                         getPathKeys={this.props.getPathKeys}
                         children={prev} />;
-                }, <Component {...this.props} />);
+                }, <Component {...extraProps} />);
             }
         }
 

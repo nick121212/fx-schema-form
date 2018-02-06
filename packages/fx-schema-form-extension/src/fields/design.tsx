@@ -111,6 +111,8 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
             child.push(this.renderItem(i));
         }
 
+        // console.log(uiSchema.keys);
+
         return <SchemaFormWithHoc children={[...child, children]} {...extraProps} />;
     }
 }

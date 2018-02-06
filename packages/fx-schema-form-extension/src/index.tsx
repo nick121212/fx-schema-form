@@ -6,7 +6,6 @@ import oneOfHoc from "./hocs/oneof";
 import showHoc from "./hocs/show";
 import tempHoc from "./hocs/temp";
 import dataToMetaHoc from "./hocs/datatometa";
-
 import { DesignField } from "./fields/design";
 
 const { hocFactory, defaultTheme } = schemaFormReact;

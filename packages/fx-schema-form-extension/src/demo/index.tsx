@@ -41,7 +41,7 @@ for (const key in actions) {
 
 let children = [];
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 2; i++) {
     children.push({
         data: {
             label: "DIV",
@@ -55,7 +55,22 @@ for (let i = 0; i < 100; i++) {
                     }
                 }
             }
-        }
+        },
+        children: [{
+            data: {
+                label: "DIV",
+                temps: ["div"],
+                options: {
+                    temp: {
+                        div: {
+                            options: {
+                                className: "ba pa1 ma1" + (i % 2 === 0 ? " bg-blue" : "")
+                            }
+                        }
+                    }
+                }
+            }
+        }]
     });
 }
 
@@ -69,14 +84,14 @@ actions.createForm({
 });
 
 store.subscribe(() => {
-    console.log(store.getState().toJS());
+    // console.log(store.getState().toJS());
 });
 
 ReactDOM.render(
     <Provider store={store}>
         <div>
             <TestForm ajv={curAjv} schemaId="design" />
-            {/*<ReactPerfTool perf={Perf} />*/}
+            <ReactPerfTool perf={Perf} />
         </div>
     </Provider>,
     document.getElementById("root"),
