@@ -3,7 +3,7 @@ export default {
 
     temps: [{
         key: "div",
-        uiSchemas: ["*"],
+        uiSchemas: ["className"],
         schemaId: "dnd-div",
     }],
 
