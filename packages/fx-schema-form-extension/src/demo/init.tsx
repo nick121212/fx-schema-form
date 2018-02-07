@@ -168,6 +168,7 @@ export const gloabelOptions = Immutable.fromJS({
                 metaKeys: ["isLoading", "errorText", "isValid", "dirty"]
             }), immutableRenderDecorator],
             options: {
+                hasFeedback: false,
                 labelCol: {
                     xs: { span: 24 },
                     sm: { span: 8 },

@@ -21,8 +21,8 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
     public render(): JSX.Element {
         const { children, arrayIndex, getOptions, getTitle, tempKey, formItemMeta, initArrayComponent, } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey);
-        const { hasFeedback = true } = tempOptions;
         const uiSchema = this.props.uiSchema as FxUiSchema;
+        let { hasFeedback = true } = tempOptions;
         let props: FormItemProps = {};
         let { dirty = false, isValid = true, errorText = "", isLoading = false } = formItemMeta ? formItemMeta.toJS() : {};
 
@@ -32,6 +32,7 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
 
         if (isLoading) {
             props.validateStatus = "validating";
+            hasFeedback = true;
         }
 
         return (
