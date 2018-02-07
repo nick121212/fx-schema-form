@@ -1,11 +1,14 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
+
 import Immutable from "immutable";
 import Button from "antd/lib/button";
 import propTypes from "prop-types";
 
-import { gloabelOptions, curAjv, globalOptionsOfDesign } from "./init";
+import { gloabelOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "./init";
 
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
@@ -34,15 +37,31 @@ export class TestForm extends React.PureComponent<any> {
         const { isValidating = false, isValid = false, validateAll } = this.props;
 
         return <div>
-            <SchemaForm
-                key={"designForm" + "design"}
-                RootComponent={Form}
-                schemaId="design"
-                uiSchemas={uiSchema}
-                parentKeys={this.props.parentKeys}
-                globalOptions={globalOptionsOfDesign}
-                ajv={curAjv} >
-            </SchemaForm>
+            <Row>
+                <Col span={12}>
+                    <SchemaForm
+                        key={"designForm" + "design"}
+                        RootComponent={Form}
+                        schemaId="design"
+                        uiSchemas={uiSchema}
+                        parentKeys={this.props.parentKeys}
+                        globalOptions={globalOptionsOfDesign}
+                        ajv={curAjv} >
+                    </SchemaForm>
+                </Col>
+                <Col span={12}>
+                    <SchemaForm
+                        key={"designForm" + "design1"}
+                        RootComponent={Form}
+                        schemaId="design"
+                        uiSchemas={uiSchema}
+                        parentKeys={this.props.parentKeys}
+                        globalOptions={globalOptionsOfDesign1}
+                        ajv={curAjv} >
+                    </SchemaForm>
+                </Col>
+            </Row>
+
             <button key={"submit" + isValidating + isValid}
                 type="primary"
                 onClick={this._validateAll}>

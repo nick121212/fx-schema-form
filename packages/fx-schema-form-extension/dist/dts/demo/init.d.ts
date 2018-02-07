@@ -16,4 +16,5 @@ export declare class ArrayItemComponent extends PureComponent<DefaultProps & any
 }
 export declare const gloabelOptions: any;
 export declare const globalOptionsOfDesign: any;
+export declare const globalOptionsOfDesign1: any;
 export declare const curAjv: ajv.Ajv;

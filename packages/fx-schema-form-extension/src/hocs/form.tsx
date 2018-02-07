@@ -25,6 +25,54 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
  */
 export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<Props, any> => {
+
+        class EditFormComponent extends React.PureComponent<any, any> {
+            public render() {
+                const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex } = this.props,
+                    options = getOptions(this.props, "hoc", "extraForm"),
+                    { temps = [], widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {},
+                    dataKeys = uiSchema && uiSchema.originKeys ? uiSchema.originKeys.slice(0, uiSchema.originKeys.length - 1) : [];
+
+                return <div className="ba b-dashed">
+                    这里是元素的编辑表单
+                    {
+                        temps.map((temp: { key: string, schemaId: string, uiSchemas: any[] }) => {
+                            return <SchemaForm
+                                key={temp.key}
+                                schemaId={temp.schemaId || ""}
+                                uiSchema={Object.assign({}, uiSchema, {
+                                    originKeys: [...dataKeys,
+                                        "data", "options", "temp", temp.key, "options"]
+                                })}
+                                arrayLevel={arrayLevel}
+                                arrayIndex={arrayIndex}
+                                uiSchemas={temp.uiSchemas || ["*"]}
+                                parentKeys={[...parentKeys]}
+                                globalOptions={Immutable.fromJS(options.globalOptions)}
+                                ajv={ajv}
+                            />;
+                        })
+                    }
+                    {
+                        widget ? <SchemaForm
+                            key={widget.key}
+                            schemaId={widget.schemaId || ""}
+                            uiSchema={Object.assign({}, uiSchema, {
+                                originKeys: [...dataKeys,
+                                    "data", "options", "widget", widget.key, "options"]
+                            })}
+                            arrayLevel={arrayLevel}
+                            arrayIndex={arrayIndex}
+                            uiSchemas={widget.uiSchemas || ["*"]}
+                            parentKeys={[...parentKeys]}
+                            globalOptions={Immutable.fromJS(options.globalOptions)}
+                            ajv={ajv}
+                        /> : null
+                    }
+                </div>;
+            }
+        }
+
         @(compose(
             hocFactory.get("data")({
                 treeNode: true
@@ -40,43 +88,7 @@ export default (hocFactory: BaseFactory<any>) => {
                 if (formItemNode && formItemNode.value && uiSchema && uiSchema.originKeys) {
                     return <div>
                         <Component {...this.props} />
-                        <div className="ba b-dashed">
-                            这里是元素的编辑表单
-                        {
-                                temps.map((temp: { key: string, schemaId: string, uiSchemas: any[] }) => {
-                                    return <SchemaForm
-                                        key={temp.key}
-                                        schemaId={temp.schemaId || ""}
-                                        uiSchema={Object.assign({}, uiSchema, {
-                                            originKeys: [...dataKeys,
-                                                "data", "options", "temp", temp.key, "options"]
-                                        })}
-                                        arrayLevel={arrayLevel}
-                                        arrayIndex={arrayIndex}
-                                        uiSchemas={temp.uiSchemas || ["*"]}
-                                        parentKeys={[...parentKeys]}
-                                        globalOptions={Immutable.fromJS(options.globalOptions)}
-                                        ajv={ajv}
-                                    />;
-                                })
-                            }
-                            {
-                                widget ? <SchemaForm
-                                    key={widget.key}
-                                    schemaId={widget.schemaId || ""}
-                                    uiSchema={Object.assign({}, uiSchema, {
-                                        originKeys: [...dataKeys,
-                                            "data", "options", "widget", widget.key, "options"]
-                                    })}
-                                    arrayLevel={arrayLevel}
-                                    arrayIndex={arrayIndex}
-                                    uiSchemas={widget.uiSchemas || ["*"]}
-                                    parentKeys={[...parentKeys]}
-                                    globalOptions={Immutable.fromJS(options.globalOptions)}
-                                    ajv={ajv}
-                                /> : null
-                            }
-                        </div>
+                        <EditFormComponent {...this.props} />
                     </div>;
                 }
 

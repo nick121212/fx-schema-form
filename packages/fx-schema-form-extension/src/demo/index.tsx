@@ -43,7 +43,10 @@ for (let i = 0; i < 1; i++) {
     children.push({
         data: div,
         children: [{
-            data: div
+            data: div,
+            children: [{
+                data: div
+            }]
         }, {
             data: checkbox
         }]

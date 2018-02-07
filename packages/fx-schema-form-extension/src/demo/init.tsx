@@ -195,7 +195,7 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         object: {
         },
         design: {
-            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraTemp", "extraWidget", "extraForm"],
+            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraTemp", "extraWidget"],
             // 这里为array字段添加sort排序功能
             formHocs: [(Component: any) => {
                 class EEEE extends React.PureComponent<any> {
@@ -264,7 +264,80 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         }
     }
 });
+export const globalOptionsOfDesign1 = Immutable.fromJS({
+    field: {
+        object: {
+        },
+        design: {
+            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraForm"],
+            // 这里为array字段添加sort排序功能
+            formHocs: [(Component: any) => {
+                class EEEE extends React.PureComponent<any> {
+                    private _onSortEnd: any;
 
+                    constructor(props: any) {
+                        super(props);
+
+                        this._onSortEnd = this.onSortEnd.bind(this);
+                    }
+
+                    private onSortEnd({ oldIndex, newIndex }: { oldIndex: number; newIndex: number; }) {
+                        const { uiSchema, parentKeys } = this.props;
+
+                        if (oldIndex === newIndex) {
+                            return;
+                        }
+                        this.props.moveItem(parentKeys, uiSchema.keys, oldIndex, newIndex);
+                    }
+
+                    public render() {
+                        return <Component useWindowAsScrollContainer={true}
+                            pressDelay={300} onSortEnd={this._onSortEnd} {...this.props} />;
+                    }
+                }
+
+                return EEEE;
+            }, SortableContainer, schemaFormReact.hocFactory.get("resetKey")({
+                excludeKeys: ["formItemData", "formItemMeta"]
+            })],
+            formItemHocs: [SortableElement, shouldUpdate(() => false)],
+            fieldHocs: [schemaFormReact.hocFactory.get("data")({
+                data: true,
+                dataLength: true
+            })]
+        }
+    },
+    temp: {
+        div: {
+            tempHocs: [schemaFormReact.hocFactory.get("data")({
+                meta: true,
+                metaKeys: ["options"]
+            }), immutableRenderDecorator],
+            options: {
+                className: "ba b--dashed"
+            }
+        }
+    },
+    hoc: {
+        extraForm: {
+            globalOptions: gloabelOptions,
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
+        extraWidget: {
+            globalOptions: gloabelOptions,
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
+        extraTemp: {
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
+        data: {
+            rootReducerKey: ["schemaForm"]
+        },
+        dataToMeta: {
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        }
+    }
+});
 
 export const curAjv: ajv.Ajv = new ajv({
     allErrors: true,
