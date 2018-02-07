@@ -6,12 +6,13 @@ import ajvErrors from "ajv-errors";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import { Button } from "antd";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
+import { ResolveLib } from "fx-schema-form-core";
 
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-
+import { design, div, checkbox } from "./schemas";
 
 schemaFormReact.defaultTheme.tempFactory.add("default", NoneTemp as any);
 schemaFormReact.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
@@ -19,6 +20,7 @@ schemaFormReact.defaultTheme.tempFactory.add("formitem", AntdFormItemTemp as any
 schemaFormReact.defaultTheme.tempFactory.add("div", DivTemp as any);
 
 schemaFormReact.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as any);
+schemaFormReact.defaultTheme.widgetFactory.add("boolean", AntdCheckboxWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("number", AntdInputNumberWidget as any);
 
@@ -136,9 +138,7 @@ export const gloabelOptions = Immutable.fromJS({
 
                 return EEEE;
             }, SortableContainer, schemaFormReact.hocFactory.get("resetKey")({
-                category: "field",
-                field: "array",
-                key: "keys"
+                excludeKeys: ["formItemData", "formItemMeta"]
             })],
             formItemHocs: [SortableElement, shouldUpdate(() => false)],
             fieldHocs: [schemaFormReact.hocFactory.get("data")({
@@ -150,6 +150,9 @@ export const gloabelOptions = Immutable.fromJS({
         },
         object: {
             temps: ["card"]
+        },
+        boolean: {
+            widget: "checkbox"
         }
     },
     temp: {
@@ -192,8 +195,7 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         object: {
         },
         design: {
-            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraTemp"],
-            globalOptions: gloabelOptions,
+            hocs: ["theme", "field", "validate", "array", "dataToMeta", "extraTemp", "extraWidget", "extraForm"],
             // 这里为array字段添加sort排序功能
             formHocs: [(Component: any) => {
                 class EEEE extends React.PureComponent<any> {
@@ -243,6 +245,14 @@ export const globalOptionsOfDesign = Immutable.fromJS({
         }
     },
     hoc: {
+        extraForm: {
+            globalOptions: gloabelOptions,
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
+        extraWidget: {
+            globalOptions: gloabelOptions,
+            excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
+        },
         extraTemp: {
             excludeKeys: ["formItemData", "formItemMeta", "formItemNode"]
         },
@@ -266,10 +276,11 @@ export const curAjv: ajv.Ajv = new ajv({
     removeAdditional: true,
 });
 
-// ajvErrors(curAjv, {
-//     keepErrors: false,
-//     singleError: false
-// });
+let designResolve = [
+    new ResolveLib(curAjv, design as any),
+    new ResolveLib(curAjv, div as any),
+    new ResolveLib(curAjv, checkbox as any)
+];
 
 curAjv.addKeyword("idExists", {
     async: true,

@@ -1,7 +1,6 @@
 import { default as row } from "./dnd/row";
 import { default as col } from "./dnd/col";
 import { default as common } from "./dnd/common";
-import { default as div } from "./dnd/div";
 import { default as echart } from "./dnd/echart";
 import { default as echart1 } from "./dnd/echart1";
 import { default as echart2 } from "./dnd/echart2";
@@ -18,4 +17,6 @@ import { default as echartItemStyle } from "./dnd/echart.itemstyle";
 import { default as echartTimeline } from "./dnd/echart.timeline";
 import { default as style } from "./dnd/style";
 import { default as design } from "./dnd/design";
-export { style, common, row, col, div, echartLineStyle, echartAreaStyle, echartTextStyle, echartItemStyle, echartAxis, echartSeries, echartTooltip, echartLegend, echartToolbox, echartTimeline, echartTitle, echart, echart1, echart2, design };
+import { default as div } from "./dnd/dnd.div";
+import { default as checkbox } from "./dnd/dnd.checkbox";
+export { style, common, row, col, div, checkbox, echartLineStyle, echartAreaStyle, echartTextStyle, echartItemStyle, echartAxis, echartSeries, echartTooltip, echartLegend, echartToolbox, echartTimeline, echartTitle, echart, echart1, echart2, design };

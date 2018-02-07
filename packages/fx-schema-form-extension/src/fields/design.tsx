@@ -16,7 +16,9 @@ let arrayFieldStyle = {
 
 class DesignFieldComponent extends React.PureComponent {
     public render() {
-        return <div style={arrayFieldStyle}>{this.props.children}</div>;
+        return <div style={arrayFieldStyle}>
+            {this.props.children}
+        </div>;
     }
 }
 

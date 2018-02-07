@@ -2146,13 +2146,13 @@ exports.default = function (hocFactory) {
         };
         return fxSelectorCreator([getFormItemData, getFormItemMeta, getRoot], function (formItemData, formItemMeta, formItemNode) {
             var rtn = {};
-            if (formItemData) {
+            if (formItemData !== undefined && formItemData !== null) {
                 rtn.formItemData = formItemData;
             }
-            if (formItemMeta) {
+            if (formItemMeta !== undefined && formItemData !== null) {
                 rtn.formItemMeta = formItemMeta;
             }
-            if (formItemNode) {
+            if (formItemNode !== undefined && formItemData !== null) {
                 rtn.formItemNode = formItemNode;
             }
             return rtn;

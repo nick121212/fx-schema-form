@@ -45,7 +45,7 @@ export class AntdInputNumberWidget extends PureComponent<AntdInputWidgetProps, a
                 }}
                 disabled={readonly}
                 placeholder={getTitle(this.props)}
-                {...getOptions(this.props, "widget", "input") }
+                {...getOptions(this.props, "widget", "number").options }
                 {...this.setDefaultProps() }>
             </InputNumber>
         );

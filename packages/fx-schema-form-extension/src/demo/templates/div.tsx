@@ -17,7 +17,6 @@ export class DivTemp extends PureComponent<Props, any> {
 
         return (
             <div {...tempOptions.options}>
-                这是一个DIV
                 {children}
             </div>
         );

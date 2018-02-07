@@ -72,6 +72,7 @@ export default (hocFactory: BaseFactory<any>) => {
             public componentWillUpdate(props: Props) {
                 this.dataToMeta(props);
             }
+
             public render(): JSX.Element {
                 const { getOptions, getRequiredKeys, uiSchema } = this.props,
                     options = getOptions(this.props, "hoc", "dataToMeta"),

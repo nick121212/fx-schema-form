@@ -7,6 +7,9 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ThemeHocOutProps } from "fx-schema-form-react/dist/typings/hocs/theme";
 import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
+import schemaFormReact from "fx-schema-form-react";
+
+const { SchemaForm } = schemaFormReact;
 
 export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps {
     formItemNode?: TreeMap;
@@ -35,35 +38,32 @@ export default (hocFactory: BaseFactory<any>) => {
              * 3. 渲染Component组件作为temps的children
              */
             public render(): JSX.Element {
-                const { uiSchema, getOptions, currentTheme, formItemNode, getRequiredKeys } = this.props,
-                    options = getOptions(this.props, "hoc", "extraTemp"),
+                const { uiSchema, getOptions, currentTheme, formItemNode, arrayLevel, arrayIndex,
+                    parentKeys, getRequiredKeys, children, globalOptions, schemaId } = this.props,
+                    options = getOptions(this.props, "hoc", "extraWidget"),
                     extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys),
-                    { temps = [] } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {};
+                    { widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {};
 
-                return temps.map((temp: { key: string }) => {
-                    return {
-                        key: temp.key,
-                        Temp: currentTheme.tempFactory.get(temp.key)
-                    };
-                }).reduce((prev: JSX.Element, { key, Temp }: any) => {
-                    const tempOptions = getOptions(this.props, "temp", key),
-                        TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
+                if (widget && currentTheme.widgetFactory.has(widget.key)) {
+                    let WidgetComponent = hocFactory.get("data")({
+                        meta: true,
+                        metaKeys: ["options"]
+                    })(currentTheme.widgetFactory.get(widget.key));
 
-                    return <TempWithHoc
-                        key={key}
-                        tempKey={key}
-                        ajv={this.props.ajv}
-                        uiSchema={this.props.uiSchema}
-                        schemaId={this.props.schemaId}
-                        arrayLevel={this.props.arrayLevel}
-                        arrayIndex={this.props.arrayIndex}
-                        globalOptions={this.props.globalOptions}
-                        parentKeys={this.props.parentKeys}
-                        getTitle={this.props.getTitle}
-                        getOptions={this.props.getOptions}
-                        getPathKeys={this.props.getPathKeys}
-                        children={prev} />;
-                }, <Component {...extraProps} />);
+                    return <Component {...extraProps} >
+                        <WidgetComponent key={widget.key}
+                            schemaId={schemaId}
+                            uiSchema={uiSchema}
+                            arrayLevel={arrayLevel}
+                            arrayIndex={arrayIndex}
+                            getOptions={getOptions}
+                            parentKeys={[...parentKeys]}
+                            globalOptions={globalOptions} />
+                        {children}
+                    </Component>;
+                }
+
+                return <Component {...extraProps} />;
             }
         }
 

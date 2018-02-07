@@ -5,6 +5,8 @@ import resetKeyHoc from "./hocs/resetkey";
 import oneOfHoc from "./hocs/oneof";
 import showHoc from "./hocs/show";
 import tempHoc from "./hocs/temp";
+import formHoc from "./hocs/form";
+import widgetHoc from "./hocs/widget";
 import dataToMetaHoc from "./hocs/datatometa";
 import { DesignField } from "./fields/design";
 
@@ -16,5 +18,7 @@ hocFactory.add("oneof", oneOfHoc.bind(oneOfHoc, hocFactory));
 hocFactory.add("show", showHoc.bind(showHoc, hocFactory));
 hocFactory.add("extraTemp", tempHoc.bind(tempHoc, hocFactory));
 hocFactory.add("dataToMeta", dataToMetaHoc.bind(dataToMetaHoc, hocFactory));
+hocFactory.add("extraForm", formHoc.bind(formHoc, hocFactory));
+hocFactory.add("extraWidget", widgetHoc.bind(widgetHoc, hocFactory));
 
 defaultTheme.fieldFactory.add("design", DesignField as any);

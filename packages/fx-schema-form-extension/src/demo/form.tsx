@@ -31,6 +31,8 @@ export class TestForm extends React.PureComponent<any> {
     }
 
     public render() {
+        const { isValidating = false, isValid = false, validateAll } = this.props;
+
         return <div>
             <SchemaForm
                 key={"designForm" + "design"}
@@ -41,9 +43,11 @@ export class TestForm extends React.PureComponent<any> {
                 globalOptions={globalOptionsOfDesign}
                 ajv={curAjv} >
             </SchemaForm>
-            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>
-                validate is {this.props.isValid ? this.props.isValid.toString() : "false"}
-            </Button>
+            <button key={"submit" + isValidating + isValid}
+                type="primary"
+                onClick={this._validateAll}>
+                validate is {isValid ? "true" : "false"}
+            </button>
         </div>;
     }
 }

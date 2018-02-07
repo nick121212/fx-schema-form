@@ -103,13 +103,13 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
             (formItemData: any, formItemMeta: any, formItemNode: TreeMap) => {
                 const rtn: { formItemData?: any, formItemMeta?: any, formItemNode?: TreeMap } = {};
 
-                if (formItemData) {
+                if (formItemData !== undefined && formItemData !== null) {
                     rtn.formItemData = formItemData;
                 }
-                if (formItemMeta) {
+                if (formItemMeta !== undefined && formItemData !== null) {
                     rtn.formItemMeta = formItemMeta;
                 }
-                if (formItemNode) {
+                if (formItemNode !== undefined && formItemData !== null) {
                     rtn.formItemNode = formItemNode;
                 }
 
