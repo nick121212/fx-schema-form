@@ -8,7 +8,7 @@ import Immutable from "immutable";
 import Button from "antd/lib/button";
 import propTypes from "prop-types";
 
-import { gloabelOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
+import { globalOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
 import div from "../dnd/div";
 import checkbox from "../dnd/checkbox";
 
@@ -33,15 +33,17 @@ export class NormalForm extends React.PureComponent<any> {
                 schemaId={"dnd-style"}
                 uiSchemas={["*"]}
                 parentKeys={this.props.parentKeys}
-                globalOptions={gloabelOptions}
+                globalOptions={globalOptions}
                 ajv={curAjv} >
             </SchemaForm>
-
-            <button key={"submit" + isValidating + isValid}
-                type="primary"
-                onClick={this.props.validateAll}>
-                validate is {isValid ? "true" : "false"}
-            </button>
+            <div className="tc">
+                <button key={"submit" + isValidating + isValid}
+                    type="primary"
+                    className="pa2 mt5 ba b--dashed bg-gray"
+                    onClick={this.props.validateAll}>
+                    validate is {isValid ? "true" : "false"}
+                </button>
+            </div>
         </div>;
     }
 }

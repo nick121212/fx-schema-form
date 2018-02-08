@@ -6,7 +6,7 @@ export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[]) => {
         [key: string]: any;
     };
-    getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): () => any;
+    getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): () => string;
     getPathKeys: (keys: string[], path: string) => Array<string | number>;
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => {

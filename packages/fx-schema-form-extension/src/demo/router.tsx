@@ -24,7 +24,9 @@ export class RouterComponent extends React.Component<any, any> {
                     return <DesignForm ajv={curAjv} schemaId="design" formKey="designForm" initData={{ children }} />;
                 }} />
                 <Route path="/form/normal" component={() => {
-                    return <NormalForm ajv={curAjv} schemaId="dnd-style" formKey="normalForm" initData={{}} />;
+                    return <NormalForm ajv={curAjv} schemaId="dnd-style" formKey="normalForm" initData={{
+                        ids: [1, 2, 3]
+                    }} />;
                 }} />
                 {/* <Route key="panel-create" path="/panel/create" component={CreateComponent} />, */}
                 {/* <Route key="panel-edit" path="/panel/edit/:id" component={CreateComponent} />, */}

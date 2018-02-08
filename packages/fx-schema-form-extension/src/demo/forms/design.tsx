@@ -8,7 +8,7 @@ import Immutable from "immutable";
 import Button from "antd/lib/button";
 import propTypes from "prop-types";
 
-import { gloabelOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
+import { curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
 import div from "../dnd/div";
 import checkbox from "../dnd/checkbox";
 
@@ -71,12 +71,14 @@ export class DesignForm extends React.PureComponent<any> {
                     </SchemaForm>
                 </Col>
             </Row>
-
-            <button key={"submit" + isValidating + isValid}
-                type="primary"
-                onClick={this.props.validateAll}>
-                validate is {isValid ? "true" : "false"}
-            </button>
+            <div className="tc">
+                <button key={"submit" + isValidating + isValid}
+                    type="primary"
+                    className="pa2 mt5 ba b--dashed bg-gray"
+                    onClick={this.props.validateAll}>
+                    validate is {isValid ? "true" : "false"}
+                </button>
+            </div>
         </div>;
     }
 }
