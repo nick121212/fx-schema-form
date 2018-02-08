@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-react",
-  "version": "3.0.29",
+  "version": "3.0.30",
   "description": "自动生成表单组件",
   "main": "dist/index.js",
   "types": "./dist/typings/index.d.ts",
