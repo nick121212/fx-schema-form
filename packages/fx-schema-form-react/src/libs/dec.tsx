@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import { connect } from "react-redux";
 import Immutable from "immutable";
-import { Ajv, ErrorObject, ValidationError } from "ajv";
+import ajv, { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
@@ -24,6 +24,9 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps {
     errors?: any;
     isValid?: boolean;
     isValidating?: boolean;
+
+    formKey: string;
+    initData?: any;
 }
 
 export interface SchemaFormHocOutProps extends SchemaFormProps {
@@ -51,9 +54,9 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 return {
                     data: state.getIn(dataKeys),
                     root: root,
-                    isValid: root.value.get("isValid"),
-                    errors: root.value.get("errors"),
-                    isValidating: root.value.get("isLoading")
+                    isValid: root ? root.value.get("isValid") : true,
+                    errors: root ? root.value.get("errors") : null,
+                    isValidating: root ? root.value.get("isLoading") : false
                 };
             })) as any)
         class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
@@ -61,6 +64,13 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
             constructor(props: SchemaFormProps) {
                 super(props);
+
+                if (props.formKey) {
+                    actions.createForm({
+                        key: props.formKey,
+                        data: props.initData || {}
+                    });
+                }
 
                 this._validateAll = this.validateAll.bind(this);
             }
@@ -98,9 +108,13 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         meta: root.value
                     });
 
-                    (validate as any).$async = !!async;
+                    // (validate as any).$async = !!async;
 
-                    await validate(this.props.data.toJS());
+                    let valRes = await validate(this.props.data.toJS());
+
+                    if (!valRes) {
+                        throw new (ValidationError as any)(validate.errors);
+                    }
 
                     root.value = root.value.merge({
                         isValid: true
@@ -126,7 +140,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         if (childNode) {
                             childNode.value = childNode.value.merge($validateAfterData).merge({
                                 isValid: false,
-                                errorText: element.message
+                                errorText: dataKeys.pop() + " " + element.message
                             });
                         }
                     });

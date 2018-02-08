@@ -38,7 +38,7 @@ export default (hocFactory: BaseFactory<any>) => {
              * 3. 渲染Component组件作为temps的children
              */
             public render(): JSX.Element {
-                const { uiSchema, getOptions, currentTheme, formItemNode, arrayLevel, arrayIndex,
+                const { uiSchema, getOptions, currentTheme, formItemNode, arrayLevel, arrayIndex, getTitle, getPathKeys,
                     parentKeys, getRequiredKeys, children, globalOptions, schemaId } = this.props,
                     options = getOptions(this.props, "hoc", "extraWidget"),
                     extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys),
@@ -58,6 +58,8 @@ export default (hocFactory: BaseFactory<any>) => {
                             arrayIndex={arrayIndex}
                             getOptions={getOptions}
                             parentKeys={[...parentKeys]}
+                            getTitle={getTitle}
+                            getPathKeys={getPathKeys}
                             globalOptions={globalOptions} />
                         {children}
                     </Component>;

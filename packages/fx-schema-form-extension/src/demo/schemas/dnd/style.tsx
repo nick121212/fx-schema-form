@@ -1,10 +1,25 @@
 export default {
     type: "object",
     $id: "dnd-style",
+    required: ["textAlign", "width"],
     properties: {
         width: { type: "string" },
         height: { type: "string" },
         fontSize: { type: "number" },
-        textAlign: { type: "string", enum: ["left", "right", "center"] }
+        url: { type: "string", format: "url" },
+        email: { type: "string", format: "email" },
+        ids: {
+            type: "array",
+            items: {
+                title: "测试ID",
+                type: "string",
+                format: "uuid"
+            }
+        },
+        textAlign: {
+            type: "string",
+            enum: ["left", "right", "center"],
+            description: "Note: 只能是left，right，center中的一个。"
+        }
     }
 };

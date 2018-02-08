@@ -19,3 +19,8 @@ declare module "ajv-errors" {
     const value: any;
     export default value;
 }
+
+declare module "ajv-i18n"{
+    const value: any;
+    export default value;
+}

@@ -11,7 +11,7 @@ export default {
         temp: {
             div: {
                 options: {
-                    className: "ba pa1 ma1"
+                    className: "ba pa3 ma1 b--dashed"
                 }
             }
         }

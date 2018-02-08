@@ -5,6 +5,9 @@ declare const _default: {
         checked: {
             type: string;
         };
+        title: {
+            type: string;
+        };
     };
 };
 export default _default;

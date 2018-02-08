@@ -18,7 +18,7 @@
         "width": 100,
         "height": 100,
     },
-    "className": "ba bb-dashed" // 边框样式
+    "className": "ba bb-dashed"
 }
 ```
 

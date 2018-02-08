@@ -12,6 +12,8 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps {
     errors?: any;
     isValid?: boolean;
     isValidating?: boolean;
+    formKey: string;
+    initData?: any;
 }
 export interface SchemaFormHocOutProps extends SchemaFormProps {
     validateAll?: () => Promise<any>;

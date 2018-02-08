@@ -8,33 +8,43 @@ import Immutable from "immutable";
 import Button from "antd/lib/button";
 import propTypes from "prop-types";
 
-import { gloabelOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "./init";
+import { gloabelOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
+import div from "../dnd/div";
+import checkbox from "../dnd/checkbox";
 
-const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
+const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
 
 const uiSchema = [{
     key: "children",
     field: "design"
 }];
 
+let children: any = [];
+
+for (let i = 0; i < 1; i++) {
+    children.push({
+        data: div,
+        children: [{
+            data: div,
+            children: [{
+                data: div
+            }]
+        }, {
+            data: checkbox
+        }]
+    });
+}
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
     parentKeys: ["designForm"]
 }) as any)
-export class TestForm extends React.PureComponent<any> {
-
-    public static propTypes: any;
-
-    private _validateAll: () => Promise<void>;
-
-    constructor(props: any) {
-        super(props);
-
-        this._validateAll = props.validateAll.bind(this);
-    }
-
+export class DesignForm extends React.PureComponent<any> {
     public render() {
         const { isValidating = false, isValid = false, validateAll } = this.props;
+
+        if (!this.props.root) {
+            return null;
+        }
 
         return <div>
             <Row>
@@ -64,10 +74,13 @@ export class TestForm extends React.PureComponent<any> {
 
             <button key={"submit" + isValidating + isValid}
                 type="primary"
-                onClick={this._validateAll}>
+                onClick={this.props.validateAll}>
                 validate is {isValid ? "true" : "false"}
             </button>
         </div>;
     }
 }
 
+export {
+    children
+};

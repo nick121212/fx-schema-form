@@ -3,6 +3,7 @@ import { immutableRenderDecorator } from "react-immutable-render-mixin";
 import ajv from "ajv";
 import React, { PureComponent } from "react";
 import ajvErrors from "ajv-errors";
+
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import { Button } from "antd";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
@@ -12,7 +13,7 @@ import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { design, div, checkbox } from "./schemas";
+import { design, div, checkbox, style } from "./schemas";
 
 schemaFormReact.defaultTheme.tempFactory.add("default", NoneTemp as any);
 schemaFormReact.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
@@ -168,7 +169,7 @@ export const gloabelOptions = Immutable.fromJS({
                 metaKeys: ["isLoading", "errorText", "isValid", "dirty"]
             }), immutableRenderDecorator],
             options: {
-                hasFeedback: false,
+                hasFeedback: true,
                 labelCol: {
                     xs: { span: 24 },
                     sm: { span: 8 },
@@ -346,6 +347,7 @@ export const curAjv: ajv.Ajv = new ajv({
     useDefaults: true,
     format: "full",
     $data: true,
+    loadSchema: loadSchema as any,
     errorDataPath: "property",
     removeAdditional: true,
 });
@@ -353,7 +355,8 @@ export const curAjv: ajv.Ajv = new ajv({
 let designResolve = [
     new ResolveLib(curAjv, design as any),
     new ResolveLib(curAjv, div as any),
-    new ResolveLib(curAjv, checkbox as any)
+    new ResolveLib(curAjv, checkbox as any),
+    new ResolveLib(curAjv, style as any)
 ];
 
 curAjv.addKeyword("idExists", {
@@ -371,4 +374,12 @@ function checkIdExists(schema: any, data: any) {
             reject(new (ajv.ValidationError as any)([{ message: "idExists不是nick" }] as any));
         }, 2000);
     });
+}
+
+function loadSchema(uri: string) {
+
+    return fetch(uri).then((res: Response) => {
+        return res.json();
+    });
+
 }

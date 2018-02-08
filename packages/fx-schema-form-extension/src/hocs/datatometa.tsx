@@ -37,6 +37,11 @@ export default (hocFactory: BaseFactory<any>) => {
         ) as any)
         class ComponentHoc extends React.PureComponent<Props, any> {
 
+            /**
+             * 这里把数据塞到了meta中，便于后面的组件使用
+             * 遍历数组，数组元素的每一项数据合并到meta
+             * @param props 当前的props
+             */
             public dataToMeta(props: Props) {
                 const { formItemData, uiSchema, parentKeys, formItemNode } = props,
                     { keys = [] } = uiSchema || {};
@@ -56,12 +61,6 @@ export default (hocFactory: BaseFactory<any>) => {
                             childNode.value = child.get("data");
                         }
                     });
-
-                    // actions.updateItemMeta({
-                    //     keys: keys,
-                    //     parentKeys: parentKeys,
-                    //     meta: Immutable.fromJS({})
-                    // });
                 }
             }
 

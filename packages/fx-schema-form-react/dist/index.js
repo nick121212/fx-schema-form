@@ -971,6 +971,17 @@ exports.default = function (hocFactory) {
                     var title = uiSchema.title,
                         keys = uiSchema.keys;
 
+                    for (var _len2 = arguments.length, extraSettings = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                        extraSettings[_key2 - 1] = arguments[_key2];
+                    }
+
+                    if (!title && extraSettings && extraSettings.length) {
+                        extraSettings.forEach(function (sets) {
+                            if (sets && !title && sets.get("title")) {
+                                title = sets.get("title");
+                            }
+                        });
+                    }
                     if (title !== undefined) {
                         return title;
                     }
@@ -2793,6 +2804,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -2813,6 +2826,12 @@ exports.default = function () {
 
                 var _this = _possibleConstructorReturn(this, (SchemaFormComponentHoc.__proto__ || Object.getPrototypeOf(SchemaFormComponentHoc)).call(this, props));
 
+                if (props.formKey) {
+                    actions.createForm({
+                        key: props.formKey,
+                        data: props.initData || {}
+                    });
+                }
                 _this._validateAll = _this.validateAll.bind(_this);
                 return _this;
             }
@@ -2823,7 +2842,7 @@ exports.default = function () {
                     return tslib_1.__awaiter(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                         var _this2 = this;
 
-                        var root, validate, $validateBeforeData, $validateAfterData, normalizeDataPath;
+                        var root, validate, $validateBeforeData, $validateAfterData, normalizeDataPath, valRes;
                         return regeneratorRuntime.wrap(function _callee$(_context) {
                             while (1) {
                                 switch (_context.prev = _context.next) {
@@ -2863,11 +2882,20 @@ exports.default = function () {
                                             keys: [],
                                             meta: root.value
                                         });
-                                        validate.$async = !!async;
-                                        _context.next = 11;
+                                        _context.next = 10;
                                         return validate(this.props.data.toJS());
 
-                                    case 11:
+                                    case 10:
+                                        valRes = _context.sent;
+
+                                        if (valRes) {
+                                            _context.next = 13;
+                                            break;
+                                        }
+
+                                        throw new _ajv.ValidationError(validate.errors);
+
+                                    case 13:
                                         root.value = root.value.merge({
                                             isValid: true
                                         });
@@ -2876,36 +2904,36 @@ exports.default = function () {
                                             keys: [],
                                             meta: root.value
                                         });
-                                        _context.next = 23;
+                                        _context.next = 25;
                                         break;
 
-                                    case 15:
-                                        _context.prev = 15;
+                                    case 17:
+                                        _context.prev = 17;
                                         _context.t0 = _context["catch"](5);
 
                                         if (_context.t0 instanceof _ajv.ValidationError) {
-                                            _context.next = 19;
+                                            _context.next = 21;
                                             break;
                                         }
 
                                         return _context.abrupt("return", console.error(_context.t0));
 
-                                    case 19:
+                                    case 21:
                                         if (root) {
-                                            _context.next = 21;
+                                            _context.next = 23;
                                             break;
                                         }
 
                                         return _context.abrupt("return");
 
-                                    case 21:
+                                    case 23:
                                         _context.t0.errors.forEach(function (element) {
                                             var dataKeys = root.getCurrentKeys().concat(normalizeDataPath(_this2.props.schemaId, element.dataPath));
                                             var childNode = root.addChild(dataKeys, _immutable2.default.fromJS({}));
                                             if (childNode) {
                                                 childNode.value = childNode.value.merge($validateAfterData).merge({
                                                     isValid: false,
-                                                    errorText: element.message
+                                                    errorText: [].concat(_toConsumableArray(dataKeys)).pop() + " " + element.message
                                                 });
                                             }
                                         });
@@ -2914,8 +2942,8 @@ exports.default = function () {
                                             errors: _context.t0.errors
                                         });
 
-                                    case 23:
-                                        _context.prev = 23;
+                                    case 25:
+                                        _context.prev = 25;
 
                                         root.forEach(function (node) {
                                             if (node.value) {
@@ -2928,14 +2956,14 @@ exports.default = function () {
                                             keys: [],
                                             meta: root.value
                                         });
-                                        return _context.finish(23);
+                                        return _context.finish(25);
 
-                                    case 27:
+                                    case 29:
                                     case "end":
                                         return _context.stop();
                                 }
                             }
-                        }, _callee, this, [[5, 15, 23, 27]]);
+                        }, _callee, this, [[5, 17, 25, 29]]);
                     }));
                 }
             }, {
@@ -2966,9 +2994,9 @@ exports.default = function () {
             return {
                 data: state.getIn(dataKeys),
                 root: root,
-                isValid: root.value.get("isValid"),
-                errors: root.value.get("errors"),
-                isValidating: root.value.get("isLoading")
+                isValid: root ? root.value.get("isValid") : true,
+                errors: root ? root.value.get("errors") : null,
+                isValidating: root ? root.value.get("isLoading") : false
             };
         })), tslib_1.__metadata("design:paramtypes", [Object])], SchemaFormComponentHoc);
         return SchemaFormComponentHoc;

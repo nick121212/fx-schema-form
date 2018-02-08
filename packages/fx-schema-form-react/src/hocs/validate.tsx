@@ -64,8 +64,9 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                         } catch (err) {
                             // 处理错误消息
                             result.errorText = err.errors ?
-                                props.ajv.errorsText(err.errors, { dataVar: props.getTitle(props).toString() })
-                                : err.message;
+                                props.ajv.errorsText(err.errors, {
+                                    dataVar: props.getTitle(props).toString()
+                                }) : err.message;
                         }
                         finally {
                             clearTimeout(timeId);

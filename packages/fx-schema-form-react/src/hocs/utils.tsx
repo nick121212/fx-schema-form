@@ -13,7 +13,7 @@ import { FxUiSchema, RC } from "../models/index";
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
         => { [key: string]: any };
-    getTitle(props: DefaultProps): () => any;
+    getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): () => string;
     getPathKeys: (keys: string[], path: string) => Array<string | number>;
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => { [key: string]: any };
@@ -151,9 +151,17 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
              * 获取标题数据
              * title || key || index
              */
-            private getTitle(props: DefaultProps): string {
+            private getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): string {
                 const { uiSchema } = props;
-                const { title, keys } = uiSchema as FxUiSchema;
+                let { title, keys } = uiSchema as FxUiSchema;
+
+                if (!title && extraSettings && extraSettings.length) {
+                    extraSettings.forEach((sets: Immutable.Map<string, any>) => {
+                        if (sets && !title && sets.get("title")) {
+                            title = sets.get("title");
+                        }
+                    });
+                }
 
                 if (title !== undefined) {
                     return title;

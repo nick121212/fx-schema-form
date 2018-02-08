@@ -4,6 +4,9 @@ export default {
     properties: {
         checked: {
             type: "boolean"
+        },
+        title: {
+            type: "string"
         }
     }
 };

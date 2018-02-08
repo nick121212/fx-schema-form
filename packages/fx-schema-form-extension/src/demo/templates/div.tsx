@@ -13,7 +13,7 @@ export class DivTemp extends PureComponent<Props, any> {
     public render(): JSX.Element {
         const { children, tempKey, getOptions, getTitle, initArrayComponent, formItemMeta } = this.props;
         const tempOptions = getOptions(this.props, "temp", tempKey,
-            formItemMeta ? formItemMeta.get("options").getIn(["temp", tempKey]) : {});
+            formItemMeta ? formItemMeta.getIn(["options", "temp", tempKey]) : {});
 
         return (
             <div {...tempOptions.options}>

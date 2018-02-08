@@ -8,59 +8,25 @@ import { ResolveLib } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 import Immutable from "immutable";
 import { Provider } from "react-redux";
+import { HashRouter as Router } from "react-router-dom";
 
 import "antd/dist/antd.css";
 import "react-perf-tool/lib/styles.css";
-import div from "./div";
-import checkbox from "./checkbox";
 
 
 import "../";
 
 import { curAjv } from "./init";
-import { TestForm } from "./form";
+import { RouterComponent } from "./router";
 
 const { SchemaForm, hocFactory, schemaFormDec } = schemaFormReact;
 
-// 获取actions
-let actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
 // 将schemaForm加入到store
 let store = createStore<any>(combineReducers({
     "schemaForm": schemaFormReact.reducerFactory.get("schemaForm").reducer as any
 }), Immutable.fromJS({}));
-
-// actions要assign到store
-for (const key in actions) {
-    if (actions.hasOwnProperty(key)) {
-        const element = actions[key];
-        element.assignTo(store);
-    }
-}
-
-let children = [];
-
-for (let i = 0; i < 1; i++) {
-    children.push({
-        data: div,
-        children: [{
-            data: div,
-            children: [{
-                data: div
-            }]
-        }, {
-            data: checkbox
-        }]
-    });
-}
-
-// 创建一个form
-actions.createForm({
-    key: "designForm",
-    data: {
-        name: "nick",
-        children: children
-    }
-});
+// 初始化reducer
+schemaFormReact.reducerFactory.get("schemaForm").init(store);
 
 store.subscribe(() => {
     console.log(store.getState().toJS());
@@ -68,10 +34,10 @@ store.subscribe(() => {
 
 ReactDOM.render(
     <Provider store={store}>
-        <div>
-            <TestForm ajv={curAjv} schemaId="design" />
-            {/* <ReactPerfTool perf={Perf} /> */}
-        </div>
+        <Router>
+            <RouterComponent key={"rootRouter"} />
+        </Router>
+        {/* <ReactPerfTool perf={Perf} /> */}
     </Provider>,
     document.getElementById("root"),
     () => {
