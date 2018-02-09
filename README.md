@@ -6,8 +6,6 @@
 
 ![效果图](./images/effect.png)
 
-<!-- 表单交给后端来渲染生成，想怎么改怎么改。当然不是让后端去拼接html代码。而是通过配置文件，生成出强大的表单； -->
-
 >举个栗子：
 
 有一份数据结构：
@@ -51,6 +49,145 @@ SchemaForm的难点在于
 - 解决JsonSchema和UiSchema之间的关联。因为JsonSchema是可以互相嵌套的。以及各种关键字。比如anyOf,oneOf,allOf等。
 - 各种组件之间高内聚低耦合。
 - 灵活性和性能。
+- 动态数据，比如echart中的[data]字段，如果需要从接口获取; 如果通过配置，data的数据格式会出现二义性（data是数组类型，而配置的可能是字符串）；如果data数据需要多个接口的数据简单合并呢？
+
+![echart的部分界面](./images/timeline.png)
+
+再来看看下面的数据结构（相信你会疯掉）：
+
+逻辑复杂，条件判断繁琐，验证困难；但这就是SchemaForm的使用场景。
+
+```json
+{
+    "type": "object",
+    "required": [
+        "name",
+        "type",
+        "dsOption"
+    ],
+    "properties": {
+        "name": {
+            "type": "string",
+            "minLength": 2
+        },
+        "type": {
+            "type": "string"
+        },
+        "dsOption": {
+            "type": "object",
+            "required": [
+                "sourceType"
+            ],
+            "default": {},
+            "properties": {
+                "menuId": {
+                    "type": "number"
+                },
+                "parentMenuId": {
+                    "type": "number"
+                },
+                "params": {
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "name",
+                            "type",
+                            "data"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "period",
+                                    "dimension",
+                                    "fixed"
+                                ]
+                            },
+                            "data": {
+                                "oneOf": [{
+                                    "default": {},
+                                    "type": "object",
+                                    "title": "固定参数-fixed",
+                                    "required": [
+                                        "value"
+                                    ],
+                                    "properties": {
+                                        "value": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }, {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "维度参数-dimension",
+                                    "required": [
+                                        "dataFieldName",
+                                        "correspondField"
+                                    ],
+                                    "properties": {
+                                        "dataFieldName": {
+                                            "type": "string"
+                                        },
+                                        "correspondField": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },{
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "周期性参数-period",
+                                    "required": [
+                                        "correspondValue"
+                                    ],
+                                    "properties": {
+                                        "correspondValue": {
+                                            "default": {},
+                                            "type": "object",
+                                            "required": [
+                                                "dataType",
+                                                "initialValue",
+                                                "periodGap"
+                                            ],
+                                            "properties": {
+                                                "dataType": {
+                                                    "type": "string"
+                                                },
+                                                "initialValue": {
+                                                    "type": "string"
+                                                },
+                                                "periodGap": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "value",
+                                                        "unit"
+                                                    ],
+                                                    "properties": {
+                                                        "value": {
+                                                            "type": "number"
+                                                        },
+                                                        "unit": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
 
 ## [fx-schema-form-core](./packages/fx-schema-form-core/readme.md)
 
