@@ -201,7 +201,10 @@ export const globalOptions = Immutable.fromJS({
             tempHocs: [schemaFormReact.hocFactory.get("data")({
                 meta: true,
                 metaKeys: ["errorText", "isValid", "collapsing"]
-            }), immutableRenderDecorator]
+            }), immutableRenderDecorator],
+            options: {
+                bordered: false
+            }
         },
         formitem: {
             tempHocs: [schemaFormReact.hocFactory.get("data")({
