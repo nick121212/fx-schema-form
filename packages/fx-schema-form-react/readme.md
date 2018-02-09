@@ -538,7 +538,7 @@ hoc是schema-form的核心功能；比如接口请求，条件判断，数据处
 }
 ```
 
-这里是一个树形结构，如果我们想渲染成tree。默认的ArrayField显然不能满足需求。
+这里是一个树形结构，如果我们想渲染成tree。默认的ArrayField显然不能满足需求。具体请[查看源码](../fx-schema-form-extension/src/fields/design.tsx)
 
 ### 自定义模板
 
