@@ -49,7 +49,8 @@ SchemaForm的难点在于
 
 - 数据结构的复杂程度。
 - 解决JsonSchema和UiSchema之间的关联。因为JsonSchema是可以互相嵌套的。以及各种关键字。比如anyOf,oneOf,allOf等。
-- 各种组件之间高耦合低内聚。
+- 各种组件之间高内聚低耦合。
+- 灵活性和性能。
 
 ## [fx-schema-form-core](./packages/fx-schema-form-core/readme.md)
 
