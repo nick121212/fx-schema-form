@@ -5,6 +5,8 @@ export declare const uiSchemaSchema: {
         anyOf: ({
             type: string;
             minLength: number;
+            required?: undefined;
+            properties?: undefined;
         } | {
             type: string;
             required: string[];
@@ -13,6 +15,7 @@ export declare const uiSchemaSchema: {
                     type: string;
                 };
             };
+            minLength?: undefined;
         })[];
     };
 };

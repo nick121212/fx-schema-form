@@ -162,4 +162,14 @@ describe("测试MergeLib类", () => {
         expect(merge1.mergeUiSchemaList.length).to.equal(2);
         expect(merge1.mergeUiSchemaList[0].keys.join()).to.equal(["appType", "name"].join());
     });
+
+    it("实例化MergeLib，测试没有key的uiSchema", () => {
+        let merge = new MergeLib(ajv, "design", null, ["appType"]);
+        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
+            merge.mergeUiSchemaList[0], [{
+                key: ""
+            }]);
+
+        console.log(merge.mergeUiSchemaList);
+    });
 });
