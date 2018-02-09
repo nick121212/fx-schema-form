@@ -17,11 +17,11 @@ export interface ThemeHocOutProps {
  * 加入属性
  * currentTheme 当前的命名空间
  */
-export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<DefaultProps, any> => {
         class ThemeComponentHoc extends PureComponent<DefaultProps, any> {
             public render(): JSX.Element {
-                const { theme, field } = this.props.uiSchema as FxUiSchema;
+                const { theme } = this.props.uiSchema as FxUiSchema;
                 let nsFactory;
 
                 if (themeFactory.has(theme || "default")) {

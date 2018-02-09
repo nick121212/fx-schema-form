@@ -34,7 +34,6 @@
 - [验证](#验证)
   - [本地验证](本地验证)
   - [远程验证](远程验证)
-- [关于JsonSchema](#关于JsonSchema)
 - [License](#license)
 
 ## 安装
@@ -355,23 +354,110 @@ uiSchema的参数配置：
 
 ### HOCS
 
-1. ThemeHoc: 解决主题样式。
+名称 | 说明 | 依赖 | 加入属性 |
+|-  |- |- | - |
+[ThemeHoc](#ThemeHoc)    | 解决主题样式| null | currentTheme |
+[FieldHoc](#FieldHoc)    | 取得FieldComponent和WidgetComponent | ThemeHoc, UtilsHoc | FieldComponent,WidgetComponent |
+[ValidateHoc](#ValidateHoc) | 验证以及数据操作相关 | null | updateItemData,updateItemMeta,validate |
+[ArrayHoc](#ArrayHoc)    | 数组的相关操作 | UtilsHoc | addItem,removeItem,moveItem,initArrayComponent,ArrayComponent,ArrayItemComponent |
+[TempHoc](#TempHoc)     | 模板的归并 | ThemeHoc, UtilsHoc, [ArrayHoc] | null |
+[DataHoc](#DataHoc)     | 用于从reducer中获取数据 | UtilsHoc | [formItemData,formItemMeta,formItemNode] |
+[MakeHoc](#MakeHoc)     | 用于FormItem的包裹Hoc合并 | UtilsHoc | null |
+[UtilsHoc](#UtilsHoc)    | 工具类Hoc | null | getOptions,getTitle,getPathKeys,normalizeDataPath,getRequiredKeys |
+[MergeHoc](#MergeHoc)    | jsonschema和uischema合并 | null | null |
 
-2. FieldHoc: 解决从jsonschema中取得FieldComponent和WidgetComponent。
+#### ThemeHoc
 
-3. ValidateHoc: 验证以及数据操作相关。
+配置参数: null
 
-4. ArrayHoc: 数组的相关操作。
+返回属性:
 
-5. TempHoc: 模板的归并。
+- currentTheme: NsFactory 获取当前的主题样式工厂类；
 
-6. DataHoc: 用于从reducer中获取数据。
+#### FieldHoc
 
-7. MakeHoc: 用于FormItem的包裹Hoc合并。
+配置参数: null
 
-8. UtilsHoc: 工具类Hoc。
+返回属性:
 
-9. MergeHoc: jsonschema和uischema的合并操作。
+- FieldComponent: new() => React.PureComponent; 根据schema的配置获取对应的FieldComponent
+- WidgetComponent: new() => React.PureComponent; 根据schema的配置来获取对应的WidgetComponent
+
+#### ValidateHoc
+
+配置参数: null
+
+返回属性:
+
+- updateItemData: (props, data, meta?) => void; 提交数据，触发更改数据action
+- updateItemMeta: (props, data, meta?, noChange?) => void; 提交meta数据，触发更改meta的action
+- validate: (props, data, meta) => any; 验证data的合法性
+
+#### ArrayHoc
+
+配置参数: null
+
+返回属性:
+
+- addItem: (props,data) => Promise; 数组中添加一项到末尾
+- removeItem: (parentKeys,keys,index) => void; 数组删除一个元素
+- moveItem: (parentKeys,keys,index) => void; 数组中2个元素交换位置
+- initArrayComponent: (props,index) => JSX.Element; 根据当前的schema返回ArrayComponent
+- ArrayComponent: React.PureComponent; 数组的操作组件
+- ArrayItemComponent: React.PureComponent; 数组中子元素的操作组件
+
+#### TempHoc
+
+配置参数:
+
+- tempField: string; 配置中的字段名称
+- templates: string[]; 需要使用的temps
+
+返回属性: null
+
+#### DataHoc
+
+配置参数:
+
+- data: boolean; 是否需要数据
+- dataLength: boolean; 是否需要数据的长度
+- meta: boolean; 是否需要meta数据
+- metaKeys: string[]; meta数据中的字段过滤
+- treeNode: boolean; 是否需要treeNode
+
+返回属性:
+
+- formItemData: any; 当前组件的数据
+- formItemMeta: Immutable.Map; 当前组件的meta数据
+- formItemNode: TreeMap; 当前组件对应的tree
+
+#### MakeHoc
+
+配置参数:
+
+- hocs: Array<string|ComponentEnhancer>; 需要compose的hoc数组
+
+返回属性: null
+
+#### UtilsHoc
+
+配置参数: null
+
+返回属性:
+
+- getOptions: (props,category,field,...extraSettings) => Object; 获取当前元素的配置参数
+- getTitle: (props,...extraSettings) => string; 获取当前元素的标题
+- getPathKeys: (keys,path) => string[]; 获取当前元素keys的相对keys
+- normalizeDataPath: (schemaId,dataPath) => string[]; 格式化keys
+- getRequiredKeys: (props,include,exclude) => string[]; 获取当前props中所需的prop
+
+#### MergeHoc
+
+配置参数: null
+
+返回属性:
+
+- mergeSchemaList: FxUiSchema[]; 合并之后的数组
 
 ### 字段
 
@@ -398,29 +484,81 @@ uiSchema的参数配置：
 
 ***默认字段：***
 
-1. NormalField: 普通数据类型字段，直接渲染WidgetComponent。
+#### NormalField
 
-2. ArrayField: 根据数组元素的个数，嵌套渲染N个ShemaForm。
+普通数据类型字段，直接渲染WidgetComponent。
 
-3. ObjectField: 直接嵌套一层SchemaForm。
+配置项:
+
+- widgetHocs: Array<string|ComponentEnhancer>; 为WidgetComponent包装hoc
+
+#### ArrayField
+
+根据数组元素的个数，嵌套渲染N个ShemaForm。
+
+配置项:
+
+- formHocs: Array<string|ComponentEnhancer>; 数组根元素包装hocs
+- formItemHocs: Array<string|ComponentEnhancer>; 数组中每个元素包装hocs
+
+#### ObjectField
+
+直接嵌套一层SchemaForm。
+
+配置项:
+
+- formHocs: Array<string|ComponentEnhancer>; 为WidgetComponent包装hoc
 
 ## 高级配置
 
+> 为了增强功能，很多时候需要自定义一些hoc；
+
 ### 自定义hoc
+
+hoc是schema-form的核心功能；比如接口请求，条件判断，数据处理等等。举个例子:
+
+我们需要一个条件判断的功能，比如当a=1的时候，b才显示。具体代码查看[这里](../fx-schema-form-extension/src/hocs/condition.tsx)
 
 ### 自定义字段
 
+自定义字段是为了解决一些特殊的数据格式。比如我们有以下数据结构：
+
+```json
+{
+    "type":"object",
+    "$id":"tree",
+    "properties":{
+        "children":{
+            "type":"array",
+            "items":{
+                "$ref":"tree#"
+            }
+        }
+    }
+}
+```
+
+这里是一个树形结构，如果我们想渲染成tree。默认的ArrayField显然不能满足需求。
+
 ### 自定义模板
 
+为了满足不同的样式，不同的需求，需要各种各样的模板组件。
+
 ### 自定义组件
+
+为了满足不同的样式组件，这里需要自己建立很多的模组件，比如(input,select,mension...);
 
 ## 验证
 
 ### 本地验证
 
+本地验证，直接使用json-schema的各种关键字来定义。
+
+当然也可以自定义一些验证，关于自定义验证请查看[这里](http://epoberezkin.github.io/ajv/#api-addkeyword)
+
 ### 远程验证
 
-## 关于JsonSchema
+ajv默认支持远程验证，文档在[这里](http://epoberezkin.github.io/ajv/#asynchronous-validation)
 
 ## License
 

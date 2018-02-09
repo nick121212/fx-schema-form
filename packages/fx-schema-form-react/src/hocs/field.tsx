@@ -20,7 +20,7 @@ export interface FieldHocOutProps {
  * 加入属性FieldComponent   schema对应的fieldcomponent
  * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
-export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
+export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> => {
         class FieldComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element | null {
