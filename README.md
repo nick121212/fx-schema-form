@@ -197,7 +197,7 @@ SchemaForm的难点在于
 
 用于生成表单的组件。
 
-## [fx-schema-form-extendsion](./packages/fx-schema-form-extension/readme.md)
+## [fx-schema-form-extension](./packages/fx-schema-form-extension/readme.md)
 
 fx-schema-form-react的扩展。
 
