@@ -10,6 +10,7 @@ export default {
         email: { type: "string", format: "email" },
         ids: {
             type: "array",
+            description: "拖动元素试试",
             items: {
                 title: "测试ID",
                 type: "string",

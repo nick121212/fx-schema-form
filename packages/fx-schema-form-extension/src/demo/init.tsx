@@ -9,7 +9,7 @@ import { Button } from "antd";
 import { ResolveLib } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
-import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget } from "./widgets";
+import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget, AntdSelectWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { design, div, checkbox, style } from "./schemas";
 
@@ -26,6 +26,8 @@ schemaFormReact.defaultTheme.widgetFactory.add("checkbox", AntdCheckboxWidget as
 schemaFormReact.defaultTheme.widgetFactory.add("boolean", AntdCheckboxWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("default", AntdInputWidget as any);
 schemaFormReact.defaultTheme.widgetFactory.add("number", AntdInputNumberWidget as any);
+schemaFormReact.defaultTheme.widgetFactory.add("select", AntdSelectWidget as any);
+
 
 export const curAjv: ajv.Ajv = new ajv({
     allErrors: true,

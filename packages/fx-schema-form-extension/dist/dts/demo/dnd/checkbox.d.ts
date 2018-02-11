@@ -2,11 +2,13 @@ declare const _default: {
     label: string;
     temps: {
         key: string;
+        type: string;
         uiSchemas: string[];
         schemaId: string;
     }[];
     widget: {
         key: string;
+        type: string;
         uiSchemas: string[];
         schemaId: string;
     };

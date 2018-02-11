@@ -100,26 +100,10 @@ export const globalOptions = Immutable.fromJS({
             })]
         },
         array: {
-            temps: ["card"],
+            temps: ["formitem", "card"],
             // 这里为array字段添加sort排序功能
             formHocs: [
                 DragDropContext(HTML5Backend),
-                // DropTarget("SchemaFormItem", {
-                //     drop() { }
-                // }, connect => ({
-                //     connectDropTarget: connect.dropTarget(),
-                // })),
-                // (Component: new () => React.PureComponent) => {
-                //     return class Com extends React.PureComponent<DefaultProps & { connectDropTarget: any }> {
-                //         public render() {
-                //             const { connectDropTarget, ...extraProps } = this.props;
-
-                //             console.log(extraProps);
-
-                //             return connectDropTarget(<div><Component {...extraProps} /></div>);
-                //         }
-                //     };
-                // },
                 schemaFormReact.hocFactory.get("resetKey")({
                     excludeKeys: ["formItemData", "formItemMeta"]
                 })

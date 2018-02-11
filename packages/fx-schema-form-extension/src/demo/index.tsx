@@ -29,10 +29,12 @@ schemaFormReact.reducerFactory.get("schemaForm").init(store);
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
-            <RouterComponent key={"rootRouter"} />
-        </Router>
-        {/* <ReactPerfTool perf={Perf} /> */}
+        <div>
+            <Router>
+                <RouterComponent key={"rootRouter"} />
+            </Router>
+            <ReactPerfTool perf={Perf} />
+        </div>
     </Provider>,
     document.getElementById("root"),
     () => {

@@ -22,6 +22,7 @@ declare const _default: {
         };
         ids: {
             type: string;
+            description: string;
             items: {
                 title: string;
                 type: string;

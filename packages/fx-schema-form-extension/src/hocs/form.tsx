@@ -26,23 +26,31 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
 export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<Props, any> => {
 
+        /**
+         * 生成普通的表单
+         * 1. 遍历temps模板配置
+         * 2. widget配置
+         */
         class EditFormComponent extends React.PureComponent<any, any> {
             public render() {
                 const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex } = this.props,
                     options = getOptions(this.props, "hoc", "extraForm"),
                     { temps = [], widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {},
-                    dataKeys = uiSchema && uiSchema.originKeys ? uiSchema.originKeys.slice(0, uiSchema.originKeys.length - 1) : [];
+                    dataKeys = uiSchema && uiSchema.originKeys ? uiSchema.originKeys.slice(0, uiSchema.originKeys.length - 1) : [],
+                    forms = [...temps, widget];
 
                 return <div className="ba b-dashed">
-                    这里是元素的编辑表单
                     {
-                        temps.map((temp: { key: string, schemaId: string, uiSchemas: any[] }) => {
+                        forms.map((temp: { key: string, schemaId: string, type: string, uiSchemas: any[] }) => {
+                            if (!temp) {
+                                return null;
+                            }
                             return <SchemaForm
                                 key={temp.key}
                                 schemaId={temp.schemaId || ""}
                                 uiSchema={Object.assign({}, uiSchema, {
                                     originKeys: [...dataKeys,
-                                        "data", "options", "temp", temp.key, "options"]
+                                        "data", "options", temp.type || "temp", temp.key, "options"]
                                 })}
                                 arrayLevel={arrayLevel}
                                 arrayIndex={arrayIndex}
@@ -52,22 +60,6 @@ export default (hocFactory: BaseFactory<any>) => {
                                 ajv={ajv}
                             />;
                         })
-                    }
-                    {
-                        widget ? <SchemaForm
-                            key={widget.key}
-                            schemaId={widget.schemaId || ""}
-                            uiSchema={Object.assign({}, uiSchema, {
-                                originKeys: [...dataKeys,
-                                    "data", "options", "widget", widget.key, "options"]
-                            })}
-                            arrayLevel={arrayLevel}
-                            arrayIndex={arrayIndex}
-                            uiSchemas={widget.uiSchemas || ["*"]}
-                            parentKeys={[...parentKeys]}
-                            globalOptions={Immutable.fromJS(options.globalOptions)}
-                            ajv={ajv}
-                        /> : null
                     }
                 </div>;
             }

@@ -3,11 +3,13 @@ export default {
 
     temps: [{
         key: "div",
+        type: "temp",
         uiSchemas: ["className"],
         schemaId: "dnd-div",
     }],
     widget: {
         key: "checkbox",
+        type: "widget",
         uiSchemas: ["*"],
         schemaId: "dnd-checkbox",
     },
