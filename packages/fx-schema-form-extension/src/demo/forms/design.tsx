@@ -74,7 +74,7 @@ export class DesignForm extends React.PureComponent<any> {
             <div className="tc">
                 <button key={"submit" + isValidating + isValid}
                     type="primary"
-                    className="pa2 mt5 ba b--dashed bg-gray"
+                    className="pa3 mt5 ba b--dashed w-90"
                     onClick={this.props.validateAll}>
                     validate is {isValid ? "true" : "false"}
                 </button>
