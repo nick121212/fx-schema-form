@@ -17,6 +17,8 @@ export class RouterComponent extends React.Component<any, any> {
                     <Link className="link dim white dib mr3" to="/form/normal">Normal</Link>
                     <Link className="link dim white dib mr3" to="#" title="Store">Store</Link>
                     <Link className="link dim white dib" to="#" title="Contact">Contact</Link>
+
+                    <a className="dib fr" href="https://github.com/nick121212/fx-schema-form">GITHUB</a>
                 </nav>
             </header>
             <div className="ma2">
