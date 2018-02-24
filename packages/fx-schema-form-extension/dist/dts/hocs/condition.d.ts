@@ -18,5 +18,10 @@ export interface ConditionHocSettings {
 }
 export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
 }
-declare const _default: (hocFactory: BaseFactory<any>, settings?: ConditionHocSettings) => (Component: any) => RC<ConditionHocOutProps, any>;
+export declare const name = "condition";
+export declare const hoc1: (hocFactory: BaseFactory<any>) => (settings?: ConditionHocSettings) => (Component: any) => RC<ConditionHocOutProps, any>;
+declare const _default: {
+    name: string;
+    hoc: (hocFactory: BaseFactory<any>) => (settings?: ConditionHocSettings) => (Component: any) => RC<ConditionHocOutProps, any>;
+};
 export default _default;

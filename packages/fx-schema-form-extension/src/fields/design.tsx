@@ -9,7 +9,9 @@ export interface DesignFieldProps extends DefaultProps, UtilsHocOutProps, Valida
 
 }
 
-let arrayFieldStyle = {
+const { SchemaForm, schemaFormTypes } = schemaFormReact;
+
+const arrayFieldStyle = {
     width: "100%",
     height: "100%"
 };
@@ -21,6 +23,8 @@ class DesignFieldComponent extends React.PureComponent {
         </div>;
     }
 }
+
+export const name = "design";
 
 /**
  * Design字段的生成规则
@@ -43,7 +47,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
     /**
      * 包装之后的子元素组件
      */
-    private SchemaFormItemWithHoc: new () => React.PureComponent = schemaFormReact.SchemaForm;
+    private SchemaFormItemWithHoc: new () => React.PureComponent = SchemaForm;
 
     /**
      * 构造函数
@@ -62,14 +66,14 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      */
     private initComponent() {
         const { uiSchema, formItemData, getOptions } = this.props,
-            options = getOptions(this.props, "field", "design");
+            options = getOptions(this.props, schemaFormTypes.field, name);
 
         if (options.formHocs && options.formHocs.constructor === Array) {
             this.SchemaFormWithHoc = compose(...options.formHocs)(DesignFieldComponent);
         }
 
         if (options.formItemHocs && options.formItemHocs.constructor === Array) {
-            this.SchemaFormItemWithHoc = compose(...options.formItemHocs)(schemaFormReact.SchemaForm as any);
+            this.SchemaFormItemWithHoc = compose(...options.formItemHocs)(SchemaForm as any);
         }
     }
     /**
@@ -93,7 +97,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
                 schemaId={uiSchema.schemaPath}
                 uiSchemas={[{
                     key: "-/children",
-                    field: "design"
+                    field: name
                 }]}
                 parentKeys={parentKeys}
                 globalOptions={globalOptions}
@@ -106,7 +110,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      */
     public render(): any {
         const { uiSchema, formItemData, getOptions, getRequiredKeys, children } = this.props, child = [],
-            options = getOptions(this.props, "field", "design");
+            options = getOptions(this.props, "field", name);
         let SchemaFormWithHoc = this.SchemaFormWithHoc;
         const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
 
@@ -114,8 +118,10 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
             child.push(this.renderItem(i));
         }
 
-        // console.log(uiSchema.keys);
-
         return <SchemaFormWithHoc children={[...child, children]} {...extraProps} />;
     }
 }
+
+export default {
+    [name]: DesignField
+};

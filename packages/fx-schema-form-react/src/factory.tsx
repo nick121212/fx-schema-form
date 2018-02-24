@@ -5,22 +5,16 @@ import { FxReducer } from "./reducers/reducer";
 import { SchemaFormReducer } from "./reducers/schema.form";
 import { DefaultProps } from "./components";
 import { FxUiSchema, RC, NsFactory, SchemaFormNs } from "./models";
-import { utils, merge, field, theme, array, validate, make, temp, data } from "./hocs";
+import { hocs } from "./hocs";
 import { schemaFormReducer } from "./reducer";
 
 export const reducerFactory = new BaseFactory<FxReducer>();
 export const hocFactory = new BaseFactory<(settings?: any) => new () => React.PureComponent<DefaultProps, any>>();
 export const themeFactory = new BaseFactory<NsFactory>();
 
-hocFactory.add("utils", utils.bind(utils, hocFactory));
-hocFactory.add("merge", merge.bind(merge, hocFactory));
-hocFactory.add("field", field.bind(field, hocFactory));
-hocFactory.add("theme", theme.bind(theme, hocFactory));
-hocFactory.add("array", array.bind(array, hocFactory));
-hocFactory.add("validate", validate.bind(validate, hocFactory));
-hocFactory.add("make", make.bind(make, hocFactory));
-hocFactory.add("temp", temp.bind(temp, hocFactory));
-hocFactory.add("data", data.bind(data, hocFactory));
+hocs.forEach((hoc: { name: string, hoc: (hocFactory: BaseFactory<any>) => any }) => {
+    hocFactory.add(hoc.name, hoc.hoc(hocFactory));
+});
 
 reducerFactory.add("schemaForm", schemaFormReducer);
 

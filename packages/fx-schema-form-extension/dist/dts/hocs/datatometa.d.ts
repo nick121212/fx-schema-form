@@ -7,5 +7,10 @@ import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
     formItemNode?: TreeMap;
 }
-declare const _default: (hocFactory: BaseFactory<any>) => (Component: any) => RC<Props, any>;
+export declare const name = "dataToMeta";
+export declare const hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<Props, any>;
+declare const _default: {
+    name: string;
+    hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<Props, any>;
+};
 export default _default;

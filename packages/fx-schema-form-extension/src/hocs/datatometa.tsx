@@ -15,9 +15,13 @@ import schemaFormReact from "fx-schema-form-react";
 
 import { ConditionHocOutProps } from "./condition";
 
+const { schemaFormTypes } = schemaFormReact;
+
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
     formItemNode?: TreeMap;
 }
+
+export const name = "dataToMeta";
 
 /**
  * data
@@ -25,60 +29,67 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>) => {
-    return (Component: any): RC<Props, any> => {
-        @(compose(
-            hocFactory.get("data")({
-                data: true,
-                treeNode: true
-            })
-        ) as any)
-        class ComponentHoc extends React.PureComponent<Props, any> {
+export const hoc = (hocFactory: BaseFactory<any>) => {
+    return () => {
+        return (Component: any): RC<Props, any> => {
+            @(compose(
+                hocFactory.get("data")({
+                    data: true,
+                    treeNode: true
+                })
+            ) as any)
+            class ComponentHoc extends React.PureComponent<Props, any> {
 
-            /**
-             * 这里把数据塞到了meta中，便于后面的组件使用
-             * 遍历数组，数组元素的每一项数据合并到meta
-             * @param props 当前的props
-             */
-            public dataToMeta(props: Props) {
-                const { formItemData, uiSchema, parentKeys, formItemNode } = props,
-                    { keys = [] } = uiSchema || {};
+                /**
+                 * 这里把数据塞到了meta中，便于后面的组件使用
+                 * 遍历数组，数组元素的每一项数据合并到meta
+                 * @param props 当前的props
+                 */
+                public dataToMeta(props: Props) {
+                    const { formItemData, uiSchema, parentKeys, formItemNode } = props,
+                        { keys = [] } = uiSchema || {};
 
-                if (formItemData && formItemNode) {
-                    formItemData.map((child: Immutable.Map<string, any>, index: number) => {
-                        let childNodeKeys = [index, "children"],
-                            childNode = formItemNode.containPath(childNodeKeys);
+                    if (formItemData && formItemNode) {
+                        formItemData.map((child: Immutable.Map<string, any>, index: number) => {
+                            let childNodeKeys = [index, "children"],
+                                childNode = formItemNode.containPath(childNodeKeys);
 
-                        if (!childNode) {
-                            return formItemNode.addChild(childNodeKeys, child.get("data"));
-                        }
+                            if (!childNode) {
+                                return formItemNode.addChild(childNodeKeys, child.get("data"));
+                            }
 
-                        if (childNode.value) {
-                            childNode.value = childNode.value.merge(child.get("data"));
-                        } else {
-                            childNode.value = child.get("data");
-                        }
-                    });
+                            if (childNode.value) {
+                                childNode.value = childNode.value.merge(child.get("data"));
+                            } else {
+                                childNode.value = child.get("data");
+                            }
+                        });
+                    }
+                }
+
+                public componentWillMount() {
+                    this.dataToMeta(this.props);
+                }
+
+                public componentWillUpdate(props: Props) {
+                    this.dataToMeta(props);
+                }
+
+                public render(): JSX.Element {
+                    const { getOptions, getRequiredKeys, uiSchema } = this.props,
+                        options = getOptions(this.props, schemaFormTypes.hoc, name),
+                        extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
+
+                    return <Component {...extraProps} />;
                 }
             }
 
-            public componentWillMount() {
-                this.dataToMeta(this.props);
-            }
-
-            public componentWillUpdate(props: Props) {
-                this.dataToMeta(props);
-            }
-
-            public render(): JSX.Element {
-                const { getOptions, getRequiredKeys, uiSchema } = this.props,
-                    options = getOptions(this.props, "hoc", "dataToMeta"),
-                    extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
-
-                return <Component {...extraProps} />;
-            }
-        }
-
-        return ComponentHoc as any;
+            return ComponentHoc as any;
+        };
     };
+};
+
+export default {
+    name,
+    hoc
 };

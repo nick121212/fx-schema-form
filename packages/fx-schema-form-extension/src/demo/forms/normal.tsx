@@ -32,7 +32,6 @@ export class NormalForm extends React.PureComponent<any> {
                 RootComponent={Form}
                 schemaId={"dnd-style"}
                 uiSchemas={["*"]}
-                reducerKey="schemaForm"
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptions}
                 ajv={curAjv} >

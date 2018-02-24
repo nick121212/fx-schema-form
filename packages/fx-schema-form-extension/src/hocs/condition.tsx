@@ -9,6 +9,9 @@ import { createSelectorCreator, defaultMemoize, Selector, createSelector, Output
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models/index";
+import schemaFormReact from "fx-schema-form-react";
+
+const { schemaFormTypes } = schemaFormReact;
 
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 
@@ -49,6 +52,8 @@ export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
 
 }
 
+export const name = "condition";
+
 /**
  * condition
  * 筛选出需要使用的字段，包装到condition这个prop中，传递到下层组件
@@ -58,7 +63,7 @@ export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>, settings: ConditionHocSettings = { paths: [] }) => {
+export const hoc1 = (hocFactory: BaseFactory<any>) => {
     /**
     * 获取FormItemData的数据
     * @param state 当前的state树
@@ -79,77 +84,84 @@ export default (hocFactory: BaseFactory<any>, settings: ConditionHocSettings = {
         };
     };
 
-    return (Component: any): RC<ConditionHocOutProps, any> => {
-        class ComponentHoc extends React.PureComponent<ConditionHocProps, any> {
-            private ComponentWithHoc: new () => React.PureComponent = Component;
-            private $condition: Immutable.Map<string, any> = Immutable.fromJS({});
+    return (settings: ConditionHocSettings = { paths: [] }) => {
+        return (Component: any): RC<ConditionHocOutProps, any> => {
+            class ComponentHoc extends React.PureComponent<ConditionHocProps, any> {
+                private ComponentWithHoc: new () => React.PureComponent = Component;
+                private $condition: Immutable.Map<string, any> = Immutable.fromJS({});
 
-            constructor(props: ConditionHocProps) {
-                super(props);
-                this.getConditionHocs();
-            }
-
-            /**
-             * 获取当前配置的Component
-             * 1. 获取当前需要监听的key
-             * 2. 生成hoc
-             * 3. 获取所有的监听数据做合并
-             * 4. 返回
-             */
-            private getConditionHocs() {
-                const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props,
-                    options = getOptions(this.props, "hoc", "condition"),
-                    dataHocOptions = getOptions(this.props, "hoc", "data"),
-                    { keys = [] } = uiSchema || {},
-                    funcs: Selector<any, any>[] = [],
-                    conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(),
-                    { paths, hoc } = conditionOptions;
-
-                if (paths && paths.length && hoc) {
-                    paths.forEach((path: ConditionPath) => {
-                        let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
-
-                        funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
-                    });
+                constructor(props: ConditionHocProps) {
+                    super(props);
+                    this.getConditionHocs();
                 }
 
-                if (funcs.length) {
-                    this.ComponentWithHoc = compose(connect(
-                        // connect 数据
-                        fxSelectorCreator.apply(fxSelectorCreator, [funcs, function () {
-                            let formItemData = Array.prototype.splice.call(arguments, 0);
+                /**
+                 * 获取当前配置的Component
+                 * 1. 获取当前需要监听的key
+                 * 2. 生成hoc
+                 * 3. 获取所有的监听数据做合并
+                 * 4. 返回
+                 */
+                private getConditionHocs() {
+                    const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props,
+                        options = getOptions(this.props, schemaFormTypes.hoc, name),
+                        dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"),
+                        { keys = [] } = uiSchema || {},
+                        funcs: Selector<any, any>[] = [],
+                        conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(),
+                        { paths, hoc } = conditionOptions;
 
-                            if (!formItemData || !formItemData.length) {
-                                return {};
-                            }
-                            return {
-                                condition: formItemData.reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
-                                    if (!next) {
-                                        return prev;
-                                    }
-                                    return prev.merge(next);
-                                }, Immutable.fromJS({}))
-                            };
-                        }])),
-                        onlyUpdateForKeys(["condition"]),
-                        // 需要接受condition参数的hoc
-                        hoc,
-                        // 去掉condition后传递到下一个hoc
-                        hocFactory.get("resetKey")({
-                            excludeKeys: ["condition"]
-                        }))(Component);
+                    if (paths && paths.length && hoc) {
+                        paths.forEach((path: ConditionPath) => {
+                            let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
+
+                            funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
+                        });
+                    }
+
+                    if (funcs.length) {
+                        this.ComponentWithHoc = compose(connect(
+                            // connect 数据
+                            fxSelectorCreator.apply(fxSelectorCreator, [funcs, function () {
+                                let formItemData = Array.prototype.splice.call(arguments, 0);
+
+                                if (!formItemData || !formItemData.length) {
+                                    return {};
+                                }
+                                return {
+                                    condition: formItemData.reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
+                                        if (!next) {
+                                            return prev;
+                                        }
+                                        return prev.merge(next);
+                                    }, Immutable.fromJS({}))
+                                };
+                            }])),
+                            onlyUpdateForKeys(["condition"]),
+                            // 需要接受condition参数的hoc
+                            hoc,
+                            // 去掉condition后传递到下一个hoc
+                            hocFactory.get("resetKey")({
+                                excludeKeys: ["condition"]
+                            }))(Component);
+                    }
+                }
+
+                public render(): JSX.Element {
+                    const { getPathKeys, uiSchema } = this.props,
+                        { keys = [] } = uiSchema || {},
+                        ComponentWithHoc = this.ComponentWithHoc || Component;
+
+                    return <ComponentWithHoc {...this.props} />;
                 }
             }
 
-            public render(): JSX.Element {
-                const { getPathKeys, uiSchema } = this.props;
-                const { keys = [] } = uiSchema || {};
-                const ComponentWithHoc = this.ComponentWithHoc || Component;
-
-                return <ComponentWithHoc {...this.props} />;
-            }
-        }
-
-        return ComponentHoc as any;
+            return ComponentHoc as any;
+        };
     };
+};
+
+export default {
+    name,
+    hoc: hoc1
 };

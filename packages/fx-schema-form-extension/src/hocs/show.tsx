@@ -9,9 +9,11 @@ import { createSelector, createSelectorCreator, defaultMemoize, Selector } from 
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models";
+import schemaFormReact from "fx-schema-form-react";
 
 import { ConditionHocOutProps } from "./condition";
 
+const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, ConditionHocOutProps, UtilsHocOutProps {
 
 }
@@ -20,6 +22,8 @@ export interface ResetKeysHocOutSettings {
     paths?: string[];
     renderNothing?: boolean;
 }
+
+export const name = "show";
 
 /**
  * condition
@@ -30,47 +34,55 @@ export interface ResetKeysHocOutSettings {
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export default (hocFactory: BaseFactory<any>, settings: ResetKeysHocOutSettings = {}) => {
+export const hoc = (hocFactory: BaseFactory<any>) => {
     const style = {
         display: "none"
     };
-    return (Component: any): RC<Props, any> => {
-        class ComponentHoc extends React.PureComponent<Props, any> {
-            /**
-             * 渲染组件
-             * 1. 如果配置中【paths，condition，uiSchema，uiSchema.keys】中的任何一项不存在，直接返回null
-             * 2. 如果paths中的任何一项为false，则隐藏组件
-             * 3. 否则正常显示组件
-             */
-            public render(): JSX.Element | null {
-                const { getOptions, getPathKeys, condition, uiSchema } = this.props;
-                const normalOptions = getOptions(this.props, "hoc", "show", Immutable.fromJS(settings || {}));
-                let show = true;
 
-                if (normalOptions.paths && condition && uiSchema && uiSchema.keys) {
-                    show = normalOptions.paths.reduce((prev: boolean, path: string) => {
-                        if (!prev) {
+    return (settings: ResetKeysHocOutSettings = {}) => {
+        return (Component: any): RC<Props, any> => {
+            class ComponentHoc extends React.PureComponent<Props, any> {
+                /**
+                 * 渲染组件
+                 * 1. 如果配置中【paths，condition，uiSchema，uiSchema.keys】中的任何一项不存在，直接返回null
+                 * 2. 如果paths中的任何一项为false，则隐藏组件
+                 * 3. 否则正常显示组件
+                 */
+                public render(): JSX.Element | null {
+                    const { getOptions, getPathKeys, condition, uiSchema } = this.props;
+                    const normalOptions = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
+                    let show = true;
+
+                    if (normalOptions.paths && condition && uiSchema && uiSchema.keys) {
+                        show = normalOptions.paths.reduce((prev: boolean, path: string) => {
+                            if (!prev) {
+                                return false;
+                            }
+
+                            let pathKeys = getPathKeys(uiSchema.keys as string[], path);
+
+                            if (condition.has(pathKeys.join("/"))) {
+                                return !!condition.get(pathKeys.join("/")) && prev;
+                            }
+
                             return false;
-                        }
+                        }, show);
+                    }
 
-                        let pathKeys = getPathKeys(uiSchema.keys as string[], path);
+                    if (show) {
+                        return <Component {...this.props} />;
+                    }
 
-                        if (condition.has(pathKeys.join("/"))) {
-                            return !!condition.get(pathKeys.join("/")) && prev;
-                        }
-
-                        return false;
-                    }, show);
+                    return null;
                 }
-
-                if (show) {
-                    return <Component {...this.props} />;
-                }
-
-                return null;
             }
-        }
 
-        return ComponentHoc as any;
+            return ComponentHoc as any;
+        };
     };
+};
+
+export default {
+    name,
+    hoc
 };

@@ -1,19 +1,40 @@
 {
-    "presets": [
-        ["env", {
-            "targets": {
-            },
-            "modules": false,
-            "loose": true
-        }], "react"
-    ],
-    "plugins": [
-        ["transform-runtime", {
-            "helpers": true,
-            "polyfill": false,
-            "regenerator": false,
-            "moduleName": "babel-runtime"
-        }]
-    ],
-    "comments": false
+
+
+    "env": {
+        "production": {
+            "presets": [
+                ["env", {
+                    "targets": {},
+                    "modules": false,
+                    "loose": true
+                }]
+            ],
+            "plugins": [
+                ["transform-runtime", {
+                    "helpers": true,
+                    "modules": false,
+                    "polyfill": false,
+                    "regenerator": false,
+                    "moduleName": "babel-runtime"
+                }]
+            ],
+            "minified": false
+        },
+        "development": {
+            "presets": [
+                "env", "react"
+            ],
+            "plugins": [
+                ["transform-runtime", {
+                    "helpers": true,
+                    "modules": false,
+                    "polyfill": false,
+                    "regenerator": false,
+                    "moduleName": "babel-runtime"
+                }]
+            ]
+        }
+    },
+    "comments": true
 }

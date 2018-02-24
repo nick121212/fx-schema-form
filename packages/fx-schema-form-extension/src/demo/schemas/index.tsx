@@ -20,11 +20,14 @@ import { default as style } from "./dnd/style";
 import { default as design } from "./dnd/design";
 import { default as div } from "./dnd/dnd.div";
 import { default as checkbox } from "./dnd/dnd.checkbox";
+import { default as oneof } from "./dnd/oneof";
+
 
 
 export {
     style,
     common,
+    oneof,
     row,
     col,
     div,

@@ -12,6 +12,7 @@ test.html
 .babelrc
 tests
 out/**
+src
 !out/index.js
 fuse.js
 dts

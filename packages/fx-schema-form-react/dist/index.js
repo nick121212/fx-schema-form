@@ -225,15 +225,9 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 var reducerFactory = new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"]();
 var hocFactory = new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"]();
 var themeFactory = new __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__["BaseFactory"]();
-hocFactory.add("utils", __WEBPACK_IMPORTED_MODULE_1__hocs__["h" /* utils */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["h" /* utils */], hocFactory));
-hocFactory.add("merge", __WEBPACK_IMPORTED_MODULE_1__hocs__["e" /* merge */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["e" /* merge */], hocFactory));
-hocFactory.add("field", __WEBPACK_IMPORTED_MODULE_1__hocs__["c" /* field */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["c" /* field */], hocFactory));
-hocFactory.add("theme", __WEBPACK_IMPORTED_MODULE_1__hocs__["g" /* theme */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["g" /* theme */], hocFactory));
-hocFactory.add("array", __WEBPACK_IMPORTED_MODULE_1__hocs__["a" /* array */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["a" /* array */], hocFactory));
-hocFactory.add("validate", __WEBPACK_IMPORTED_MODULE_1__hocs__["i" /* validate */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["i" /* validate */], hocFactory));
-hocFactory.add("make", __WEBPACK_IMPORTED_MODULE_1__hocs__["d" /* make */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["d" /* make */], hocFactory));
-hocFactory.add("temp", __WEBPACK_IMPORTED_MODULE_1__hocs__["f" /* temp */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["f" /* temp */], hocFactory));
-hocFactory.add("data", __WEBPACK_IMPORTED_MODULE_1__hocs__["b" /* data */].bind(__WEBPACK_IMPORTED_MODULE_1__hocs__["b" /* data */], hocFactory));
+__WEBPACK_IMPORTED_MODULE_1__hocs__["a" /* hocs */].forEach(function (hoc) {
+    hocFactory.add(hoc.name, hoc.hoc(hocFactory));
+});
 reducerFactory.add("schemaForm", __WEBPACK_IMPORTED_MODULE_2__reducer__["a" /* schemaFormReducer */]);
 
 /***/ }),
@@ -1134,24 +1128,16 @@ __WEBPACK_IMPORTED_MODULE_1__factory__["a" /* hocFactory */].add("schemaFormDec"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hocs; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__merge__ = __webpack_require__(55);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_0__merge__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(91);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_1__utils__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__theme__ = __webpack_require__(93);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_2__theme__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__field__ = __webpack_require__(94);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_3__field__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__array__ = __webpack_require__(95);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__array__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__validate__ = __webpack_require__(96);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_5__validate__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__make__ = __webpack_require__(97);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_6__make__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__temp__ = __webpack_require__(98);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_7__temp__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__data__ = __webpack_require__(99);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_8__data__["a"]; });
 
 
 
@@ -1161,12 +1147,15 @@ __WEBPACK_IMPORTED_MODULE_1__factory__["a" /* hocFactory */].add("schemaFormDec"
 
 
 
+var hocs = [__WEBPACK_IMPORTED_MODULE_0__merge__["a" /* default */], __WEBPACK_IMPORTED_MODULE_1__utils__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__theme__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__field__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__array__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__validate__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__make__["a" /* default */], __WEBPACK_IMPORTED_MODULE_7__temp__["a" /* default */], __WEBPACK_IMPORTED_MODULE_8__data__["a" /* default */]];
 
 /***/ }),
 /* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -1190,61 +1179,66 @@ var __rest = this && this.__rest || function (s, e) {
 };
 
 
-var totalTime = 0,
-    timeid = void 0;
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var name = "merge";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    return function (Component) {
-        var MergeComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(MergeComponentHoc, _PureComponent);
+        return function (Component) {
+            var MergeComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(MergeComponentHoc, _PureComponent);
 
-            function MergeComponentHoc(props) {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, MergeComponentHoc);
+                function MergeComponentHoc(props) {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, MergeComponentHoc);
 
-                var _this = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.call(this, props));
+                    var _this = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.call(this, props));
 
-                var uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : undefined;
-                if (uiSchema) {
-                    uiSchema.keys = uiSchema.originKeys;
-                }
-                var merge = new __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["MergeLib"](props.ajv, props.schemaId, uiSchema, props.uiSchemas);
-                _this._mergeUiSchemaList = merge.mergeUiSchemaList.map(function (v) {
-                    return _this.mergeKeys(v);
-                });
-                return _this;
-            }
-
-            MergeComponentHoc.prototype.mergeKeys = function mergeKeys(mergeSchema) {
-                var _props$arrayLevel = this.props.arrayLevel,
-                    arrayLevel = _props$arrayLevel === undefined ? [] : _props$arrayLevel;
-
-                var arrayLevelCopy = arrayLevel.concat([]);
-                mergeSchema = Object.assign({}, mergeSchema);
-                mergeSchema.originKeys = [].concat(mergeSchema.keys);
-                mergeSchema.keys = mergeSchema.keys.reverse().map(function (key) {
-                    if (key === "-") {
-                        return arrayLevelCopy.pop();
+                    var uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : undefined;
+                    if (uiSchema) {
+                        uiSchema.keys = uiSchema.originKeys;
                     }
-                    return key;
-                });
-                mergeSchema.keys.reverse();
-                return mergeSchema;
-            };
+                    var merge = new __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["MergeLib"](props.ajv, props.schemaId, uiSchema, props.uiSchemas);
+                    _this._mergeUiSchemaList = merge.mergeUiSchemaList.map(function (v) {
+                        return _this.mergeKeys(v);
+                    });
+                    return _this;
+                }
 
-            MergeComponentHoc.prototype.render = function render() {
-                var _a = this.props,
-                    uiSchemas = _a.uiSchemas,
-                    uiSchema = _a.uiSchema,
-                    extraProps = __rest(_a, ["uiSchemas", "uiSchema"]);
-                return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ mergeSchemaList: this._mergeUiSchemaList }, extraProps));
-            };
+                MergeComponentHoc.prototype.mergeKeys = function mergeKeys(mergeSchema) {
+                    var _props$arrayLevel = this.props.arrayLevel,
+                        arrayLevel = _props$arrayLevel === undefined ? [] : _props$arrayLevel;
+
+                    var arrayLevelCopy = arrayLevel.concat([]);
+                    mergeSchema = Object.assign({}, mergeSchema);
+                    mergeSchema.originKeys = [].concat(mergeSchema.keys);
+                    mergeSchema.keys = mergeSchema.keys.reverse().map(function (key) {
+                        if (key === "-") {
+                            return arrayLevelCopy.pop();
+                        }
+                        return key;
+                    });
+                    mergeSchema.keys.reverse();
+                    return mergeSchema;
+                };
+
+                MergeComponentHoc.prototype.render = function render() {
+                    var _a = this.props,
+                        uiSchemas = _a.uiSchemas,
+                        uiSchema = _a.uiSchema,
+                        extraProps = __rest(_a, ["uiSchemas", "uiSchema"]);
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ mergeSchemaList: this._mergeUiSchemaList }, extraProps));
+                };
+
+                return MergeComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return MergeComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return MergeComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2023,6 +2017,8 @@ $export($export.S, 'Object', { create: __webpack_require__(29) });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2044,144 +2040,149 @@ $export($export.S, 'Object', { create: __webpack_require__(29) });
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var name = "utils";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        return function (Component) {
+            var ComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ComponentHoc, _PureComponent);
 
-    return function (Component) {
-        var ComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ComponentHoc, _PureComponent);
+                function ComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ComponentHoc);
 
-            function ComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ComponentHoc);
-
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
-
-            ComponentHoc.prototype.render = function render() {
-                return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys }, this.props));
-            };
-
-            ComponentHoc.prototype.getRequiredKeys = function getRequiredKeys(props) {
-                var includeKeys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-                var excludeKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
-                var extraProps = {};
-                if (includeKeys && includeKeys.constructor === Array && includeKeys.length) {
-                    includeKeys.forEach(function (key) {
-                        if (props.hasOwnProperty(key)) {
-                            extraProps[key] = props[key];
-                        }
-                    });
-                } else {
-                    extraProps = Object.assign({}, props);
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
                 }
-                if (excludeKeys && excludeKeys.constructor === Array && excludeKeys.length) {
-                    excludeKeys.forEach(function (key) {
-                        if (extraProps.hasOwnProperty(key)) {
-                            delete extraProps[key];
-                        }
-                    });
-                }
-                return extraProps;
-            };
 
-            ComponentHoc.prototype.normalizeDataPath = function normalizeDataPath(schemaId, dataPath) {
-                var dataKeys = dataPath.replace(/^\//g, "").split("/");
-                dataKeys = dataKeys.map(function (key, index) {
-                    if (Number.isInteger(+key)) {
-                        var keys = dataKeys.slice(0, index);
-                        keys.unshift(schemaId);
-                        if (__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaKeysFactory"].has(keys.join("/"))) {
-                            var schema = __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaFieldFactory"].get(__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaKeysFactory"].get(keys.join("/")));
-                            if (schema.type === "array") {
-                                return +key;
+                ComponentHoc.prototype.render = function render() {
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys }, this.props));
+                };
+
+                ComponentHoc.prototype.getRequiredKeys = function getRequiredKeys(props) {
+                    var includeKeys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+                    var excludeKeys = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+
+                    var extraProps = {};
+                    if (includeKeys && includeKeys.constructor === Array && includeKeys.length) {
+                        includeKeys.forEach(function (key) {
+                            if (props.hasOwnProperty(key)) {
+                                extraProps[key] = props[key];
+                            }
+                        });
+                    } else {
+                        extraProps = Object.assign({}, props);
+                    }
+                    if (excludeKeys && excludeKeys.constructor === Array && excludeKeys.length) {
+                        excludeKeys.forEach(function (key) {
+                            if (extraProps.hasOwnProperty(key)) {
+                                delete extraProps[key];
+                            }
+                        });
+                    }
+                    return extraProps;
+                };
+
+                ComponentHoc.prototype.normalizeDataPath = function normalizeDataPath(schemaId, dataPath) {
+                    var dataKeys = dataPath.replace(/^\//g, "").split("/");
+                    dataKeys = dataKeys.map(function (key, index) {
+                        if (Number.isInteger(+key)) {
+                            var keys = dataKeys.slice(0, index);
+                            keys.unshift(schemaId);
+                            if (__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaKeysFactory"].has(keys.join("/"))) {
+                                var schema = __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaFieldFactory"].get(__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__["schemaKeysFactory"].get(keys.join("/")));
+                                if (schema.type === "array") {
+                                    return +key;
+                                }
                             }
                         }
-                    }
-                    return key;
-                });
-                return dataKeys;
-            };
-
-            ComponentHoc.prototype.getOptions = function getOptions(props, category, field) {
-                var _props$uiSchema = props.uiSchema,
-                    uiSchema = _props$uiSchema === undefined ? {} : _props$uiSchema,
-                    globalOptions = props.globalOptions;
-                var options = uiSchema.options;
-
-                var optionsArray = [];
-                if (globalOptions && globalOptions.hasIn([category, "default"])) {
-                    optionsArray.push(globalOptions.getIn([category, "default"]));
-                }
-                if (globalOptions && globalOptions.hasIn([category, field])) {
-                    optionsArray.push(globalOptions.getIn([category, field]));
-                }
-                if (options && options.hasIn([category, field])) {
-                    optionsArray.push(options.getIn([category, field]));
-                }
-
-                for (var _len = arguments.length, extraSettings = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-                    extraSettings[_key - 3] = arguments[_key];
-                }
-
-                optionsArray = optionsArray.concat(extraSettings);
-                var opts = optionsArray.reverse().reduce(function (prev, next) {
-                    if (next) {
-                        if (!__WEBPACK_IMPORTED_MODULE_5_immutable___default.a.Map.isMap(next)) {
-                            next = __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(next);
-                        }
-                        return next.merge(prev);
-                    }
-                    return prev;
-                }, __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS({})).toJS();
-                return opts;
-            };
-
-            ComponentHoc.prototype.getTitle = function getTitle(props) {
-                var uiSchema = props.uiSchema;
-                var title = uiSchema.title,
-                    keys = uiSchema.keys;
-
-                for (var _len2 = arguments.length, extraSettings = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-                    extraSettings[_key2 - 1] = arguments[_key2];
-                }
-
-                if (!title && extraSettings && extraSettings.length) {
-                    extraSettings.forEach(function (sets) {
-                        if (sets && !title && sets.get("title")) {
-                            title = sets.get("title");
-                        }
+                        return key;
                     });
-                }
-                if (title !== undefined) {
-                    return title;
-                }
-                if (keys && keys.length) {
-                    var keysCopy = [].concat(keys),
-                        keyTitle = keysCopy.pop();
-                    return keyTitle !== undefined ? keyTitle.toString() : "";
-                }
-                if (props.arrayIndex) {
-                    return props.arrayIndex.toString();
-                }
-                return "";
-            };
+                    return dataKeys;
+                };
 
-            ComponentHoc.prototype.getPathKeys = function getPathKeys(keys, path) {
-                var keysCopy = [""].concat(keys.concat([""]));
-                var keysResolve = __WEBPACK_IMPORTED_MODULE_6_resolve_pathname___default()(path, keysCopy.join("/")).split("/");
-                keysResolve.shift();
-                if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
-                    keysResolve.pop();
-                }
-                return keysResolve;
-            };
+                ComponentHoc.prototype.getOptions = function getOptions(props, category, field) {
+                    var _props$uiSchema = props.uiSchema,
+                        uiSchema = _props$uiSchema === undefined ? {} : _props$uiSchema,
+                        globalOptions = props.globalOptions;
+                    var options = uiSchema.options;
+
+                    var optionsArray = [];
+                    if (globalOptions && globalOptions.hasIn([category, "default"])) {
+                        optionsArray.push(globalOptions.getIn([category, "default"]));
+                    }
+                    if (globalOptions && globalOptions.hasIn([category, field])) {
+                        optionsArray.push(globalOptions.getIn([category, field]));
+                    }
+                    if (options && options.hasIn([category, field])) {
+                        optionsArray.push(options.getIn([category, field]));
+                    }
+
+                    for (var _len = arguments.length, extraSettings = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+                        extraSettings[_key - 3] = arguments[_key];
+                    }
+
+                    optionsArray = optionsArray.concat(extraSettings);
+                    var opts = optionsArray.reverse().reduce(function (prev, next) {
+                        if (next) {
+                            if (!__WEBPACK_IMPORTED_MODULE_5_immutable___default.a.Map.isMap(next)) {
+                                next = __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(next);
+                            }
+                            return next.merge(prev);
+                        }
+                        return prev;
+                    }, __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS({})).toJS();
+                    return opts;
+                };
+
+                ComponentHoc.prototype.getTitle = function getTitle(props) {
+                    var uiSchema = props.uiSchema;
+                    var title = uiSchema.title,
+                        keys = uiSchema.keys;
+
+                    for (var _len2 = arguments.length, extraSettings = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                        extraSettings[_key2 - 1] = arguments[_key2];
+                    }
+
+                    if (!title && extraSettings && extraSettings.length) {
+                        extraSettings.forEach(function (sets) {
+                            if (sets && !title && sets.get("title")) {
+                                title = sets.get("title");
+                            }
+                        });
+                    }
+                    if (title !== undefined) {
+                        return title;
+                    }
+                    if (keys && keys.length) {
+                        var keysCopy = [].concat(keys),
+                            keyTitle = keysCopy.pop();
+                        return keyTitle !== undefined ? keyTitle.toString() : "";
+                    }
+                    if (props.arrayIndex) {
+                        return props.arrayIndex.toString();
+                    }
+                    return "";
+                };
+
+                ComponentHoc.prototype.getPathKeys = function getPathKeys(keys, path) {
+                    var keysCopy = [""].concat(keys.concat([""]));
+                    var keysResolve = __WEBPACK_IMPORTED_MODULE_6_resolve_pathname___default()(path, keysCopy.join("/")).split("/");
+                    keysResolve.shift();
+                    if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
+                        keysResolve.pop();
+                    }
+                    return keysResolve;
+                };
+
+                return ComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return ComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return ComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2195,6 +2196,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_92__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2209,36 +2212,43 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_92__;
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    return function (Component) {
-        var defualtKey = "default";
+var name = "theme";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        return function (Component) {
+            var defualtKey = "default";
 
-        var ThemeComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ThemeComponentHoc, _PureComponent);
+            var ThemeComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ThemeComponentHoc, _PureComponent);
 
-            function ThemeComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ThemeComponentHoc);
+                function ThemeComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ThemeComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
-
-            ThemeComponentHoc.prototype.render = function render() {
-                var theme = this.props.uiSchema.theme;
-
-                var nsFactory = void 0;
-                if (__WEBPACK_IMPORTED_MODULE_4__factory__["c" /* themeFactory */].has(theme || defualtKey)) {
-                    nsFactory = __WEBPACK_IMPORTED_MODULE_4__factory__["c" /* themeFactory */].get(theme || defualtKey);
-                } else {
-                    throw new Error("\u6CA1\u6709\u627E\u5230" + (theme || defualtKey) + "\u7684\u6837\u5F0F\uFF01");
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
                 }
-                return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ currentTheme: nsFactory }, this.props));
-            };
+
+                ThemeComponentHoc.prototype.render = function render() {
+                    var theme = this.props.uiSchema.theme;
+
+                    var nsFactory = void 0;
+                    if (__WEBPACK_IMPORTED_MODULE_4__factory__["c" /* themeFactory */].has(theme || defualtKey)) {
+                        nsFactory = __WEBPACK_IMPORTED_MODULE_4__factory__["c" /* themeFactory */].get(theme || defualtKey);
+                    } else {
+                        throw new Error("\u6CA1\u6709\u627E\u5230" + (theme || defualtKey) + "\u7684\u6837\u5F0F\uFF01");
+                    }
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ currentTheme: nsFactory }, this.props));
+                };
+
+                return ThemeComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return ThemeComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return ThemeComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2246,6 +2256,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_92__;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2258,58 +2270,65 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_92__;
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    return function (Component) {
-        var defaultKey = "default";
+var name = "field";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        return function (Component) {
+            var defaultKey = "default";
 
-        var FieldComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(FieldComponentHoc, _PureComponent);
+            var FieldComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(FieldComponentHoc, _PureComponent);
 
-            function FieldComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, FieldComponentHoc);
+                function FieldComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, FieldComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
-
-            FieldComponentHoc.prototype.render = function render() {
-                var _props = this.props,
-                    currentTheme = _props.currentTheme,
-                    getOptions = _props.getOptions,
-                    uiSchema = _props.uiSchema,
-                    field = uiSchema.field,
-                    widget = uiSchema.widget,
-                    type = uiSchema.type;
-
-                var FieldComponent = void 0,
-                    WidgetComponent = void 0;
-                var calcField = field || type;
-                if (currentTheme.fieldFactory.has(calcField)) {
-                    FieldComponent = currentTheme.fieldFactory.get(calcField);
-                } else {
-                    if (currentTheme.fieldFactory.has(defaultKey)) {
-                        FieldComponent = currentTheme.fieldFactory.get(defaultKey);
-                    } else {
-                        console.error("\u627E\u4E0D\u5230field\uFF1A" + (field || type));
-                        return null;
-                    }
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
                 }
-                if (currentTheme.widgetFactory.has(widget || type)) {
-                    WidgetComponent = currentTheme.widgetFactory.get(widget || type);
-                } else {
-                    if (currentTheme.widgetFactory.has(defaultKey)) {
-                        WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
+
+                FieldComponentHoc.prototype.render = function render() {
+                    var _props = this.props,
+                        currentTheme = _props.currentTheme,
+                        getOptions = _props.getOptions,
+                        uiSchema = _props.uiSchema,
+                        field = uiSchema.field,
+                        widget = uiSchema.widget,
+                        type = uiSchema.type;
+
+                    var FieldComponent = void 0,
+                        WidgetComponent = void 0;
+                    var calcField = field || type;
+                    if (currentTheme.fieldFactory.has(calcField)) {
+                        FieldComponent = currentTheme.fieldFactory.get(calcField);
                     } else {
-                        console.warn("\u627E\u4E0D\u5230widget\uFF1A" + (widget || type), uiSchema);
+                        if (currentTheme.fieldFactory.has(defaultKey)) {
+                            FieldComponent = currentTheme.fieldFactory.get(defaultKey);
+                        } else {
+                            console.error("\u627E\u4E0D\u5230field\uFF1A" + (field || type));
+                            return null;
+                        }
                     }
-                }
-                return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({}, this.props, { FieldComponent: FieldComponent, WidgetComponent: WidgetComponent }));
-            };
+                    if (currentTheme.widgetFactory.has(widget || type)) {
+                        WidgetComponent = currentTheme.widgetFactory.get(widget || type);
+                    } else {
+                        if (currentTheme.widgetFactory.has(defaultKey)) {
+                            WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
+                        } else {
+                            console.warn("\u627E\u4E0D\u5230widget\uFF1A" + (widget || type), uiSchema);
+                        }
+                    }
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({}, this.props, { FieldComponent: FieldComponent, WidgetComponent: WidgetComponent }));
+                };
+
+                return FieldComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return FieldComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return FieldComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2318,6 +2337,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_92__;
 
 "use strict";
 /* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2385,180 +2405,186 @@ var __rest = this && this.__rest || function (s, e) {
 
 
 var name = "array";
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var hoc = Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
-        addItem: function addItem(propsCur) {
-            return function (props, data) {
-                return __awaiter(_this, void 0, void 0, regeneratorRuntime.mark(function _callee() {
-                    var itemSchema, defaultValue, itemUiSchema;
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                        while (1) {
-                            switch (_context.prev = _context.next) {
-                                case 0:
-                                    itemSchema = {}, defaultValue = {}, itemUiSchema = props.uiSchema ? props.uiSchema.items : {};
-                                    _context.prev = 1;
-                                    _context.next = 4;
-                                    return props.ajv.validate({
-                                        type: "object",
-                                        properties: {
-                                            defaultData: itemUiSchema
-                                        }
-                                    }, defaultValue);
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var commHoc = Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
+            addItem: function addItem(propsCur) {
+                return function (props, data) {
+                    return __awaiter(_this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                        var itemSchema, defaultValue, itemUiSchema;
+                        return regeneratorRuntime.wrap(function _callee$(_context) {
+                            while (1) {
+                                switch (_context.prev = _context.next) {
+                                    case 0:
+                                        itemSchema = {}, defaultValue = {}, itemUiSchema = props.uiSchema ? props.uiSchema.items : {};
+                                        _context.prev = 1;
+                                        _context.next = 4;
+                                        return props.ajv.validate({
+                                            type: "object",
+                                            properties: {
+                                                defaultData: itemUiSchema
+                                            }
+                                        }, defaultValue);
 
-                                case 4:
-                                    _context.next = 9;
-                                    break;
-
-                                case 6:
-                                    _context.prev = 6;
-                                    _context.t0 = _context["catch"](1);
-
-                                    console.log(_context.t0);
-
-                                case 9:
-                                    _context.prev = 9;
-
-                                    if (!(propsCur.uiSchema && propsCur.uiSchema.items)) {
-                                        _context.next = 20;
+                                    case 4:
+                                        _context.next = 9;
                                         break;
-                                    }
 
-                                    _context.t1 = propsCur.uiSchema.items.type;
-                                    _context.next = _context.t1 === "object" ? 14 : _context.t1 === "array" ? 17 : 19;
-                                    break;
+                                    case 6:
+                                        _context.prev = 6;
+                                        _context.t0 = _context["catch"](1);
 
-                                case 14:
-                                    if (!defaultValue.defaultData) {
-                                        defaultValue.defaultData = data || {};
-                                    }
-                                    Object.assign(defaultValue.defaultData, data);
-                                    return _context.abrupt("break", 20);
+                                        console.log(_context.t0);
 
-                                case 17:
-                                    if (!defaultValue.defaultData) {
-                                        defaultValue.defaultData = data || [];
-                                    }
-                                    return _context.abrupt("break", 20);
+                                    case 9:
+                                        _context.prev = 9;
 
-                                case 19:
-                                    return _context.abrupt("break", 20);
+                                        if (!(propsCur.uiSchema && propsCur.uiSchema.items)) {
+                                            _context.next = 20;
+                                            break;
+                                        }
 
-                                case 20:
-                                    __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.addItem({
-                                        parentKeys: props.parentKeys,
-                                        keys: props.uiSchema.keys,
-                                        data: defaultValue.defaultData
-                                    });
-                                    return _context.finish(9);
+                                        _context.t1 = propsCur.uiSchema.items.type;
+                                        _context.next = _context.t1 === "object" ? 14 : _context.t1 === "array" ? 17 : 19;
+                                        break;
 
-                                case 22:
-                                case "end":
-                                    return _context.stop();
+                                    case 14:
+                                        if (!defaultValue.defaultData) {
+                                            defaultValue.defaultData = data || {};
+                                        }
+                                        Object.assign(defaultValue.defaultData, data);
+                                        return _context.abrupt("break", 20);
+
+                                    case 17:
+                                        if (!defaultValue.defaultData) {
+                                            defaultValue.defaultData = data || [];
+                                        }
+                                        return _context.abrupt("break", 20);
+
+                                    case 19:
+                                        return _context.abrupt("break", 20);
+
+                                    case 20:
+                                        __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.addItem({
+                                            parentKeys: props.parentKeys,
+                                            keys: props.uiSchema.keys,
+                                            data: defaultValue.defaultData
+                                        });
+                                        return _context.finish(9);
+
+                                    case 22:
+                                    case "end":
+                                        return _context.stop();
+                                }
                             }
-                        }
-                    }, _callee, this, [[1, 6, 9, 22]]);
-                }));
-            };
-        },
-        removeItem: function removeItem(propsCur) {
-            return function (parentKeys, keys, index) {
-                __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(propsCur.reducerKey || "schemaForm").actions.removeItem({
-                    parentKeys: parentKeys,
-                    keys: keys,
-                    index: index
-                });
-            };
-        },
-        moveItem: function moveItem(propsCur) {
-            return function (parentKeys, keys, curIndex, toIndex) {
-                __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(propsCur.reducerKey || "schemaForm").actions.moveToItem({
-                    parentKeys: parentKeys,
-                    keys: keys,
-                    curIndex: curIndex,
-                    toIndex: toIndex
-                });
-            };
-        },
-        initArrayComponent: function initArrayComponent(propsCur) {
-            return function (props, index) {
-                var ArrayComponent = props.ArrayComponent,
-                    ArrayItemComponent = props.ArrayItemComponent,
-                    extraProps = __rest(props, ["ArrayComponent", "ArrayItemComponent"]),
-                    uiSchema = props.uiSchema;
+                        }, _callee, this, [[1, 6, 9, 22]]);
+                    }));
+                };
+            },
+            removeItem: function removeItem(propsCur) {
+                return function (parentKeys, keys, index) {
+                    __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(propsCur.reducerKey || "schemaForm").actions.removeItem({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        index: index
+                    });
+                };
+            },
+            moveItem: function moveItem(propsCur) {
+                return function (parentKeys, keys, curIndex, toIndex) {
+                    __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(propsCur.reducerKey || "schemaForm").actions.moveToItem({
+                        parentKeys: parentKeys,
+                        keys: keys,
+                        curIndex: curIndex,
+                        toIndex: toIndex
+                    });
+                };
+            },
+            initArrayComponent: function initArrayComponent(propsCur) {
+                return function (props, index) {
+                    var ArrayComponent = props.ArrayComponent,
+                        ArrayItemComponent = props.ArrayItemComponent,
+                        extraProps = __rest(props, ["ArrayComponent", "ArrayItemComponent"]),
+                        uiSchema = props.uiSchema;
 
-                if (uiSchema.type === "array") {
-                    return ArrayComponent ? __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ArrayComponent, Object.assign({}, extraProps)) : null;
-                }
-                return ArrayItemComponent ? __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ArrayItemComponent, Object.assign({}, extraProps)) : null;
-            };
-        }
-    }));
-    var arrayHoc = function arrayHoc(Component) {
-        var ArrayComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayComponentHoc, _PureComponent);
-
-            function ArrayComponentHoc(props, context) {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayComponentHoc);
-
-                var _this2 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.call(this, props, context));
-
-                _this2.initArrayComponents();
-                return _this2;
+                    if (uiSchema.type === "array") {
+                        return ArrayComponent ? __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ArrayComponent, Object.assign({}, extraProps)) : null;
+                    }
+                    return ArrayItemComponent ? __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ArrayItemComponent, Object.assign({}, extraProps)) : null;
+                };
             }
+        }));
+        var arrayHoc = function arrayHoc(Component) {
+            var ArrayComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayComponentHoc, _PureComponent);
 
-            ArrayComponentHoc.prototype.initArrayComponents = function initArrayComponents() {
-                var getOptions = this.props.getOptions;
+                function ArrayComponentHoc(props, context) {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayComponentHoc);
 
-                var hocOptions = getOptions(this.props, "hoc", name);
-                if (hocOptions.ArrayComponent) {
-                    this.ArrayComponent = hocOptions.ArrayComponent;
-                }
-                if (hocOptions.ArrayItemComponent) {
-                    this.ArrayItemComponent = hocOptions.ArrayItemComponent;
-                }
-            };
+                    var _this2 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.call(this, props, context));
 
-            ArrayComponentHoc.prototype.render = function render() {
-                var props = {};
-                if (this.ArrayComponent) {
-                    props.ArrayComponent = this.ArrayComponent;
+                    _this2.initArrayComponents();
+                    return _this2;
                 }
-                if (this.ArrayItemComponent) {
-                    props.ArrayItemComponent = this.ArrayItemComponent;
-                }
-                return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props, props));
-            };
 
+                ArrayComponentHoc.prototype.initArrayComponents = function initArrayComponents() {
+                    var getOptions = this.props.getOptions;
+
+                    var hocOptions = getOptions(this.props, "hoc", name);
+                    if (hocOptions.ArrayComponent) {
+                        this.ArrayComponent = hocOptions.ArrayComponent;
+                    }
+                    if (hocOptions.ArrayItemComponent) {
+                        this.ArrayItemComponent = hocOptions.ArrayItemComponent;
+                    }
+                };
+
+                ArrayComponentHoc.prototype.render = function render() {
+                    var props = {};
+                    if (this.ArrayComponent) {
+                        props.ArrayComponent = this.ArrayComponent;
+                    }
+                    if (this.ArrayItemComponent) {
+                        props.ArrayItemComponent = this.ArrayItemComponent;
+                    }
+                    return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props, props));
+                };
+
+                return ArrayComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
+            ArrayComponentHoc = __decorate([commHoc, __metadata("design:paramtypes", [Object, Object])], ArrayComponentHoc);
             return ArrayComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
-        ArrayComponentHoc = __decorate([hoc, __metadata("design:paramtypes", [Object, Object])], ArrayComponentHoc);
-        return ArrayComponentHoc;
-    };
-    var pureHoc = function pureHoc(Component) {
-        var ArrayPureComponentHoc = function (_React$PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayPureComponentHoc, _React$PureComponent);
+        };
+        var pureHoc = function pureHoc(Component) {
+            var ArrayPureComponentHoc = function (_React$PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayPureComponentHoc, _React$PureComponent);
 
-            function ArrayPureComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayPureComponentHoc);
+                function ArrayPureComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayPureComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _React$PureComponent.apply(this, arguments));
-            }
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _React$PureComponent.apply(this, arguments));
+                }
 
-            ArrayPureComponentHoc.prototype.render = function render() {
-                return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props));
-            };
+                ArrayPureComponentHoc.prototype.render = function render() {
+                    return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props));
+                };
 
+                return ArrayPureComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_4_react___default.a.PureComponent);
+            ArrayPureComponentHoc = __decorate([commHoc], ArrayPureComponentHoc);
             return ArrayPureComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_4_react___default.a.PureComponent);
-        ArrayPureComponentHoc = __decorate([hoc], ArrayPureComponentHoc);
-        return ArrayPureComponentHoc;
-    };
-    return Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["branch"])(function (props) {
-        var _props$uiSchema = props.uiSchema,
-            uiSchema = _props$uiSchema === undefined ? { type: "" } : _props$uiSchema;
+        };
+        return Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["branch"])(function (props) {
+            var _props$uiSchema = props.uiSchema,
+                uiSchema = _props$uiSchema === undefined ? { type: "" } : _props$uiSchema;
 
-        return uiSchema.type === "array";
-    }, arrayHoc, pureHoc);
+            return uiSchema.type === "array";
+        }, arrayHoc, pureHoc);
+    };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2566,6 +2592,8 @@ var name = "array";
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2621,168 +2649,175 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var name = "validate";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    return function (Component) {
-        var ArrayComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayComponentHoc, _PureComponent);
+        return function (Component) {
+            var ArrayComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(ArrayComponentHoc, _PureComponent);
 
-            function ArrayComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayComponentHoc);
+                function ArrayComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, ArrayComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
+                }
 
-            ArrayComponentHoc.prototype.render = function render() {
-                return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props));
-            };
+                ArrayComponentHoc.prototype.render = function render() {
+                    return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Component, Object.assign({}, this.props));
+                };
 
+                return ArrayComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
+            ArrayComponentHoc = __decorate([Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
+                validate: function validate(propsCur) {
+                    return function (props, data) {
+                        return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                            var result, timeId, validateResult, error;
+                            return regeneratorRuntime.wrap(function _callee$(_context) {
+                                while (1) {
+                                    switch (_context.prev = _context.next) {
+                                        case 0:
+                                            result = { dirty: true, isValid: false, isLoading: false };
+                                            timeId = setTimeout(function () {
+                                                __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemMeta({
+                                                    parentKeys: props.parentKeys,
+                                                    keys: props.uiSchema.keys,
+                                                    meta: { isLoading: true, isValid: false, errorText: false }
+                                                });
+                                            }, 200);
+                                            _context.prev = 2;
+                                            validateResult = void 0;
+
+                                            if (!props.uiSchema.$id) {
+                                                _context.next = 10;
+                                                break;
+                                            }
+
+                                            _context.next = 7;
+                                            return props.ajv.getSchema(props.uiSchema.$id)(data);
+
+                                        case 7:
+                                            validateResult = _context.sent;
+                                            _context.next = 13;
+                                            break;
+
+                                        case 10:
+                                            _context.next = 12;
+                                            return props.ajv.validate(props.uiSchema, data);
+
+                                        case 12:
+                                            validateResult = _context.sent;
+
+                                        case 13:
+                                            result.isValid = validateResult;
+
+                                            if (validateResult) {
+                                                _context.next = 18;
+                                                break;
+                                            }
+
+                                            error = new Error();
+
+                                            error.errors = props.ajv.errors;
+                                            throw error;
+
+                                        case 18:
+                                            _context.next = 23;
+                                            break;
+
+                                        case 20:
+                                            _context.prev = 20;
+                                            _context.t0 = _context["catch"](2);
+
+                                            result.errorText = _context.t0.errors ? props.ajv.errorsText(_context.t0.errors, {
+                                                dataVar: props.getTitle(props).toString()
+                                            }) : _context.t0.message;
+
+                                        case 23:
+                                            _context.prev = 23;
+
+                                            clearTimeout(timeId);
+                                            return _context.finish(23);
+
+                                        case 26:
+                                            return _context.abrupt("return", result);
+
+                                        case 27:
+                                        case "end":
+                                            return _context.stop();
+                                    }
+                                }
+                            }, _callee, this, [[2, 20, 23, 26]]);
+                        }));
+                    };
+                }
+            }), Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
+                updateItemData: function updateItemData(propsCur) {
+                    return function (props, data, meta) {
+                        __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemData({
+                            parentKeys: props.parentKeys,
+                            keys: props.uiSchema.keys,
+                            data: data,
+                            meta: meta
+                        });
+                    };
+                },
+                updateItemMeta: function updateItemMeta(propsCur) {
+                    return function (props, data) {
+                        var meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+                        var noChange = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+                        return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+                            return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                                while (1) {
+                                    switch (_context2.prev = _context2.next) {
+                                        case 0:
+                                            _context2.t0 = __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions;
+                                            _context2.t1 = props.parentKeys;
+                                            _context2.t2 = props.uiSchema.keys;
+                                            _context2.t3 = meta;
+
+                                            if (_context2.t3) {
+                                                _context2.next = 8;
+                                                break;
+                                            }
+
+                                            _context2.next = 7;
+                                            return propsCur.validate(props, data);
+
+                                        case 7:
+                                            _context2.t3 = _context2.sent;
+
+                                        case 8:
+                                            _context2.t4 = _context2.t3;
+                                            _context2.t5 = noChange;
+                                            _context2.t6 = {
+                                                parentKeys: _context2.t1,
+                                                keys: _context2.t2,
+                                                meta: _context2.t4,
+                                                noChange: _context2.t5
+                                            };
+
+                                            _context2.t0.updateItemMeta.call(_context2.t0, _context2.t6);
+
+                                        case 12:
+                                        case "end":
+                                            return _context2.stop();
+                                    }
+                                }
+                            }, _callee2, this);
+                        }));
+                    };
+                }
+            }))], ArrayComponentHoc);
             return ArrayComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
-        ArrayComponentHoc = __decorate([Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
-            validate: function validate(propsCur) {
-                return function (props, data) {
-                    return __awaiter(_this2, void 0, void 0, regeneratorRuntime.mark(function _callee() {
-                        var result, timeId, validateResult, error;
-                        return regeneratorRuntime.wrap(function _callee$(_context) {
-                            while (1) {
-                                switch (_context.prev = _context.next) {
-                                    case 0:
-                                        result = { dirty: true, isValid: false, isLoading: false };
-                                        timeId = setTimeout(function () {
-                                            __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                                parentKeys: props.parentKeys,
-                                                keys: props.uiSchema.keys,
-                                                meta: { isLoading: true, isValid: false, errorText: false }
-                                            });
-                                        }, 200);
-                                        _context.prev = 2;
-                                        validateResult = void 0;
-
-                                        if (!props.uiSchema.$id) {
-                                            _context.next = 10;
-                                            break;
-                                        }
-
-                                        _context.next = 7;
-                                        return props.ajv.getSchema(props.uiSchema.$id)(data);
-
-                                    case 7:
-                                        validateResult = _context.sent;
-                                        _context.next = 13;
-                                        break;
-
-                                    case 10:
-                                        _context.next = 12;
-                                        return props.ajv.validate(props.uiSchema, data);
-
-                                    case 12:
-                                        validateResult = _context.sent;
-
-                                    case 13:
-                                        result.isValid = validateResult;
-
-                                        if (validateResult) {
-                                            _context.next = 18;
-                                            break;
-                                        }
-
-                                        error = new Error();
-
-                                        error.errors = props.ajv.errors;
-                                        throw error;
-
-                                    case 18:
-                                        _context.next = 23;
-                                        break;
-
-                                    case 20:
-                                        _context.prev = 20;
-                                        _context.t0 = _context["catch"](2);
-
-                                        result.errorText = _context.t0.errors ? props.ajv.errorsText(_context.t0.errors, {
-                                            dataVar: props.getTitle(props).toString()
-                                        }) : _context.t0.message;
-
-                                    case 23:
-                                        _context.prev = 23;
-
-                                        clearTimeout(timeId);
-                                        return _context.finish(23);
-
-                                    case 26:
-                                        return _context.abrupt("return", result);
-
-                                    case 27:
-                                    case "end":
-                                        return _context.stop();
-                                }
-                            }
-                        }, _callee, this, [[2, 20, 23, 26]]);
-                    }));
-                };
-            }
-        }), Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
-            updateItemData: function updateItemData(propsCur) {
-                return function (props, data, meta) {
-                    __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemData({
-                        parentKeys: props.parentKeys,
-                        keys: props.uiSchema.keys,
-                        data: data,
-                        meta: meta
-                    });
-                };
-            },
-            updateItemMeta: function updateItemMeta(propsCur) {
-                return function (props, data) {
-                    var meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-                    var noChange = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-                    return __awaiter(_this2, void 0, void 0, regeneratorRuntime.mark(function _callee2() {
-                        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-                            while (1) {
-                                switch (_context2.prev = _context2.next) {
-                                    case 0:
-                                        _context2.t0 = __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions;
-                                        _context2.t1 = props.parentKeys;
-                                        _context2.t2 = props.uiSchema.keys;
-                                        _context2.t3 = meta;
-
-                                        if (_context2.t3) {
-                                            _context2.next = 8;
-                                            break;
-                                        }
-
-                                        _context2.next = 7;
-                                        return propsCur.validate(props, data);
-
-                                    case 7:
-                                        _context2.t3 = _context2.sent;
-
-                                    case 8:
-                                        _context2.t4 = _context2.t3;
-                                        _context2.t5 = noChange;
-                                        _context2.t6 = {
-                                            parentKeys: _context2.t1,
-                                            keys: _context2.t2,
-                                            meta: _context2.t4,
-                                            noChange: _context2.t5
-                                        };
-
-                                        _context2.t0.updateItemMeta.call(_context2.t0, _context2.t6);
-
-                                    case 12:
-                                    case "end":
-                                        return _context2.stop();
-                                }
-                            }
-                        }, _callee2, this);
-                    }));
-                };
-            }
-        }))], ArrayComponentHoc);
-        return ArrayComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2790,6 +2825,8 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2810,43 +2847,49 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var name = "make";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    return function (Component) {
-        var MakeComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(MakeComponentHoc, _PureComponent);
+        return function (Component) {
+            var MakeComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(MakeComponentHoc, _PureComponent);
 
-            function MakeComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, MakeComponentHoc);
+                function MakeComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, MakeComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
+                }
 
-            MakeComponentHoc.prototype.render = function render() {
-                var _props = this.props,
-                    uiSchema = _props.uiSchema,
-                    getOptions = _props.getOptions;
-                var type = uiSchema.type,
-                    field = uiSchema.field;
+                MakeComponentHoc.prototype.render = function render() {
+                    var _props = this.props,
+                        uiSchema = _props.uiSchema,
+                        getOptions = _props.getOptions;
+                    var type = uiSchema.type,
+                        field = uiSchema.field;
 
-                var fieldOptions = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_6__models_index__["a" /* schemaFormTypes */].field, field || type, __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}), __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(settings || {}));
-                var hocs = fieldOptions.hocs || ["theme", "field", "validate", "array", "temp"];
-                hocs.unshift("utils");
-                var ComponentWithHocs = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, [].concat(hocs).map(function (hoc) {
-                    if (typeof hoc !== "string") {
-                        return hoc;
-                    }
-                    return hocFactory.get(hoc)();
-                }))(Component);
-                return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(ComponentWithHocs, Object.assign({}, this.props));
-            };
+                    var fieldOptions = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_6__models_index__["a" /* schemaFormTypes */].field, field || type, __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}), __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(settings || {}));
+                    var hocs = fieldOptions.hocs || ["utils", "theme", "field", "validate", "array", "temp"];
+                    var ComponentWithHocs = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, [].concat(hocs).map(function (hoc1) {
+                        if (typeof hoc1 !== "string") {
+                            return hoc1;
+                        }
+                        return hocFactory.get(hoc1)();
+                    }))(Component);
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(ComponentWithHocs, Object.assign({}, this.props));
+                };
+
+                return MakeComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return MakeComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return MakeComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2854,6 +2897,8 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -2871,93 +2916,100 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        tempField: "temps",
-        templates: []
-    };
+var name = "temp";
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+            tempField: "temps",
+            templates: []
+        };
 
-    return function (Component) {
-        var TempComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(TempComponentHoc, _PureComponent);
+        return function (Component) {
+            var TempComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(TempComponentHoc, _PureComponent);
 
-            function TempComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, TempComponentHoc);
+                function TempComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, TempComponentHoc);
 
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
-
-            TempComponentHoc.prototype.render = function render() {
-                var _this2 = this;
-
-                var _props = this.props,
-                    uiSchema = _props.uiSchema,
-                    getOptions = _props.getOptions,
-                    reducerKey = _props.reducerKey;
-                var uiSchemaOptions = uiSchema.options,
-                    keys = uiSchema.keys;
-
-                var TempComponents = this.getTemplates();
-                return TempComponents.reduce(function (prev, _ref) {
-                    var key = _ref.key,
-                        Temp = _ref.Temp;
-
-                    var tempOptions = getOptions(_this2.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].template, key),
-                        TempWithHoc = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, tempOptions.tempHocs || [])(Temp);
-                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(TempWithHoc, { tempKey: key, ajv: _this2.props.ajv, uiSchema: _this2.props.uiSchema, schemaId: _this2.props.schemaId, arrayLevel: _this2.props.arrayLevel, reducerKey: reducerKey, arrayIndex: _this2.props.arrayIndex, globalOptions: _this2.props.globalOptions, ArrayComponent: _this2.props.ArrayComponent, ArrayItemComponent: _this2.props.ArrayItemComponent, initArrayComponent: _this2.props.initArrayComponent, parentKeys: _this2.props.parentKeys, getTitle: _this2.props.getTitle, getOptions: _this2.props.getOptions, getPathKeys: _this2.props.getPathKeys, children: prev });
-                }, __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({}, this.props)));
-            };
-
-            TempComponentHoc.prototype.getTemplates = function getTemplates() {
-                var _props2 = this.props,
-                    uiSchema = _props2.uiSchema,
-                    currentTheme = _props2.currentTheme,
-                    getOptions = _props2.getOptions,
-                    keys = uiSchema.keys,
-                    type = uiSchema.type,
-                    typeDefaultOptions = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].field, type),
-                    TempComponent = [];
-
-                var template = void 0;
-                if (settings.templates && settings.templates.length > 0) {
-                    template = settings.templates;
-                } else {
-                    template = typeDefaultOptions[settings.tempField] || "default";
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
                 }
-                var getTemplate = function getTemplate(tmp) {
-                    switch (tmp.constructor) {
-                        case String:
-                            if (!currentTheme.tempFactory.has(tmp)) {
-                                console.error("\u4E0D\u5B58\u5728" + tmp + "\u7684temp\uFF01");
-                            } else {
-                                TempComponent.push({
-                                    key: tmp,
-                                    Temp: currentTheme.tempFactory.get(tmp)
-                                });
-                            }
-                            break;
-                        case Object:
-                            TempComponent.push({
-                                key: tmp.name,
-                                Temp: tmp
-                            });
-                            break;
-                        case Array:
-                            [].concat(template).reverse().forEach(function (tml, idx) {
-                                getTemplate(tml);
-                            });
-                            break;
-                    }
+
+                TempComponentHoc.prototype.render = function render() {
+                    var _this2 = this;
+
+                    var _props = this.props,
+                        uiSchema = _props.uiSchema,
+                        getOptions = _props.getOptions,
+                        reducerKey = _props.reducerKey;
+                    var uiSchemaOptions = uiSchema.options,
+                        keys = uiSchema.keys;
+
+                    var TempComponents = this.getTemplates();
+                    return TempComponents.reduce(function (prev, _ref) {
+                        var key = _ref.key,
+                            Temp = _ref.Temp;
+
+                        var tempOptions = getOptions(_this2.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].template, key),
+                            TempWithHoc = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, tempOptions.tempHocs || [])(Temp);
+                        return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(TempWithHoc, { tempKey: key, ajv: _this2.props.ajv, uiSchema: _this2.props.uiSchema, schemaId: _this2.props.schemaId, arrayLevel: _this2.props.arrayLevel, reducerKey: reducerKey, arrayIndex: _this2.props.arrayIndex, globalOptions: _this2.props.globalOptions, ArrayComponent: _this2.props.ArrayComponent, ArrayItemComponent: _this2.props.ArrayItemComponent, initArrayComponent: _this2.props.initArrayComponent, parentKeys: _this2.props.parentKeys, getTitle: _this2.props.getTitle, getOptions: _this2.props.getOptions, getPathKeys: _this2.props.getPathKeys, children: prev });
+                    }, __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({}, this.props)));
                 };
-                getTemplate(template);
-                return TempComponent;
-            };
+
+                TempComponentHoc.prototype.getTemplates = function getTemplates() {
+                    var _props2 = this.props,
+                        uiSchema = _props2.uiSchema,
+                        currentTheme = _props2.currentTheme,
+                        getOptions = _props2.getOptions,
+                        keys = uiSchema.keys,
+                        type = uiSchema.type,
+                        typeDefaultOptions = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].field, type),
+                        TempComponent = [];
+
+                    var template = void 0;
+                    if (settings.templates && settings.templates.length > 0) {
+                        template = settings.templates;
+                    } else {
+                        template = typeDefaultOptions[settings.tempField] || "default";
+                    }
+                    var getTemplate = function getTemplate(tmp) {
+                        switch (tmp.constructor) {
+                            case String:
+                                if (!currentTheme.tempFactory.has(tmp)) {
+                                    console.error("\u4E0D\u5B58\u5728" + tmp + "\u7684temp\uFF01");
+                                } else {
+                                    TempComponent.push({
+                                        key: tmp,
+                                        Temp: currentTheme.tempFactory.get(tmp)
+                                    });
+                                }
+                                break;
+                            case Object:
+                                TempComponent.push({
+                                    key: tmp.name,
+                                    Temp: tmp
+                                });
+                                break;
+                            case Array:
+                                [].concat(template).reverse().forEach(function (tml, idx) {
+                                    getTemplate(tml);
+                                });
+                                break;
+                        }
+                    };
+                    getTemplate(template);
+                    return TempComponent;
+                };
+
+                return TempComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
 
             return TempComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_3_react__["PureComponent"]);
-
-        return TempComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -2966,6 +3018,7 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 
 "use strict";
 /* unused harmony export name */
+/* unused harmony export hoc */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(1);
@@ -3005,100 +3058,106 @@ var __decorate = this && this.__decorate || function (decorators, target, key, d
 
 var fxSelectorCreator = Object(__WEBPACK_IMPORTED_MODULE_7_reselect__["createSelectorCreator"])(__WEBPACK_IMPORTED_MODULE_7_reselect__["defaultMemoize"], __WEBPACK_IMPORTED_MODULE_8_immutable__["is"]);
 var name = "data";
-/* harmony default export */ __webpack_exports__["a"] = (function (hocFactory) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        data: true
-    };
+var hoc = function hoc(hocFactory) {
+    return function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+            data: true
+        };
 
-    var getItemDataHoc = function getItemDataHoc(parentKeys, rootReducerKey, keys) {
-        var getFormItemData = function getFormItemData(state) {
-            var dataKeys = [].concat(rootReducerKey, parentKeys, ["data"], keys);
-            if (settings.data && state.hasIn(dataKeys)) {
-                var formItemData = state.getIn(dataKeys);
-                if (formItemData !== undefined) {
-                    if (!settings.dataLength) {
-                        return formItemData;
-                    } else {
-                        return formItemData.size;
+        var getItemDataHoc = function getItemDataHoc(parentKeys, rootReducerKey, keys) {
+            var getFormItemData = function getFormItemData(state) {
+                var dataKeys = [].concat(rootReducerKey, parentKeys, ["data"], keys);
+                if (settings.data && state.hasIn(dataKeys)) {
+                    var formItemData = state.getIn(dataKeys);
+                    if (formItemData !== undefined) {
+                        if (!settings.dataLength) {
+                            return formItemData;
+                        } else {
+                            return formItemData.size;
+                        }
                     }
                 }
-            }
-        };
-        var getFormItemMeta = function getFormItemMeta(state) {
-            var metaKeys = [].concat(rootReducerKey, parentKeys, ["meta"]);
-            if (settings.meta && state.hasIn(metaKeys)) {
-                var rootNode = state.getIn(metaKeys),
-                    childNode = rootNode.containPath([].concat(keys));
-                if (childNode && childNode.value) {
-                    if (settings.metaKeys) {
-                        return childNode.value.filter(function (val, key) {
-                            return settings.metaKeys.indexOf(key) >= 0;
-                        });
-                    }
-                    return childNode.value;
-                }
-            }
-        };
-        var getRoot = function getRoot(state) {
-            if (!settings.treeNode) {
-                return null;
-            }
-            var metaKeys = [].concat(rootReducerKey, parentKeys, ["meta"]);
-            var rootNode = state.getIn(metaKeys);
-            var childNode = rootNode.containPath([].concat(keys));
-            if (childNode) {
-                return childNode;
-            }
-            return rootNode.addChild([].concat(keys));
-        };
-        return fxSelectorCreator([getFormItemData, getFormItemMeta, getRoot], function (formItemData, formItemMeta, formItemNode) {
-            var rtn = {};
-            if (formItemData !== undefined && formItemData !== null) {
-                rtn.formItemData = formItemData;
-            }
-            if (formItemMeta !== undefined && formItemData !== null) {
-                rtn.formItemMeta = formItemMeta;
-            }
-            if (formItemNode !== undefined && formItemData !== null) {
-                rtn.formItemNode = formItemNode;
-            }
-            return rtn;
-        });
-    };
-    return function (Component) {
-        var DataComponentHoc = function (_PureComponent) {
-            __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(DataComponentHoc, _PureComponent);
-
-            function DataComponentHoc() {
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, DataComponentHoc);
-
-                return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
-            }
-
-            DataComponentHoc.prototype.render = function render() {
-                var _props = this.props,
-                    uiSchema = _props.uiSchema,
-                    getOptions = _props.getOptions,
-                    _ref = this.props.uiSchema || {},
-                    _ref$keys = _ref.keys,
-                    keys = _ref$keys === undefined ? [] : _ref$keys,
-                    options = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_9__models_index__["a" /* schemaFormTypes */].hoc, name);
-
-                if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
-                    console.error("dataHoc missing property rootReducerKey.should be a Array.");
-                }
-                var hoc = Object(__WEBPACK_IMPORTED_MODULE_6_react_redux__["connect"])(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
-                    ComponentWithHoc = hoc(Component);
-                return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ComponentWithHoc, Object.assign({}, this.props));
             };
+            var getFormItemMeta = function getFormItemMeta(state) {
+                var metaKeys = [].concat(rootReducerKey, parentKeys, ["meta"]);
+                if (settings.meta && state.hasIn(metaKeys)) {
+                    var rootNode = state.getIn(metaKeys),
+                        childNode = rootNode.containPath([].concat(keys));
+                    if (childNode && childNode.value) {
+                        if (settings.metaKeys) {
+                            return childNode.value.filter(function (val, key) {
+                                return settings.metaKeys.indexOf(key) >= 0;
+                            });
+                        }
+                        return childNode.value;
+                    }
+                }
+            };
+            var getRoot = function getRoot(state) {
+                if (!settings.treeNode) {
+                    return null;
+                }
+                var metaKeys = [].concat(rootReducerKey, parentKeys, ["meta"]);
+                var rootNode = state.getIn(metaKeys);
+                var childNode = rootNode.containPath([].concat(keys));
+                if (childNode) {
+                    return childNode;
+                }
+                return rootNode.addChild([].concat(keys));
+            };
+            return fxSelectorCreator([getFormItemData, getFormItemMeta, getRoot], function (formItemData, formItemMeta, formItemNode) {
+                var rtn = {};
+                if (formItemData !== undefined && formItemData !== null) {
+                    rtn.formItemData = formItemData;
+                }
+                if (formItemMeta !== undefined && formItemData !== null) {
+                    rtn.formItemMeta = formItemMeta;
+                }
+                if (formItemNode !== undefined && formItemData !== null) {
+                    rtn.formItemNode = formItemNode;
+                }
+                return rtn;
+            });
+        };
+        return function (Component) {
+            var DataComponentHoc = function (_PureComponent) {
+                __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default()(DataComponentHoc, _PureComponent);
 
+                function DataComponentHoc() {
+                    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, DataComponentHoc);
+
+                    return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_possibleConstructorReturn___default()(this, _PureComponent.apply(this, arguments));
+                }
+
+                DataComponentHoc.prototype.render = function render() {
+                    var _props = this.props,
+                        uiSchema = _props.uiSchema,
+                        getOptions = _props.getOptions,
+                        _ref = this.props.uiSchema || {},
+                        _ref$keys = _ref.keys,
+                        keys = _ref$keys === undefined ? [] : _ref$keys,
+                        options = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_9__models_index__["a" /* schemaFormTypes */].hoc, name);
+
+                    if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
+                        console.error("dataHoc missing property rootReducerKey.should be a Array.");
+                    }
+                    var hocWithData = Object(__WEBPACK_IMPORTED_MODULE_6_react_redux__["connect"])(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
+                        ComponentWithHoc = hocWithData(Component);
+                    return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(ComponentWithHoc, Object.assign({}, this.props));
+                };
+
+                return DataComponentHoc;
+            }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
+            DataComponentHoc = __decorate([Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["shouldUpdate"])(function () {
+                return false;
+            })], DataComponentHoc);
             return DataComponentHoc;
-        }(__WEBPACK_IMPORTED_MODULE_4_react__["PureComponent"]);
-        DataComponentHoc = __decorate([Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["shouldUpdate"])(function () {
-            return false;
-        })], DataComponentHoc);
-        return DataComponentHoc;
+        };
     };
+};
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: name,
+    hoc: hoc
 });
 
 /***/ }),
@@ -4050,7 +4109,7 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
             validateAll: function validateAll(props) {
                 var actions = __WEBPACK_IMPORTED_MODULE_9__factory__["b" /* reducerFactory */].get(props.reducerKey).actions;
                 return function (async) {
-                    return __awaiter(_this2, void 0, void 0, regeneratorRuntime.mark(function _callee() {
+                    return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                         var root, validate, $validateBeforeData, $validateAfterData, normalizeDataPath, valRes;
                         return regeneratorRuntime.wrap(function _callee$(_context) {
                             while (1) {

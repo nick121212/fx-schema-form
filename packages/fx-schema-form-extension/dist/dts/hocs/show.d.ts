@@ -9,5 +9,10 @@ export interface ResetKeysHocOutSettings {
     paths?: string[];
     renderNothing?: boolean;
 }
-declare const _default: (hocFactory: BaseFactory<any>, settings?: ResetKeysHocOutSettings) => (Component: any) => RC<Props, any>;
+export declare const name = "show";
+export declare const hoc: (hocFactory: BaseFactory<any>) => (settings?: ResetKeysHocOutSettings) => (Component: any) => RC<Props, any>;
+declare const _default: {
+    name: string;
+    hoc: (hocFactory: BaseFactory<any>) => (settings?: ResetKeysHocOutSettings) => (Component: any) => RC<Props, any>;
+};
 export default _default;
