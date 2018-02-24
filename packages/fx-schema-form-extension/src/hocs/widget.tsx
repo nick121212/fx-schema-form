@@ -39,7 +39,7 @@ export default (hocFactory: BaseFactory<any>) => {
              */
             public render(): JSX.Element {
                 const { uiSchema, getOptions, currentTheme, formItemNode, arrayLevel, arrayIndex, getTitle, getPathKeys,
-                    parentKeys, getRequiredKeys, children, globalOptions, schemaId } = this.props,
+                    parentKeys, getRequiredKeys, children, globalOptions, schemaId, reducerKey } = this.props,
                     options = getOptions(this.props, "hoc", "extraWidget"),
                     extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys),
                     { widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {};
@@ -53,6 +53,7 @@ export default (hocFactory: BaseFactory<any>) => {
                     return <Component {...extraProps} >
                         <WidgetComponent key={widget.key}
                             schemaId={schemaId}
+                            reducerKey={reducerKey}
                             uiSchema={uiSchema}
                             arrayLevel={arrayLevel}
                             arrayIndex={arrayIndex}

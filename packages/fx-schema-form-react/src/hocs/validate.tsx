@@ -7,7 +7,7 @@ import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models/index";
-import { schemaFormReducer } from "../reducer";
+import { reducerFactory } from "../factory";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
@@ -34,7 +34,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                     return async (props: DefaultProps & UtilsHocOutProps, data: any) => {
                         const result: any = { dirty: true, isValid: false, isLoading: false };
                         const timeId = setTimeout(() => {
-                            schemaFormReducer.actions.updateItemMeta({
+                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                                 parentKeys: props.parentKeys,
                                 keys: (props.uiSchema as any).keys,
                                 meta: { isLoading: true, isValid: false, errorText: false }
@@ -82,7 +82,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                  */
                 updateItemData: (propsCur: DefaultProps) => {
                     return (props: DefaultProps, data: any, meta?: any) => {
-                        schemaFormReducer.actions.updateItemData({
+                        reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemData({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
                             data: data,
@@ -95,7 +95,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
                  */
                 updateItemMeta: (propsCur: ValidateHocOutProps) => {
                     return async (props: DefaultProps, data: any, meta: any = null, noChange = false) => {
-                        schemaFormReducer.actions.updateItemMeta({
+                        reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
                             meta: meta || await propsCur.validate(props, data),

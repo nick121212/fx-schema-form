@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 
 import { SchemaForm } from "../components/form";
 import { DefaultProps } from "../components";
-import { FxUiSchema } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models/index";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { compose } from "recompose";
 
@@ -10,15 +10,16 @@ export interface ObjectFieldProps extends DefaultProps, UtilsHocOutProps {
 
 }
 
+export const name = "object";
+
 /**
  * Object类型的字段解析
  * 嵌套一层SchemaForm
  */
 export class ObjectField extends PureComponent<ObjectFieldProps, any> {
     public render(): JSX.Element | null {
-        const uiSchema = this.props.uiSchema as FxUiSchema,
-            { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, schemaId, getOptions } = this.props,
-            options = getOptions(this.props, "field", "object");
+        const { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, schemaId, getOptions, reducerKey, uiSchema } = this.props,
+            options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc: any = SchemaForm;
 
         // 如果children设置成null，则返回空
@@ -35,6 +36,7 @@ export class ObjectField extends PureComponent<ObjectFieldProps, any> {
             <SchemaFormWithHoc
                 arrayIndex={arrayIndex}
                 arrayLevel={arrayLevel}
+                reducerKey={reducerKey}
                 schemaId={uiSchema.schemaPath}
                 uiSchemas={uiSchema.children || ["*"]}
                 uiSchema={uiSchema}
@@ -44,3 +46,7 @@ export class ObjectField extends PureComponent<ObjectFieldProps, any> {
         );
     }
 }
+
+export default {
+    [name]: ObjectField
+};

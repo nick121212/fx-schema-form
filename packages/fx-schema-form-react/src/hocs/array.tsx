@@ -10,7 +10,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models/index";
-import { schemaFormReducer } from "../reducer";
+import { reducerFactory } from "../factory";
 import { JSONSchema6 } from "json-schema";
 
 export interface ArrayHocOutProps {
@@ -25,6 +25,8 @@ export interface ArrayHocOutProps {
 export interface ArrayProps extends DefaultProps, UtilsHocOutProps {
 
 }
+
+export const name = "array";
 
 export default (hocFactory: BaseFactory<any>) => {
 
@@ -67,8 +69,7 @@ export default (hocFactory: BaseFactory<any>) => {
                                     break;
                             }
                         }
-
-                        schemaFormReducer.actions.addItem({
+                        reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
                             parentKeys: props.parentKeys,
                             keys: (props.uiSchema as any).keys,
                             data: defaultValue.defaultData
@@ -81,7 +82,7 @@ export default (hocFactory: BaseFactory<any>) => {
              */
             removeItem: (propsCur: DefaultProps) => {
                 return (parentKeys: any[], keys: any[], index: number) => {
-                    schemaFormReducer.actions.removeItem({
+                    reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.removeItem({
                         parentKeys: parentKeys,
                         keys: keys,
                         index: index
@@ -93,7 +94,7 @@ export default (hocFactory: BaseFactory<any>) => {
              */
             moveItem: (propsCur: DefaultProps) => {
                 return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
-                    schemaFormReducer.actions.moveToItem({
+                    reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.moveToItem({
                         parentKeys: parentKeys,
                         keys: keys,
                         curIndex: curIndex,
@@ -137,7 +138,7 @@ export default (hocFactory: BaseFactory<any>) => {
 
             private initArrayComponents() {
                 const { getOptions } = this.props;
-                const hocOptions: any = getOptions(this.props, "hoc", "array");
+                const hocOptions: any = getOptions(this.props, "hoc", name);
 
                 if (hocOptions.ArrayComponent) {
                     this.ArrayComponent = hocOptions.ArrayComponent;

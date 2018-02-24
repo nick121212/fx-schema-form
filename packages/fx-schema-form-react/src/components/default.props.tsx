@@ -48,6 +48,10 @@ export interface DefaultProps {
      * 数组元素子项的操作
      */
     ArrayItemComponent?: new () => React.PureComponent<DefaultProps>;
+    /**
+     * 当前的reducerkey
+     */
+    reducerKey?: string;
 }
 
 export const DefaultPropsTypeCheck: ValidationMap<DefaultProps & { customProp: Function }> = {

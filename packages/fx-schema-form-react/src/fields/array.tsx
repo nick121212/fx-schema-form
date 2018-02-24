@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { shouldUpdate, compose } from "recompose";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models/index";
 
 import { SchemaForm } from "../components/form";
 import { hocFactory } from "../factory";
@@ -23,6 +23,7 @@ class ArrayFieldComponent extends React.PureComponent {
     }
 }
 
+export const name = "array";
 
 /**
  * 数组结构的字段解析
@@ -44,7 +45,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      */
     private initComponent() {
         const { uiSchema, formItemData, getOptions } = this.props,
-            options = getOptions(this.props, "field", "array");
+            options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = null, SchemaFormItemWithHoc = null;
 
         if (options.formHocs && options.formHocs.constructor === Array) {
@@ -64,7 +65,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      * @param idx 数组的索引
      */
     private renderItem(idx: number): JSX.Element | null {
-        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent } = this.props,
+        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, reducerKey, ArrayItemComponent } = this.props,
             uiSchema = this.props.uiSchema as FxUiSchema;
         // options = getOptions(this.props, "field", "array");
         let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc || SchemaForm;
@@ -88,6 +89,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
                 uiSchema={uiSchema}
                 ArrayItemComponent={ArrayItemComponent}
                 arrayLevel={arrayLevel.concat([idx])}
+                reducerKey={reducerKey}
                 schemaId={uiSchema.schemaPath}
                 uiSchemas={uiSchema.children || ["-"]}
                 parentKeys={parentKeys}
@@ -100,7 +102,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      */
     public render(): JSX.Element | null {
         const { uiSchema, formItemData, getOptions, getRequiredKeys } = this.props, child = [],
-            options = getOptions(this.props, "field", "array");
+            options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = this.SchemaFormWithHoc;
         const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
 
@@ -120,3 +122,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
         return <SchemaFormWithHoc children={child} {...extraProps} />;
     }
 }
+
+export default {
+    [name]: ArrayField
+};

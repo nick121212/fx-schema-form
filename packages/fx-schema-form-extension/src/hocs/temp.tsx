@@ -46,22 +46,25 @@ export default (hocFactory: BaseFactory<any>) => {
                         Temp: currentTheme.tempFactory.get(temp.key)
                     };
                 }).reduce((prev: JSX.Element, { key, Temp }: any) => {
+                    const { reducerKey, ajv, arrayLevel, arrayIndex, schemaId,
+                        globalOptions, parentKeys, getTitle, getPathKeys } = this.props;
                     const tempOptions = getOptions(this.props, "temp", key),
                         TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
                         key={key}
                         tempKey={key}
-                        ajv={this.props.ajv}
-                        uiSchema={this.props.uiSchema}
-                        schemaId={this.props.schemaId}
-                        arrayLevel={this.props.arrayLevel}
-                        arrayIndex={this.props.arrayIndex}
-                        globalOptions={this.props.globalOptions}
-                        parentKeys={this.props.parentKeys}
-                        getTitle={this.props.getTitle}
-                        getOptions={this.props.getOptions}
-                        getPathKeys={this.props.getPathKeys}
+                        reducerKey={reducerKey}
+                        ajv={ajv}
+                        uiSchema={uiSchema}
+                        schemaId={schemaId}
+                        arrayLevel={arrayLevel}
+                        arrayIndex={arrayIndex}
+                        globalOptions={globalOptions}
+                        parentKeys={parentKeys}
+                        getTitle={getTitle}
+                        getOptions={getOptions}
+                        getPathKeys={getPathKeys}
                         children={prev} />;
                 }, <Component {...extraProps} />);
             }

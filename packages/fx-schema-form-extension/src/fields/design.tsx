@@ -77,7 +77,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      * @param idx 数组的索引
      */
     private renderItem(idx: number): JSX.Element | null {
-        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent } = this.props,
+        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent, reducerKey } = this.props,
             uiSchema = this.props.uiSchema as any;
         let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc;
 
@@ -86,6 +86,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
                 key={idx}
                 index={idx}
                 arrayIndex={idx}
+                reducerKey={reducerKey}
                 uiSchema={uiSchema}
                 ArrayItemComponent={ArrayItemComponent}
                 arrayLevel={arrayLevel.concat([idx])}

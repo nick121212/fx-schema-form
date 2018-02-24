@@ -2,7 +2,7 @@
   "name": "fx-schema-form-core",
   "version": "3.0.32",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.prd.js",
   "types": "dist/typings/index.d.ts",
   "pre-commit": [
     "lint",
@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "NODE_ENV=production webpack",
+    "build_dev": "NODE_ENV=dev webpack",
     "test": "mocha ./tests/**/*.spec.js --require babel-register"
   },
   "repository": {
@@ -46,6 +47,7 @@
     "tslint": "^5.9.1",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.6.2",
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "webpack": "^3.10.0"
   }
 }

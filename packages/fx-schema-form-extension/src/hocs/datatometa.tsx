@@ -26,8 +26,6 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
  * @param Component 需要包装的组件
  */
 export default (hocFactory: BaseFactory<any>) => {
-    const actions = schemaFormReact.reducerFactory.get("schemaForm").actions;
-
     return (Component: any): RC<Props, any> => {
         @(compose(
             hocFactory.get("data")({

@@ -6,14 +6,12 @@ import { reducerFactory, hocFactory, themeFactory } from "./factory";
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
 import { SchemaForm, DefaultProps } from "./components";
-import { RC, models, SchemaFormNs } from "./models";
+import { RC, SchemaFormNs, schemaFormTypes } from "./models";
 
-import { NormalField, ObjectField, ArrayField } from "./fields";
+import fields from "./fields";
 import { TreeMap } from "./libs/tree";
 import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec } from "./libs/dec";
 import { SchemaFormProps } from "./libs/dec";
-
-let total = models;
 
 /**
  * 默认样式配置
@@ -25,9 +23,16 @@ const defaultTheme = {
     widgetFactory: new BaseFactory<RC<DefaultProps, any>>()
 };
 
-defaultTheme.fieldFactory.add("default", NormalField as any);
-defaultTheme.fieldFactory.add("object", ObjectField as any);
-defaultTheme.fieldFactory.add("array", ArrayField as any);
+/**
+ * 添加默认的fields
+ */
+fields.forEach((field: any) => {
+    for (const key in field) {
+        if (field.hasOwnProperty(key)) {
+            defaultTheme.fieldFactory.add(key, field[key]);
+        }
+    }
+});
 
 themeFactory.add("default", defaultTheme as any);
 
@@ -40,6 +45,7 @@ export default {
     TreeMap,
     reducerFactory,
     SchemaForm,
-    hocFactory
+    hocFactory,
+    schemaFormTypes
 };
 

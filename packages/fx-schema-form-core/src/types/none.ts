@@ -23,7 +23,7 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
         keys,
         schemaPath: schemaKey
     }));
-    schemaKeysFactory.add([$id, ...keys].join("/"), schemaKey);
+    schemaKeysFactory.add([$id].concat(keys).join("/"), schemaKey);
 
     return currentSchema || schema;
 };

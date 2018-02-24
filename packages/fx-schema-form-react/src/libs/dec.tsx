@@ -25,6 +25,7 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
     isValid?: boolean;
     isValidating?: boolean;
 
+    reducerKey: string;
     formKey: string;
     initData?: any;
 }
@@ -32,8 +33,6 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
 }
-
-const actions: SchemaFormActions = reducerFactory.get("schemaForm").actions;
 
 /**
  * 提供全部验证等功能
@@ -61,23 +60,25 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
             }),
             withHandlers({
                 validateAll: (props: SchemaFormProps) => {
+                    let actions = reducerFactory.get(props.reducerKey).actions;
+
                     return async (async?: boolean) => {
-                        let root = this.props.root as TreeMap,
-                            validate = this.props.ajv.getSchema(this.props.schemaId),
+                        let root = props.root as TreeMap,
+                            validate = props.ajv.getSchema(props.schemaId),
                             $validateBeforeData = Immutable.fromJS({
                                 dirty: true,
                                 isValid: true,
                                 isLoading: true
                             }),
                             $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }),
-                            normalizeDataPath = this.props.normalizeDataPath;
+                            normalizeDataPath = props.normalizeDataPath;
 
                         if (!root) {
                             return;
                         }
 
                         if (!validate) {
-                            throw new Error(`没有找到对应的${this.props.schemaId};`);
+                            throw new Error(`没有找到对应的${props.schemaId};`);
                         }
 
                         try {
@@ -96,7 +97,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                             // (validate as any).$async = !!async;
 
-                            let valRes = await validate(this.props.data.toJS());
+                            let valRes = await validate(props.data.toJS());
 
                             if (!valRes) {
                                 throw new (ValidationError as any)(validate.errors);
@@ -120,7 +121,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 return;
                             }
                             e.errors.forEach((element: ErrorObject) => {
-                                let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(this.props.schemaId, element.dataPath));
+                                let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
                                 let childNode = root.addChild(dataKeys, Immutable.fromJS({}));
 
                                 if (childNode) {
@@ -163,6 +164,8 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 this._validateAll = this.props.validateAll.bind(this);
                 // 这里创建一个form，如果当前存在formKey，则覆盖掉当前的数据
                 if (props.formKey) {
+                    let actions = reducerFactory.get(props.reducerKey).actions;
+
                     actions.createForm({
                         key: props.formKey,
                         data: props.initData || {}

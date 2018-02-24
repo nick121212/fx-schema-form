@@ -63,6 +63,7 @@ export class DesignForm extends React.PureComponent<any> {
                     <SchemaForm
                         key={"designForm" + "design1"}
                         RootComponent={Form}
+                        reducerKey="schemaForm"
                         schemaId="design"
                         uiSchemas={uiSchema}
                         parentKeys={this.props.parentKeys}

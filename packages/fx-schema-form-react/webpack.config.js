@@ -14,24 +14,13 @@ const __DEV__ = env.toUpperCase() == "DEV" || env.toUpperCase() == "DEVELOPMENT"
 const __PROD__ = env.toUpperCase() == "PRODUCTION";
 
 module.exports = {
-    entry: __PROD__ ? "./src/index.tsx" : "./src/demo/index.tsx",
+    entry: __PROD__ ? ["./src/index.tsx"] : "./src/demo/index.tsx",
     devServer: devServer,
     devtool: 'source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,
-            loader: 'awesome-typescript-loader',
-            options: {
-                "transpileOnly": false,
-                "useBabel": true,
-                "babelOptions": {
-                    "babelrc": false,
-                    "presets": [
-                        ["env"]
-                    ]
-                },
-                "babelCore": "babel-core",
-            },
+            loaders: ['babel-loader', 'ts-loader'],
             exclude: /node_modules/
         }, {
             test: /\.css$/,
@@ -127,18 +116,18 @@ module.exports = {
             template: "index.html"
         })
     ] : [
-            // new webpack.optimize.UglifyJsPlugin({
-            //     compress: {
-            //         warnings: false
-            //     },
-            //     output: {
-            //         beautify: false
-            //     },
-            //     mangle: {
-            //         eval: true
-            //     }
-            // })
-        ],
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     },
+        //     output: {
+        //         beautify: false
+        //     },
+        //     mangle: {
+        //         eval: true
+        //     }
+        // })
+    ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
         filename: 'index.js',
@@ -150,7 +139,7 @@ module.exports = {
         umdNamedDefine: true,
         libraryExport: "default"
     } : {
-            path: path.resolve('./dist'),
-            filename: '[name].js',
-        }
+        path: path.resolve('./dist'),
+        filename: '[name].js',
+    }
 };

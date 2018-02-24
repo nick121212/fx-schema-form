@@ -23,10 +23,13 @@ export class RouterComponent extends React.Component<any, any> {
             </header>
             <div className="ma2">
                 <Route path="/form/design" component={() => {
-                    return <DesignForm ajv={curAjv} schemaId="design" formKey="designForm" initData={{ children }} />;
+                    return <DesignForm ajv={curAjv} schemaId="design"
+                        reducerKey="schemaForm"
+                        formKey="designForm"
+                        initData={{ children }} />;
                 }} />
                 <Route path="/form/normal" component={() => {
-                    return <NormalForm ajv={curAjv} schemaId="dnd-style" formKey="normalForm" initData={{
+                    return <NormalForm ajv={curAjv} schemaId="dnd-style" reducerKey="schemaForm" formKey="normalForm" initData={{
                         ids: [1, 2, 3]
                     }} />;
                 }} />

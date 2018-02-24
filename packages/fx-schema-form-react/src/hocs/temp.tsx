@@ -4,7 +4,7 @@ import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure
 import { connect } from "react-redux";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 import { ThemeHocOutProps } from "./theme";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
@@ -27,12 +27,12 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
         */
         class TempComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps & ArrayHocOutProps, any> {
             public render(): JSX.Element {
-                const { uiSchema, getOptions } = this.props;
+                const { uiSchema, getOptions, reducerKey } = this.props;
                 const { options: uiSchemaOptions, keys } = uiSchema as FxUiSchema;
                 const TempComponents = this.getTemplates();
 
                 return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
-                    const tempOptions = getOptions(this.props, "temp", key),
+                    const tempOptions = getOptions(this.props, schemaFormTypes.template, key),
                         TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
 
                     return <TempWithHoc
@@ -41,6 +41,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
                         uiSchema={this.props.uiSchema}
                         schemaId={this.props.schemaId}
                         arrayLevel={this.props.arrayLevel}
+                        reducerKey={reducerKey}
                         arrayIndex={this.props.arrayIndex}
                         globalOptions={this.props.globalOptions}
                         ArrayComponent={this.props.ArrayComponent}
@@ -60,7 +61,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {
             private getTemplates(): Array<{ key: string, Temp: RC<any, any> }> {
                 const { uiSchema, currentTheme, getOptions } = this.props,
                     { keys, type } = uiSchema as FxUiSchema,
-                    typeDefaultOptions = getOptions(this.props, "field", type as string),
+                    typeDefaultOptions = getOptions(this.props, schemaFormTypes.field, type as string),
                     TempComponent: Array<{ key: string, Temp: RC<any, any> }> = [];
                 let template: Array<any>;
 

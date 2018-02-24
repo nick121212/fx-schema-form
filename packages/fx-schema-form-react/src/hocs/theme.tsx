@@ -19,15 +19,16 @@ export interface ThemeHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<DefaultProps, any> => {
+        const defualtKey = "default";
         class ThemeComponentHoc extends PureComponent<DefaultProps, any> {
             public render(): JSX.Element {
                 const { theme } = this.props.uiSchema as FxUiSchema;
                 let nsFactory;
 
-                if (themeFactory.has(theme || "default")) {
-                    nsFactory = themeFactory.get(theme || "default");
+                if (themeFactory.has(theme || defualtKey)) {
+                    nsFactory = themeFactory.get(theme || defualtKey);
                 } else {
-                    throw new Error(`没有找到${theme || "default"}的样式！`);
+                    throw new Error(`没有找到${theme || defualtKey}的样式！`);
                 }
 
                 return <Component currentTheme={nsFactory} {...this.props} />;

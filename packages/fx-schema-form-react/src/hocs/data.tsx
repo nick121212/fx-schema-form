@@ -7,7 +7,7 @@ import { createSelector, createSelectorCreator, defaultMemoize } from "reselect"
 import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 import { UtilsHocOutProps } from "./utils";
 import { TreeMap } from "../libs/tree";
 
@@ -25,6 +25,8 @@ export interface DataHocSettings {
 
 // 自定义选择器创建函数
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
+
+export const name = "data";
 
 /**
  * 与reduce相关的数据操作
@@ -133,7 +135,7 @@ export default (hocFactory: BaseFactory<RC<DefaultProps, {}>>, settings: DataHoc
             public render(): JSX.Element {
                 const { uiSchema, getOptions } = this.props,
                     { keys = [] } = this.props.uiSchema || {},
-                    options = getOptions(this.props, "hoc", "data");
+                    options = getOptions(this.props, schemaFormTypes.hoc, name);
 
 
                 if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {

@@ -1,4 +1,19 @@
 {
-    "presets": ["env", "react"],
-    "plugins": []
+    "presets": [
+        ["env", {
+            "targets": {
+            },
+            "modules": false,
+            "loose": true
+        }], "react"
+    ],
+    "plugins": [
+        ["transform-runtime", {
+            "helpers": true,
+            "polyfill": false,
+            "regenerator": false,
+            "moduleName": "babel-runtime"
+        }]
+    ],
+    "comments": false
 }

@@ -22,6 +22,7 @@ export interface FieldHocOutProps {
  */
 export default (hocFactory: BaseFactory<any>) => {
     return (Component: any): RC<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> => {
+        const defaultKey = "default";
         class FieldComponentHoc extends PureComponent<DefaultProps & ThemeHocOutProps & UtilsHocOutProps, any> {
             public render(): JSX.Element | null {
                 const { currentTheme, getOptions, uiSchema } = this.props,
@@ -32,8 +33,8 @@ export default (hocFactory: BaseFactory<any>) => {
                 if (currentTheme.fieldFactory.has(calcField)) {
                     FieldComponent = currentTheme.fieldFactory.get(calcField);
                 } else {
-                    if (currentTheme.fieldFactory.has("default")) {
-                        FieldComponent = currentTheme.fieldFactory.get("default");
+                    if (currentTheme.fieldFactory.has(defaultKey)) {
+                        FieldComponent = currentTheme.fieldFactory.get(defaultKey);
                     } else {
                         console.error(`找不到field：${field || type}`);
                         return null;
@@ -43,8 +44,8 @@ export default (hocFactory: BaseFactory<any>) => {
                 if (currentTheme.widgetFactory.has(widget || type as string)) {
                     WidgetComponent = currentTheme.widgetFactory.get(widget || type as string);
                 } else {
-                    if (currentTheme.widgetFactory.has("default")) {
-                        WidgetComponent = currentTheme.widgetFactory.get("default");
+                    if (currentTheme.widgetFactory.has(defaultKey)) {
+                        WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
                     } else {
                         console.warn(`找不到widget：${widget || type}`, uiSchema);
                     }

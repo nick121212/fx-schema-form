@@ -14,7 +14,7 @@ const regexp = /#$/g;
 export default class ResolveLib {
     public mergeSchema: JSONSchema6 = {};
 
-    constructor(private ajv: Ajv, schema: JSONSchema6, public readonly $id = "") {
+    constructor(private ajv: Ajv, schema: JSONSchema6, readonly $id = "") {
         // 验证schema的完整性
         if (!$id) {
             this.initSchema(ajv, schema);
@@ -35,7 +35,10 @@ export default class ResolveLib {
         let $id: string | undefined = schema.$id;
         // 如果没有$id, 同时没有$ref的情况下直接报错
         if (!$id && !schema.$ref) {
-            throw new Error(`id is required by fx-schema-form-core.`);
+            if (!__PROD__) {
+                throw new Error(`id is required.`);
+            }
+            return;
         }
 
         // 验证schema的正确性
@@ -69,7 +72,10 @@ export default class ResolveLib {
 
         // 这里只解析type为字符串的结构，不支持数组类型的type
         if (schema.type.constructor !== String) {
-            throw new Error(`schema type[${schema.type}] can only be string.`);
+            if (!__PROD__) {
+                throw new Error(`schema type[${schema.type}] can only be string.`);
+            }
+            return;
         }
 
         let type: string = schema.type.toString();
@@ -129,7 +135,10 @@ export default class ResolveLib {
         const keys = schemaKey.split("/");
 
         if (!keys.length) {
-            throw new Error(`${schemaKey} not a valid schemaPath.`);
+            if (!__PROD__) {
+                throw new Error(`${schemaKey} not a valid schemaPath.`);
+            }
+            return;
         }
 
         return keys[0].replace(regexp, "");

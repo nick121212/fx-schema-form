@@ -24,7 +24,9 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
 
             return schemaAjv;
         } else {
-            throw new Error("${schema.$ref} not exist.");
+            if (!__PROD__) {
+                throw new Error("${schema.$ref} not exist.");
+            }
         }
     }
 

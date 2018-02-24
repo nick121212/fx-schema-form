@@ -35,4 +35,9 @@ export interface FxUiSchema extends UiSchema {
 }
 export type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 
-export const models = 1;
+export const schemaFormTypes = {
+    hoc: "hoc",
+    widget: "widget",
+    template: "temp",
+    field: "field"
+};

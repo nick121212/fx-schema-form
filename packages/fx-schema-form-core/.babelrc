@@ -1,6 +1,31 @@
 {
-    "presets": ["env"],
-    "plugins": [
-       
-    ]
+
+
+    "env": {
+        "production": {
+            "presets": [
+                ["env", {
+                    "targets": {},
+                    "modules": false,
+                    "loose": true
+                }]
+            ],
+            "plugins": [
+                ["transform-runtime", {
+                    "helpers": true,
+                    "modules": false,
+                    "polyfill": false,
+                    "regenerator": false,
+                    "moduleName": "babel-runtime"
+                }]
+            ],
+            "minified": false
+        },
+        "development": {
+            "presets": [
+                "env"
+            ]
+        }
+    },
+    "comments": true
 }

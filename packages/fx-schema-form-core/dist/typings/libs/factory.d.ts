@@ -1,8 +1,8 @@
 export declare class BaseFactory<T> {
-    protected instances: {
+    protected i: {
         [id: string]: T;
     };
-    private protectedInstances;
+    private pi;
     add(name: string, intance: T, override?: boolean): boolean | void;
     has(name: string): boolean;
     get(name: string): T;

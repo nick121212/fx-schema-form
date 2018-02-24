@@ -4,77 +4,50 @@ const devServer = require("./webpack/devserver"); // 用于快速开发应用程
 const {
     CheckerPlugin
 } = require('awesome-typescript-loader');
-
-const env = process.env.NODE_ENV || "dev";
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const env = process.env.NODE_ENV || "none";
 
 const __DEV__ = env.toUpperCase() == "DEV" || env.toUpperCase() == "DEVELOPMENT";
 const __PROD__ = env.toUpperCase() == "PRODUCTION";
 
 module.exports = {
-    entry: __PROD__ ? path.resolve("./src/index.ts") : "./src/demo/index.ts",
+    entry: path.resolve("./src/index.ts"),
     devServer: devServer,
     devtool: 'source-map',
     module: {
         rules: [{
             test: /\.ts?$/,
-            loader: 'awesome-typescript-loader',
-            options: {
-                "transpileOnly": false,
-                "useBabel": false,
-                "babelOptions": {
-                    "babelrc": false,
-                    "presets": [
-                        ["env"]
-                    ]
-                },
-                "babelCore": "babel-core",
-            },
-            exclude: /node_modules/
-        }, {
-            test: /\.jsx?$/,
-            use: [
-                'babel-loader'
-            ],
-            exclude: /node_modules/
-        }, {
-            test: /\.css$/,
-            use: [
-                'style-loader',
-                'css-loader'
-            ]
+            loaders: ['babel-loader', 'ts-loader']
         }]
     },
     resolve: {
-        extensions: ['.ts']
+        extensions: ['.ts', '.js']
     },
-    plugins: !__PROD__ ? [
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
+    plugins: [new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': JSON.stringify(env),
+        },
+        "__DEV__": JSON.stringify(__DEV__),
+        "__PROD__": JSON.stringify(__PROD__)
+    })].concat(!__PROD__ ? [
+
     ] : [
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false
-                },
-                output: {
-                    beautify: false
-                },
-                mangle: {
-                    eval: true
-                }
-            })
-        ],
-    output: __PROD__ ? {
+        new UglifyJsPlugin({
+            sourceMap: true
+        })
+    ]),
+    output: __PROD__ || __DEV__ ? {
         path: path.resolve('./dist'),
-        filename: 'index.js',
+        filename: __PROD__ ? 'index.prd.js' : 'index.dev.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
-        // sourceMapFilename: "index.map",
-        library: "SchemaFormCore",
+        sourceMapFilename: __PROD__ ? 'index.prd.js.map' : 'index.dev.js.map',
+        library: "SFC",
         // umdNamedDefine: true,
         // libraryExport: "default"
     } : {
-            path: path.resolve('./dist'),
-            filename: '[name].js',
-        }
+        path: path.resolve('./dist'),
+        filename: '[name].js',
+    }
 };

@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models/index";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { FieldHocOutProps } from "../hocs/field";
 
 export interface NormalFieldProps extends DefaultProps, UtilsHocOutProps, FieldHocOutProps {
 
 }
+
+export const name = "normal";
 
 /**
  * 普通数据字段类型
@@ -23,7 +25,7 @@ export class NormalField extends PureComponent<NormalFieldProps> {
 
     public render(): JSX.Element | null {
         const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props;
-        const fieldOptions = extraProps.getOptions(this.props, "field", "normal");
+        const fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name);
         const { keys } = extraProps.uiSchema as FxUiSchema;
         let WidgetComponentWithHoc = WidgetComponent;
 
@@ -42,3 +44,8 @@ export class NormalField extends PureComponent<NormalFieldProps> {
         );
     }
 }
+
+export default {
+    [name]: NormalField,
+    default: NormalField
+};

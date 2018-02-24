@@ -6,7 +6,7 @@ import Immutable from "immutable";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 
 export interface MakeHocOutProps extends UtilsHocOutProps {
 
@@ -25,7 +25,7 @@ export default (hocFactory: BaseFactory<any>, settings: any = {}) => {
             public render(): JSX.Element {
                 const { uiSchema, getOptions } = this.props;
                 const { type, field } = uiSchema as FxUiSchema;
-                const fieldOptions = getOptions(this.props, "field", field || type as string,
+                const fieldOptions = getOptions(this.props, schemaFormTypes.field, field || type as string,
                     Immutable.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}),
                     Immutable.fromJS(settings || {}));
                 const hocs: Array<string | ComponentEnhancer<any, any>> = fieldOptions.hocs
