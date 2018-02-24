@@ -9,7 +9,7 @@ import {
     schemaFieldFactory,
     schemaKeysFactory,
     ResolveLib
-} from "../../dist";
+} from "../../dist/index.dev";
 
 describe("测试ResolveLib类", () => {
     let ajv;

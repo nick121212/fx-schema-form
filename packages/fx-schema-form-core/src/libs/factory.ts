@@ -37,7 +37,7 @@ export class BaseFactory<T> {
         if (this.has(name)) {
             return this.i[name];
         }
-        if (__PROD__) {
+        if (!__PROD__) {
             throw new Error(`name=[${name}]not exist`);
         }
     }

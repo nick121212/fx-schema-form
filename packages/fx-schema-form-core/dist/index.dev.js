@@ -212,7 +212,7 @@ class BaseFactory {
         if (this.has(name)) {
             return this.i[name];
         }
-        if (false) {
+        if (true) {
             throw new Error(`name=[${name}]not exist`);
         }
     }
