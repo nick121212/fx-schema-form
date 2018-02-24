@@ -2,7 +2,7 @@ import React from "react";
 import Immutable from "immutable";
 import schemaFormReact from "fx-schema-form-react";
 import { immutableRenderDecorator } from "react-immutable-render-mixin";
-import { Button } from "antd";
+import Button from "antd/lib/button";
 import { compose, shouldUpdate } from "recompose";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import HTML5Backend from "react-dnd-html5-backend";
