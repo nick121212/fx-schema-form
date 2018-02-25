@@ -35,10 +35,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     validate: (propsCur: DefaultProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
+                            const schema = Object.assign({}, props.uiSchema);
                             const timeId = setTimeout(() => {
                                 reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                                     parentKeys: props.parentKeys,
-                                    keys: (props.uiSchema as any).keys,
+                                    keys: (schema as any).keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
                                 });
                             }, 200);
@@ -47,10 +48,12 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             try {
                                 let validateResult;
 
-                                if (props.uiSchema.$id) {
-                                    validateResult = await props.ajv.getSchema(props.uiSchema.$id)(data);
+                                if (schema.$id) {
+                                    validateResult = await props.ajv.getSchema(schema.$id)(data);
                                 } else {
-                                    validateResult = await props.ajv.validate(props.uiSchema, data);
+                                    delete schema.$id;
+                                    delete schema.$ref;
+                                    validateResult = await props.ajv.validate(schema, data);
                                 }
 
                                 result.isValid = validateResult;

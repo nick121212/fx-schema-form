@@ -266,6 +266,7 @@ export default class MergeLib {
         if (curSchema.$id) {
             curSchema.$ref = curSchema.$id;
             curSchema.$id = undefined;
+            delete curSchema.$id;
         }
         this.mergeUiSchemaList = initMergeSchema(parent || null, schemaPath, uiSchemas, curSchema);
     }

@@ -2524,7 +2524,11 @@ var hoc = function hoc(hocFactory) {
                                         return _context.abrupt("return");
 
                                     case 2:
-                                        defaultData = props.getDefaultData(props.ajv, props.uiSchema.items, data);
+                                        _context.next = 4;
+                                        return props.getDefaultData(props.ajv, props.uiSchema.items, data);
+
+                                    case 4:
+                                        defaultData = _context.sent;
 
                                         __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.addItem({
                                             parentKeys: props.parentKeys,
@@ -2532,7 +2536,7 @@ var hoc = function hoc(hocFactory) {
                                             data: defaultData
                                         });
 
-                                    case 4:
+                                    case 6:
                                     case "end":
                                         return _context.stop();
                                 }
@@ -2734,47 +2738,50 @@ var hoc = function hoc(hocFactory) {
                 validate: function validate(propsCur) {
                     return function (props, data) {
                         return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                            var result, timeId, validateResult, error;
+                            var result, schema, timeId, validateResult, error;
                             return regeneratorRuntime.wrap(function _callee$(_context) {
                                 while (1) {
                                     switch (_context.prev = _context.next) {
                                         case 0:
                                             result = { dirty: true, isValid: false, isLoading: false };
+                                            schema = Object.assign({}, props.uiSchema);
                                             timeId = setTimeout(function () {
                                                 __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                                                     parentKeys: props.parentKeys,
-                                                    keys: props.uiSchema.keys,
+                                                    keys: schema.keys,
                                                     meta: { isLoading: true, isValid: false, errorText: false }
                                                 });
                                             }, 200);
-                                            _context.prev = 2;
+                                            _context.prev = 3;
                                             validateResult = void 0;
 
-                                            if (!props.uiSchema.$id) {
-                                                _context.next = 10;
+                                            if (!schema.$id) {
+                                                _context.next = 11;
                                                 break;
                                             }
 
-                                            _context.next = 7;
-                                            return props.ajv.getSchema(props.uiSchema.$id)(data);
+                                            _context.next = 8;
+                                            return props.ajv.getSchema(schema.$id)(data);
 
-                                        case 7:
+                                        case 8:
                                             validateResult = _context.sent;
-                                            _context.next = 13;
+                                            _context.next = 16;
                                             break;
 
-                                        case 10:
-                                            _context.next = 12;
-                                            return props.ajv.validate(props.uiSchema, data);
+                                        case 11:
+                                            delete schema.$id;
+                                            delete schema.$ref;
+                                            _context.next = 15;
+                                            return props.ajv.validate(schema, data);
 
-                                        case 12:
+                                        case 15:
                                             validateResult = _context.sent;
 
-                                        case 13:
+                                        case 16:
                                             result.isValid = validateResult;
 
                                             if (validateResult) {
-                                                _context.next = 18;
+                                                _context.next = 21;
                                                 break;
                                             }
 
@@ -2783,33 +2790,33 @@ var hoc = function hoc(hocFactory) {
                                             error.errors = props.ajv.errors;
                                             throw error;
 
-                                        case 18:
-                                            _context.next = 23;
+                                        case 21:
+                                            _context.next = 26;
                                             break;
 
-                                        case 20:
-                                            _context.prev = 20;
-                                            _context.t0 = _context["catch"](2);
+                                        case 23:
+                                            _context.prev = 23;
+                                            _context.t0 = _context["catch"](3);
 
                                             result.errorText = _context.t0.errors ? props.ajv.errorsText(_context.t0.errors, {
                                                 dataVar: props.getTitle(props).toString()
                                             }) : _context.t0.message;
 
-                                        case 23:
-                                            _context.prev = 23;
+                                        case 26:
+                                            _context.prev = 26;
 
                                             clearTimeout(timeId);
-                                            return _context.finish(23);
+                                            return _context.finish(26);
 
-                                        case 26:
+                                        case 29:
                                             return _context.abrupt("return", result);
 
-                                        case 27:
+                                        case 30:
                                         case "end":
                                             return _context.stop();
                                     }
                                 }
-                            }, _callee, this, [[2, 20, 23, 26]]);
+                            }, _callee, this, [[3, 23, 26, 29]]);
                         }));
                     };
                 }

@@ -450,6 +450,7 @@ uiSchema的参数配置：
 - getPathKeys: (keys,path) => string[]; 获取当前元素keys的相对keys
 - normalizeDataPath: (schemaId,dataPath) => string[]; 格式化keys
 - getRequiredKeys: (props,include,exclude) => string[]; 获取当前props中所需的prop
+- getDefaultData: (ajv,schema,defaultData,merge) => Promise; 获取schema的默认数据
 
 #### MergeHoc
 

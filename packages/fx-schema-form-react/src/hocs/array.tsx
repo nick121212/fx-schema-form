@@ -39,7 +39,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (!props.uiSchema || !props.uiSchema.items) {
                             return;
                         }
-                        let defaultData = props.getDefaultData(props.ajv, props.uiSchema.items as any, data);
+                        let defaultData = await props.getDefaultData(props.ajv, props.uiSchema.items as any, data);
 
                         reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
                             parentKeys: props.parentKeys,

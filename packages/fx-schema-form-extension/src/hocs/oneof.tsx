@@ -9,6 +9,7 @@ import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/dist/typings/models/index";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 import schemaFormReact from "fx-schema-form-react";
+import { JSONSchema6 } from "json-schema";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps {
@@ -41,15 +42,21 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
         return (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {
 
+                private currentSchema: any = null;
+
                 /**
                  * 数据更改的时候清除掉当前数据
                  * @param props props
                  */
-                public componentWillUpdate(props: Props) {
-                    const { uiSchema, updateItemData } = props;
+                public async componentDidUpdate(props: Props) {
+                    const { uiSchema, updateItemData, getDefaultData, ajv } = props;
+
+                    if (!this.currentSchema) {
+                        return updateItemData(props, null, null);
+                    }
 
                     // 清除当前数据
-                    updateItemData(props, null, null);
+                    updateItemData(props, await getDefaultData(ajv, this.currentSchema, null), null);
                 }
 
                 /**
@@ -85,6 +92,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (!someOf[index]) {
                             return null;
                         }
+
+                        this.currentSchema = someOf[index];
 
                         // uiSchemaInOneof = Object.assign({}, uiSchema, someOf[index], {
                         //     keys: keys,

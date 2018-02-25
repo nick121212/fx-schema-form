@@ -11,6 +11,7 @@ import { ArrayHocOutProps } from "fx-schema-form-react/dist/typings/hocs/array";
 
 @(compose(
     shouldUpdate(() => false),
+    schemaFormReact.hocFactory.get("utils")(),
     schemaFormReact.hocFactory.get("validate")(),
     schemaFormReact.hocFactory.get("array")(),
     schemaFormReact.hocFactory.get("data")({

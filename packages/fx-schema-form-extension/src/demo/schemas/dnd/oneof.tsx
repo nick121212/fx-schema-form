@@ -14,11 +14,11 @@ export default {
         value: {
             oneOf: [{
                 $id: "dnd-oneof-number",
-                type: "string",
+                type: "number",
                 title: "这是一个数字类型"
             }, {
                 $id: "dnd-oneof-string",
-                type: "number",
+                type: "string",
                 title: "这是一个字符串类型"
             }, {
                 $id: "dnd-oneof-boolean",
@@ -31,8 +31,8 @@ export default {
                 default: {},
                 required: ["a", "b"],
                 properties: {
-                    a: { type: "string" },
-                    b: { type: "boolean" }
+                    a: { type: "string", default: "nick" },
+                    b: { type: "boolean", default: true }
                 }
             }]
         }

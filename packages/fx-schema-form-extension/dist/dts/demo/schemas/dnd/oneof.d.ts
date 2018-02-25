@@ -28,9 +28,11 @@ declare const _default: {
                 properties: {
                     a: {
                         type: string;
+                        default: string;
                     };
                     b: {
                         type: string;
+                        default: boolean;
                     };
                 };
             })[];

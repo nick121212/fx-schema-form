@@ -35,7 +35,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     return TempComponents.reduce((prev: JSX.Element, { key, Temp }) => {
                         const tempOptions = getOptions(this.props, schemaFormTypes.template, key),
-                            TempWithHoc: any = compose(...(tempOptions.tempHocs || []))(Temp);
+                            TempWithHoc: any = compose(hocFactory.get("utils")(), ...(tempOptions.tempHocs || []))(Temp);
 
                         return <TempWithHoc
                             tempKey={key}
@@ -50,9 +50,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             ArrayItemComponent={this.props.ArrayItemComponent}
                             initArrayComponent={this.props.initArrayComponent}
                             parentKeys={this.props.parentKeys}
-                            getTitle={this.props.getTitle}
-                            getOptions={this.props.getOptions}
-                            getPathKeys={this.props.getPathKeys}
                             children={prev} />;
                     }, <Component {...this.props} />);
                 }
