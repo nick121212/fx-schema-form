@@ -14,9 +14,9 @@ export interface OneHocOutSettings {
     };
 }
 export declare const name = "oneOf";
-export declare const hoc: (hocFactory: BaseFactory<any>) => (settings?: OneHocOutSettings) => (Component: any) => RC<Props, any>;
+export declare const hoc: (hocFactory: BaseFactory<any>) => (settings: OneHocOutSettings) => (Component: any) => RC<Props, any>;
 declare const _default: {
     name: string;
-    hoc: (hocFactory: BaseFactory<any>) => (settings?: OneHocOutSettings) => (Component: any) => RC<Props, any>;
+    hoc: (hocFactory: BaseFactory<any>) => (settings: OneHocOutSettings) => (Component: any) => RC<Props, any>;
 };
 export default _default;

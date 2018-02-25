@@ -30,7 +30,7 @@
                     "helpers": true,
                     "modules": false,
                     "polyfill": false,
-                    "regenerator": false,
+                    "regenerator": true,
                     "moduleName": "babel-runtime"
                 }]
             ]

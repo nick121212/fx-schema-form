@@ -7,6 +7,8 @@ import Immutable from "immutable";
 import resolvePathname from "resolve-pathname";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models/index";
+import { JSONSchema6 } from "json-schema";
+import { Ajv } from "ajv";
 
 // const resolvePathname = require("resolve-pathname");
 
@@ -19,6 +21,7 @@ export interface UtilsHocOutProps {
     getPathKeys: (keys: string[], path: string) => Array<string | number>;
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => { [key: string]: any };
+    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, merge?: boolean) => Promise<any>;
 }
 
 /**
@@ -41,6 +44,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         getOptions={this.getOptions}
                         normalizeDataPath={this.normalizeDataPath}
                         getRequiredKeys={this.getRequiredKeys}
+                        getDefaultData={this.getDefaultData}
                         {...this.props} />;
                 }
 
@@ -149,10 +153,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     return opts;
                 }
-
                 /**
                  * 获取标题数据
                  * title || key || index
+                 * @param props         当前的props
+                 * @param extraSettings 额外的配置参数
                  */
                 private getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): string {
                     const { uiSchema } = props;
@@ -199,6 +204,59 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     }
 
                     return keysResolve;
+                }
+
+                /**
+                 * 获取当前schema的默认的数据
+                 *  通过ajv的validate方法获取默认的数据
+                 * @param props 当前的props
+                 * @param data  额外的数据
+                 */
+                private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, merge = false): Promise<any> {
+                    let itemSchema: any = {},
+                        defaultValue: any = {},
+                        type = schema.type,
+                        mergeData = (dataOfType: any) => {
+                            if (!merge) {
+                                return defaultValue.defaultData;
+                            }
+                            if (type === "object") {
+                                return Immutable.fromJS({}).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                            }
+
+                            return Immutable.fromJS([]).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                        };
+
+                    try {
+                        await ajv.validate({
+                            type: "object",
+                            properties: {
+                                defaultData: schema
+                            }
+                        }, defaultValue);
+                    } catch (e) {
+                        console.log(e);
+                        return data;
+                    } finally {
+                        switch (type) {
+                            case "object":
+                                if (!defaultValue.defaultData) {
+                                    defaultValue.defaultData = data || {};
+                                }
+                                defaultValue.defaultData = mergeData(data || {});
+                                break;
+                            case "array":
+                                if (!defaultValue.defaultData) {
+                                    defaultValue.defaultData = data || [];
+                                }
+                                defaultValue.defaultData = mergeData(data || []);
+                                break;
+                            default:
+                                defaultValue.defaultData = data || defaultValue.defaultData;
+                        }
+                    }
+
+                    return defaultValue.defaultData;
                 }
             }
 

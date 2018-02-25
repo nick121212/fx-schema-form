@@ -17,7 +17,7 @@ describe("utils的hoc", () => {
         merge = new MergeLib(curAjv, "design", null, ["*"]);
         App = hocFactory.get("utils")()(AppCom);
         roots = merge.mergeUiSchemaList.map((uiSchema) => {
-            let m = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={uiSchema} />);
+            let m = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={uiSchema} ajv={curAjv} />);
 
             return m.find(AppCom);
         });
@@ -61,6 +61,27 @@ describe("utils的hoc", () => {
         expect(roots[0].props().getRequiredKeys(roots[0].props(), ["globalOptions"]).schemaId).to.eq(undefined);
         expect(roots[0].props().getRequiredKeys(roots[0].props(), ["globalOptions"]).globalOptions).to.be.a("object");
         expect(roots[0].props().getRequiredKeys(roots[0].props(), ["globalOptions"], ["globalOptions"]).globalOptions).to.eq(undefined);
+    });
+
+    it("测试getDefaultData方法;", () => {
+        const defaultData = [{ age: 23 }];
+
+        expect(roots[0].props().getDefaultData).to.be.a("function");
+        // expect().to.eq(undefined);
+
+        return Promise.all([
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema, defaultData, true),
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema),
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema.items),
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema.items, { age: 20, name: "nick" }, true)
+        ]).then((datas) => {
+            expect(datas[0].length).to.equal(1);
+            expect(datas[0][0].age).to.equal(23);
+            expect(datas[1].length).to.equal(0);
+            expect(datas[1].length).to.equal(0);
+            expect(datas[2].age).to.equal("25");
+            expect(datas[3].age + datas[3].name).to.equal("20nick");
+        });
     });
 
 });

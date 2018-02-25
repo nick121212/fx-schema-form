@@ -12,11 +12,28 @@ declare const _default: {
             description: string;
         };
         value: {
-            oneOf: {
+            oneOf: ({
                 $id: string;
                 type: string;
                 title: string;
-            }[];
+                default?: undefined;
+                required?: undefined;
+                properties?: undefined;
+            } | {
+                $id: string;
+                type: string;
+                title: string;
+                default: {};
+                required: string[];
+                properties: {
+                    a: {
+                        type: string;
+                    };
+                    b: {
+                        type: string;
+                    };
+                };
+            })[];
         };
     };
 };

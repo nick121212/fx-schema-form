@@ -34,46 +34,18 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 /**
                  * 更新一个数据
                  */
-                addItem: (propsCur: DefaultProps) => {
-                    return async (props: DefaultProps, data?: any) => {
-                        let itemSchema: any = {},
-                            defaultValue: any = {},
-                            itemUiSchema: any = props.uiSchema ? props.uiSchema.items : {};
-
-                        try {
-                            // 先获取默认的数据
-                            await props.ajv.validate({
-                                type: "object",
-                                properties: {
-                                    defaultData: itemUiSchema
-                                }
-                            }, defaultValue);
-                        } catch (e) {
-                            console.log(e);
-                        } finally {
-                            if (propsCur.uiSchema && propsCur.uiSchema.items) {
-                                switch ((propsCur.uiSchema.items as JSONSchema6).type) {
-                                    case "object":
-                                        if (!defaultValue.defaultData) {
-                                            defaultValue.defaultData = data || {};
-                                        }
-                                        Object.assign(defaultValue.defaultData, data);
-                                        break;
-                                    case "array":
-                                        if (!defaultValue.defaultData) {
-                                            defaultValue.defaultData = data || [];
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
-                                parentKeys: props.parentKeys,
-                                keys: (props.uiSchema as any).keys,
-                                data: defaultValue.defaultData
-                            });
+                addItem: (propsCur: ArrayProps) => {
+                    return async (props: ArrayProps, data?: any) => {
+                        if (!props.uiSchema || !props.uiSchema.items) {
+                            return;
                         }
+                        let defaultData = props.getDefaultData(props.ajv, props.uiSchema.items as any, data);
+
+                        reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
+                            parentKeys: props.parentKeys,
+                            keys: (props.uiSchema as any).keys,
+                            data: defaultData
+                        });
                     };
                 },
                 /**

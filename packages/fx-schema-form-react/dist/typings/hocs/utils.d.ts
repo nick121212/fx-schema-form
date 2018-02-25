@@ -2,6 +2,8 @@ import { BaseFactory } from "fx-schema-form-core";
 import Immutable from "immutable";
 import { DefaultProps } from "../components";
 import { RC } from "../models/index";
+import { JSONSchema6 } from "json-schema";
+import { Ajv } from "ajv";
 export declare const name = "utils";
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[]) => {
@@ -13,6 +15,7 @@ export interface UtilsHocOutProps {
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => {
         [key: string]: any;
     };
+    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, merge?: boolean) => Promise<any>;
 }
 export declare const hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<DefaultProps, any>;
 declare const _default: {

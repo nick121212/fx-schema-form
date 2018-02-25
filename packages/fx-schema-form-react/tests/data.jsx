@@ -40,6 +40,7 @@ export const design = {
             type: "array",
             maxItems: 3,
             minItems: 1,
+            default: [],
             items: {
                 type: "object",
                 required: ["age", "name", "password"],

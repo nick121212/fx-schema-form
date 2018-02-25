@@ -28,6 +28,8 @@ export default {
                 $id: "dnd-oneof-object",
                 type: "object",
                 title: "这是一个object类型",
+                default: {},
+                required: ["a", "b"],
                 properties: {
                     a: { type: "string" },
                     b: { type: "boolean" }

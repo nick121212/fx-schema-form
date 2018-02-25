@@ -2036,6 +2036,30 @@ $export($export.S, 'Object', { create: __webpack_require__(29) });
 
 
 
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function step(result) {
+            result.done ? resolve(result.value) : new P(function (resolve) {
+                resolve(result.value);
+            }).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
 
 
@@ -2054,7 +2078,7 @@ var hoc = function hoc(hocFactory) {
                 }
 
                 ComponentHoc.prototype.render = function render() {
-                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys }, this.props));
+                    return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData }, this.props));
                 };
 
                 ComponentHoc.prototype.getRequiredKeys = function getRequiredKeys(props) {
@@ -2171,6 +2195,82 @@ var hoc = function hoc(hocFactory) {
                         keysResolve.pop();
                     }
                     return keysResolve;
+                };
+
+                ComponentHoc.prototype.getDefaultData = function getDefaultData(ajv, schema, data) {
+                    var merge = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+                    return __awaiter(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                        var itemSchema, defaultValue, type, mergeData;
+                        return regeneratorRuntime.wrap(function _callee$(_context) {
+                            while (1) {
+                                switch (_context.prev = _context.next) {
+                                    case 0:
+                                        itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = function mergeData(dataOfType) {
+                                            if (!merge) {
+                                                return defaultValue.defaultData;
+                                            }
+                                            if (type === "object") {
+                                                return __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS({}).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                                            }
+                                            return __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS([]).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                                        };
+                                        _context.prev = 1;
+                                        _context.next = 4;
+                                        return ajv.validate({
+                                            type: "object",
+                                            properties: {
+                                                defaultData: schema
+                                            }
+                                        }, defaultValue);
+
+                                    case 4:
+                                        _context.next = 10;
+                                        break;
+
+                                    case 6:
+                                        _context.prev = 6;
+                                        _context.t0 = _context["catch"](1);
+
+                                        console.log(_context.t0);
+                                        return _context.abrupt("return", data);
+
+                                    case 10:
+                                        _context.prev = 10;
+                                        _context.t1 = type;
+                                        _context.next = _context.t1 === "object" ? 14 : _context.t1 === "array" ? 17 : 20;
+                                        break;
+
+                                    case 14:
+                                        if (!defaultValue.defaultData) {
+                                            defaultValue.defaultData = data || {};
+                                        }
+                                        defaultValue.defaultData = mergeData(data || {});
+                                        return _context.abrupt("break", 21);
+
+                                    case 17:
+                                        if (!defaultValue.defaultData) {
+                                            defaultValue.defaultData = data || [];
+                                        }
+                                        defaultValue.defaultData = mergeData(data || []);
+                                        return _context.abrupt("break", 21);
+
+                                    case 20:
+                                        defaultValue.defaultData = data || defaultValue.defaultData;
+
+                                    case 21:
+                                        return _context.finish(10);
+
+                                    case 22:
+                                        return _context.abrupt("return", defaultValue.defaultData);
+
+                                    case 23:
+                                    case "end":
+                                        return _context.stop();
+                                }
+                            }
+                        }, _callee, this, [[1, 6, 10, 22]]);
+                    }));
                 };
 
                 return ComponentHoc;
@@ -2411,73 +2511,33 @@ var hoc = function hoc(hocFactory) {
             addItem: function addItem(propsCur) {
                 return function (props, data) {
                     return __awaiter(_this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                        var itemSchema, defaultValue, itemUiSchema;
+                        var defaultData;
                         return regeneratorRuntime.wrap(function _callee$(_context) {
                             while (1) {
                                 switch (_context.prev = _context.next) {
                                     case 0:
-                                        itemSchema = {}, defaultValue = {}, itemUiSchema = props.uiSchema ? props.uiSchema.items : {};
-                                        _context.prev = 1;
-                                        _context.next = 4;
-                                        return props.ajv.validate({
-                                            type: "object",
-                                            properties: {
-                                                defaultData: itemUiSchema
-                                            }
-                                        }, defaultValue);
-
-                                    case 4:
-                                        _context.next = 9;
-                                        break;
-
-                                    case 6:
-                                        _context.prev = 6;
-                                        _context.t0 = _context["catch"](1);
-
-                                        console.log(_context.t0);
-
-                                    case 9:
-                                        _context.prev = 9;
-
-                                        if (!(propsCur.uiSchema && propsCur.uiSchema.items)) {
-                                            _context.next = 20;
+                                        if (!(!props.uiSchema || !props.uiSchema.items)) {
+                                            _context.next = 2;
                                             break;
                                         }
 
-                                        _context.t1 = propsCur.uiSchema.items.type;
-                                        _context.next = _context.t1 === "object" ? 14 : _context.t1 === "array" ? 17 : 19;
-                                        break;
+                                        return _context.abrupt("return");
 
-                                    case 14:
-                                        if (!defaultValue.defaultData) {
-                                            defaultValue.defaultData = data || {};
-                                        }
-                                        Object.assign(defaultValue.defaultData, data);
-                                        return _context.abrupt("break", 20);
+                                    case 2:
+                                        defaultData = props.getDefaultData(props.ajv, props.uiSchema.items, data);
 
-                                    case 17:
-                                        if (!defaultValue.defaultData) {
-                                            defaultValue.defaultData = data || [];
-                                        }
-                                        return _context.abrupt("break", 20);
-
-                                    case 19:
-                                        return _context.abrupt("break", 20);
-
-                                    case 20:
                                         __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.addItem({
                                             parentKeys: props.parentKeys,
                                             keys: props.uiSchema.keys,
-                                            data: defaultValue.defaultData
+                                            data: defaultData
                                         });
-                                        return _context.finish(9);
 
-                                    case 22:
+                                    case 4:
                                     case "end":
                                         return _context.stop();
                                 }
                             }
-                        }, _callee, this, [[1, 6, 9, 22]]);
+                        }, _callee, this);
                     }));
                 };
             },
