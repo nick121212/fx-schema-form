@@ -28,8 +28,7 @@ export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
         const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props,
             { keys = [], readonly = false } = uiSchema || {},
             metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) : fromJS({}),
-            widgetOptions = getOptions(this.props, "widget", "checkbox",
-                this.setDefaultProps(), metaOptions);
+            widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
 
         return (
             <Checkbox onChange={async (e: SyntheticEvent<HTMLInputElement>) => {
@@ -38,7 +37,8 @@ export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
                 }
             }}
                 disabled={readonly}
-                {...widgetOptions.options } >
+                {...widgetOptions.options}
+                {...this.setDefaultProps()}>
                 {getTitle(this.props, metaOptions.get("options"))}
             </Checkbox>
         );

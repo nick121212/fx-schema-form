@@ -1,7 +1,7 @@
 
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
-import { BaseFactory } from "fx-schema-form-core";
+import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
@@ -46,23 +46,29 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                             // 这里做一层try catch处理
                             try {
-                                let validateResult;
+                                let validateFunc;
 
-                                if (schema.$id) {
-                                    validateResult = await props.ajv.getSchema(schema.$id)(data);
+                                // 使用schema.schemaPath来确定schema
+                                if (schema.schemaPath && props.ajv.getSchema(schema.schemaPath)) {
+                                    validateFunc = props.ajv.getSchema(schema.schemaPath);
+                                } else if (schema.$id) {
+                                    validateFunc = props.ajv.getSchema(schema.$id);
                                 } else {
-                                    delete schema.$id;
-                                    delete schema.$ref;
-                                    validateResult = await props.ajv.validate(schema, data);
+                                    let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
+
+                                    delete schemaInCache.$id;
+                                    delete schemaInCache.$ref;
+
+                                    validateFunc = props.ajv.compile(schemaInCache);
                                 }
 
-                                result.isValid = validateResult;
+                                result.isValid = await validateFunc(data);
 
                                 // 如果验证出错，则抛出错误
-                                if (!validateResult) {
+                                if (!result.isValid) {
                                     let error: any = new Error();
 
-                                    error.errors = props.ajv.errors;
+                                    error.errors = validateFunc.errors;
 
                                     throw error;
                                 }

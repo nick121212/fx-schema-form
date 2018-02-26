@@ -4,6 +4,7 @@ import { HashRouter as Router, Switch, Route, Redirect, Link } from "react-route
 import { DesignForm, children } from "./forms/design";
 import { NormalForm } from "./forms/normal";
 import { OneOfForm } from "./forms/oneof";
+import { TreeForm } from "./forms/tree";
 import { curAjv } from "./init";
 
 /**
@@ -14,10 +15,10 @@ export class RouterComponent extends React.Component<any, any> {
         return <div>
             <header className="bg-black-90 w-100 ph3 pv3 pv4-ns ph4-m ph5-l">
                 <nav className="f6 fw6 ttu tracked">
-                    <Link className="link dim white dib mr3" to="/form/design">design</Link>
-                    <Link className="link dim white dib mr3" to="/form/normal">Normal</Link>
-                    <Link className="link dim white dib mr3" to="/form/oneof" title="OneOf">OneOf</Link>
-                    <Link className="link dim white dib" to="#" title="Contact">Contact</Link>
+                    <Link className="link dim white dib mr3" to="/form/design">所见即所得</Link>
+                    <Link className="link dim white dib mr3" to="/form/normal">表单模式</Link>
+                    <Link className="link dim white dib mr3" to="/form/oneof" title="OneOf">OneOf关键字</Link>
+                    <Link className="link dim white dib" to="/form/tree" title="Tree">二叉树</Link>
 
                     <a className="dib fr" href="https://github.com/nick121212/fx-schema-form">GITHUB</a>
                 </nav>
@@ -38,6 +39,9 @@ export class RouterComponent extends React.Component<any, any> {
                     return <OneOfForm ajv={curAjv} schemaId="dnd-oneof" reducerKey="schemaForm" formKey="oneOfForm" initData={{
                         type: 1
                     }} />;
+                }} />
+                <Route path="/form/tree" component={() => {
+                    return <TreeForm ajv={curAjv} schemaId="dnd-tree" reducerKey="schemaForm" formKey="treeForm" initData={{}} />;
                 }} />
                 {/* <Route key="panel-create" path="/panel/create" component={CreateComponent} />, */}
                 {/* <Route key="panel-edit" path="/panel/edit/:id" component={CreateComponent} />, */}

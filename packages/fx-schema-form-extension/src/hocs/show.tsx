@@ -58,7 +58,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             if (!prev) {
                                 return false;
                             }
-
+                            // 从condition中获取数据，判断是否为空
                             let pathKeys = getPathKeys(uiSchema.keys as string[], path);
 
                             if (condition.has(pathKeys.join("/"))) {

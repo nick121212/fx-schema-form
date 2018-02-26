@@ -1,17 +1,14 @@
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { shouldUpdate, compose, onlyUpdateForKeys } from "recompose";
-
-import Form from "antd/lib/form";
-import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-
-import { FormItemProps } from "antd/lib/form/FormItem";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
+import Form from "antd/lib/form";
+import React, { PureComponent } from "react";
+import Row from "antd/lib/row";
 import { ArrayHocOutProps } from "fx-schema-form-react/dist/typings/hocs/array";
+import { compose, onlyUpdateForKeys, shouldUpdate } from "recompose";
+import { connect } from "react-redux";
+import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { FormItemProps } from "antd/lib/form/FormItem";
 import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
-
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 
 export interface AntdFormItemTempProps extends DefaultProps, UtilsHocOutProps, ArrayHocOutProps {
     tempKey: string;
@@ -45,12 +42,10 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
                 help={isValid ? "" : errorText}
                 {...props}
                 {...tempOptions.options}>
-
-                <Row>
-                    <Col span={20}>{children}</Col>
-                    <Col span={4}>{initArrayComponent ? initArrayComponent(this.props) : null}</Col>
-                </Row>
+                {children}
+                {/* {initArrayComponent ? initArrayComponent(this.props) : null} */}
             </Form.Item>
+
         );
     }
 }

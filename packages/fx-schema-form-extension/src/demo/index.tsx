@@ -23,9 +23,9 @@ let store = createStore<any>(combineReducers({
 // 初始化reducer
 schemaFormReact.reducerFactory.get("schemaForm").init(store);
 
-// store.subscribe(() => {
-//     console.log(store.getState().toJS());
-// });
+store.subscribe(() => {
+    console.log(store.getState().toJS());
+});
 
 ReactDOM.render(
     <Provider store={store}>
@@ -33,7 +33,7 @@ ReactDOM.render(
             <Router>
                 <RouterComponent key={"rootRouter"} />
             </Router>
-            <ReactPerfTool perf={Perf} />
+            {/* <ReactPerfTool perf={Perf} /> */}
         </div>
     </Provider>,
     document.getElementById("root"),

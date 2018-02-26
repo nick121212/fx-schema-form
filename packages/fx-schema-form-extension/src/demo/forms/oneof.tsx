@@ -3,6 +3,7 @@ import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import Select from "antd/lib/select";
 
 import Immutable from "immutable";
 import Button from "antd/lib/button";
@@ -29,7 +30,21 @@ export class OneOfForm extends React.PureComponent<any> {
                 key={"designForm" + "design"}
                 RootComponent={Form}
                 schemaId={"dnd-oneof"}
-                uiSchemas={["type", {
+                uiSchemas={[{
+                    key: "type",
+                    widget: "select",
+                    options: Immutable.fromJS({
+                        widget: {
+                            select: {
+                                options: {
+                                    children: [1, 2, 3, 4].map((val: number, index: number) => {
+                                        return <Select.Option key={index} value={val}>{val}</Select.Option>;
+                                    })
+                                }
+                            }
+                        }
+                    })
+                }, {
                     key: "value",
                     hocs: ["utils", "theme", "field", "validate", "condition", "array", "temp"],
                     options: Immutable.fromJS({

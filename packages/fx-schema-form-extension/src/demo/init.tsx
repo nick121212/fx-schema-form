@@ -11,11 +11,12 @@ import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget, AntdSelectWidget } from "./widgets";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { design, div, checkbox, style, oneof } from "./schemas";
+import { design, div, checkbox, style, oneof, tree } from "./schemas";
 
 export { globalOptions } from "./options/normal";
 export { globalOptionsOfDesign, globalOptionsOfDesign1 } from "./options/design";
-
+export { globalOptions as treeGlobalOptions } from "./options/tree";
+export { globalOptions as designGlobalOptions } from "./options/oneof";
 
 schemaFormReact.defaultTheme.tempFactory.add("default", NoneTemp as any);
 schemaFormReact.defaultTheme.tempFactory.add("card", AntdCardTemp as any);
@@ -45,4 +46,5 @@ let designResolve = [
     new ResolveLib(curAjv, checkbox as any),
     new ResolveLib(curAjv, style as any),
     new ResolveLib(curAjv, oneof as any),
+    new ResolveLib(curAjv, tree as any),
 ];

@@ -71,8 +71,8 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
     const getFormItemData = (rootReducerKey: string[], parentKeys: string[], keys: string[]):
         (state: Immutable.Map<string, any>) => Selector<any, any> => {
         return (state: Immutable.Map<string, any>): any => {
-            let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
-            let formItemData = state.getIn(dataKeys);
+            let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys],
+                formItemData = state.getIn(dataKeys);
 
             if (formItemData !== undefined) {
                 return Immutable.fromJS({
@@ -111,6 +111,7 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                         conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(),
                         { paths, hoc } = conditionOptions;
 
+                    // 获取所有需要监听的数据的值
                     if (paths && paths.length && hoc) {
                         paths.forEach((path: ConditionPath) => {
                             let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
@@ -128,6 +129,7 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                                 if (!formItemData || !formItemData.length) {
                                     return {};
                                 }
+                                // 数据合并
                                 return {
                                     condition: formItemData.reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
                                         if (!next) {
@@ -137,6 +139,7 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                                     }, Immutable.fromJS({}))
                                 };
                             }])),
+                            // 只有conditon变化才触发之后的hoc
                             onlyUpdateForKeys(["condition"]),
                             // 需要接受condition参数的hoc
                             hoc,
@@ -147,6 +150,9 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                     }
                 }
 
+                /**
+                 * 渲染页面
+                 */
                 public render(): JSX.Element {
                     const { getPathKeys, uiSchema } = this.props,
                         { keys = [] } = uiSchema || {},

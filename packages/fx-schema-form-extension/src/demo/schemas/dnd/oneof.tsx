@@ -17,7 +17,7 @@ export default {
                 type: "number",
                 title: "这是一个数字类型"
             }, {
-                $id: "dnd-oneof-string",
+                $id: "dnd-oneof-string1",
                 type: "string",
                 title: "这是一个字符串类型"
             }, {

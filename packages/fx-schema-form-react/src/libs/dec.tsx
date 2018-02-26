@@ -60,7 +60,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
             }),
             withHandlers({
                 validateAll: (props: SchemaFormProps) => {
-                    let actions = reducerFactory.get(props.reducerKey).actions;
+                    let actions = reducerFactory.get(props.reducerKey).actions, timeId: any;
 
                     return async (async?: boolean) => {
                         let root = props.root as TreeMap,
@@ -82,6 +82,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         }
 
                         try {
+                            // 将所有的字段的meta数据标准化
                             root.forEach((node: TreeMap) => {
                                 if (node.value) {
                                     return node.value.merge($validateBeforeData);
@@ -89,13 +90,14 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                                 return $validateBeforeData;
                             }, true);
-                            actions.updateItemMeta({
-                                parentKeys: settings.parentKeys,
-                                keys: [],
-                                meta: root.value
-                            });
-
-                            // (validate as any).$async = !!async;
+                            // 验收更新meta数据
+                            timeId = setTimeout(() => {
+                                actions.updateItemMeta({
+                                    parentKeys: settings.parentKeys,
+                                    keys: [],
+                                    meta: root.value
+                                });
+                            }, 200);
 
                             let valRes = await validate(props.data.toJS());
 
@@ -120,6 +122,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             if (!root) {
                                 return;
                             }
+                            // 处理错误
                             e.errors.forEach((element: ErrorObject) => {
                                 let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
                                 let childNode = root.addChild(dataKeys, Immutable.fromJS({}));
@@ -137,6 +140,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 errors: e.errors
                             });
                         } finally {
+                            clearTimeout(timeId);
                             root.forEach((node: TreeMap) => {
                                 if (node.value) {
                                     return node.value.merge($validateAfterData);

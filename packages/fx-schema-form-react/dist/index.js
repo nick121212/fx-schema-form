@@ -7,7 +7,7 @@
 		exports["SchemaFormReact"] = factory(require("react"), require("recompose"), require("immutable"), require("fx-schema-form-core"), require("react-redux"), require("resolve-pathname"), require("reselect"), require("redux-act"), require("redux"), require("prop-types"), require("ajv"));
 	else
 		root["SchemaFormReact"] = factory(root["React"], root["recompose"], root["Immutable"], root["SchemaFormCore"], root["react-redux"], root["resolve-pathname"], root["reselect"], root["redux-act"], root["Redux"], root["prop-types"], root["Ajv"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_20__, __WEBPACK_EXTERNAL_MODULE_49__, __WEBPACK_EXTERNAL_MODULE_92__, __WEBPACK_EXTERNAL_MODULE_100__, __WEBPACK_EXTERNAL_MODULE_107__, __WEBPACK_EXTERNAL_MODULE_114__, __WEBPACK_EXTERNAL_MODULE_116__, __WEBPACK_EXTERNAL_MODULE_122__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_17__, __WEBPACK_EXTERNAL_MODULE_18__, __WEBPACK_EXTERNAL_MODULE_49__, __WEBPACK_EXTERNAL_MODULE_92__, __WEBPACK_EXTERNAL_MODULE_100__, __WEBPACK_EXTERNAL_MODULE_107__, __WEBPACK_EXTERNAL_MODULE_114__, __WEBPACK_EXTERNAL_MODULE_116__, __WEBPACK_EXTERNAL_MODULE_122__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -215,7 +215,7 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return reducerFactory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hocFactory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return themeFactory; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hocs__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reducer__ = __webpack_require__(101);
@@ -234,7 +234,7 @@ reducerFactory.add("schemaForm", __WEBPACK_IMPORTED_MODULE_2__reducer__["a" /* s
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(19);
+var anObject = __webpack_require__(20);
 var IE8_DOM_DEFINE = __webpack_require__(41);
 var toPrimitive = __webpack_require__(27);
 var dP = Object.defineProperty;
@@ -353,6 +353,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_17__;
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(6);
@@ -419,7 +425,7 @@ module.exports = $export;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(14);
@@ -428,12 +434,6 @@ module.exports = function (it) {
   return it;
 };
 
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
 
 /***/ }),
 /* 21 */
@@ -533,7 +533,7 @@ module.exports = {};
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(19);
+var anObject = __webpack_require__(20);
 var dPs = __webpack_require__(62);
 var enumBugKeys = __webpack_require__(33);
 var IE_PROTO = __webpack_require__(31)('IE_PROTO');
@@ -683,7 +683,7 @@ __WEBPACK_IMPORTED_MODULE_0__component__["a" /* SchemaForm */].propTypes = Objec
 "use strict";
 
 var LIBRARY = __webpack_require__(26);
-var $export = __webpack_require__(18);
+var $export = __webpack_require__(19);
 var redefine = __webpack_require__(43);
 var hide = __webpack_require__(13);
 var has = __webpack_require__(10);
@@ -1083,7 +1083,7 @@ module.exports = __webpack_require__(53);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fx_schema_form_core__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__factory__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components__ = __webpack_require__(109);
@@ -1164,7 +1164,7 @@ var hocs = [__WEBPACK_IMPORTED_MODULE_0__merge__["a" /* default */], __WEBPACK_I
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__);
 
 
@@ -1338,7 +1338,7 @@ module.exports = function (Constructor, NAME, next) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(8);
-var anObject = __webpack_require__(19);
+var anObject = __webpack_require__(20);
 var getKeys = __webpack_require__(30);
 
 module.exports = __webpack_require__(9) ? Object.defineProperties : function defineProperties(O, Properties) {
@@ -1565,7 +1565,7 @@ module.exports = __webpack_require__(12).Symbol;
 var global = __webpack_require__(6);
 var has = __webpack_require__(10);
 var DESCRIPTORS = __webpack_require__(9);
-var $export = __webpack_require__(18);
+var $export = __webpack_require__(19);
 var redefine = __webpack_require__(43);
 var META = __webpack_require__(77).KEY;
 var $fails = __webpack_require__(21);
@@ -1577,7 +1577,7 @@ var wksExt = __webpack_require__(35);
 var wksDefine = __webpack_require__(36);
 var enumKeys = __webpack_require__(78);
 var isArray = __webpack_require__(79);
-var anObject = __webpack_require__(19);
+var anObject = __webpack_require__(20);
 var isObject = __webpack_require__(14);
 var toIObject = __webpack_require__(15);
 var toPrimitive = __webpack_require__(27);
@@ -1951,7 +1951,7 @@ module.exports = __webpack_require__(12).Object.setPrototypeOf;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(18);
+var $export = __webpack_require__(19);
 $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(87).set });
 
 
@@ -1962,7 +1962,7 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(87).set });
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 var isObject = __webpack_require__(14);
-var anObject = __webpack_require__(19);
+var anObject = __webpack_require__(20);
 var check = function (O, proto) {
   anObject(O);
   if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
@@ -2007,7 +2007,7 @@ module.exports = function create(P, D) {
 /* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(18);
+var $export = __webpack_require__(19);
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 $export($export.S, 'Object', { create: __webpack_require__(29) });
 
@@ -2027,7 +2027,7 @@ $export($export.S, 'Object', { create: __webpack_require__(29) });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_inherits__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_fx_schema_form_core__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_immutable__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_immutable__);
@@ -2670,7 +2670,9 @@ var hoc = function hoc(hocFactory) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_recompose__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_recompose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_recompose__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__factory__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_fx_schema_form_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_fx_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_fx_schema_form_core__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__factory__ = __webpack_require__(7);
 
 
 
@@ -2713,6 +2715,7 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
 
 
 
+
 var name = "validate";
 var hoc = function hoc(hocFactory) {
     return function () {
@@ -2738,7 +2741,7 @@ var hoc = function hoc(hocFactory) {
                 validate: function validate(propsCur) {
                     return function (props, data) {
                         return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                            var result, schema, timeId, validateResult, error;
+                            var result, schema, timeId, validateFunc, schemaInCache, error;
                             return regeneratorRuntime.wrap(function _callee$(_context) {
                                 while (1) {
                                     switch (_context.prev = _context.next) {
@@ -2746,84 +2749,76 @@ var hoc = function hoc(hocFactory) {
                                             result = { dirty: true, isValid: false, isLoading: false };
                                             schema = Object.assign({}, props.uiSchema);
                                             timeId = setTimeout(function () {
-                                                __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemMeta({
+                                                __WEBPACK_IMPORTED_MODULE_7__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                                                     parentKeys: props.parentKeys,
                                                     keys: schema.keys,
                                                     meta: { isLoading: true, isValid: false, errorText: false }
                                                 });
                                             }, 200);
                                             _context.prev = 3;
-                                            validateResult = void 0;
+                                            validateFunc = void 0;
 
-                                            if (!schema.$id) {
-                                                _context.next = 11;
-                                                break;
+                                            if (schema.schemaPath && props.ajv.getSchema(schema.schemaPath)) {
+                                                validateFunc = props.ajv.getSchema(schema.schemaPath);
+                                            } else if (schema.$id) {
+                                                validateFunc = props.ajv.getSchema(schema.$id);
+                                            } else {
+                                                schemaInCache = Object.assign({}, __WEBPACK_IMPORTED_MODULE_6_fx_schema_form_core__["schemaFieldFactory"].get(schema.schemaPath));
+
+                                                delete schemaInCache.$id;
+                                                delete schemaInCache.$ref;
+                                                validateFunc = props.ajv.compile(schemaInCache);
                                             }
-
                                             _context.next = 8;
-                                            return props.ajv.getSchema(schema.$id)(data);
+                                            return validateFunc(data);
 
                                         case 8:
-                                            validateResult = _context.sent;
-                                            _context.next = 16;
-                                            break;
+                                            result.isValid = _context.sent;
 
-                                        case 11:
-                                            delete schema.$id;
-                                            delete schema.$ref;
-                                            _context.next = 15;
-                                            return props.ajv.validate(schema, data);
-
-                                        case 15:
-                                            validateResult = _context.sent;
-
-                                        case 16:
-                                            result.isValid = validateResult;
-
-                                            if (validateResult) {
-                                                _context.next = 21;
+                                            if (result.isValid) {
+                                                _context.next = 13;
                                                 break;
                                             }
 
                                             error = new Error();
 
-                                            error.errors = props.ajv.errors;
+                                            error.errors = validateFunc.errors;
                                             throw error;
 
-                                        case 21:
-                                            _context.next = 26;
+                                        case 13:
+                                            _context.next = 18;
                                             break;
 
-                                        case 23:
-                                            _context.prev = 23;
+                                        case 15:
+                                            _context.prev = 15;
                                             _context.t0 = _context["catch"](3);
 
                                             result.errorText = _context.t0.errors ? props.ajv.errorsText(_context.t0.errors, {
                                                 dataVar: props.getTitle(props).toString()
                                             }) : _context.t0.message;
 
-                                        case 26:
-                                            _context.prev = 26;
+                                        case 18:
+                                            _context.prev = 18;
 
                                             clearTimeout(timeId);
-                                            return _context.finish(26);
+                                            return _context.finish(18);
 
-                                        case 29:
+                                        case 21:
                                             return _context.abrupt("return", result);
 
-                                        case 30:
+                                        case 22:
                                         case "end":
                                             return _context.stop();
                                     }
                                 }
-                            }, _callee, this, [[3, 23, 26, 29]]);
+                            }, _callee, this, [[3, 15, 18, 21]]);
                         }));
                     };
                 }
             }), Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
                 updateItemData: function updateItemData(propsCur) {
                     return function (props, data, meta) {
-                        __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemData({
+                        __WEBPACK_IMPORTED_MODULE_7__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions.updateItemData({
                             parentKeys: props.parentKeys,
                             keys: props.uiSchema.keys,
                             data: data,
@@ -2840,7 +2835,7 @@ var hoc = function hoc(hocFactory) {
                                 while (1) {
                                     switch (_context2.prev = _context2.next) {
                                         case 0:
-                                            _context2.t0 = __WEBPACK_IMPORTED_MODULE_6__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions;
+                                            _context2.t0 = __WEBPACK_IMPORTED_MODULE_7__factory__["b" /* reducerFactory */].get(props.reducerKey || "schemaForm").actions;
                                             _context2.t1 = props.parentKeys;
                                             _context2.t2 = props.uiSchema.keys;
                                             _context2.t3 = meta;
@@ -3017,8 +3012,8 @@ var hoc = function hoc(hocFactory) {
                             Temp = _ref.Temp;
 
                         var tempOptions = getOptions(_this2.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].template, key),
-                            TempWithHoc = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, tempOptions.tempHocs || [])(Temp);
-                        return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(TempWithHoc, { tempKey: key, ajv: _this2.props.ajv, uiSchema: _this2.props.uiSchema, schemaId: _this2.props.schemaId, arrayLevel: _this2.props.arrayLevel, reducerKey: reducerKey, arrayIndex: _this2.props.arrayIndex, globalOptions: _this2.props.globalOptions, ArrayComponent: _this2.props.ArrayComponent, ArrayItemComponent: _this2.props.ArrayItemComponent, initArrayComponent: _this2.props.initArrayComponent, parentKeys: _this2.props.parentKeys, getTitle: _this2.props.getTitle, getOptions: _this2.props.getOptions, getPathKeys: _this2.props.getPathKeys, children: prev });
+                            TempWithHoc = __WEBPACK_IMPORTED_MODULE_4_recompose__["compose"].apply(undefined, [hocFactory.get("utils")()].concat(tempOptions.tempHocs || []))(Temp);
+                        return __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(TempWithHoc, { tempKey: key, ajv: _this2.props.ajv, uiSchema: _this2.props.uiSchema, schemaId: _this2.props.schemaId, arrayLevel: _this2.props.arrayLevel, reducerKey: reducerKey, arrayIndex: _this2.props.arrayIndex, globalOptions: _this2.props.globalOptions, ArrayComponent: _this2.props.ArrayComponent, ArrayItemComponent: _this2.props.ArrayItemComponent, initArrayComponent: _this2.props.initArrayComponent, parentKeys: _this2.props.parentKeys, children: prev });
                     }, __WEBPACK_IMPORTED_MODULE_3_react___default.a.createElement(Component, Object.assign({}, this.props)));
                 };
 
@@ -3549,7 +3544,7 @@ module.exports = function defineProperty(it, key, desc) {
 /* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(18);
+var $export = __webpack_require__(19);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !__webpack_require__(9), 'Object', { defineProperty: __webpack_require__(8).f });
 
@@ -4174,7 +4169,8 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
             };
         }), Object(__WEBPACK_IMPORTED_MODULE_5_recompose__["withHandlers"])({
             validateAll: function validateAll(props) {
-                var actions = __WEBPACK_IMPORTED_MODULE_9__factory__["b" /* reducerFactory */].get(props.reducerKey).actions;
+                var actions = __WEBPACK_IMPORTED_MODULE_9__factory__["b" /* reducerFactory */].get(props.reducerKey).actions,
+                    timeId = void 0;
                 return function (async) {
                     return __awaiter(_this2, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
                         var root, validate, $validateBeforeData, $validateAfterData, normalizeDataPath, valRes;
@@ -4212,11 +4208,13 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
                                             }
                                             return $validateBeforeData;
                                         }, true);
-                                        actions.updateItemMeta({
-                                            parentKeys: settings.parentKeys,
-                                            keys: [],
-                                            meta: root.value
-                                        });
+                                        timeId = setTimeout(function () {
+                                            actions.updateItemMeta({
+                                                parentKeys: settings.parentKeys,
+                                                keys: [],
+                                                meta: root.value
+                                            });
+                                        }, 200);
                                         _context.next = 10;
                                         return validate(props.data.toJS());
 
@@ -4280,6 +4278,7 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
                                     case 25:
                                         _context.prev = 25;
 
+                                        clearTimeout(timeId);
                                         root.forEach(function (node) {
                                             if (node.value) {
                                                 return node.value.merge($validateAfterData);
@@ -4293,12 +4292,12 @@ var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, gene
                                         });
                                         return _context.finish(25);
 
-                                    case 29:
+                                    case 30:
                                     case "end":
                                         return _context.stop();
                                 }
                             }
-                        }, _callee, this, [[5, 17, 25, 29]]);
+                        }, _callee, this, [[5, 17, 25, 30]]);
                     }));
                 };
             }

@@ -6,7 +6,6 @@ import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/vali
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 export declare class AntdSelectWidget extends PureComponent<AntdInputWidgetProps, any> {
-    private _count;
     private setDefaultProps();
     render(): JSX.Element;
 }
