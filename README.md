@@ -2,6 +2,8 @@
 
 爬虫前端核心组件。用于生成静态或者动态表单；
 
+## [DEMO](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html)
+
 ## 一个一直有想法但并没有花时间去实现的功能
 
 ![效果图](./images/effect.png)
