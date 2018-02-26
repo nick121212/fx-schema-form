@@ -16,7 +16,7 @@ const __PROD__ = env.toUpperCase() == "PRODUCTION";
 module.exports = {
     entry: __PROD__ ? "./src/index.tsx" : ["babel-polyfill", "tachyons", "./src/demo/index.tsx"],
     devServer: devServer,
-    devtool: 'inline-source-map',
+    // devtool: 'source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,
@@ -119,6 +119,17 @@ module.exports = {
         new CheckerPlugin(),
         new HtmlWebpackPlugin({
             template: "index.html"
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            },
+            output: {
+                beautify: false
+            },
+            mangle: {
+                eval: true
+            }
         })
     ] : [
         new webpack.optimize.UglifyJsPlugin({
