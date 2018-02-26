@@ -19,7 +19,7 @@ const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReac
 }) as any)
 export class TreeForm extends React.PureComponent<any> {
     public render() {
-        const { isValidating = false, isValid = false, validateAll } = this.props;
+        const { isValidating = false, isValid = false, validateAll, data } = this.props;
 
         if (!this.props.root) {
             return null;
@@ -39,6 +39,9 @@ export class TreeForm extends React.PureComponent<any> {
                 ajv={curAjv} >
             </SchemaForm>
             <div className="tc">
+
+                {JSON.stringify(data.toJS())}
+
                 <button key={"submit" + isValidating + isValid}
                     type="primary"
                     className="pa3 mt5 ba b--dashed w-90"
