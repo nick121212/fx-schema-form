@@ -16,7 +16,7 @@ const __PROD__ = env.toUpperCase() == "PRODUCTION";
 module.exports = {
     entry: __PROD__ ? "./src/index.tsx" : ["babel-polyfill", "tachyons", "./src/demo/index.tsx"],
     devServer: devServer,
-    // devtool: 'source-map',
+    devtool: 'source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,

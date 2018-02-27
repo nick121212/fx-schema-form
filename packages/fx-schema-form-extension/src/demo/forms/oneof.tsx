@@ -60,7 +60,13 @@ export class OneOfForm extends React.PureComponent<any> {
                                     1: { index: 0, uiSchema: ["*"] },
                                     2: { index: 1, uiSchema: ["*"] },
                                     3: { index: 2, uiSchema: ["*"] },
-                                    4: { index: 3, uiSchema: ["*"] }
+                                    4: {
+                                        index: 3, uiSchema: [{
+                                            key: "",
+                                            temps: ["formitem"],
+                                            children: ["*"]
+                                        }]
+                                    }
                                 }
                             }
                         }

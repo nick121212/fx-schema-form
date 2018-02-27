@@ -2127,18 +2127,21 @@ var hoc = function hoc(hocFactory) {
                     var _props$uiSchema = props.uiSchema,
                         uiSchema = _props$uiSchema === undefined ? {} : _props$uiSchema,
                         globalOptions = props.globalOptions;
-                    var options = uiSchema.options;
-
-                    var optionsArray = [];
-                    if (globalOptions && globalOptions.hasIn([category, "default"])) {
-                        optionsArray.push(globalOptions.getIn([category, "default"]));
-                    }
-                    if (globalOptions && globalOptions.hasIn([category, field])) {
-                        optionsArray.push(globalOptions.getIn([category, field]));
-                    }
-                    if (options && options.hasIn([category, field])) {
-                        optionsArray.push(options.getIn([category, field]));
-                    }
+                    var options = uiSchema.options,
+                        optionsArray = [],
+                        getOptions = function getOptions(o, c, f) {
+                        if (o) {
+                            if (!__WEBPACK_IMPORTED_MODULE_5_immutable___default.a.Map.isMap(o)) {
+                                o = __WEBPACK_IMPORTED_MODULE_5_immutable___default.a.fromJS(o);
+                            }
+                            if (o.hasIn([c, f])) {
+                                optionsArray.push(o.getIn([c, f]));
+                            }
+                        }
+                    };
+                    getOptions(globalOptions, category, "default");
+                    getOptions(globalOptions, category, field);
+                    getOptions(options, category, field);
 
                     for (var _len = arguments.length, extraSettings = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
                         extraSettings[_key - 3] = arguments[_key];
@@ -3024,11 +3027,14 @@ var hoc = function hoc(hocFactory) {
                         getOptions = _props2.getOptions,
                         keys = uiSchema.keys,
                         type = uiSchema.type,
+                        temps = uiSchema.temps,
                         typeDefaultOptions = getOptions(this.props, __WEBPACK_IMPORTED_MODULE_5__models_index__["a" /* schemaFormTypes */].field, type),
                         TempComponent = [];
 
                     var template = void 0;
-                    if (settings.templates && settings.templates.length > 0) {
+                    if (temps) {
+                        template = temps;
+                    } else if (settings.templates && settings.templates.length > 0) {
                         template = settings.templates;
                     } else {
                         template = typeDefaultOptions[settings.tempField] || "default";

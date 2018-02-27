@@ -59,12 +59,14 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 */
                 private getTemplates(): Array<{ key: string, Temp: RC<any, any> }> {
                     const { uiSchema, currentTheme, getOptions } = this.props,
-                        { keys, type } = uiSchema as FxUiSchema,
+                        { keys, type, temps } = uiSchema as FxUiSchema,
                         typeDefaultOptions = getOptions(this.props, schemaFormTypes.field, type as string),
                         TempComponent: Array<{ key: string, Temp: RC<any, any> }> = [];
                     let template: Array<any>;
 
-                    if (settings.templates && settings.templates.length > 0) {
+                    if (temps) {
+                        template = temps;
+                    } else if (settings.templates && settings.templates.length > 0) {
                         template = settings.templates;
                     } else {
                         template = typeDefaultOptions[settings.tempField] || "default";

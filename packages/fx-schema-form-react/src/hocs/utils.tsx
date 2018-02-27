@@ -123,20 +123,42 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getOptions(props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
                     : { [key: string]: any } {
                     const { uiSchema = {}, globalOptions } = props;
-                    const { options } = uiSchema as FxUiSchema;
-                    let optionsArray: Immutable.Map<string, any>[] = [];
+                    let { options } = uiSchema as FxUiSchema,
+                        optionsArray: Immutable.Map<string, any>[] = [],
+                        getOptions = (o: any, c: string, f: string) => {
+                            if (o) {
+                                if (!Immutable.Map.isMap(o)) {
+                                    o = Immutable.fromJS(o);
+                                }
+                                if (o.hasIn([c, f])) {
+                                    optionsArray.push(o.getIn([c, f]));
+                                }
+                            }
+                        };
 
-                    if (globalOptions && globalOptions.hasIn([category, "default"])) {
-                        optionsArray.push(globalOptions.getIn([category, "default"]));
-                    }
+                    // 从globalOptions中抽取default的配置
+                    // 从globalOptions中抽取field的配置
+                    // 从options中抽取field的配置
+                    getOptions(globalOptions, category, "default");
+                    getOptions(globalOptions, category, field);
+                    getOptions(options, category, field);
 
-                    if (globalOptions && globalOptions.hasIn([category, field])) {
-                        optionsArray.push(globalOptions.getIn([category, field]));
-                    }
+                    // if (globalOptions && globalOptions.hasIn([category, "default"])) {
+                    //     optionsArray.push(globalOptions.getIn([category, "default"]));
+                    // }
 
-                    if (options && options.hasIn([category, field])) {
-                        optionsArray.push(options.getIn([category, field]));
-                    }
+                    // if (globalOptions && globalOptions.hasIn([category, field])) {
+                    //     optionsArray.push(globalOptions.getIn([category, field]));
+                    // }
+
+                    // if (options) {
+                    //     if (!Immutable.Map.isMap(options)) {
+                    //         options = Immutable.fromJS(options);
+                    //     }
+                    //     if (options.hasIn([category, field])) {
+                    //         optionsArray.push(options.getIn([category, field]));
+                    //     }
+                    // }
 
                     optionsArray = optionsArray.concat(extraSettings);
 
