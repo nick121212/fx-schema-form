@@ -49,7 +49,7 @@ export const globalOptions = Immutable.fromJS({
                                     uiSchema: {
                                         keys: uiSchema.keys.concat("leftNode")
                                     }
-                                }, {});
+                                }, { value: prps.arrayLevel.length + "--left" });
                             }} >添加左节点</Button> : null}
                             {(!formItemData || !formItemData.has("rightNode")) ? <Button key="right" type="primary" onClick={() => {
                                 updateItemData({
@@ -57,7 +57,7 @@ export const globalOptions = Immutable.fromJS({
                                     uiSchema: {
                                         keys: uiSchema.keys.concat("rightNode")
                                     }
-                                }, {});
+                                }, { value: prps.arrayLevel.length + "--right" });
                             }} >添加右节点</Button> : null}
                         </Button.Group>;
                     }

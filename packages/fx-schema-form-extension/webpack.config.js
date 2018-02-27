@@ -120,17 +120,17 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "index.html"
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            output: {
-                beautify: false
-            },
-            mangle: {
-                eval: true
-            }
-        })
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     },
+        //     output: {
+        //         beautify: false
+        //     },
+        //     mangle: {
+        //         eval: true
+        //     }
+        // })
     ] : [
         new webpack.optimize.UglifyJsPlugin({
             compress: {

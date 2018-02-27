@@ -7,7 +7,7 @@ export default {
             type: "object",
             properties: {
                 value: {
-                    type: "number"
+                    type: "string"
                 },
                 leftNode: {
                     $ref: "dnd-tree#/properties/root"

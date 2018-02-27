@@ -34,13 +34,15 @@ export class TreeForm extends React.PureComponent<any> {
                     key: "root",
                     field: "tree"
                 }]}
+                arrayLevel={[0]}
                 parentKeys={this.props.parentKeys}
                 globalOptions={treeGlobalOptions}
                 ajv={curAjv} >
             </SchemaForm>
             <div className="tc">
 
-                {JSON.stringify(data.toJS())}
+                <textarea cols={30} rows={10} value={JSON.stringify(data.toJS(), null, 4)}>
+                </textarea>
 
                 <button key={"submit" + isValidating + isValid}
                     type="primary"

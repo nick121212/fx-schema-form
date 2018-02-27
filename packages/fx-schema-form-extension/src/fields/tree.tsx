@@ -55,8 +55,7 @@ export class TreeField extends PureComponent<ObjectFieldProps, any> {
         return (
             <SchemaFormWithHoc
                 key={children.length}
-                arrayIndex={arrayIndex}
-                arrayLevel={arrayLevel}
+                arrayLevel={arrayLevel ? arrayLevel.concat([0]) : [0]}
                 reducerKey={reducerKey}
                 schemaId={uiSchema.schemaPath}
                 uiSchemas={children}
