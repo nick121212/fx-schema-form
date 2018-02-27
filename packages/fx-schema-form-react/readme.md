@@ -2,6 +2,8 @@
 
 爬虫前端核心组件。
 
+## [DEMO](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html)
+
 ## react-schema-form-react V3
 
 通过[json-schema](http://jsonschema.net/),[ui-schema](#custoization-ui-schema),自动生成表单组件。前后端可以复用一份JsonSchema来验证字段，错误消息前后端统一，这个可以有。
