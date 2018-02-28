@@ -1,7 +1,7 @@
 import { Ajv, ValidateFunction } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { default as ResolveLib } from "../libs/resolve";
+import { default as ResolveLib, getDataKeys } from "../libs/resolve";
 
 /**
  * 解析schema中的关键字 ref
@@ -19,7 +19,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
             delete schemaAjv.$id;
 
             Object.assign(schemaAjv, {
-                refKeys: ResolveLib.getDataKeys(schema.$ref)
+                refKeys: getDataKeys(schema.$ref)
             });
 
             return schemaAjv;

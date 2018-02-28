@@ -1,7 +1,7 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { default as ResolveLib } from "../libs/resolve";
+import { default as ResolveLib, getDataKeys } from "../libs/resolve";
 
 const items = "items";
 
@@ -16,7 +16,7 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
             [schemaKey, items].join("/")
         );
 
-        const keys: string[] = ResolveLib.getDataKeys([schemaKey, items].join("/"));
+        const keys: string[] = getDataKeys([schemaKey, items].join("/"));
 
         Object.assign(propertySchemaResolve.mergeSchema, {
             keys

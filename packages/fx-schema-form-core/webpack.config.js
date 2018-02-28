@@ -41,7 +41,6 @@ module.exports = {
         filename: __PROD__ ? 'index.prd.js' : 'index.dev.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        strictModuleExceptionHandling: true,
         sourceMapFilename: __PROD__ ? 'index.prd.js.map' : 'index.dev.js.map',
         library: "SFC",
         // umdNamedDefine: true,

@@ -18,7 +18,7 @@ export default (schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
     let anyOf = schema.anyOf;
 
     if (anyOf && anyOf.constructor === Array) {
-        schema.oneOf = anyOf.map((schemaOfOne: JSONSchema6) => {
+        schema.anyOf = anyOf.map((schemaOfOne: JSONSchema6) => {
             let { mergeSchema } = new ResolveLib(ajv, schemaOfOne);
 
             // if (mergeSchema.$id) {

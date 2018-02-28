@@ -8,17 +8,17 @@
 
 
     <script src="node_modules/ajv/dist/ajv.min.js"></script>
-    <script src="./dist/index.js"></script>
+    <script src="./dist/index.prd.js"></script>
 </head>
 
 <body>
     <script>
-        console.log(SchemaFormCore);
+        console.log(SFC);
         var ajv = new Ajv({
             extendRefs: true,
             missingRefs: true
         });
-        var b = [new SchemaFormCore.ResolveLib(ajv, {
+        var b = [new SFC.ResolveLib(ajv, {
             type: "object",
             $id: "design",
             required: ["name", "dsModelIds"],
@@ -93,12 +93,12 @@
             }
         })];
 
-        let merge = new SchemaFormCore.MergeLib(ajv, "design", null, ["appType"]);
+        let merge = new SFC.MergeLib(ajv, "design", null, ["appType"]);
         // let merge1 = new SchemaFormCore.MergeLib(ajv, "appType-1", null, ["*"]);
 
         console.log(merge);
 
-        let merge1 = new SchemaFormCore.MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
+        let merge1 = new SFC.MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
             merge.mergeUiSchemaList[0], ["*"]);
 
         console.log(merge1);

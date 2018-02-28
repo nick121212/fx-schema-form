@@ -51,7 +51,7 @@ module.exports = {
             commonjs: 'redux'
         },
         "fx-schema-form-core": {
-            root: 'SchemaFormCore',
+            root: 'SFC',
             amd: 'fx-schema-form-core',
             commonjs2: 'fx-schema-form-core',
             commonjs: 'fx-schema-form-core'
@@ -116,26 +116,18 @@ module.exports = {
             template: "index.html"
         })
     ] : [
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     },
-        //     output: {
-        //         beautify: false
-        //     },
-        //     mangle: {
-        //         eval: true
-        //     }
-        // })
+        new UglifyJsPlugin({
+            sourceMap: true
+        })
     ],
     output: __PROD__ ? {
         path: path.resolve('./dist'),
         filename: 'index.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        strictModuleExceptionHandling: true,
+        // strictModuleExceptionHandling: true,
         // sourceMapFilename: "index.map",
-        library: "SchemaFormReact",
+        library: "SFR",
         umdNamedDefine: true,
         libraryExport: "default"
     } : {

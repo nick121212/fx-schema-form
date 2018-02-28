@@ -7,6 +7,65 @@ import { schemaTypeFactory } from "../factory";
 const regexp = /#$/g;
 
 /**
+* 解析path成成数据的路径
+* 最终schema需要与uiSchema做合并，uiSchema中的key配置的是数组 ["appType', '-','type']，所以需要做一下转换
+* 1. 去掉properties，items关键字转换成【 - 】
+* 2. 第一个字符去掉末尾的【 # 】
+* @example design#/properties/appType => ["appType']
+* @example design#/properties/appType/type => ["appType','type']
+* @example design#/properties/appType/items/properties/type => ["appType', '-','type']
+* @param schemaKey schema的path
+* @param keepFirst 是否需要保留第一个
+*/
+export const getDataKeys = (schemaKey: string, keepFirst = false): string[] => {
+    let keys = schemaKey.split("/").map((key: string, index: number) => {
+        // 第一个替换末尾的#
+        if (index === 0 && regexp.test(key)) {
+            // 这里是regexp的陷阱,需要修改lastIndex = 0
+            // 对于同一个正则表达式对象regex，不能重复调用：第一次返回true，第二次就返回false，很显然这种效果不是我们想要的。
+            // 这是因为RegExp.test()方法，第一次从位置0开始查找，可以匹配；第二次的查找位置就不是0了，说以就不能匹配了。
+            regexp.lastIndex = 0;
+            return keepFirst ? key.replace(regexp, "") : null;
+        }
+
+        // 去掉properties
+        if (key === "properties") {
+            return null;
+        }
+
+        // 转换items成-
+        if (key === "items") {
+            return "-";
+        }
+
+        return key;
+    });
+
+    // 提取其中不为空的项
+    return keys.filter((key: string | null) => {
+        return key !== null;
+    }) as string[];
+};
+
+/**
+* 从schemaPath中获取$id
+* @param schemaKey 当前schema的path
+*/
+export const getSchemaId = (schemaKey: string): string => {
+    const keys = schemaKey.split("/");
+
+    if (!keys.length) {
+        if (!__PROD__) {
+            throw new Error(`${schemaKey} not a valid schemaPath.`);
+        }
+        return "";
+    }
+
+    return keys[0].replace(regexp, "");
+};
+
+
+/**
  * 解析schema中的字段，缓存到【schemaFieldFactory】中
  * 1. 验证schema的合法性
  * 2. 提取成map
@@ -38,7 +97,7 @@ export default class ResolveLib {
             if (!__PROD__) {
                 throw new Error(`id is required.`);
             }
-            return;
+            return schema;
         }
 
         // 验证schema的正确性
@@ -84,64 +143,6 @@ export default class ResolveLib {
         if (schemaTypeFactory.has(type)) {
             this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || (schema.$id + "#"), this.ajv);
         }
-    }
-
-    /**
-     * 解析path成成数据的路径
-     * 最终schema需要与uiSchema做合并，uiSchema中的key配置的是数组 ["appType', '-','type']，所以需要做一下转换
-     * 1. 去掉properties，items关键字转换成【 - 】
-     * 2. 第一个字符去掉末尾的【 # 】
-     * @example design#/properties/appType => ["appType']
-     * @example design#/properties/appType/type => ["appType','type']
-     * @example design#/properties/appType/items/properties/type => ["appType', '-','type']
-     * @param schemaKey schema的path
-     * @param keepFirst 是否需要保留第一个
-     */
-    public static getDataKeys(schemaKey: string, keepFirst = false): string[] {
-        let keys = schemaKey.split("/").map((key: string, index: number) => {
-            // 第一个替换末尾的#
-            if (index === 0 && regexp.test(key)) {
-                // 这里是regexp的陷阱,需要修改lastIndex = 0
-                // 对于同一个正则表达式对象regex，不能重复调用：第一次返回true，第二次就返回false，很显然这种效果不是我们想要的。
-                // 这是因为RegExp.test()方法，第一次从位置0开始查找，可以匹配；第二次的查找位置就不是0了，说以就不能匹配了。
-                regexp.lastIndex = 0;
-                return keepFirst ? key.replace(regexp, "") : null;
-            }
-
-            // 去掉properties
-            if (key === "properties") {
-                return null;
-            }
-
-            // 转换items成-
-            if (key === "items") {
-                return "-";
-            }
-
-            return key;
-        });
-
-        // 提取其中不为空的项
-        return keys.filter((key: string | null) => {
-            return key !== null;
-        }) as string[];
-    }
-
-    /**
-     * 从schemaPath中获取$id
-     * @param schemaKey 当前schema的path
-     */
-    public static getSchemaId(schemaKey: string): string {
-        const keys = schemaKey.split("/");
-
-        if (!keys.length) {
-            if (!__PROD__) {
-                throw new Error(`${schemaKey} not a valid schemaPath.`);
-            }
-            return;
-        }
-
-        return keys[0].replace(regexp, "");
     }
 }
 

@@ -40,6 +40,8 @@ export class BaseFactory<T> {
         if (!__PROD__) {
             throw new Error(`name=[${name}]not exist`);
         }
+
+        return null as any;
     }
 
     /**

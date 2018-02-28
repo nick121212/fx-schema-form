@@ -8,7 +8,9 @@ import {
     schemaTypeFactory,
     schemaFieldFactory,
     schemaKeysFactory,
-    ResolveLib
+    ResolveLib,
+    getSchemaId,
+    getDataKeys
 } from "../../dist/index.dev";
 
 describe("测试ResolveLib类", () => {
@@ -41,10 +43,10 @@ describe("测试ResolveLib类", () => {
     });
 
     it("ResolveLib中静态方法，【getSchemaId】【getDataKeys】", () => {
-        expect(ResolveLib.getSchemaId("test#/properties/name")).to.equal("test");
-        expect(ResolveLib.getSchemaId("test/properties/name")).to.equal("test");
-        expect(ResolveLib.getDataKeys("test#/properties/name").join()).to.equal(["name"].join());
-        expect(ResolveLib.getDataKeys("test#/properties/names/items").join()).to.equal(["names", "-"].join());
+        expect(getSchemaId("test#/properties/name")).to.equal("test");
+        expect(getSchemaId("test/properties/name")).to.equal("test");
+        expect(getDataKeys("test#/properties/name").join()).to.equal(["name"].join());
+        expect(getDataKeys("test#/properties/names/items").join()).to.equal(["names", "-"].join());
     });
 
     it("", () => {
@@ -96,9 +98,6 @@ describe("测试ResolveLib类", () => {
         };
 
         new ResolveLib(ajv, schema);
-
-        console.log(ajv.getSchema("dnd-oneof-string"));
-
     });
 
 });

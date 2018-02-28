@@ -4,34 +4,22 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
-const {
-    CheckerPlugin
-} = require('awesome-typescript-loader');
-
 const env = process.env.NODE_ENV || "dev";
 
 const __DEV__ = env.toUpperCase() == "DEV" || env.toUpperCase() == "DEVELOPMENT";
 const __PROD__ = env.toUpperCase() == "PRODUCTION";
 
 module.exports = {
-    entry: __PROD__ ? "./src/index.tsx" : ["babel-polyfill", "tachyons", "./src/demo/index.tsx"],
+    entry: {
+        index: "./src/index.tsx",
+        // demo: [ "tachyons", "./src/demo/index.tsx"]
+    },
     devServer: devServer,
     devtool: 'source-map',
     module: {
         rules: [{
             test: /\.tsx?$/,
-            loader: 'awesome-typescript-loader',
-            options: {
-                "transpileOnly": false,
-                "useBabel": true,
-                "babelOptions": {
-                    "babelrc": false,
-                    "presets": [
-                        ["env"]
-                    ]
-                },
-                "babelCore": "babel-core",
-            },
+            loaders: ['babel-loader', 'ts-loader'],
             exclude: /node_modules/
         }, {
             test: /\.css$/,
@@ -62,10 +50,16 @@ module.exports = {
             commonjs: 'redux'
         },
         "fx-schema-form-core": {
-            root: 'SchemaFormCore',
+            root: 'SFC',
             amd: 'fx-schema-form-core',
             commonjs2: 'fx-schema-form-core',
             commonjs: 'fx-schema-form-core'
+        },
+        "fx-schema-form-react": {
+            root: 'SFR',
+            amd: 'fx-schema-form-react',
+            commonjs2: 'fx-schema-form-react',
+            commonjs: 'fx-schema-form-react'
         },
         "recompose": {
             root: 'recompose',
@@ -103,6 +97,12 @@ module.exports = {
             commonjs2: 'ajv',
             commonjs: 'ajv'
         },
+        "prop-types": {
+            root: 'prop-types',
+            amd: 'prop-typese',
+            commonjs2: 'prop-types',
+            commonjs: 'prop-types'
+        },
         "resolve-pathname": {
             root: 'resolve-pathname',
             amd: 'resolve-pathname',
@@ -116,32 +116,12 @@ module.exports = {
     plugins: !__PROD__ ? [
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new CheckerPlugin(),
         new HtmlWebpackPlugin({
             template: "index.html"
-        }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     },
-        //     output: {
-        //         beautify: false
-        //     },
-        //     mangle: {
-        //         eval: true
-        //     }
-        // })
+        })
     ] : [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            output: {
-                beautify: false
-            },
-            mangle: {
-                eval: true
-            }
+        new UglifyJsPlugin({
+            sourceMap: true
         })
     ],
     output: __PROD__ ? {
@@ -151,7 +131,7 @@ module.exports = {
         libraryTarget: "umd",
         strictModuleExceptionHandling: true,
         sourceMapFilename: "index.map",
-        library: "SchemaFormReactExtendsion",
+        library: "SFRT",
         // umdNamedDefine: true,
         // libraryExport: "default"
     } : {

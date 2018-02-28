@@ -60,7 +60,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
             }),
             withHandlers({
                 validateAll: (props: SchemaFormProps) => {
-                    let actions = reducerFactory.get(props.reducerKey).actions, timeId: any;
+                    let { updateItemMeta } = reducerFactory.get(props.reducerKey).actions, timeId: any;
 
                     return async (async?: boolean) => {
                         let root = props.root as TreeMap,
@@ -92,7 +92,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             }, true);
                             // 验收更新meta数据
                             timeId = setTimeout(() => {
-                                actions.updateItemMeta({
+                                updateItemMeta({
                                     parentKeys: settings.parentKeys,
                                     keys: [],
                                     meta: root.value
@@ -109,7 +109,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 isValid: true
                             });
 
-                            actions.updateItemMeta({
+                            updateItemMeta({
                                 parentKeys: settings.parentKeys,
                                 keys: [],
                                 meta: root.value
@@ -149,7 +149,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 return node.value;
                             }, true);
 
-                            actions.updateItemMeta({
+                            updateItemMeta({
                                 parentKeys: settings.parentKeys,
                                 keys: [],
                                 meta: root.value
@@ -168,9 +168,9 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 this._validateAll = this.props.validateAll.bind(this);
                 // 这里创建一个form，如果当前存在formKey，则覆盖掉当前的数据
                 if (props.formKey) {
-                    let actions = reducerFactory.get(props.reducerKey).actions;
+                    let { createForm } = reducerFactory.get(props.reducerKey).actions;
 
-                    actions.createForm({
+                    createForm({
                         key: props.formKey,
                         data: props.initData || {}
                     });
