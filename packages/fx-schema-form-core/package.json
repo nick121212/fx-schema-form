@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-core",
-  "version": "3.0.39",
+  "version": "3.0.40",
   "description": "",
   "main": "dist/index.prd.js",
   "types": "dist/typings/index.d.ts",
@@ -9,8 +9,7 @@
     "test"
   ],
   "scripts": {
-    "build": "NODE_ENV=production webpack",
-    "build_dev": "NODE_ENV=dev webpack",
+    "build": "NODE_ENV=production webpack && NODE_ENV=dev webpack",
     "test": "mocha ./tests/**/*.spec.js --require babel-register"
   },
   "repository": {

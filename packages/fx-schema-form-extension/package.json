@@ -1,9 +1,9 @@
 {
   "name": "fx-schema-form-extension",
-  "version": "3.0.11",
+  "version": "3.0.40",
   "description": "自动生成表单组件",
   "main": "dist/index.js",
-  "types": "dts/index.d.ts",
+  "types": "dist/dts/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "start": "webpack-dev-server --port=8004",
@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
-    "fx-schema-form-core": "^3.0.38",
-    "fx-schema-form-react": "^3.0.38",
+    "fx-schema-form-core": "^3.0.40",
+    "fx-schema-form-react": "^3.0.40",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-immutable-render-mixin": "^0.9.7",
