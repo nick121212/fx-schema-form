@@ -4,6 +4,7 @@ import { RC } from "../models/index";
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => void;
+    removeItemData: (props: DefaultProps, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
 export declare const name = "validate";

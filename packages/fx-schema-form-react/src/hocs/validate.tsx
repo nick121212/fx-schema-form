@@ -12,6 +12,7 @@ import { reducerFactory } from "../factory";
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => void;
+    removeItemData: (props: DefaultProps, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
 export const name = "validate";
@@ -111,6 +112,18 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 keys: (props.uiSchema as any).keys,
                                 meta: meta || await propsCur.validate(props, data),
                                 noChange: noChange
+                            });
+                        };
+                    },
+                    /**
+                     * 删除一个元素的meta和data
+                     */
+                    removeItemData: (propsCur: ValidateHocOutProps) => {
+                        return async (props: DefaultProps, meta = true) => {
+                            reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
+                                parentKeys: props.parentKeys,
+                                keys: (props.uiSchema as any).keys,
+                                meta: meta
                             });
                         };
                     }

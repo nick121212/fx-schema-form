@@ -49,14 +49,15 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props props
                  */
                 public async componentDidUpdate(props: Props) {
-                    const { uiSchema, updateItemData, getDefaultData, ajv } = props;
+                    const { uiSchema, updateItemData, getDefaultData, removeItemData, ajv } = props;
 
+                    // 清除meta数据
+                    removeItemData(props, true);
                     if (!this.currentSchema) {
-                        return updateItemData(props, null, null);
+                        return updateItemData(props, null);
                     }
-
                     // 清除当前数据
-                    updateItemData(props, await getDefaultData(ajv, this.currentSchema, null), null);
+                    updateItemData(props, await getDefaultData(ajv, this.currentSchema, null));
                 }
 
                 /**

@@ -11,7 +11,13 @@
                 }]
             ],
             "plugins": [
-                
+                ["transform-runtime", {
+                    "helpers": false,
+                    "modules": false,
+                    "polyfill": false,
+                    "regenerator": true,
+                    "moduleName": "babel-runtime"
+                }]
             ],
             "minified": false
         },

@@ -24,7 +24,6 @@ describe("validate的hoc", () => {
         let m = mount(<App schemaId={"design"} ajv={curAjv} globalOptions={gloabelOptions} uiSchema={merge.mergeUiSchemaList[0]} />);
         m = m.find(AppCom);
 
-
         return m.prop("validate")(m.props(), "3").then((d) => {
             expect(d.isValid).to.eq(false);
         });
