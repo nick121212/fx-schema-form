@@ -1,0 +1,17 @@
+.vscode
+.history
+images
+tsconfig.json
+tslint.json
+webpack.config.js
+src
+node_modules
+global.d.ts
+package-lock.json
+readme.md
+test.html
+tests
+.babelrc
+out/**
+!out/index.js
+fuse.js

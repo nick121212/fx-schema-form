@@ -1,0 +1,1 @@
+export { hoc } from "../container";

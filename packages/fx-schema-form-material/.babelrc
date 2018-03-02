@@ -1,0 +1,26 @@
+{
+    "env": {
+        "production": {
+            "presets": [
+                ["env", {
+                    "targets": {},
+                    "modules": false,
+                    "loose": true
+                }]
+            ],
+            "plugins": [
+               
+            ],
+            "minified": false
+        },
+        "development": {
+            "presets": [
+                "env", "react"
+            ],
+            "plugins": [
+
+            ]
+        }
+    },
+    "comments": true
+}
