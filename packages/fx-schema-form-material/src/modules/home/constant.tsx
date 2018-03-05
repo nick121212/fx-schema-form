@@ -8,7 +8,7 @@ export const sideBarWidth = 240;
 
 export const $initialState = fromJS({
     opened: true,
-    type: "light"
+    type: "dark"
 });
 
 export const reducerKey = "index";

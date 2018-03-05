@@ -31,7 +31,7 @@ export class HeaderComponent extends React.PureComponent<any> {
                         onChange={() => console.log("onChange")}
                         onRequestSearch={() => console.log("onRequestSearch")}
                         style={{
-                            margin: "0 auto",
+                            margin: "0 20px",
                             boxShadow: "none",
                             height: 40,
                             maxWidth: 800

@@ -1,7 +1,7 @@
 
 import React from "react";
 import {
-    Drawer, Toolbar, IconButton, Typography, Divider, List,
+    Drawer, Toolbar, IconButton, Typography, Divider, List, SvgIcon, Checkbox, Icon,
     ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse, ListItemSecondaryAction, Switch
 } from "material-ui";
 import classNames from "classnames";
@@ -17,12 +17,40 @@ import LightbulbOutline from "material-ui-icons/LightbulbOutline";
 import StarBorder from "material-ui-icons/StarBorder";
 
 import { hoc } from "./container";
+import { MenuComponent } from "./menu";
+
+const menus = [{
+    key: "email",
+    icon: "mail_outline",
+    title: "Send mail"
+}, {
+    key: "draft",
+    icon: "drafts",
+    title: "Draft"
+}, {
+    key: "inbox",
+    icon: "inbox",
+    title: "inbox"
+}, {
+    key: "starred",
+    icon: "star",
+    title: "Starred",
+    subHeader: "Starred",
+    children: [{
+        key: "starred-1",
+        icon: "star_border",
+        title: "Starred1",
+        children: [{
+            key: "starred-11",
+            icon: "star_half",
+            title: "Starred11",
+        }]
+    }]
+}];
 
 export class Component extends React.PureComponent<any> {
     public render() {
         const { classes, opened, toggleOpen, setTheme, type, theme, title = "Yun" } = this.props;
-
-        console.log(this.props.theme);
 
         return (
             <Drawer
@@ -44,53 +72,19 @@ export class Component extends React.PureComponent<any> {
                 </Toolbar>
                 <Divider />
 
-                <List component="nav"
-                    subheader={opened ? <ListSubheader component="div">Nested List Items</ListSubheader> : undefined}>
-                    <ListItem button dense={true}>
-                        <ListItemIcon>
-                            <SendIcon />
-                        </ListItemIcon>
-                        <ListItemText inset primary="Sent mail" />
-                    </ListItem>
-                    <ListItem button dense={true}>
-                        <ListItemIcon>
-                            <DraftsIcon />
-                        </ListItemIcon>
-                        <ListItemText inset primary="Drafts" />
-                    </ListItem>
-                    <ListItem button dense={true}>
-                        <ListItemIcon>
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText inset primary="Inbox" />
-                        {opened ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    <Collapse in={opened} timeout="auto" unmountOnExit>
-                        <List component="div" dense={true}>
-                            <ListItem button className={classes.nested}>
-                                <ListItemIcon>
-                                    <StarBorder />
-                                </ListItemIcon>
-                                <ListItemText inset primary="Starred" />
-                            </ListItem>
-                        </List>
-                    </Collapse>
-
-                    <ListItem>
-                        <ListItemIcon>
-                            <LightbulbOutline />
-                        </ListItemIcon>
-                        <ListItemText primary="Bluetooth" />
-                        <ListItemSecondaryAction>
-                            <Switch
-                                onChange={() => {
-                                    setTheme(type === "dark" ? "light" : "dark");
-                                }}
-                                checked={type === "dark"}
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </List>
+                <MenuComponent menus={menus} opened={opened}>
+                    <List component="nav"
+                        subheader={<ListSubheader component="div">设置</ListSubheader>}>
+                        <ListItem button dense={true} onClick={() => {
+                            setTheme(type === "dark" ? "light" : "dark");
+                        }}>
+                            <ListItemIcon>
+                                <Icon>{type === "dark" ? "brightness_high" : "brightness_low"}</Icon>
+                            </ListItemIcon>
+                            <ListItemText primary="主题样式" secondary={type} />
+                        </ListItem>
+                    </List>
+                </MenuComponent>
             </Drawer>
         );
     }
