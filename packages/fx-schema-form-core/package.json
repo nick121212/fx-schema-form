@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-core",
-  "version": "3.0.40",
+  "version": "3.0.41",
   "description": "",
   "main": "dist/index.prd.js",
   "types": "dist/typings/index.d.ts",
