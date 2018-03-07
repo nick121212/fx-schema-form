@@ -46,8 +46,8 @@ export class Temp extends PureComponent<Props> {
                         <FormControl
                             error={!isValid}
                             margin="normal"
-                            {...tempOptions.options}
-                            required={uiSchema.isRequired}>
+                            required={uiSchema.isRequired}
+                            {...tempOptions.options}>
                             {tempOptions.showTitle === false
                                 ? null
                                 : <InputLabel htmlFor={uiSchema.schemaPath}>{getTitle(this.props)}</InputLabel>
@@ -59,7 +59,7 @@ export class Temp extends PureComponent<Props> {
                                 </FormHelperText>
                                 : null
                             }
-                            {(!isValid && dirty)
+                            {!isValid
                                 ? <FormHelperText className="tr" error={!isValid}>
                                     {errorText}
                                 </FormHelperText>

@@ -1,9 +1,7 @@
-import Immutable from "immutable";
 import ajv from "ajv";
 import { ResolveLib } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 
-import { ObjectField } from "./fields/object";
 import temps from "./templates";
 import widgets from "./widgets";
 
@@ -11,8 +9,6 @@ export { globalOptions } from "./options/default";
 
 const { defaultTheme } = schemaFormReact;
 const { tempFactory, widgetFactory, fieldFactory } = defaultTheme;
-
-fieldFactory.add("object", ObjectField, true);
 
 temps.forEach((temp: any) => {
     for (const key in temp) {
@@ -58,7 +54,6 @@ const schema = {
         aaa: {
             type: "array",
             title: "测试checkbox group",
-            $id: "dajklfdjl",
             items: {
                 title: "测试Object",
                 type: "object",

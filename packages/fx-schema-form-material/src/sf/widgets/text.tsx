@@ -30,7 +30,8 @@ export class Widget extends PureComponent<Props, any> {
 
     public render(): JSX.Element | null {
         const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props,
-            { keys= [], readonly = false } = uiSchema || {},
+            { keys = [], readonly = false } = uiSchema || {},
+            isValid = formItemMeta ? formItemMeta.get("isValid") : true,
             metaOptions = formItemMeta ? formItemMeta.getIn(["options", schemaFormTypes.widget, widgetKey]) : fromJS({}),
             widgetOptions = getOptions(this.props, schemaFormTypes.widget, widgetKey, metaOptions);
 
@@ -41,7 +42,7 @@ export class Widget extends PureComponent<Props, any> {
         return (
             <Input {...widgetOptions.options}
                 {...this.setDefaultProps()}
-                id={uiSchema.schemaPath}
+                error={!isValid}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     this._count++;
                     updateItemData(this.props, e.currentTarget.value);

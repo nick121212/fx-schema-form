@@ -30,20 +30,20 @@ export class Temp extends PureComponent<Props> {
                     }
                     className="pl0"
                     avatar={
-                        <Avatar aria-label="Recipe">
-                            <Icon>apps</Icon>
-                        </Avatar>
+                        tempOptions.icon ? <Avatar aria-label="Card-Icon">
+                            <Icon>{tempOptions.icon}</Icon>
+                        </Avatar> : null
                     }
                     title={getTitle(this.props)}
                     subheader={(tempOptions.showCount !== false && uiSchema.type === "array") ? `当前有${formItemData || 0}项` : ""}
                     {...tempOptions.header}
                 />
                 <Divider />
-                <Collapse in={!collapsing} timeout="auto" unmountOnExit>
+                <Collapse in={!collapsing && ((formItemData && uiSchema.type === "array") || uiSchema.type !== "array")}
+                    timeout="auto" unmountOnExit>
                     <CardContent {...tempOptions.content}>
                         {children}
                     </CardContent>
-                    <Divider />
                 </Collapse>
                 {/* {
                     (tempOptions.showCount !== false && uiSchema.type === "array") ? <CardContent className="pb0">

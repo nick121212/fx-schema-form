@@ -41,6 +41,7 @@ export class NormalForm extends React.PureComponent<any> {
                         key: "height"
                     }, {
                         key: "aaa",
+                        temps: ["card", "formGroup"],
                         options: Immutable.fromJS({
                             temp: {
                                 card: {
@@ -51,7 +52,8 @@ export class NormalForm extends React.PureComponent<any> {
                                     }
                                 }
                             }
-                        })
+                        }),
+                        children: ["-"]
                     }]
                 }, {
                     key: "",
