@@ -39,12 +39,25 @@ export class NormalForm extends React.PureComponent<any> {
                         key: "width"
                     }, {
                         key: "height"
+                    }, {
+                        key: "aaa",
+                        options: Immutable.fromJS({
+                            temp: {
+                                card: {
+                                    options: {
+                                        className: "ml3 mr3 w-100",
+                                        elevation: 0,
+                                        raised: false
+                                    }
+                                }
+                            }
+                        })
                     }]
                 }, {
                     key: "",
                     title: "基础设置",
                     temps: ["formGroup"],
-                    children: ["textAlign", "font-size", "ids", "aaa"],
+                    children: ["textAlign", "font-size", "ids"],
                     options: Immutable.fromJS({
                         temp: {
                             formGroup: {

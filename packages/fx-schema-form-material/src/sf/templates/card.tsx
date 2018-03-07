@@ -39,7 +39,7 @@ export class Temp extends PureComponent<Props> {
                     {...tempOptions.header}
                 />
                 <Divider />
-                <Collapse in={!collapsing && !!formItemData} timeout="auto" unmountOnExit>
+                <Collapse in={!collapsing} timeout="auto" unmountOnExit>
                     <CardContent {...tempOptions.content}>
                         {children}
                     </CardContent>

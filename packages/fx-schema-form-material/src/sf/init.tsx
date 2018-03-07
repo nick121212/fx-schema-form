@@ -12,7 +12,7 @@ export { globalOptions } from "./options/default";
 const { defaultTheme } = schemaFormReact;
 const { tempFactory, widgetFactory, fieldFactory } = defaultTheme;
 
-fieldFactory.add("object", ObjectField);
+fieldFactory.add("object", ObjectField, true);
 
 temps.forEach((temp: any) => {
     for (const key in temp) {
