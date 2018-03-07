@@ -5,8 +5,11 @@ import { combineReducers } from "redux-immutable";
 import { fromJS } from "immutable";
 import schemaFormReact from "fx-schema-form-react";
 import { Provider } from "react-redux";
+import "fx-schema-form-extension";
 
 import { HomeComponent, reducer, initActions } from "./modules/home";
+import { NormalForm } from "./modules/datasource";
+import { curAjv } from "./sf/init";
 
 
 const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
@@ -29,7 +32,11 @@ initActions(store);
 // 渲染数据
 ReactDOM.render(
     <Provider store={store}>
-        <HomeComponent />
+        <HomeComponent>
+            <NormalForm ajv={curAjv} schemaId="dnd-style" reducerKey="schemaForm" formKey="normalForm" initData={{
+                ids: [1, 2, 3]
+            }} />
+        </HomeComponent>
     </Provider>,
     document.getElementById("root"),
     () => {

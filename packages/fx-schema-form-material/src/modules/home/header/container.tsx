@@ -4,6 +4,7 @@ import Immutable from "immutable";
 
 import { reducerKeys, reducerKey } from "../constant";
 import { hoc as mainHoc } from "../container";
+import { Props } from "../constant";
 
 export const mapStateToProps = (state: Immutable.Map<string, any>, ownProps: any) => {
     return {
@@ -11,7 +12,7 @@ export const mapStateToProps = (state: Immutable.Map<string, any>, ownProps: any
     };
 };
 
-export const hoc = compose<any, any>(
+export const hoc = compose<Props, any>(
     mainHoc,
     connect(mapStateToProps)
 );

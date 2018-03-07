@@ -6,7 +6,7 @@ import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import Immutable from "immutable";
 import resolvePathname from "resolve-pathname";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
 
@@ -123,15 +123,17 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getOptions(props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
                     : { [key: string]: any } {
                     const { uiSchema = {}, globalOptions } = props;
-                    let { options } = uiSchema as FxUiSchema,
+                        // fieldOptions = (field === schemaFormTypes.field ? null :
+                        //                 this.getOptions(props, schemaFormTypes.field, props.uiSchema.type.toString()));
+                    let { options, type = "" } = uiSchema as FxUiSchema,
                         optionsArray: Immutable.Map<string, any>[] = [],
-                        getOptions = (o: any, c: string, f: string) => {
+                        getOptions = (o: any, ks: string[]) => {
                             if (o) {
                                 if (!Immutable.Map.isMap(o)) {
                                     o = Immutable.fromJS(o);
                                 }
-                                if (o.hasIn([c, f])) {
-                                    optionsArray.push(o.getIn([c, f]));
+                                if (o.hasIn(ks)) {
+                                    optionsArray.push(o.getIn(ks));
                                 }
                             }
                         };
@@ -139,26 +141,15 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     // 从globalOptions中抽取default的配置
                     // 从globalOptions中抽取field的配置
                     // 从options中抽取field的配置
-                    getOptions(globalOptions, category, "default");
-                    getOptions(globalOptions, category, field);
-                    getOptions(options, category, field);
+                    getOptions(globalOptions, [category, "default"]);
+                    getOptions(globalOptions, [category, field]);
 
-                    // if (globalOptions && globalOptions.hasIn([category, "default"])) {
-                    //     optionsArray.push(globalOptions.getIn([category, "default"]));
-                    // }
+                    getOptions(globalOptions, [schemaFormTypes.field, type.toString(), "options", category, field]);
 
-                    // if (globalOptions && globalOptions.hasIn([category, field])) {
-                    //     optionsArray.push(globalOptions.getIn([category, field]));
+                    // if (fieldOptions && fieldOptions.options) {
+                    //     getOptions(fieldOptions.options, category, field);
                     // }
-
-                    // if (options) {
-                    //     if (!Immutable.Map.isMap(options)) {
-                    //         options = Immutable.fromJS(options);
-                    //     }
-                    //     if (options.hasIn([category, field])) {
-                    //         optionsArray.push(options.getIn([category, field]));
-                    //     }
-                    // }
+                    getOptions(options, [category, field]);
 
                     optionsArray = optionsArray.concat(extraSettings);
 

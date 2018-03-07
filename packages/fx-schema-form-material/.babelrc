@@ -18,7 +18,13 @@
                 "env", "react"
             ],
             "plugins": [
-
+                ["transform-runtime", {
+                    "helpers": true,
+                    "modules": false,
+                    "polyfill": false,
+                    "regenerator": true,
+                    "moduleName": "babel-runtime"
+                }]
             ]
         }
     },

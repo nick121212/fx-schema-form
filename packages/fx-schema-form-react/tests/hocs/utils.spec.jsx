@@ -45,6 +45,8 @@ describe("utils的hoc", () => {
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card").tempHocs).to.be.a("array");
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card").a).to.eq(1);
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card", { a: 2 }, { a: 3 }).a).to.eq(3);
+        expect(roots[0].props().getOptions(roots[0].props(), "temp", "formitem", { a: 2 }, { a: 3 }).options.labelCol).to.eq(null);
+
     });
 
     it("测试normalizeDataPath方法;", () => {

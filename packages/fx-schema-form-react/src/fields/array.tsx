@@ -49,7 +49,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
         let SchemaFormWithHoc = null, SchemaFormItemWithHoc = null;
 
         if (options.formHocs && options.formHocs.constructor === Array) {
-            SchemaFormWithHoc = compose(...options.formHocs)(ArrayFieldComponent);
+            SchemaFormWithHoc = compose(...options.formHocs)(options.ArrayFieldComponent || ArrayFieldComponent);
         }
 
         if (options.formItemHocs && options.formItemHocs.constructor === Array) {
@@ -66,8 +66,8 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      */
     private renderItem(idx: number): JSX.Element | null {
         const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, reducerKey, ArrayItemComponent } = this.props,
-            uiSchema = this.props.uiSchema as FxUiSchema;
-        // options = getOptions(this.props, "field", "array");
+            uiSchema = this.props.uiSchema as FxUiSchema,
+            options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc || SchemaForm;
         // const extraProps = getRequiredKeys(this.props, options);
 
@@ -87,6 +87,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
                 index={idx}
                 arrayIndex={idx}
                 uiSchema={uiSchema}
+                RootComponent={options.Root}
                 ArrayItemComponent={ArrayItemComponent}
                 arrayLevel={arrayLevel.concat([idx])}
                 reducerKey={reducerKey}

@@ -1,15 +1,24 @@
 import React from "react";
 import { fromJS } from "immutable";
 import withStyles, { StyledComponentProps } from "material-ui/styles/withStyles";
-import { Theme, WithStyles } from "material-ui";
+import { Theme, WithStyles, PaletteType } from "material-ui";
 import { ComponentEnhancer } from "recompose";
 
 export const sideBarWidth = 240;
 
 export const $initialState = fromJS({
     opened: true,
-    type: "dark"
+    type: "light"
 });
+
+export interface Props {
+    classes: any;
+    opened: boolean;
+    toggleOpen: () => void;
+    setTheme: (type: "light" | "dark") => void;
+    title: string;
+    type: PaletteType;
+}
 
 export const reducerKey = "index";
 
@@ -55,7 +64,10 @@ export const styles = (theme: Theme) => {
             }),
         },
         drawerPaperClose: {
-            width: 60,
+            width: 70,
+            [theme.breakpoints.down("xs")]: {
+                width: 0
+            },
             overflowX: "hidden",
             transition: theme.transitions.create("width", {
                 easing: theme.transitions.easing.sharp,
@@ -71,7 +83,10 @@ export const styles = (theme: Theme) => {
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing.unit * 3,
+            // padding: theme.spacing.unit * 3
+        },
+        contentMain: {
+            padding: 0
         }
     });
 };

@@ -83,6 +83,7 @@ export class MenuComponent extends React.PureComponent<any, any> {
 
         return (
             <Grid container
+                spacing={0}
                 wrap="nowrap"
                 alignItems={"stretch"}
                 direction={"column"}

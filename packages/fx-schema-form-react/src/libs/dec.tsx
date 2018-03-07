@@ -32,6 +32,7 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
 
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
+    resetForm?: () => void;
 }
 
 /**
@@ -156,6 +157,18 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             });
                         }
                     };
+                },
+                resetForm: (props: SchemaFormProps) => {
+                    return () => {
+                        if (props.formKey) {
+                            let { createForm } = reducerFactory.get(props.reducerKey).actions;
+
+                            createForm({
+                                key: props.formKey,
+                                data: props.initData || {}
+                            });
+                        }
+                    };
                 }
             })) as any)
         class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
@@ -165,16 +178,9 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 super(props);
 
                 // 绑定当前的方法，可以使用autobind
-                this._validateAll = this.props.validateAll.bind(this);
+                this._validateAll = props.validateAll.bind(this);
                 // 这里创建一个form，如果当前存在formKey，则覆盖掉当前的数据
-                if (props.formKey) {
-                    let { createForm } = reducerFactory.get(props.reducerKey).actions;
-
-                    createForm({
-                        key: props.formKey,
-                        data: props.initData || {}
-                    });
-                }
+                props.resetForm();
             }
 
             public render(): JSX.Element | null {

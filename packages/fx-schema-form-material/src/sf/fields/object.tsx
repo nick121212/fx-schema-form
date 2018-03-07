@@ -1,10 +1,11 @@
 import React, { PureComponent } from "react";
 
-import { SchemaForm } from "../components/form";
-import { DefaultProps } from "../components";
-import { FxUiSchema, schemaFormTypes } from "../models/index";
-import { UtilsHocOutProps } from "../hocs/utils";
 import { compose } from "recompose";
+import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
+import schemaFormReact from "fx-schema-form-react";
+
+const { SchemaForm, schemaFormTypes } = schemaFormReact;
 
 export interface ObjectFieldProps extends DefaultProps, UtilsHocOutProps {
 

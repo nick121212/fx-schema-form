@@ -1,31 +1,32 @@
 import React from "react";
-import {
-    hocFactory,
-    reducerFactory
-} from "../dist";
-import { ResolveLib } from "fx-schema-form-core";
+import {hocFactory, reducerFactory} from "../dist";
+import {ResolveLib} from "fx-schema-form-core";
 import Ajv from "ajv";
 import Immutable from "immutable";
-import ShallowRenderer, { createRenderer } from "react-test-renderer/shallow";
+import ShallowRenderer, {createRenderer} from "react-test-renderer/shallow";
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { createStore } from "redux";
-import { combineReducers } from "redux-immutable";
+import {createStore} from "redux";
+import {combineReducers} from "redux-immutable";
 import undoable from "redux-undo-immutable";
 
-Enzyme.configure({ adapter: new Adapter() });
+Enzyme.configure({adapter: new Adapter()});
 
 export const design = {
     $async: true,
     type: "object",
     $id: "design",
-    required: ["name", "dsModelIds"],
+    required: [
+        "name", "dsModelIds"
+    ],
     properties: {
         name: {
             type: "string",
             title: "面板名称",
             $async: true,
-            idExists: { "table": "users" },
+            idExists: {
+                "table": "users"
+            },
             description: "远程验证字段，输入nick试试看"
         },
         description: {
@@ -43,7 +44,9 @@ export const design = {
             default: [],
             items: {
                 type: "object",
-                required: ["age", "name", "password"],
+                required: [
+                    "age", "name", "password"
+                ],
                 default: {},
                 properties: {
                     age: {
@@ -57,7 +60,9 @@ export const design = {
                             minLength: "必须10个字符及以上"
                         }
                     },
-                    password: { type: "string" }
+                    password: {
+                        type: "string"
+                    }
                 }
             }
         },
@@ -85,13 +90,15 @@ export const design = {
                         type: "string"
                     },
                     data: {
-                        oneOf: [{
-                            $id: "design-object",
-                            type: "object",
-                        }, {
-                            $id: "design-string",
-                            type: "string"
-                        }]
+                        oneOf: [
+                            {
+                                $id: "design-object",
+                                type: "object"
+                            }, {
+                                $id: "design-string",
+                                type: "string"
+                            }
+                        ]
                     },
                     infoOptions: {
                         $ref: "design#/properties/infoOptions"
@@ -110,40 +117,46 @@ export let schema = {
     properties: {
         type: {
             type: "number",
-            enum: [1, 2, 3, 4],
+            enum: [
+                1, 2, 3, 4
+            ],
             title: "类型选择",
             description: "1:数字,2:字符串,3:bool,4:object"
         },
         value: {
-            oneOf: [{
-                $id: "dnd-oneof-number",
-                type: "number",
-                title: "这是一个数字类型"
-            }, {
-                $id: "dnd-oneof-string",
-                type: "string",
-                title: "这是一个字符串类型"
-            }, {
-                $id: "dnd-oneof-boolean",
-                type: "boolean",
-                title: "这是一个bool类型"
-            }, {
-                $id: "dnd-oneof-object",
-                type: "object",
-                title: "这是一个object类型",
-                default: {},
-                required: ["a", "b"],
-                properties: {
-                    a: {
-                        type: "string",
-                        default: "nick"
-                    },
-                    b: {
-                        type: "boolean",
-                        default: true
+            oneOf: [
+                {
+                    $id: "dnd-oneof-number",
+                    type: "number",
+                    title: "这是一个数字类型"
+                }, {
+                    $id: "dnd-oneof-string",
+                    type: "string",
+                    title: "这是一个字符串类型"
+                }, {
+                    $id: "dnd-oneof-boolean",
+                    type: "boolean",
+                    title: "这是一个bool类型"
+                }, {
+                    $id: "dnd-oneof-object",
+                    type: "object",
+                    title: "这是一个object类型",
+                    default: {},
+                    required: [
+                        "a", "b"
+                    ],
+                    properties: {
+                        a: {
+                            type: "string",
+                            default: "nick"
+                        },
+                        b: {
+                            type: "boolean",
+                            default: true
+                        }
                     }
                 }
-            }]
+            ]
         }
     }
 };
@@ -152,20 +165,24 @@ export const gloabelOptions = Immutable.fromJS({
     field: {
         default: {
             temps: ["formitem"],
-            widgetHocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                data: true
-            })]
+            widgetHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], data: true})]
         },
         array: {
             temps: ["card"],
-            fieldHocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                data: true,
-                dataLength: true
-            })]
+            fieldHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], data: true, dataLength: true})]
         },
-        normal: {
+        string: {
+            options: {
+                temp: {
+                    formitem: {
+                        options: {
+                            labelCol: null,
+                            wrapperCol: {
+                            }
+                        }
+                    }
+                }
+            }
         },
         object: {
             temps: ["card"]
@@ -173,33 +190,33 @@ export const gloabelOptions = Immutable.fromJS({
     },
     temp: {
         card: {
-            tempHocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                meta: true
-            })],
+            tempHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], meta: true})],
             a: 1
         },
         formitem: {
-            tempHocs: [hocFactory.get("data")({
-                rootReducerKey: ["schemaForm"],
-                meta: true
-            })],
+            tempHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], meta: true})],
             options: {
                 labelCol: {
-                    xs: { span: 24 },
-                    sm: { span: 8 },
+                    xs: {
+                        span: 24
+                    },
+                    sm: {
+                        span: 8
+                    }
                 },
                 wrapperCol: {
-                    xs: { span: 24 },
-                    sm: { span: 16 },
-                },
+                    xs: {
+                        span: 24
+                    },
+                    sm: {
+                        span: 16
+                    }
+                }
             }
         }
     },
     hoc: {
-        array: {
-
-        }
+        array: {}
     }
 });
 
@@ -210,7 +227,7 @@ export const curAjv = new Ajv({
     format: "full",
     $data: true,
     errorDataPath: "property",
-    removeAdditional: true,
+    removeAdditional: true
 });
 
 export const uiSchema = {};
@@ -221,7 +238,7 @@ new ResolveLib(curAjv, schema);
 
 export const shallowRender = (Component, props) => {
     const renderer = new ShallowRenderer();
-    renderer.render(<Component {...props} />);
+    renderer.render(<Component {...props}/>);
     return renderer.getRenderOutput();
 }
 
@@ -232,12 +249,13 @@ export class AppCom extends React.PureComponent {
 }
 
 export const store = createStore(combineReducers({
-    "schemaForm1": undoable(reducerFactory.get("schemaForm").reducer, {
-
-    }),
+    "schemaForm1": undoable(reducerFactory.get("schemaForm").reducer, {})
 }), Immutable.fromJS({}));
 
-reducerFactory.get("schemaForm").init(store);
+reducerFactory
+    .get("schemaForm")
+    .init(store);
 
-export const actions = reducerFactory.get("schemaForm").actions;
-
+export const actions = reducerFactory
+    .get("schemaForm")
+    .actions;

@@ -18,6 +18,7 @@ import StarBorder from "material-ui-icons/StarBorder";
 
 import { hoc } from "./container";
 import { MenuComponent } from "./menu";
+import { Props } from "./constant";
 
 const menus = [{
     key: "email",
@@ -48,13 +49,12 @@ const menus = [{
     }]
 }];
 
-export class Component extends React.PureComponent<any> {
+export class Component extends React.PureComponent<Props> {
     public render() {
-        const { classes, opened, toggleOpen, setTheme, type, theme, title = "Yun" } = this.props;
+        const { classes, opened, toggleOpen, setTheme, type, title = "Yun" } = this.props;
 
         return (
             <Drawer
-                theme={theme}
                 variant="permanent"
                 classes={{
                     paper: classNames(classes.drawerPaper, !opened && classes.drawerPaperClose),
@@ -74,7 +74,7 @@ export class Component extends React.PureComponent<any> {
 
                 <MenuComponent menus={menus} opened={opened}>
                     <List component="nav"
-                        subheader={<ListSubheader component="div">设置</ListSubheader>}>
+                        subheader={opened ? <ListSubheader component="div">设置</ListSubheader> : undefined}>
                         <ListItem button dense={true} onClick={() => {
                             setTheme(type === "dark" ? "light" : "dark");
                         }}>

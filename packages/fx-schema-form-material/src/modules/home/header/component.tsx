@@ -5,8 +5,9 @@ import Cloud from "material-ui-icons/Cloud";
 import SearchBar from "material-ui-search-bar";
 
 import { hoc } from "./container";
+import { Props } from "../constant";
 
-export class HeaderComponent extends React.PureComponent<any> {
+export class HeaderComponent extends React.PureComponent<Props> {
 
     public render() {
         const { classes, opened, toggleOpen, title = "Yun" } = this.props;
