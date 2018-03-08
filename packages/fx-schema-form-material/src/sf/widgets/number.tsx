@@ -3,7 +3,7 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
-import { Input } from "material-ui";
+import { Input, InputAdornment, Icon } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
 
@@ -41,14 +41,21 @@ export class Widget extends PureComponent<Props, any> {
 
         return (
             <Input
+                endAdornment={
+                    <InputAdornment position="start">
+                        <Icon color="disabled">format_list_numbered</Icon>
+                    </InputAdornment>
+                }
                 error={!isValid}
                 {...widgetOptions.options}
                 {...this.setDefaultProps()}
-                id={uiSchema.schemaPath}
+                inputProps={{
+                    id: uiSchema.schemaPath
+                }}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    let val: any = e.currentTarget.value;
+                    let val: any = e.target.value;
 
-                    val = val ? Number(e.currentTarget.value) : Number.NaN;
+                    val = val ? Number(val) : Number.NaN;
 
                     if (Number.isNaN(val)) {
                         return removeItemData(this.props);

@@ -17,7 +17,7 @@ export const globalOptions = Immutable.fromJS({
             widgetHocs: [schemaFormReact.hocFactory.get("data")({
                 data: true,
                 meta: true,
-                metaKeys: ["isValid"]
+                metaKeys: ["isValid", "showPassword"]
             })]
         },
         array: {
@@ -164,12 +164,20 @@ export const globalOptions = Immutable.fromJS({
         array: {
             ArrayComponent: ArrayComponent,
             ArrayItemComponent: ArrayItemComponent
+        },
+        schemaFormDec: {
+            hocIncludeKeys: ["schemaId"]
         }
     },
     widget: {
         text: {
             options: {
-                autoFocus: true
+                autoFocus: false
+            }
+        },
+        password: {
+            options: {
+                autoFocus: false
             }
         }
     }

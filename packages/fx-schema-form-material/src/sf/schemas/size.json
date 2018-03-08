@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "$id": "size",
+    "properties": {
+        "width": {
+            "$ref": "w#/properties/width"
+        },
+        "height": {
+            "type": "string",
+            "title": "高度",
+            "description": "高度可以是多行"
+        }
+    }
+}

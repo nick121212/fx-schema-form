@@ -3,7 +3,8 @@ const webpack = require("webpack");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const devServer = require("./webpack/devserver"); // 用于快速开发应用程序
+const devServer = require("./webpack/devserver");
+const CopyPlugin = require("copy-webpack-plugin");
 const env = process.env.NODE_ENV || "dev";
 const {
     CheckerPlugin
@@ -27,6 +28,9 @@ module.exports = {
                 'style-loader',
                 'css-loader'
             ]
+        }, {
+            test: /\.json$/,
+            loader: 'json-loader'
         }, {
             test: /\.scss/,
             use: [{
@@ -121,6 +125,10 @@ module.exports = {
         extensions: ['.tsx', '.js']
     },
     plugins: !__PROD__ ? [
+        new CopyPlugin([{
+            from: 'src/sf/schemas',
+            to: 'schemas'
+        }]),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new CheckerPlugin(),

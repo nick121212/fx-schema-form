@@ -7,7 +7,7 @@ import ajv, { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 import { hocFactory, reducerFactory } from "../factory";
 import { TreeMap } from "./tree";
 import { SchemaFormActions } from "../reducers/schema.form";
@@ -184,14 +184,15 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
             }
 
             public render(): JSX.Element | null {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions } = this.props;
-                const options = getOptions(this.props, "hoc", "schemaFormDec");
+                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props;
+                const options = getOptions(this.props, schemaFormTypes.hoc, "schemaFormDec");
                 const extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
 
                 return (
                     <Component
                         validateAll={this._validateAll}
                         parentKeys={settings.parentKeys}
+                        schemaId={schemaId}
                         {...extraProps} />
                 );
             }

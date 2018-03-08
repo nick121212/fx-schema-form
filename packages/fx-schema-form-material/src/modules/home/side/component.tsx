@@ -59,6 +59,7 @@ export class Component extends React.PureComponent<Props> {
                 classes={{
                     paper: classNames(classes.drawerPaper, !opened && classes.drawerPaperClose),
                 }}
+                className="flex h-100 overflow-hidden"
                 open={opened}>
                 <Toolbar disableGutters={true}>
                     <IconButton
@@ -71,20 +72,21 @@ export class Component extends React.PureComponent<Props> {
                     </Typography>
                 </Toolbar>
                 <Divider />
-
-                <MenuComponent menus={menus} opened={opened}>
-                    <List component="nav"
-                        subheader={opened ? <ListSubheader component="div">设置</ListSubheader> : undefined}>
-                        <ListItem button dense={true} onClick={() => {
-                            setTheme(type === "dark" ? "light" : "dark");
-                        }}>
-                            <ListItemIcon>
-                                <Icon>{type === "dark" ? "brightness_high" : "brightness_low"}</Icon>
-                            </ListItemIcon>
-                            <ListItemText primary="主题样式" secondary={type} />
-                        </ListItem>
-                    </List>
-                </MenuComponent>
+                <div className="flex-auto overflow-auto overflow-x-hidden">
+                    <MenuComponent menus={menus} opened={opened}>
+                        <List component="nav"
+                            subheader={opened ? <ListSubheader component="div">设置</ListSubheader> : undefined}>
+                            <ListItem button dense={true} onClick={() => {
+                                setTheme(type === "dark" ? "light" : "dark");
+                            }}>
+                                <ListItemIcon>
+                                    <Icon>{type === "dark" ? "brightness_high" : "brightness_low"}</Icon>
+                                </ListItemIcon>
+                                {opened ? <ListItemText primary="主题样式" secondary={type} /> : null}
+                            </ListItem>
+                        </List>
+                    </MenuComponent>
+                </div>
             </Drawer>
         );
     }

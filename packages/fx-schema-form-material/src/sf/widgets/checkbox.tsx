@@ -41,6 +41,9 @@ export class Widget extends PureComponent<Props, any> {
             <FormControlLabel control={
                 <Checkbox {...widgetOptions.options}
                     {...this.setDefaultProps()}
+                    inputProps={{
+                        id: uiSchema.schemaPath
+                    }}
                     onChange={async (e: ChangeEvent<HTMLInputElement>, checked: boolean) => {
                         updateItemData(this.props, checked, await validate(this.props, checked));
                     }} />

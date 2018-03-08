@@ -3,7 +3,7 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
-import { Input, Icon, InputAdornment } from "material-ui";
+import { Input, Icon, InputAdornment, IconButton } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
 
@@ -12,7 +12,7 @@ const { schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 
-export const widgetKey = "text";
+export const widgetKey = "password";
 
 export class Widget extends PureComponent<Props, any> {
     private _count = 0;
@@ -29,9 +29,11 @@ export class Widget extends PureComponent<Props, any> {
     }
 
     public render(): JSX.Element | null {
-        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props,
+        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId,
+            updateItemData, updateItemMeta, validate, formItemData } = this.props,
             { keys = [], readonly = false } = uiSchema || {},
             isValid = formItemMeta ? formItemMeta.get("isValid") : true,
+            showPassword = formItemMeta ? formItemMeta.get("showPassword") : false,
             metaOptions = formItemMeta ? formItemMeta.getIn(["options", schemaFormTypes.widget, widgetKey]) : fromJS({}),
             widgetOptions = getOptions(this.props, schemaFormTypes.widget, widgetKey, metaOptions);
 
@@ -42,12 +44,20 @@ export class Widget extends PureComponent<Props, any> {
         return (
             <Input
                 endAdornment={
-                    <InputAdornment position="start">
-                        <Icon color="disabled">text_format</Icon>
+                    <InputAdornment position="end">
+                        <IconButton
+                            onClick={() => {
+                                updateItemMeta(this.props, formItemData, {
+                                    showPassword: !showPassword
+                                });
+                            }}>
+                            <Icon>{showPassword ? "visibility_off" : "visibility"}</Icon>
+                        </IconButton>
                     </InputAdornment>
                 }
                 inputProps={{
-                    id: uiSchema.schemaPath
+                    id: uiSchema.schemaPath,
+                    type: showPassword ? "text" : "password"
                 }}
                 {...widgetOptions.options}
                 {...this.setDefaultProps()}

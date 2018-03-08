@@ -1,0 +1,15 @@
+{
+    "engine": "json",
+    "interfaces": [{
+        "key": "schema",
+        "method": "get",
+        "path": "/schemas",
+        "title": "调用本地的schema文件"
+    }],
+    "key": "sf",
+    "state": "dev",
+    "states": {
+        "dev": ""
+    },
+    "title": "schema的获取接口"
+}

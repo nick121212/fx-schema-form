@@ -140,12 +140,12 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                                 };
                             }])),
                             // 只有conditon变化才触发之后的hoc
-                            onlyUpdateForKeys(["condition"]),
+                            onlyUpdateForKeys([name]),
                             // 需要接受condition参数的hoc
                             hoc,
                             // 去掉condition后传递到下一个hoc
                             hocFactory.get("resetKey")({
-                                excludeKeys: ["condition"]
+                                excludeKeys: [name]
                             }))(Component);
                     }
                 }

@@ -303,8 +303,12 @@ export class SchemaFormReducer<T> implements FxReducer {
     private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, meta, noChange }: any): Map<string, any> {
         let metaKeys: string[] = parentKeys.concat(["meta"]);
         let rootNode: TreeMap = state.getIn(metaKeys);
-        let childNode: TreeMap | null = rootNode.addChild(keys);
+        let childNode: TreeMap | null = rootNode.containPath(keys);
         let value = childNode ? childNode.value : null;
+
+        if (!childNode) {
+            childNode = rootNode.addChild(keys);
+        }
 
         if (childNode) {
             if (value) {

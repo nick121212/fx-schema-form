@@ -20,18 +20,19 @@ export class MenuComponent extends React.PureComponent<any, any> {
         const { opened } = this.props;
 
         children.push(
-            <ListItem key={element.key}
+            <ListItem
+                key={element.title}
                 button={true}
                 dense={true}
                 style={level ? {
                     paddingLeft: padding * 2 * level,
                 } : {}}>
-                    <Tooltip title={element.title}>
-                        <ListItemIcon>
-                            <Icon children={element.icon} />
-                        </ListItemIcon>
-                    </Tooltip>
-                <ListItemText inset primary={element.title} />
+                <Tooltip title={element.title}>
+                    <ListItemIcon>
+                        <Icon children={element.icon} />
+                    </ListItemIcon>
+                </Tooltip>
+                {opened ? <ListItemText inset primary={element.title} /> : null}
                 {
                     (hasChild && opened) ? <ListItemSecondaryAction>
                         <IconButton aria-label={element.title}

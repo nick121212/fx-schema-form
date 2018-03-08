@@ -6,11 +6,13 @@ import { fromJS } from "immutable";
 import schemaFormReact from "fx-schema-form-react";
 import { Provider } from "react-redux";
 import "fx-schema-form-extension";
+import { JSONSchema6 } from "json-schema";
 
 import { HomeComponent, reducer, initActions } from "./modules/home";
 import { NormalForm } from "./modules/datasource";
 import { curAjv } from "./sf/init";
-
+import proxy, { getSchema } from "./modelproxy";
+import { ResolveLib } from "fx-schema-form-core";
 
 const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
 
@@ -33,13 +35,13 @@ initActions(store);
 ReactDOM.render(
     <Provider store={store}>
         <HomeComponent>
-            <NormalForm ajv={curAjv} schemaId="dnd-style" reducerKey="schemaForm" formKey="normalForm" initData={{
-                ids: [1, 2, 3]
+            <NormalForm ajv={curAjv} schemaId="style" reducerKey="schemaForm" formKey="normalForm" initData={{
+                
             }} />
         </HomeComponent>
     </Provider>,
     document.getElementById("root"),
     () => {
-        console.log("form ok!");
+        console.log("react init!");
     });
 
