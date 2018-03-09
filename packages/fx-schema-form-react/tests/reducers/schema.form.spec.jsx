@@ -67,16 +67,18 @@ describe("测试schemaReducer", () => {
         expect(childNode).to.be.a("object");
         expect(childNode.value).to.eq(meta);
 
-        rootNode = store.getState().getIn(["schemaForm1", "present", "test", "meta"]);
-
         actions.updateItemData({
             parentKeys: ["test"],
             keys: ["b"],
-            meta: { showPassword: true }
+            meta: {
+                showPassword: true
+            }
         });
 
         rootNode = store.getState().getIn(["schemaForm1", "present", "test", "meta"]);
         childNode = rootNode.contains("b");
+
+        expect(childNode.value.get("showPassword")).to.eq(true);
     });
     it("addItem,添加一个元素到数组", () => {
         expect(store.getState().getIn(["schemaForm1", "present", "test", "data", "c"]).size).to.eq(3);
