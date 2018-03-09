@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-extension",
-  "version": "3.0.41",
+  "version": "3.0.42",
   "description": "自动生成表单组件",
   "main": "dist/index.js",
   "types": "dist/dts/index.d.ts",
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "ajv": "^6.1.0",
-    "fx-schema-form-core": "^3.0.41",
-    "fx-schema-form-react": "^3.0.41",
+    "fx-schema-form-core": "^3.0.42",
+    "fx-schema-form-react": "^3.0.42",
     "immutable": "^3.8.2",
     "react": "^15.6.2",
     "react-immutable-render-mixin": "^0.9.7",
