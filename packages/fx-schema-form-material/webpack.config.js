@@ -38,6 +38,13 @@ module.exports = {
             }, {
                 loader: 'sass-loader'
             }]
+        }, {
+            test: /\.less/,
+            use: [{
+                loader: 'css-loader'
+            }, {
+                loader: 'less-loader'
+            }]
         }]
     },
     target: "web",

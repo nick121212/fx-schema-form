@@ -7,12 +7,14 @@ import schemaFormReact from "fx-schema-form-react";
 import { Provider } from "react-redux";
 import "fx-schema-form-extension";
 import { JSONSchema6 } from "json-schema";
+import { ResolveLib } from "fx-schema-form-core";
 
 import { HomeComponent, reducer, initActions } from "./modules/home";
-import { NormalForm } from "./modules/datasource";
 import { curAjv } from "./sf/init";
 import proxy, { getSchema } from "./modelproxy";
-import { ResolveLib } from "fx-schema-form-core";
+import { NormalForm } from "./modules/datasource";
+import { Dashboard } from "./modules/dashboard";
+
 
 const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
 
@@ -35,9 +37,9 @@ initActions(store);
 ReactDOM.render(
     <Provider store={store}>
         <HomeComponent>
-            <NormalForm ajv={curAjv} schemaId="style" reducerKey="schemaForm" formKey="normalForm" initData={{
-                
-            }} />
+            {/* <NormalForm ajv={curAjv} schemaId="style" reducerKey="schemaForm" formKey="normalForm" initData={{
+            }} /> */}
+            <Dashboard />
         </HomeComponent>
     </Provider>,
     document.getElementById("root"),
