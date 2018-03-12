@@ -7,7 +7,7 @@ import { ComponentEnhancer } from "recompose";
 export const sideBarWidth = 240;
 
 export const $initialState = fromJS({
-    opened: true,
+    opened: false,
     type: "light"
 });
 
