@@ -1,28 +1,40 @@
-import React, { PureComponent, SyntheticEvent, ChangeEvent } from "react";
+import React, { PureComponent, SyntheticEvent, ChangeEvent, ReactNode } from "react";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
 import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
-import { Input, Icon, InputAdornment } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
+import { TimePicker, DatePicker, DateTimePicker } from "material-ui-pickers";
+import { Moment } from "moment";
+import { Icon, InputAdornment, Input, TextField } from "material-ui";
 
 const { schemaFormTypes } = schemaFormReact;
 
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }
 
-export const widgetKey = "text";
+export const widgetKey = "datetime";
+
+class DateWidgetTextComponent extends React.PureComponent<any> {
+    public render() {
+        const { ...extraProps } = this.props;
+
+        return <TextField {...extraProps} component={({ children }: { children?: ReactNode }) => {
+            return children;
+        }} />;
+    }
+}
+
 
 export class Widget extends PureComponent<Props, any> {
-    private _count = 0;
     private setDefaultProps(): any {
         const props: any = {}, { uiSchema } = this.props;
 
         if (this.props.formItemData !== undefined) {
             props.value = this.props.formItemData;
         } else {
-            props.value = "";
+            props.value = null;
         }
 
         return props;
@@ -40,33 +52,27 @@ export class Widget extends PureComponent<Props, any> {
         }
 
         return (
-            <Input
-                endAdornment={
-                    <InputAdornment position="start">
-                        <Icon color="disabled">text_format</Icon>
-                    </InputAdornment>
-                }
-                inputProps={{
-                    id: uiSchema.schemaPath
+            <DateTimePicker
+                InputProps={{
+                    inputProps: {
+                        id: uiSchema.schemaPath
+                    }
                 }}
+                label={getTitle(this.props)}
+                TextFieldComponent={DateWidgetTextComponent}
                 {...widgetOptions.options}
                 {...this.setDefaultProps()}
                 error={isValid === false}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    this._count++;
-                    updateItemData(this.props, e.target.value);
-                }} onBlur={() => {
-                    if (this._count > 0) {
-                        this._count = 0;
-                        updateItemMeta(this.props, this.props.formItemData);
-                    }
+                onChange={(date: Moment) => {
+                    let dateStr = date ? date.format(widgetOptions.options.format || "YYYY-MM-DD") : "";
+
+                    updateItemData(this.props, dateStr);
+                    updateItemMeta(this.props, dateStr);
                 }} />
         );
     }
 }
 
 export default {
-    [widgetKey]: Widget,
-    "string": Widget,
-    "default": Widget
+    [widgetKey]: Widget
 };

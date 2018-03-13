@@ -3,7 +3,7 @@
     "interfaces": [{
         "key": "schema",
         "method": "get",
-        "path": "/schemas",
+        "path": "/schemas/:id",
         "title": "调用本地的schema文件"
     }],
     "key": "sf",

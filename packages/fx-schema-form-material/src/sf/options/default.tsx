@@ -9,6 +9,7 @@ import { DropTarget, DragDropContext, DragSource } from "react-dnd";
 import { ArrayHocOutProps } from "fx-schema-form-react/dist/typings/hocs/array";
 import { ArrayComponent, ArrayItemComponent } from "./arrayitem";
 import { NoneComponent } from "../../common/components/none";
+import proxy from "../../modelproxy";
 
 export const globalOptions = Immutable.fromJS({
     field: {
@@ -17,7 +18,7 @@ export const globalOptions = Immutable.fromJS({
             widgetHocs: [schemaFormReact.hocFactory.get("data")({
                 data: true,
                 meta: true,
-                metaKeys: ["isValid", "showPassword"]
+                metaKeys: ["isValid", "showPassword", "options"]
             })]
         },
         array: {
@@ -167,6 +168,9 @@ export const globalOptions = Immutable.fromJS({
         },
         schemaFormDec: {
             hocIncludeKeys: ["schemaId"]
+        },
+        proxy: {
+            proxy: proxy
         }
     },
     widget: {
@@ -178,6 +182,31 @@ export const globalOptions = Immutable.fromJS({
         password: {
             options: {
                 autoFocus: false
+            }
+        },
+        date: {
+            options: {
+                keyboard: true,
+                clearable: true,
+                format: "YYYY-MM-DD",
+                invalidLabel: ""
+            }
+        },
+        datetime: {
+            options: {
+                keyboard: true,
+                clearable: true,
+                format: "YYYY-MM-DD HH:mm:ss",
+                invalidLabel: ""
+            }
+        },
+        time: {
+            options: {
+                mask: [/\d/, /\d/, ":", /\d/, /\d/, " ", /a|p/i, "M"],
+                keyboard: true,
+                clearable: true,
+                invalidLabel: "",
+                ampm: true
             }
         }
     }

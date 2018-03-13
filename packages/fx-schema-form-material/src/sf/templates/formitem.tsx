@@ -3,7 +3,7 @@ import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ArrayHocOutProps } from "fx-schema-form-react/dist/typings/hocs/array";
 import schemaFormReact from "fx-schema-form-react";
-import { FormControl, InputLabel, FormHelperText, FormGroup, Grid, Icon } from "material-ui";
+import { FormControl, InputLabel, FormHelperText, FormGroup, Grid, Icon, LinearProgress } from "material-ui";
 
 const { schemaFormTypes } = schemaFormReact;
 
@@ -46,6 +46,7 @@ export class Temp extends PureComponent<Props> {
                         <FormControl
                             error={!isValid}
                             margin="normal"
+                            disabled={isLoading}
                             required={uiSchema.isRequired}
                             {...tempOptions.options}>
                             {tempOptions.showTitle === false
@@ -53,6 +54,7 @@ export class Temp extends PureComponent<Props> {
                                 : <InputLabel htmlFor={uiSchema.schemaPath}>{getTitle(this.props)}</InputLabel>
                             }
                             {children}
+                            {isLoading ? <LinearProgress variant="query" /> : null}
                             {(uiSchema.description)
                                 ? <FormHelperText error={false}>
                                     {uiSchema.description}

@@ -74,9 +74,62 @@ export class NormalForm extends React.PureComponent<any> {
                     title: "基础设置",
                     temps: ["formGroup"],
                     children: [{
+                        key: "date",
+                        widget: "datetime",
+                        options: Immutable.fromJS({
+                            temp: {
+                                formItem: {
+                                    showTitle: false
+                                }
+                            }
+                        })
+                    }, {
+                        key: "date",
+                        widget: "date",
+                        options: Immutable.fromJS({
+                            temp: {
+                                formItem: {
+                                    showTitle: false
+                                }
+                            }
+                        })
+                    }, {
+                        key: "time",
+                        widget: "time",
+                        options: Immutable.fromJS({
+                            temp: {
+                                formItem: {
+                                    showTitle: false
+                                }
+                            }
+                        })
+                    }, {
                         key: "textAlign",
                         widget: "select",
+                        hocs: ["utils", "theme", "field", "validate", "condition", "temp"],
                         options: Immutable.fromJS({
+                            hoc: {
+                                condition: {
+                                    paths: [{ path: "../time" }],
+                                    hoc: hocFactory.get("proxy")({
+                                        proxyApi: getSchema,
+                                        options: {
+                                            params: {
+                                                id: "data.json"
+                                            }
+                                        },
+                                        dataTo: ["options", "widget", "select", "children"],
+                                        dataFilter: (data: any) => {
+                                            return data.map((val: any) => {
+                                                return {
+                                                    label: val.name,
+                                                    value: val.code
+                                                };
+                                            });
+                                        }
+                                    })
+                                }
+                            },
                             widget: {
                                 select: {
                                     children: [

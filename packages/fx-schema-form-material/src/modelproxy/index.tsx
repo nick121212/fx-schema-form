@@ -50,6 +50,12 @@ fetchSchemaEngine.use(async (ctx: IProxyCtx, next: Function) => {
 
     ctx.result = await ctx.result.json();
 
+    // await new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         resolve();
+    //     }, 2000);
+    // });
+
     await next();
 });
 

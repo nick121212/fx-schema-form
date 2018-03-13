@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import "fx-schema-form-extension";
 import { JSONSchema6 } from "json-schema";
 import { ResolveLib } from "fx-schema-form-core";
+import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
+import MomentUtils from "material-ui-pickers/utils/moment-utils";
 
 import { HomeComponent, reducer, initActions } from "./modules/home";
 import { curAjv } from "./sf/init";
@@ -36,11 +38,12 @@ initActions(store);
 // 渲染数据
 ReactDOM.render(
     <Provider store={store}>
-        <HomeComponent>
-            {/* <NormalForm ajv={curAjv} schemaId="style" reducerKey="schemaForm" formKey="normalForm" initData={{
-            }} /> */}
-            <Dashboard />
-        </HomeComponent>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+            <HomeComponent>
+                <NormalForm ajv={curAjv} schemaId="style" reducerKey="schemaForm" formKey="normalForm" initData={{}} />
+                {/* <Dashboard /> */}
+            </HomeComponent>
+        </MuiPickersUtilsProvider>
     </Provider>,
     document.getElementById("root"),
     () => {

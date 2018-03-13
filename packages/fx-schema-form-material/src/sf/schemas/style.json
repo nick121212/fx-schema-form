@@ -17,6 +17,16 @@
             "type": "string",
             "format": "url"
         },
+        "date": {
+            "type": "string",
+            "format": "date",
+            "description": "日期类型测试"
+        },
+        "time": {
+            "type": "string",
+            "format": "time",
+            "description": "日期类型测试"
+        },
         "email": {
             "type": "string",
             "format": "email"

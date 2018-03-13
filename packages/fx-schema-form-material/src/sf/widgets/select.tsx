@@ -46,8 +46,8 @@ export class Widget extends PureComponent<Props, any> {
 
         return (
             <Select
-                error={!isValid}
-                {...widgetOptions.options}
+            error={isValid === false}
+            {...widgetOptions.options}
                 {...this.setDefaultProps(widgetOptions)}
                 onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                     let val = e.target.value;

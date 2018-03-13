@@ -1,15 +1,16 @@
 import ajv from "ajv";
-import { ResolveLib } from "fx-schema-form-core";
+import { ResolveLib, BaseFactory } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 import { JSONSchema6 } from "json-schema";
 
 import proxy, { getSchema } from "../modelproxy";
 import temps from "./templates";
 import widgets from "./widgets";
+import hocs from "./hocs";
 
 export { globalOptions } from "./options/default";
 
-const { defaultTheme } = schemaFormReact;
+const { defaultTheme, hocFactory } = schemaFormReact;
 const { tempFactory, widgetFactory, fieldFactory } = defaultTheme;
 
 temps.forEach((temp: any) => {
@@ -28,6 +29,10 @@ widgets.forEach((widget: any) => {
     }
 });
 
+hocs.forEach((hoc: { name: string, hoc: (hocFactory: BaseFactory<any>) => any }) => {
+    hocFactory.add(hoc.name, hoc.hoc(hocFactory));
+});
+
 export const curAjv: ajv.Ajv = new ajv({
     allErrors: true,
     jsonPointers: true,
@@ -37,7 +42,11 @@ export const curAjv: ajv.Ajv = new ajv({
     errorDataPath: "property",
     removeAdditional: true,
     loadSchema: (uri: string) => {
-        return getSchema.get(uri + ".json").then((schema: JSONSchema6) => {
+        return getSchema.get(null, {
+            params: {
+                id: uri + ".json"
+            }
+        }).then((schema: JSONSchema6) => {
             return curAjv.compileAsync(schema).then(() => {
                 let resolve = new ResolveLib(curAjv, schema);
 

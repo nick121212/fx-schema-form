@@ -46,7 +46,7 @@ export class Widget extends PureComponent<Props, any> {
                         <Icon color="disabled">format_list_numbered</Icon>
                     </InputAdornment>
                 }
-                error={!isValid}
+                error={isValid === false}
                 {...widgetOptions.options}
                 {...this.setDefaultProps()}
                 inputProps={{

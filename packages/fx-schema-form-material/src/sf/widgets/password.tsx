@@ -61,7 +61,7 @@ export class Widget extends PureComponent<Props, any> {
                 }}
                 {...widgetOptions.options}
                 {...this.setDefaultProps()}
-                error={!isValid}
+                error={isValid === false}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     this._count++;
                     updateItemData(this.props, e.target.value);

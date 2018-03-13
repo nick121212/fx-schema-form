@@ -21,7 +21,11 @@ export default () => {
         class ComponentHoc extends React.PureComponent<any, any> {
 
             private initSchema(schemaId: string) {
-                getSchema.get(schemaId + ".json").then((schema: JSONSchema6) => {
+                getSchema.get(null, {
+                    params: {
+                        id: schemaId + ".json"
+                    }
+                }).then((schema: JSONSchema6) => {
                     curAjv.compileAsync(schema).then(() => {
                         let resolve = new ResolveLib(curAjv, schema);
 

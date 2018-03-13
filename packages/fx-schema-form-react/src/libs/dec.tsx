@@ -126,7 +126,11 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             // 处理错误
                             e.errors.forEach((element: ErrorObject) => {
                                 let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
-                                let childNode = root.addChild(dataKeys, Immutable.fromJS({}));
+                                let childNode = root.containPath(dataKeys);
+
+                                if (!childNode) {
+                                    childNode = root.addChild(dataKeys, Immutable.fromJS({}));
+                                }
 
                                 if (childNode) {
                                     childNode.value = childNode.value.merge($validateAfterData).merge({

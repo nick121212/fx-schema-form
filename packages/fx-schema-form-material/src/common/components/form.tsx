@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Grid, Button, Icon, MobileStepper, Card, CardHeader, CardContent, CardActions, IconButton, CircularProgress } from "material-ui";
+import { Divider, Button, Icon, Card, CardHeader, CardContent, LinearProgress } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import { NoneComponent } from "./none";
 
@@ -23,23 +23,22 @@ export class FormComponent extends React.PureComponent<any> {
                         uiSchemas={uiSchemas}
                         parentKeys={parentKeys}
                         globalOptions={globalOptions}
-                        ajv={ajv} >
+                        ajv={ajv}>
                     </SchemaForm>
                 </CardContent>
                 <Divider />
+                {isLoading ? <LinearProgress variant="query" /> : null}
                 <div className="flex pt3 pb3 items-center justify-center">
-                    <Button color="secondary" aria-label="reset" size="large" onClick={() => {
+                    <Button color="secondary" disabled={isLoading} aria-label="reset" size="large" onClick={() => {
                         resetForm();
                     }}>
                         <Icon>keyboard_backspace</Icon>
                         重置
                     </Button>
-                    <div className="relative ml3" style={{ height: 60 }}>
-                        <Button variant="fab" color="primary" disabled={isLoading} aria-label="submit" onClick={validateAll}>
-                            <Icon>send</Icon>
-                        </Button>
-                        {isLoading ? <CircularProgress className="absolute" style={{ left: -6, top: -6 }} size={68} /> : null}
-                    </div>
+                    <Button color="primary" disabled={isLoading} aria-label="submit" onClick={validateAll}>
+                        确定
+                        <Icon>done</Icon>
+                    </Button>
                 </div>
             </Card>
         );
