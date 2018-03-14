@@ -9,4 +9,3 @@ export const initActions = (store: any) => {
 export {
     reducer
 };
-

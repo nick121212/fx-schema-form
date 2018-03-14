@@ -44,4 +44,4 @@ export class HeaderComponent extends React.PureComponent<Props> {
     }
 }
 
-export default hoc(HeaderComponent) as any;
+export default hoc(HeaderComponent) as new () => React.PureComponent<Props, any>;

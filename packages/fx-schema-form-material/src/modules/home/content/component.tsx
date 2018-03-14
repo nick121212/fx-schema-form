@@ -6,10 +6,11 @@ import Cloud from "material-ui-icons/Cloud";
 import SearchBar from "material-ui-search-bar";
 
 import { hoc } from "./container";
+import { Props } from "../constant";
 
 const style = { padding: 0, margin: 0 };
 
-export class Component extends React.PureComponent<any> {
+export class Component extends React.PureComponent<Props> {
     public render() {
         const { classes, children } = this.props;
 
@@ -28,4 +29,4 @@ export class Component extends React.PureComponent<any> {
     }
 }
 
-export default hoc(Component) as any;
+export default hoc(Component) as new () => React.PureComponent<Props, any>;

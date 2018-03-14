@@ -94,4 +94,4 @@ export class Component extends React.PureComponent<Props> {
     }
 }
 
-export default hoc(Component) as any;
+export default hoc(Component) as new () => React.PureComponent<Props, any>;
