@@ -17,7 +17,7 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
 export const widgetKey = "time";
 
 class DateWidgetTextComponent extends React.PureComponent<any> {
-    public render() {
+    public render(): JSX.Element {
         const { ...extraProps } = this.props;
 
         return <TextField {...extraProps} component={({ children }: { children?: ReactNode }) => {

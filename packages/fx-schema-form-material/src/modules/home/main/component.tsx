@@ -24,7 +24,6 @@ export class Component extends React.PureComponent<Props> {
                 }
             })}>
                 <div className={classNames(classes.root, "h-100")}>
-                    <Reboot />
                     <HeaderComponent />
                     <SideComponent />
                     <ContentComponent children={children} />

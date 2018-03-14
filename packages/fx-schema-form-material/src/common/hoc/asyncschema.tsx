@@ -12,7 +12,7 @@ import { getSchema } from "../../modelproxy";
 
 /**
  * data
- * 将data中的字段塞到meta中
+ * 用来获取schema的插件
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
@@ -20,6 +20,10 @@ export default () => {
     return (Component: any): RC<any, any> => {
         class ComponentHoc extends React.PureComponent<any, any> {
 
+            /**
+             * 获取指定的schema的json文件
+             * 使用fx-schema-form-core中的ResolveLib来编译
+             */
             private initSchema(schemaId: string) {
                 getSchema.get(null, {
                     params: {
@@ -34,6 +38,9 @@ export default () => {
                 });
             }
 
+            /**
+             * 如果当前的schema不存在，则远程拉取
+             */
             public render(): JSX.Element | null {
                 const { schemaId, ...extraProps } = this.props;
 

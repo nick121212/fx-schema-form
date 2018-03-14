@@ -2,7 +2,7 @@
 
 
 import { createAction, createReducer, EmptyActionCreator, SimpleActionCreator } from "redux-act";
-import { Reducer, AnyAction } from "redux";
+import { Reducer } from "redux";
 import Immutable from "immutable";
 
 export interface SetThemeData {
