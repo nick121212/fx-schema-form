@@ -4,10 +4,12 @@ import { createAction, createReducer, EmptyActionCreator, SimpleActionCreator, A
 import { HomeReducer, SetThemeData } from "./reducer";
 import { $initialState, reducerKey } from "./constant";
 
+export { AnyAction } from "redux";
+
 export const homeReducer = new HomeReducer($initialState);
 
 export const homeActions = homeReducer.actions;
 
 export default combineReducers({
     [reducerKey]: homeReducer.reducer
-});
+}) as any;

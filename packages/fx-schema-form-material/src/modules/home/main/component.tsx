@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentClass } from "react";
 import { createMuiTheme, MuiThemeProvider, Reboot, withStyles } from "material-ui";
 import classNames from "classnames";
 
@@ -7,11 +7,6 @@ import { SideComponent } from "../side";
 import { ContentComponent } from "../content";
 import { stylesHoc, Props } from "../constant";
 import { hoc } from "./container";
-
-// const theme = createMuiTheme({
-//     palette: {
-//     }
-// });
 
 export class Component extends React.PureComponent<Props> {
     public render() {
@@ -33,4 +28,4 @@ export class Component extends React.PureComponent<Props> {
     }
 }
 
-export default hoc(Component);
+export default hoc(Component) as any;

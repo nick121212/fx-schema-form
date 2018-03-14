@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { ComponentClass } from "react";
 import { AppBar, Toolbar, IconButton, Typography, Divider, Grid } from "material-ui";
 import classNames from "classnames";
 import Cloud from "material-ui-icons/Cloud";
@@ -28,4 +28,4 @@ export class Component extends React.PureComponent<any> {
     }
 }
 
-export default hoc(Component);
+export default hoc(Component) as any;

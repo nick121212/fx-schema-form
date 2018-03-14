@@ -8,6 +8,7 @@ import { fromJS } from "immutable";
 import { TimePicker, DatePicker, DateTimePicker } from "material-ui-pickers";
 import { Moment } from "moment";
 import { Icon, InputAdornment, Input, TextField } from "material-ui";
+import { TextFieldProps } from "material-ui/TextField";
 
 const { schemaFormTypes } = schemaFormReact;
 
@@ -16,11 +17,11 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
 
 export const widgetKey = "date";
 
-class DateWidgetTextComponent extends React.PureComponent<any> {
+class DateWidgetTextComponent extends React.PureComponent<TextFieldProps> {
     public render() {
         const { ...extraProps } = this.props;
 
-        return <TextField {...extraProps} component={({ children }: { children?: ReactNode }) => {
+        return <TextField {...extraProps} component={({ children }: { children?: any }) => {
             return children;
         }} />;
     }

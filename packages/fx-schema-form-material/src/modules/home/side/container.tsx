@@ -12,7 +12,7 @@ export const mapStateToProps = (state: Immutable.Map<string, any>, ownProps: any
     };
 };
 
-export const hoc = compose<Props, any>(
+export const hoc: ComponentEnhancer<Props, any> = compose<Props, Props>(
     mainHoc,
     connect(mapStateToProps)
 );

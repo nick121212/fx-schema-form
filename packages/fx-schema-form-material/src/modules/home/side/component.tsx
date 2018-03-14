@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { ComponentClass } from "react";
 import {
     Drawer, Toolbar, IconButton, Typography, Divider, List, SvgIcon, Checkbox, Icon,
     ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse, ListItemSecondaryAction, Switch
@@ -64,7 +64,7 @@ export class Component extends React.PureComponent<Props> {
                 <Toolbar disableGutters={true}>
                     <IconButton
                         aria-label="open drawer"
-                        onClick={toggleOpen.bind(this)}>
+                        onClick={toggleOpen ? toggleOpen.bind(this) : null}>
                         <Cloud />
                     </IconButton>
                     <Typography variant="title" className="flex-auto">
@@ -77,7 +77,9 @@ export class Component extends React.PureComponent<Props> {
                         <List component="nav"
                             subheader={opened ? <ListSubheader component="div">设置</ListSubheader> : undefined}>
                             <ListItem button dense={true} onClick={() => {
-                                setTheme(type === "dark" ? "light" : "dark");
+                                if (setTheme) {
+                                    setTheme(type === "dark" ? "light" : "dark");
+                                }
                             }}>
                                 <ListItemIcon>
                                     <Icon>{type === "dark" ? "brightness_high" : "brightness_low"}</Icon>
@@ -92,4 +94,4 @@ export class Component extends React.PureComponent<Props> {
     }
 }
 
-export default hoc(Component);
+export default hoc(Component) as any;

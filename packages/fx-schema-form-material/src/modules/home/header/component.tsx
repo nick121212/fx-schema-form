@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentClass } from "react";
 import { AppBar, Toolbar, IconButton, Typography, Divider } from "material-ui";
 import classNames from "classnames";
 import Cloud from "material-ui-icons/Cloud";
@@ -21,7 +21,7 @@ export class HeaderComponent extends React.PureComponent<Props> {
                 <Toolbar disableGutters={true}>
                     <IconButton
                         aria-label="open drawer"
-                        onClick={toggleOpen.bind(this)}
+                        onClick={toggleOpen ? toggleOpen.bind(this) : null}
                         className={classNames(classes.menuButton, opened && classes.hide)}>
                         <Cloud />
                     </IconButton>
@@ -44,4 +44,4 @@ export class HeaderComponent extends React.PureComponent<Props> {
     }
 }
 
-export default hoc(HeaderComponent);
+export default hoc(HeaderComponent) as any;

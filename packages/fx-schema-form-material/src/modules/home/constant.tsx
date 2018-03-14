@@ -1,7 +1,6 @@
 import React from "react";
 import { fromJS } from "immutable";
-import withStyles, { StyledComponentProps } from "material-ui/styles/withStyles";
-import { Theme, WithStyles, PaletteType } from "material-ui";
+import { Theme, WithStyles, PaletteType, withStyles, StyledComponentProps } from "material-ui";
 import { ComponentEnhancer } from "recompose";
 
 export const sideBarWidth = 240;
@@ -12,12 +11,12 @@ export const $initialState = fromJS({
 });
 
 export interface Props {
-    classes: any;
-    opened: boolean;
-    toggleOpen: () => void;
-    setTheme: (type: "light" | "dark") => void;
-    title: string;
-    type: PaletteType;
+    classes?: any;
+    opened?: boolean;
+    toggleOpen?: () => void;
+    setTheme?: (type: "light" | "dark") => void;
+    title?: string;
+    type?: PaletteType;
 }
 
 export const reducerKey = "index";
