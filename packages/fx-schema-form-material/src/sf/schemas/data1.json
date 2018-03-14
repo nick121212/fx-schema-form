@@ -1,0 +1,10 @@
+ [{
+     "name": "居左",
+     "code": "left"
+ }, {
+     "name": "居右",
+     "code": "right"
+ }, {
+     "name": "居中",
+     "code": "center"
+ }]

@@ -79,7 +79,7 @@ export class NormalForm extends React.PureComponent<any> {
                                 proxyApi: getSchema,
                                 options: {
                                     params: {
-                                        id: "data.json"
+                                        id: "data1.json"
                                     }
                                 },
                                 dataTo: ["options", "widget", "autocomplete", "children"],
