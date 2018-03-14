@@ -6,5 +6,6 @@ import { default as PasswordWidget, Widget as pw, widgetKey as pn } from "./pass
 import { default as DateWidget, Widget as dw, widgetKey as dn } from "./date";
 import { default as DateTimeWidget, Widget as dtw, widgetKey as dtn } from "./datetime";
 import { default as TimeWidget, Widget as ttw, widgetKey as ttn } from "./time";
+import { default as AutoWidget, Widget as acw, widgetKey as acn } from "./autocomplete";
 
-export default [TextWidget, NumberWidget, CheckboxWidget, SelectWidget, PasswordWidget, DateWidget, DateTimeWidget, TimeWidget];
+export default [TextWidget, NumberWidget, CheckboxWidget, SelectWidget, PasswordWidget, DateWidget, DateTimeWidget, TimeWidget, AutoWidget];

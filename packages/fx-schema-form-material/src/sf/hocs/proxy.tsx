@@ -32,15 +32,8 @@ export interface ProxyHocOutProps {
 }
 
 /**
- * oneof装饰器
- * 这里解析一种特殊的schema字段oneof
- * {
- *  "name":{
- *      "oneOf":[{"type":"string"},{"type":"number"}]
- *                   or
- *      "anyOf":[{"type":"string"},{"type":"number"}]
- *  }
- * }
+ * proxy装饰器
+ * 用于拉取接口，为select，autocomplete等组件提供数据支持
  * 必须接口conditionHoc使用
  * @param hocFactory  hoc的工厂方法
  * @param Component   需要包装的组件
@@ -49,32 +42,50 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
     return (settings: ProxyHocSetting = {}) => {
         return (Component: any): RC<Props, any> => {
             @(onlyUpdateForKeys(["condition"]) as any)
+            @(hocFactory.get("data")({
+                meta: true,
+                metaKeys: ["isProxyLoaded"]
+            }) as any)
             class ComponentHoc extends React.PureComponent<Props, any> {
 
-                private execute(props: Props) {
+                private execute(props: Props, executeOptions?: IExecute) {
                     const { getOptions, updateItemMeta } = props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings));
+                    let params, timeId: number;
 
-                    if (!options.proxyApi) {
+                    if (!options.proxyApi || !options.dataTo) {
                         return;
                     }
 
-                    updateItemMeta(props, null, {
-                        isLoading: true,
-                    });
+                    timeId = setTimeout(() => {
+                        // 更改当前meta，表示正在loading
+                        updateItemMeta(props, null, {
+                            isLoading: true,
+                        });
+                    }, 200);
 
-                    let params = Immutable.fromJS(options.options || {});
+                    // 合并数据
+                    params = Immutable.fromJS(options.options || {});
 
+                    if (executeOptions) {
+                        params = params.mergeDeep(executeOptions);
+                    }
+
+                    // 调用接口
                     options.proxyApi.execute(params.toJS()).then((data: any) => {
                         let dataTo = Immutable.fromJS({});
 
-                        dataTo = dataTo.setIn(options.dataTo, options.dataFilter(data));
-
+                        clearTimeout(timeId);
+                        // 数据的设置
+                        dataTo = dataTo.setIn(options.dataTo, options.dataFilter ? options.dataFilter(data) : data);
+                        // 更新meta
                         updateItemMeta(props, null, {
                             isLoading: false,
                             ...dataTo.toJS()
                         });
                     }).catch((e: Error) => {
+                        clearTimeout(timeId);
+                        // 报错
                         updateItemMeta(props, null, {
                             isValid: false,
                             isLoading: false,
@@ -89,20 +100,20 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props props
                  */
                 public async componentDidUpdate(props: Props) {
-                    this.execute(props);
+                    const { formItemMeta } = props,
+                        isProxyLoaded = formItemMeta ? formItemMeta.get("isProxyLoaded") : false;
+
+                    if (!isProxyLoaded) {
+                        this.execute(props);
+                    }
                 }
 
                 public componentWillMount() {
-                    this.execute(this.props);
+                    this.componentDidUpdate(this.props);
                 }
 
                 /**
                  * 渲染组件
-                 * 1. 获取参数
-                 * 2. 如果【path，condition，keys，uiSchema，options.uiSchemas】中任何一个不存在，则返回空
-                 * 3. 从condition属性中查找配置的path的数据
-                 * 4. 根据数据获得配置uiSchemas的uiSchema
-                 * 5. 更改当前的uiSchema，渲染Component组件
                  */
                 public render(): JSX.Element | null {
                     return <Component {...this.props} execute={this.execute} />;

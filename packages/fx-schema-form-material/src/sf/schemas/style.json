@@ -1,7 +1,7 @@
 {
     "type": "object",
     "$id": "style",
-    "required": ["textAlign", "width", "height"],
+    "required": ["textAlign", "width", "height", "city"],
     "properties": {
         "width": {
             "$ref": "size#/properties/width"
@@ -30,6 +30,19 @@
         "email": {
             "type": "string",
             "format": "email"
+        },
+        "city": {
+            "type": "array",
+            "description": "Note: 只能是left，right，center中的一个。",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+                "anyOf": [{
+                    "type": "string"
+                }, {
+                    "type": "number"
+                }]
+            }
         },
         "textAlign": {
             "type": "string",

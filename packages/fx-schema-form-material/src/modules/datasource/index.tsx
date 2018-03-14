@@ -36,131 +36,67 @@ export class NormalForm extends React.PureComponent<any> {
                 RootComponent={NoneComponent}
                 schemaId={schemaId}
                 uiSchemas={[{
-                    key: "",
-                    title: "尺寸设置",
-                    temps: ["formGroup"],
-                    children: [{
-                        key: "width",
-                        options: Immutable.fromJS({
-                            widget: {
-                                text: {
-                                    options: {
-                                        autoFocus: true
-                                    }
-                                }
-                            }
-                        })
-                    }, {
-                        key: "height",
-                        widget: "password"
-                    }, {
-                        key: "aaa",
-                        temps: ["card", "formGroup"],
-                        options: Immutable.fromJS({
-                            temp: {
-                                card: {
-                                    options: {
-                                        className: "ml3 mr3 w-100",
-                                        elevation: 0,
-                                        raised: false
-                                    }
-                                }
-                            }
-                        }),
-                        children: ["-"]
-                    }]
-                }, {
-                    key: "",
-                    title: "基础设置",
-                    temps: ["formGroup"],
-                    children: [{
-                        key: "date",
-                        widget: "datetime",
-                        options: Immutable.fromJS({
-                            temp: {
-                                formItem: {
-                                    showTitle: false
-                                }
-                            }
-                        })
-                    }, {
-                        key: "date",
-                        widget: "date",
-                        options: Immutable.fromJS({
-                            temp: {
-                                formItem: {
-                                    showTitle: false
-                                }
-                            }
-                        })
-                    }, {
-                        key: "time",
-                        widget: "time",
-                        options: Immutable.fromJS({
-                            temp: {
-                                formItem: {
-                                    showTitle: false
-                                }
-                            }
-                        })
-                    }, {
-                        key: "textAlign",
-                        widget: "select",
-                        hocs: ["utils", "theme", "field", "validate", "condition", "temp"],
-                        options: Immutable.fromJS({
-                            hoc: {
-                                condition: {
-                                    paths: [{ path: "../time" }],
-                                    hoc: hocFactory.get("proxy")({
-                                        proxyApi: getSchema,
-                                        options: {
-                                            params: {
-                                                id: "data.json"
-                                            }
-                                        },
-                                        dataTo: ["options", "widget", "select", "children"],
-                                        dataFilter: (data: any) => {
-                                            return data.map((val: any) => {
-                                                return {
-                                                    label: val.name,
-                                                    value: val.code
-                                                };
-                                            });
-                                        }
-                                    })
-                                }
-                            },
-                            widget: {
-                                select: {
-                                    children: [
-                                        { label: "None", value: "" },
-                                        { label: "left", value: "left" },
-                                        { label: "right", value: "right" },
-                                        { label: "center", value: "center" }
-                                    ]
-                                }
-                            }
-                        }),
-                    }, {
-                        key: "font-size",
-                        widget: "number",
-                        hocs: ["utils", "theme", "field", "validate", "condition", "temp"],
-                        options: Immutable.fromJS({
-                            hoc: {
-                                condition: {
-                                    paths: [{ path: "../textAlign" }],
-                                    hoc: hocFactory.get("show")({
-                                        paths: ["../textAlign"]
-                                    })
-                                }
-                            }
-                        })
-                    }, "ids"],
+                    key: "city",
+                    temps: ["formItem"],
+                    hocs: ["utils", "theme", "field", "validate", "proxy", "temp"],
+                    field: "normal",
+                    widget: "select",
                     options: Immutable.fromJS({
-                        temp: {
-                            formGroup: {
+                        hoc: {
+                            proxy: {
+                                proxyApi: getSchema,
                                 options: {
-                                    row: false
+                                    params: {
+                                        id: "data.json"
+                                    }
+                                },
+                                dataTo: ["options", "widget", "select", "children"],
+                                dataFilter: (data: any) => {
+                                    return data.map((val: any) => {
+                                        return {
+                                            label: val.name,
+                                            value: val.code
+                                        };
+                                    });
+                                }
+                            }
+                        },
+                        widget: {
+                            select: {
+                                options: {
+                                    multiple: true
+                                }
+                            }
+                        }
+                    })
+                }, {
+                    key: "textAlign",
+                    hocs: ["utils", "theme", "field", "validate", "proxy", "temp"],
+                    widget: "autocomplete",
+                    options: Immutable.fromJS({
+                        hoc: {
+                            proxy: {
+                                proxyApi: getSchema,
+                                options: {
+                                    params: {
+                                        id: "data.json"
+                                    }
+                                },
+                                dataTo: ["options", "widget", "autocomplete", "children"],
+                                dataFilter: (data: any) => {
+                                    return data.map((val: any) => {
+                                        return {
+                                            label: val.name,
+                                            value: val.code
+                                        };
+                                    });
+                                }
+                            }
+                        },
+                        widget: {
+                            autocomplete: {
+                                options: {
+                                    multiple: false
                                 }
                             }
                         }

@@ -1,4 +1,5 @@
 import React, { PureComponent, SyntheticEvent, ChangeEvent } from "react";
+import Immutable from "immutable";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
@@ -19,8 +20,15 @@ export class Widget extends PureComponent<Props, any> {
         const props: any = {}, { uiSchema } = this.props;
 
         props.value = "";
+        if (widgetOptions.options.multiple) {
+            props.value = [];
+        }
+
         if (this.props.formItemData !== undefined) {
             props.value = this.props.formItemData;
+            if (Immutable.Map.isMap(props.value) || Immutable.List.isList(props.value)) {
+                props.value = props.value.toJS();
+            }
         }
 
         if (widgetOptions.children) {
@@ -46,8 +54,8 @@ export class Widget extends PureComponent<Props, any> {
 
         return (
             <Select
-            error={isValid === false}
-            {...widgetOptions.options}
+                error={isValid === false}
+                {...widgetOptions.options}
                 {...this.setDefaultProps(widgetOptions)}
                 onChange={async (e: ChangeEvent<HTMLInputElement>) => {
                     let val = e.target.value;
@@ -56,7 +64,7 @@ export class Widget extends PureComponent<Props, any> {
                 }}
                 inputProps={{
                     id: uiSchema.schemaPath
-                }} />
+                }}/>
         );
     }
 }
