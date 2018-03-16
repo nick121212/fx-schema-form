@@ -1,11 +1,11 @@
 {
   "name": "fx-schema-form-extension",
-  "version": "3.0.45",
+  "version": "3.0.46",
   "description": "自动生成表单组件",
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack;tsc --outDir dist -d",
+    "build": "NODE_ENV=production webpack;tsc --outDir libs -d",
     "start": "webpack-dev-server --port=8004",
     "test": "exit 0",
     "test1": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
