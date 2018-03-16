@@ -1,0 +1,1 @@
+{"version":3,"file":"dnd.checkbox.js","sourceRoot":"","sources":["../../../../src/demo/schemas/dnd/dnd.checkbox.tsx"],"names":[],"mappings":"AAAA,eAAe;IACX,GAAG,EAAE,cAAc;IACnB,IAAI,EAAE,QAAQ;IACd,UAAU,EAAE;QACR,OAAO,EAAE;YACL,IAAI,EAAE,SAAS;SAClB;QACD,KAAK,EAAE;YACH,IAAI,EAAE,QAAQ;SACjB;KACJ;CACJ,CAAC"}

@@ -1,7 +1,7 @@
 import schemaFormReact from "fx-schema-form-react";
 import { BaseFactory } from "fx-schema-form-core";
 
-import fields from "./fields";
+import { fields } from "./fields";
 import { hocs } from "./hocs";
 
 const { hocFactory, defaultTheme } = schemaFormReact;

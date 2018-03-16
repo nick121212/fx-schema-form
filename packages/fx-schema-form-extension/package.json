@@ -5,7 +5,7 @@
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack;tsc -d;",
+    "build": "NODE_ENV=production webpack;tsc --outDir dist -d",
     "start": "webpack-dev-server --port=8004",
     "test": "exit 0",
     "test1": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
