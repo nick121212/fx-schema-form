@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import React from "react";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
 export declare class ArrayComponent extends React.PureComponent<DefaultProps & any> {
     private addItem;
     private hideItems;

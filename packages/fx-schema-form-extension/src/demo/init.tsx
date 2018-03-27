@@ -10,7 +10,7 @@ import { ResolveLib } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget, AntdSelectWidget } from "./widgets";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { design, div, checkbox, style, oneof, tree } from "./schemas";
 
 export { globalOptions } from "./options/normal";

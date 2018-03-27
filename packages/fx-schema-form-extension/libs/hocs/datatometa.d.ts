@@ -1,9 +1,9 @@
 import { BaseFactory } from "fx-schema-form-core";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { RC } from "fx-schema-form-react/dist/typings/models";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { RC } from "fx-schema-form-react/libs/models";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
     formItemNode?: TreeMap;
 }

@@ -1,9 +1,9 @@
 import React, { PureComponent, SyntheticEvent, ChangeEvent } from "react";
 import { defaultProps } from "recompose";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { FxUiSchema } from "fx-schema-form-react/libs/models";
 import { Checkbox, FormControlLabel } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import NumberFormat from "react-number-format";

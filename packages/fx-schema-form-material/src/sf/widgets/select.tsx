@@ -1,9 +1,9 @@
 import React, { PureComponent, SyntheticEvent, ChangeEvent } from "react";
 import Immutable from "immutable";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { FxUiSchema } from "fx-schema-form-react/libs/models";
 import { Input, Select, MenuItem } from "material-ui";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";

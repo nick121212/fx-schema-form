@@ -1,9 +1,9 @@
 import React, { PureComponent, SyntheticEvent } from "react";
 import Input from "antd/lib/input";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-import { FxUiSchema } from "fx-schema-form-react/dist/typings/models";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { FxUiSchema } from "fx-schema-form-react/libs/models";
 
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import schemaFormReact from "fx-schema-form-react";
 
 const { schemaFormTypes } = schemaFormReact;

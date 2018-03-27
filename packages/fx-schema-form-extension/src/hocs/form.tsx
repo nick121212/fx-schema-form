@@ -4,11 +4,11 @@ import { onlyUpdateForKeys, compose } from "recompose";
 import Immutable from "immutable";
 import { BaseFactory } from "fx-schema-form-core";
 import { ConditionHocOutProps } from "./condition";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { RC, FxUiSchema } from "fx-schema-form-react/dist/typings/models/index";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
-import { TreeMap } from "fx-schema-form-react/dist/typings/libs/tree";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { RC, FxUiSchema } from "fx-schema-form-react/libs/models/index";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;

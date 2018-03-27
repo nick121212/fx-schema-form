@@ -4,10 +4,10 @@ import schemaFormReact from "fx-schema-form-react";
 import { immutableRenderDecorator } from "react-immutable-render-mixin";
 import Button from "antd/lib/button";
 import { compose, shouldUpdate } from "recompose";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DropTarget, DragDropContext, DragSource } from "react-dnd";
-import { ArrayHocOutProps } from "fx-schema-form-react/dist/typings/hocs/array";
+import { ArrayHocOutProps } from "fx-schema-form-react/libs/hocs/array";
 
 export const globalOptions = Immutable.fromJS({
     field: {

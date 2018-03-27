@@ -1,7 +1,7 @@
 import { BaseFactory } from "fx-schema-form-core";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { RC } from "fx-schema-form-react/dist/typings/models";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { RC } from "fx-schema-form-react/libs/models";
 export interface Props extends DefaultProps, UtilsHocOutProps {
 }
 export interface ResetKeysHocOutSettings {

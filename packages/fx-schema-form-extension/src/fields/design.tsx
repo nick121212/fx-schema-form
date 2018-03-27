@@ -1,9 +1,9 @@
 import React from "react";
 import { compose, shouldUpdate } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/dist/typings/hocs/validate";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 
 export interface DesignFieldProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 

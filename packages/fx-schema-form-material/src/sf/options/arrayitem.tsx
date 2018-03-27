@@ -2,7 +2,7 @@ import React from "react";
 import Immutable from "immutable";
 import schemaFormReact from "fx-schema-form-react";
 import { compose, shouldUpdate } from "recompose";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { IconButton, Icon, Tooltip } from "material-ui";
 
 const { hocFactory } = schemaFormReact;

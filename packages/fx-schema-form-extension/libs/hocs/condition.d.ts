@@ -2,9 +2,9 @@
 import { ComponentEnhancer } from "recompose";
 import Immutable from "immutable";
 import { BaseFactory } from "fx-schema-form-core";
-import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
-import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
-import { RC } from "fx-schema-form-react/dist/typings/models/index";
+import { DefaultProps } from "fx-schema-form-react/libs/components";
+import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
+import { RC } from "fx-schema-form-react/libs/models/index";
 export interface ConditionHocOutProps {
     condition?: Immutable.Map<string, any>;
 }

@@ -3,7 +3,7 @@ import React from "react";
 import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
 import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
-import { RC } from "fx-schema-form-react/dist/typings/models";
+import { RC } from "fx-schema-form-react/libs/models";
 import { JSONSchema6 } from "json-schema";
 import { ResolveLib, MergeLib, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 
