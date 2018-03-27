@@ -3,9 +3,7 @@ import React from "react";
 import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
 import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
-
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelector, createSelectorCreator, defaultMemoize, Selector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/dist/typings/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/dist/typings/hocs/utils";
 import { RC } from "fx-schema-form-react/dist/typings/models";

@@ -11,7 +11,7 @@ import { reducerFactory } from "../factory";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
-    updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => void;
+    updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
@@ -105,7 +105,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 更新一个元数据
                      */
-                    updateItemMeta: (propsCur: ValidateHocOutProps) => {
+                    updateItemMeta: (propsCur: DefaultProps & ValidateHocOutProps) => {
                         return async (props: DefaultProps, data: any, meta: any = null, noChange = false) => {
                             reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
                                 parentKeys: props.parentKeys,
@@ -118,8 +118,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 删除一个元素的meta和data
                      */
-                    removeItemData: (propsCur: ValidateHocOutProps) => {
-                        return async (props: DefaultProps, meta = true) => {
+                    removeItemData: (propsCur: DefaultProps) => {
+                        return  (props: DefaultProps, meta = true) => {
                             reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
                                 parentKeys: props.parentKeys,
                                 keys: (props.uiSchema as any).keys,
@@ -127,7 +127,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             });
                         };
                     }
-                })) as any)
+                }) as any) as any)
             class ArrayComponentHoc extends PureComponent<DefaultProps, any> {
                 public render(): JSX.Element {
                     return <Component {...this.props} />;

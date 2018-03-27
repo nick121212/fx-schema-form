@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { BaseFactory, UiSchema } from "fx-schema-form-core";
+import { DefaultProps } from "../components";
 
 export interface SchemaFormNs<F, T, W> {
     fieldFactory: BaseFactory<F>;
@@ -32,6 +33,8 @@ export interface FxUiSchema extends UiSchema {
     readonly?: boolean;
     // 用于包裹整个ShemaFormItem的hoc数组
     hocs?: any[];
+    // 数据更改的时候触发的方法
+    onValueChanged?: <T>(props: DefaultProps, data: T) => void;
 }
 export type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 

@@ -5,7 +5,7 @@ import { SchemaFormReducer } from "./reducers/schema.form";
 import { reducerFactory, hocFactory, themeFactory } from "./factory";
 import { FxReducer } from "./reducers/reducer";
 import { SchemaFormActions } from "./reducers/schema.form";
-import { SchemaForm, DefaultProps } from "./components";
+import { SchemaForm, DefaultProps, SchemaFormItem } from "./components";
 import { RC, SchemaFormNs, schemaFormTypes } from "./models";
 
 import fields from "./fields";
