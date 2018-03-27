@@ -1,11 +1,12 @@
 {
   "name": "fx-schema-form-react",
-  "version": "3.0.44",
+  "version": "3.0.47",
   "description": "自动生成表单组件",
-  "main": "dist/index.js",
-  "types": "./dist/typings/index.d.ts",
+  "main": "libs/index.js",
+  "types": "./libs/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production webpack ",
+    "dist": "NODE_ENV=production webpack ",
+    "build": "NODE_ENV=production webpack;tsc --outDir libs -d",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx"
   },
   "author": "NICK",
