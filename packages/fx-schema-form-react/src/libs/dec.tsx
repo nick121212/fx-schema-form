@@ -100,10 +100,12 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 });
                             }, 200);
 
+                            props.ajv.errors = null;
+
                             let valRes = await validate(props.data.toJS());
 
                             if (!valRes) {
-                                throw new (ValidationError as any)(validate.errors);
+                                throw new (ValidationError as any)(validate.errors.concat(props.ajv.errors||[]));
                             }
 
                             root.value = root.value.merge({

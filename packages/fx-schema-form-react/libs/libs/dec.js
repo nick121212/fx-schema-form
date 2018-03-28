@@ -60,9 +60,10 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                     meta: root.value
                                 });
                             }, 200);
+                            props.ajv.errors = null;
                             let valRes = yield validate(props.data.toJS());
                             if (!valRes) {
-                                throw new ValidationError(validate.errors);
+                                throw new ValidationError(validate.errors.concat(props.ajv.errors || []));
                             }
                             root.value = root.value.merge({
                                 isValid: true
