@@ -67,6 +67,9 @@ export const hoc = (hocFactory) => {
                                 data: data,
                                 meta
                             });
+                            if (props.uiSchema.onValueChanged) {
+                                props.uiSchema.onValueChanged(props, data);
+                            }
                         };
                     },
                     updateItemMeta: (propsCur) => {

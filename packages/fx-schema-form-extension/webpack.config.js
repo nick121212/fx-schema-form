@@ -12,7 +12,7 @@ const __PROD__ = env.toUpperCase() == "PRODUCTION";
 module.exports = {
     entry: {
         index: "./src/index.tsx",
-        // demo: [ "tachyons", "./src/demo/index.tsx"]
+        demo: [ "tachyons", "./src/demo/index.tsx"]
     },
     devServer: devServer,
     devtool: 'source-map',

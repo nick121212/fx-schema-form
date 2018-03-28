@@ -16,9 +16,6 @@ declare const _default: {
                 $id: string;
                 type: string;
                 title: string;
-                default?: undefined;
-                required?: undefined;
-                properties?: undefined;
             } | {
                 $id: string;
                 type: string;
