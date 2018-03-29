@@ -1,6 +1,6 @@
 {
   "name": "fx-schema-form-react",
-  "version": "3.0.53",
+  "version": "3.0.54",
   "description": "自动生成表单组件",
   "main": "libs/index.js",
   "types": "./libs/index.d.ts",
@@ -93,5 +93,8 @@
     "tslint-loader": "^3.5.3",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "immutable-custom-merge": "^0.2.1"
   }
 }
