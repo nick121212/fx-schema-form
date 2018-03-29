@@ -40,6 +40,9 @@ describe("utils的hoc", () => {
     });
 
     it("测试getOptions方法;", () => {
+
+console.log(roots[0].props().getOptions(roots[0].props(), "temp", "card"));
+
         expect(roots[0].props().getOptions).to.be.a("function");
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card")).to.be.a("object");
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card").tempHocs).to.be.a("array");

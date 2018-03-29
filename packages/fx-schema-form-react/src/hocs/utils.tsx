@@ -146,7 +146,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     // 从options中抽取field的配置
                     getOptions(globalOptions, [category, "default"]);
                     getOptions(globalOptions, [category, field]);
-
                     getOptions(globalOptions, [schemaFormTypes.field, type.toString(), "options", category, field]);
 
                     // if (fieldOptions && fieldOptions.options) {
@@ -156,16 +155,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     optionsArray = optionsArray.concat(extraSettings);
 
-                    let opts = optionsArray.reverse().reduce((prev: Immutable.Map<string, any>, next: Immutable.Map<string, any>) => {
+                    let opts = optionsArray.reverse().reduce((prev: any, next: Immutable.Map<string, any>) => {
                         if (next) {
-                            if (!Immutable.Map.isMap(next)) {
-                                next = Immutable.fromJS(next);
+                            if (Immutable.Map.isMap(next)) {
+                                next = next.toJS();
                             }
+
+                            console.log(next, prev, merge(next, prev));
+
                             return merge(next, prev);
                         }
 
                         return prev;
-                    }, Immutable.fromJS({})).toJS();
+                    }, {});
 
                     return opts;
                 }
