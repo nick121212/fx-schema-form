@@ -3,6 +3,7 @@ import React, { PureComponent } from "react";
 import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import Immutable from "immutable";
 import resolvePathname from "resolve-pathname";
+import merge from "immutable-custom-merge";
 import { schemaFormTypes } from "../models/index";
 export const name = "utils";
 export const hoc = (hocFactory) => {
@@ -72,7 +73,7 @@ export const hoc = (hocFactory) => {
                             if (!Immutable.Map.isMap(next)) {
                                 next = Immutable.fromJS(next);
                             }
-                            return next.merge(prev);
+                            return merge(next, prev);
                         }
                         return prev;
                     }, Immutable.fromJS({})).toJS();
@@ -109,16 +110,16 @@ export const hoc = (hocFactory) => {
                     }
                     return keysResolve;
                 }
-                getDefaultData(ajv, schema, data, merge = false) {
+                getDefaultData(ajv, schema, data, needMerge = false) {
                     return tslib_1.__awaiter(this, void 0, void 0, function* () {
                         let itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
-                            if (!merge) {
+                            if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
                             if (type === "object") {
-                                return Immutable.fromJS({}).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                                return merge(defaultValue.defaultData, dataOfType);
                             }
-                            return Immutable.fromJS([]).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                            return merge(defaultValue.defaultData, dataOfType);
                         };
                         try {
                             yield ajv.validate({

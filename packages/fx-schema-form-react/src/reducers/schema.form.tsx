@@ -1,6 +1,7 @@
 import { createAction, createReducer, SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
+import merge from "immutable-custom-merge";
 
 import { FxReducer, a } from "./reducer";
 import { TreeMap } from "../libs/tree";
@@ -312,7 +313,7 @@ export class SchemaFormReducer<T> implements FxReducer {
 
         if (childNode) {
             if (value) {
-                childNode.value = childNode.value.merge(meta);
+                childNode.value = merge(childNode.value, meta);
             } else {
                 childNode.value = fromJS(meta);
             }

@@ -5,10 +5,13 @@ import { BaseFactory, MergeLib, FxJsonSchema, schemaKeysFactory, schemaFieldFact
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import Immutable from "immutable";
 import resolvePathname from "resolve-pathname";
-import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import merge from "immutable-custom-merge";
 import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
+
+import { DefaultProps } from "../components";
+import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+
 
 // const resolvePathname = require("resolve-pathname");
 
@@ -123,8 +126,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getOptions(props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
                     : { [key: string]: any } {
                     const { uiSchema = {}, globalOptions } = props;
-                        // fieldOptions = (field === schemaFormTypes.field ? null :
-                        //                 this.getOptions(props, schemaFormTypes.field, props.uiSchema.type.toString()));
+                    // fieldOptions = (field === schemaFormTypes.field ? null :
+                    //                 this.getOptions(props, schemaFormTypes.field, props.uiSchema.type.toString()));
                     let { options, type = "" } = uiSchema as FxUiSchema,
                         optionsArray: Immutable.Map<string, any>[] = [],
                         getOptions = (o: any, ks: string[]) => {
@@ -158,7 +161,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             if (!Immutable.Map.isMap(next)) {
                                 next = Immutable.fromJS(next);
                             }
-                            return next.merge(prev);
+                            return merge(next, prev);
                         }
 
                         return prev;
@@ -225,19 +228,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props 当前的props
                  * @param data  额外的数据
                  */
-                private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, merge = false): Promise<any> {
+                private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, needMerge = false): Promise<any> {
                     let itemSchema: any = {},
                         defaultValue: any = {},
                         type = schema.type,
                         mergeData = (dataOfType: any) => {
-                            if (!merge) {
+                            if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
                             if (type === "object") {
-                                return Immutable.fromJS({}).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                                return merge(defaultValue.defaultData, dataOfType);
                             }
 
-                            return Immutable.fromJS([]).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                            return merge(defaultValue.defaultData, dataOfType);
                         };
 
                     try {

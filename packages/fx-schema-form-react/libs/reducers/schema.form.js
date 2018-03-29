@@ -1,5 +1,6 @@
 import { createAction, createReducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
+import merge from "immutable-custom-merge";
 import { a } from "./reducer";
 import { TreeMap } from "../libs/tree";
 const b = a;
@@ -167,7 +168,7 @@ export class SchemaFormReducer {
         }
         if (childNode) {
             if (value) {
-                childNode.value = childNode.value.merge(meta);
+                childNode.value = merge(childNode.value, meta);
             }
             else {
                 childNode.value = fromJS(meta);

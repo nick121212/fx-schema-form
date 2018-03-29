@@ -1,9 +1,9 @@
 import { BaseFactory } from "fx-schema-form-core";
 import Immutable from "immutable";
-import { DefaultProps } from "../components";
-import { RC } from "../models/index";
 import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
+import { DefaultProps } from "../components";
+import { RC } from "../models/index";
 export declare const name = "utils";
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[]) => {
