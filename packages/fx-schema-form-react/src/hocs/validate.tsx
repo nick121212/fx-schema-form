@@ -100,6 +100,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 data: data,
                                 meta
                             });
+                            if (props.uiSchema.onValueChanged) {
+                                props.uiSchema.onValueChanged(props, data);
+                            }
                         };
                     },
                     /**
@@ -119,7 +122,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      * 删除一个元素的meta和data
                      */
                     removeItemData: (propsCur: DefaultProps) => {
-                        return  (props: DefaultProps, meta = true) => {
+                        return (props: DefaultProps, meta = true) => {
                             reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
                                 parentKeys: props.parentKeys,
                                 keys: (props.uiSchema as any).keys,

@@ -4,9 +4,9 @@ import { schemaFormTypes } from "../models/index";
 export const name = "temp";
 export const hoc = (hocFactory) => {
     return (settings = {
-        tempField: "temps",
-        templates: []
-    }) => {
+            tempField: "temps",
+            templates: []
+        }) => {
         return (Component) => {
             class TempComponentHoc extends PureComponent {
                 render() {
