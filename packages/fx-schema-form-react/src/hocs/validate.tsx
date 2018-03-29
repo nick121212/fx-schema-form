@@ -34,7 +34,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      * 这里可能有远程验证
                      */
                     validate: (propsCur: DefaultProps) => {
-                        return async (props: DefaultProps & UtilsHocOutProps, data: any) => {
+                        return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
                             const schema = Object.assign({}, props.uiSchema);
                             const timeId = setTimeout(() => {
@@ -84,7 +84,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 clearTimeout(timeId);
                             }
 
-                            return result;
+                            return Object.assign({}, meta, result);
                         };
                     }
                 }),

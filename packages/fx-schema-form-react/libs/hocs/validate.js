@@ -15,7 +15,7 @@ export const hoc = (hocFactory) => {
             ArrayComponentHoc = tslib_1.__decorate([
                 compose(withHandlers({
                     validate: (propsCur) => {
-                        return (props, data) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                        return (props, data, meta = {}) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
                             const schema = Object.assign({}, props.uiSchema);
                             const timeId = setTimeout(() => {
@@ -55,7 +55,7 @@ export const hoc = (hocFactory) => {
                             finally {
                                 clearTimeout(timeId);
                             }
-                            return result;
+                            return Object.assign({}, meta, result);
                         });
                     }
                 }), withHandlers({

@@ -9,8 +9,8 @@ const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "data";
 export const hoc = (hocFactory) => {
     return (settings = {
-            data: true
-        }) => {
+        data: true
+    }) => {
         const getItemDataHoc = (parentKeys, rootReducerKey, keys) => {
             let getFormItemData = (state) => {
                 let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
