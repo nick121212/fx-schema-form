@@ -19,6 +19,7 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
     resetForm?: () => void;
+    shouldResetForm?: boolean;
 }
 declare const _default: (settings?: SchemaFormHocSettings) => (Component: any) => RC<SchemaFormProps, any>;
 export default _default;

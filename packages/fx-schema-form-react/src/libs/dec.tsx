@@ -33,6 +33,7 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
     resetForm?: () => void;
+    shouldResetForm?: boolean;
 }
 
 /**
@@ -105,7 +106,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             let valRes = await validate(props.data.toJS());
 
                             if (!valRes) {
-                                throw new (ValidationError as any)(validate.errors.concat(props.ajv.errors||[]));
+                                throw new (ValidationError as any)(validate.errors.concat(props.ajv.errors || []));
                             }
 
                             root.value = root.value.merge({
@@ -166,7 +167,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 },
                 resetForm: (props: SchemaFormProps) => {
                     return () => {
-                        if (props.formKey) {
+                        if (props.formKey && props.shouldResetForm !== false) {
                             let { createForm } = reducerFactory.get(props.reducerKey).actions;
 
                             createForm({

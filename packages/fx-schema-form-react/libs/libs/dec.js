@@ -117,7 +117,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 },
                 resetForm: (props) => {
                     return () => {
-                        if (props.formKey) {
+                        if (props.formKey && props.shouldResetForm !== false) {
                             let { createForm } = reducerFactory.get(props.reducerKey).actions;
                             createForm({
                                 key: props.formKey,
