@@ -12,6 +12,7 @@ import fields from "./fields";
 import { TreeMap } from "./libs/tree";
 import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec } from "./libs/dec";
 import { SchemaFormProps } from "./libs/dec";
+import merge from "./libs/merge";
 
 /**
  * 默认样式配置
@@ -46,6 +47,7 @@ export default {
     reducerFactory,
     SchemaForm,
     hocFactory,
-    schemaFormTypes
+    schemaFormTypes,
+    merge
 };
 

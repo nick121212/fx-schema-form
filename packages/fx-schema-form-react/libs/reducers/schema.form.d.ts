@@ -1,8 +1,8 @@
 import { SimpleActionCreator } from "redux-act";
 import { Reducer } from "redux-act";
 import { Map } from "immutable";
-import { FxReducer } from "./reducer";
 import { Store } from "react-redux";
+import { FxReducer } from "./reducer";
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     createForm: SimpleActionCreator<{

@@ -3,17 +3,14 @@
 import React, { PureComponent } from "react";
 import { BaseFactory, MergeLib, FxJsonSchema, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
-import Immutable from "immutable";
+import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
-import merge from "immutable-custom-merge";
 import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
-
-
-// const resolvePathname = require("resolve-pathname");
+import merge from "../libs/merge";
 
 export const name = "utils";
 
@@ -157,19 +154,17 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     let opts = optionsArray.reverse().reduce((prev: any, next: Immutable.Map<string, any>) => {
                         if (next) {
-                            if (Immutable.Map.isMap(next)) {
-                                next = next.toJS();
+                            if (!Immutable.Map.isMap(next)) {
+                                next = fromJS(next);
                             }
 
-                            console.log(next, prev, merge(next, prev));
-
-                            return merge(next, prev);
+                            return merge(next, prev, { "*": "replace" });
                         }
 
                         return prev;
-                    }, {});
+                    }, fromJS({}));
 
-                    return opts;
+                    return opts.toJS();
                 }
                 /**
                  * 获取标题数据
@@ -238,11 +233,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
-                            if (type === "object") {
-                                return merge(defaultValue.defaultData, dataOfType);
-                            }
+                            // if (type === "object") {
+                            //     return merge(defaultValue.defaultData, dataOfType);
+                            // }
 
-                            return merge(defaultValue.defaultData, dataOfType);
+                            return merge(fromJS(defaultValue.defaultData), fromJS(dataOfType)).toJS();
                         };
 
                     try {

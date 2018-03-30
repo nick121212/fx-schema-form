@@ -1,10 +1,10 @@
 import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
 import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
-import Immutable from "immutable";
+import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
-import merge from "immutable-custom-merge";
 import { schemaFormTypes } from "../models/index";
+import merge from "../libs/merge";
 export const name = "utils";
 export const hoc = (hocFactory) => {
     return () => {
@@ -71,13 +71,13 @@ export const hoc = (hocFactory) => {
                     let opts = optionsArray.reverse().reduce((prev, next) => {
                         if (next) {
                             if (!Immutable.Map.isMap(next)) {
-                                next = Immutable.fromJS(next);
+                                next = fromJS(next);
                             }
-                            return merge(next, prev);
+                            return merge(next, prev, { "*": "replace" });
                         }
                         return prev;
-                    }, Immutable.fromJS({})).toJS();
-                    return opts;
+                    }, fromJS({}));
+                    return opts.toJS();
                 }
                 getTitle(props, ...extraSettings) {
                     const { uiSchema } = props;
@@ -116,10 +116,7 @@ export const hoc = (hocFactory) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
-                            if (type === "object") {
-                                return merge(defaultValue.defaultData, dataOfType);
-                            }
-                            return merge(defaultValue.defaultData, dataOfType);
+                            return merge(fromJS(defaultValue.defaultData), fromJS(dataOfType)).toJS();
                         };
                         try {
                             yield ajv.validate({

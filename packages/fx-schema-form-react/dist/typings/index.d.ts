@@ -7,6 +7,7 @@ import { RC, SchemaFormNs } from "./models";
 import { TreeMap } from "./libs/tree";
 import { SchemaFormHocSettings } from "./libs/dec";
 import { SchemaFormProps } from "./libs/dec";
+import merge from "./libs/merge";
 declare const _default: {
     themeFactory: BaseFactory<SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>>;
     defaultTheme: {
@@ -25,5 +26,6 @@ declare const _default: {
         template: string;
         field: string;
     };
+    merge: typeof merge;
 };
 export default _default;

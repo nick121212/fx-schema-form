@@ -5,6 +5,7 @@ import { schemaFormTypes } from "./models";
 import fields from "./fields";
 import { TreeMap } from "./libs/tree";
 import { default as schemaFormDec } from "./libs/dec";
+import merge from "./libs/merge";
 const defaultTheme = {
     tempFactory: new BaseFactory(),
     fieldFactory: new BaseFactory(),
@@ -27,6 +28,7 @@ export default {
     reducerFactory,
     SchemaForm,
     hocFactory,
-    schemaFormTypes
+    schemaFormTypes,
+    merge
 };
 //# sourceMappingURL=index.js.map

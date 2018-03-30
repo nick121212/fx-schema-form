@@ -1,8 +1,8 @@
 import { createAction, createReducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
-import merge from "immutable-custom-merge";
 import { a } from "./reducer";
 import { TreeMap } from "../libs/tree";
+import merge from "../libs/merge";
 const b = a;
 export class SchemaFormReducer {
     constructor(initialState) {
@@ -168,7 +168,7 @@ export class SchemaFormReducer {
         }
         if (childNode) {
             if (value) {
-                childNode.value = merge(childNode.value, meta);
+                childNode.value = merge(childNode.value, fromJS(meta), { "*": "replace" });
             }
             else {
                 childNode.value = fromJS(meta);
