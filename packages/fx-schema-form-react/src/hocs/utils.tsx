@@ -21,7 +21,7 @@ export interface UtilsHocOutProps {
     getPathKeys: (keys: string[], path: string) => Array<string | number>;
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => { [key: string]: any };
-    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, merge?: boolean) => Promise<any>;
+    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
 }
 
 /**
@@ -225,7 +225,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props 当前的props
                  * @param data  额外的数据
                  */
-                private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, needMerge = false): Promise<any> {
+                private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, needMerge = false): Promise<any> {
                     let itemSchema: any = {},
                         defaultValue: any = {},
                         type = schema.type,
@@ -237,7 +237,13 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             //     return merge(defaultValue.defaultData, dataOfType);
                             // }
 
-                            return merge(fromJS(defaultValue.defaultData), fromJS(dataOfType)).toJS();
+                            let mData: any = merge(fromJS(defaultValue.defaultData), fromJS(dataOfType));
+
+                            if (defaultData) {
+                                return merge(mData, fromJS(defaultData));
+                            }
+
+                            return mData.toJS();
                         };
 
                     try {

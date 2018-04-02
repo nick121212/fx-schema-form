@@ -11,11 +11,12 @@ export const hoc = (hocFactory) => {
                     if (!props.uiSchema || !props.uiSchema.items) {
                         return;
                     }
-                    let defaultData = yield props.getDefaultData(props.ajv, props.uiSchema.items, data);
+                    const { items, keys, defaultData } = props.uiSchema;
+                    let dData = yield props.getDefaultData(props.ajv, items, data, defaultData, true);
                     reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
                         parentKeys: props.parentKeys,
-                        keys: props.uiSchema.keys,
-                        data: defaultData
+                        keys: keys,
+                        data: dData
                     });
                 });
             },

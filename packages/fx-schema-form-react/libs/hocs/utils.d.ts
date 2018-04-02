@@ -15,7 +15,7 @@ export interface UtilsHocOutProps {
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => {
         [key: string]: any;
     };
-    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, merge?: boolean) => Promise<any>;
+    getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
 }
 export declare const hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<DefaultProps, any>;
 declare const _default: {

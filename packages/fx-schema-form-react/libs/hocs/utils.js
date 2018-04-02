@@ -110,13 +110,17 @@ export const hoc = (hocFactory) => {
                     }
                     return keysResolve;
                 }
-                getDefaultData(ajv, schema, data, needMerge = false) {
+                getDefaultData(ajv, schema, data, defaultData, needMerge = false) {
                     return tslib_1.__awaiter(this, void 0, void 0, function* () {
                         let itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
-                            return merge(fromJS(defaultValue.defaultData), fromJS(dataOfType)).toJS();
+                            let mData = merge(fromJS(defaultValue.defaultData), fromJS(dataOfType));
+                            if (defaultData) {
+                                return merge(mData, fromJS(defaultData));
+                            }
+                            return mData.toJS();
                         };
                         try {
                             yield ajv.validate({
