@@ -7,5 +7,6 @@ import { default as validate } from "./validate";
 import { default as make } from "./make";
 import { default as temp } from "./temp";
 import { default as data } from "./data";
-export const hocs = [merge, utils, theme, field, array, validate, make, temp, data];
+import { default as resetkey } from "./resetkey";
+export const hocs = [merge, utils, theme, field, array, validate, make, temp, data, resetkey];
 //# sourceMappingURL=index.js.map

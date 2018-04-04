@@ -27,6 +27,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
     return (settings: any = {}) => {
         return (Component: any): RC<DefaultProps, any> => {
             @(compose(
+                hocFactory.get("data")({
+                    root: true
+                }),
                 withHandlers({
                     /**
                      * 验证单个数据
@@ -63,7 +66,12 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                     validateFunc = props.ajv.compile(schemaInCache);
                                 }
 
-                                result.isValid = await validateFunc(data);
+                                if (propsCur.formItemData) {
+                                    result.isValid = await validateFunc(data, undefined, undefined,
+                                        undefined, propsCur.formItemData.toJS());
+                                } else {
+                                    result.isValid = await validateFunc(data);
+                                }
 
                                 // 如果验证出错，则抛出错误
                                 if (!result.isValid) {
@@ -87,6 +95,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             return Object.assign({}, meta, result);
                         };
                     }
+                }),
+                hocFactory.get("resetKey")({
+                    excludeKeys: ["formItemData"]
                 }),
                 withHandlers({
                     /**

@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider } from "react-redux";
 import {
     assert,
     expect
@@ -7,7 +8,7 @@ import { MergeLib } from "fx-schema-form-core";
 import {
     hocFactory
 } from "../../dist";
-import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
+import { schema, gloabelOptions, curAjv, shallowRender, AppCom, store } from "../data"
 import { shallow, render, mount } from 'enzyme';
 
 describe("validate的hoc", () => {
@@ -21,12 +22,25 @@ describe("validate的hoc", () => {
     });
 
     it("测试validate方法;", () => {
-        let m = mount(<App schemaId={"design"} ajv={curAjv} globalOptions={gloabelOptions} uiSchema={merge.mergeUiSchemaList[0]} />);
+        let m = mount(
+            <Provider store={store}>
+                <App schemaId={"design"} ajv={curAjv} globalOptions={gloabelOptions} parentKeys={["test"]} schemaId="dnd-oneof" reducerKey="schemaForm" formKey="test" uiSchema={merge.mergeUiSchemaList[1]} />
+            </Provider>
+        );
         m = m.find(AppCom);
 
-        return m.prop("validate")(m.props(), "3").then((d) => {
+        return m.prop("validate")(m.props(), 4).then((d) => {
             expect(d.isValid).to.eq(false);
         });
+
+        return Promise.all([
+            m.prop("validate")(m.props(), 4).then((d) => {
+                expect(d.isValid).to.eq(false);
+            }),
+            m.prop("validate")(m.props(), 100).then((d) => {
+                expect(d.isValid).to.eq(true);
+            })
+        ]);
     });
 
 });

@@ -4,6 +4,7 @@ import { RC } from "../models/index";
 export interface DataHocOutProps extends DefaultProps {
 }
 export interface DataHocSettings {
+    root?: boolean;
     data?: boolean;
     dataLength?: boolean;
     meta?: boolean;

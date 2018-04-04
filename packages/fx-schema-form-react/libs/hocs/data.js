@@ -13,7 +13,11 @@ export const hoc = (hocFactory) => {
     }) => {
         const getItemDataHoc = (parentKeys, rootReducerKey, keys) => {
             let getFormItemData = (state) => {
-                let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
+                let dataKeys = [...rootReducerKey, ...parentKeys, "data"];
+                if (settings.root) {
+                    return state.getIn(dataKeys);
+                }
+                dataKeys = [...dataKeys, ...keys];
                 if (settings.data && state.hasIn(dataKeys)) {
                     let formItemData = state.getIn(dataKeys);
                     if (formItemData !== undefined) {

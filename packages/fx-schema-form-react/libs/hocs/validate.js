@@ -13,7 +13,9 @@ export const hoc = (hocFactory) => {
                 }
             };
             ArrayComponentHoc = tslib_1.__decorate([
-                compose(withHandlers({
+                compose(hocFactory.get("data")({
+                    root: true
+                }), withHandlers({
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
@@ -39,7 +41,12 @@ export const hoc = (hocFactory) => {
                                     delete schemaInCache.$ref;
                                     validateFunc = props.ajv.compile(schemaInCache);
                                 }
-                                result.isValid = yield validateFunc(data);
+                                if (propsCur.formItemData) {
+                                    result.isValid = yield validateFunc(data, undefined, undefined, undefined, propsCur.formItemData.toJS());
+                                }
+                                else {
+                                    result.isValid = yield validateFunc(data);
+                                }
                                 if (!result.isValid) {
                                     let error = new Error();
                                     error.errors = validateFunc.errors;
@@ -58,6 +65,8 @@ export const hoc = (hocFactory) => {
                             return Object.assign({}, meta, result);
                         });
                     }
+                }), hocFactory.get("resetKey")({
+                    excludeKeys: ["formItemData"]
                 }), withHandlers({
                     updateItemData: (propsCur) => {
                         return (props, data, meta) => {

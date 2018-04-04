@@ -15,7 +15,6 @@ import { ConditionHocOutProps } from "./condition";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, ConditionHocOutProps, UtilsHocOutProps {
-
 }
 
 export interface ResetKeysHocOutSettings {
@@ -35,9 +34,6 @@ export const name = "show";
  * @param Component 需要包装的组件
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
-    const style = {
-        display: "none"
-    };
 
     return (settings: ResetKeysHocOutSettings = {}) => {
         return (Component: any): RC<Props, any> => {

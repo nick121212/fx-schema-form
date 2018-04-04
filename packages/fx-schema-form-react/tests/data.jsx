@@ -1,16 +1,16 @@
 import React from "react";
-import {hocFactory, reducerFactory} from "../dist";
-import {ResolveLib} from "fx-schema-form-core";
+import { hocFactory, reducerFactory } from "../dist";
+import { ResolveLib } from "fx-schema-form-core";
 import Ajv from "ajv";
 import Immutable from "immutable";
-import ShallowRenderer, {createRenderer} from "react-test-renderer/shallow";
+import ShallowRenderer, { createRenderer } from "react-test-renderer/shallow";
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import {createStore} from "redux";
-import {combineReducers} from "redux-immutable";
+import { createStore } from "redux";
+import { combineReducers } from "redux-immutable";
 import undoable from "redux-undo-immutable";
 
-Enzyme.configure({adapter: new Adapter()});
+Enzyme.configure({ adapter: new Adapter() });
 
 export const design = {
     $async: true,
@@ -115,6 +115,15 @@ export let schema = {
     default: {},
     required: ["value"],
     properties: {
+        width: {
+            type: "number"
+        },
+        height: {
+            type: "number",
+            equal: {
+                key: "width"
+            }
+        },
         type: {
             type: "number",
             enum: [
@@ -165,11 +174,11 @@ export const gloabelOptions = Immutable.fromJS({
     field: {
         default: {
             temps: ["formitem"],
-            widgetHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], data: true})]
+            widgetHocs: [hocFactory.get("data")({ rootReducerKey: ["schemaForm"], data: true })]
         },
         array: {
             temps: ["card"],
-            fieldHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], data: true, dataLength: true})]
+            fieldHocs: [hocFactory.get("data")({ rootReducerKey: ["schemaForm"], data: true, dataLength: true })]
         },
         string: {
             options: {
@@ -190,11 +199,11 @@ export const gloabelOptions = Immutable.fromJS({
     },
     temp: {
         card: {
-            tempHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], meta: true})],
+            tempHocs: [hocFactory.get("data")({ rootReducerKey: ["schemaForm"], meta: true })],
             a: 1
         },
         formitem: {
-            tempHocs: [hocFactory.get("data")({rootReducerKey: ["schemaForm"], meta: true})],
+            tempHocs: [hocFactory.get("data")({ rootReducerKey: ["schemaForm"], meta: true })],
             options: {
                 labelCol: {
                     xs: {
@@ -216,7 +225,10 @@ export const gloabelOptions = Immutable.fromJS({
         }
     },
     hoc: {
-        array: {}
+        array: {},
+        data:{
+            rootReducerKey:["schemaForm1", "present"]
+        }
     }
 });
 
@@ -238,7 +250,7 @@ new ResolveLib(curAjv, schema);
 
 export const shallowRender = (Component, props) => {
     const renderer = new ShallowRenderer();
-    renderer.render(<Component {...props}/>);
+    renderer.render(<Component {...props} />);
     return renderer.getRenderOutput();
 }
 
@@ -259,3 +271,23 @@ reducerFactory
 export const actions = reducerFactory
     .get("schemaForm")
     .actions;
+
+actions.createForm({
+    key: "test",
+    data: {
+        width: 100,
+        height: 200
+    }
+});
+
+curAjv.addKeyword("equal", {
+    async: false,
+    inline: function (it, keyword, schema) {
+        let expr = "";
+
+        expr += "((" + it.util.getData(it.dataLevel + "/" + schema.key, it.dataLevel, it.dataPathArr) + ") === (" + 'data' + (it.dataLevel || '') + "));";
+
+        return expr;
+    }
+});
+

@@ -1,15 +1,14 @@
-
 import React from "react";
 import { compose, shouldUpdate, ComponentEnhancer, onlyUpdateForKeys } from "recompose";
 import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
-
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelectorCreator, defaultMemoize, Selector, createSelector, OutputSelector } from "reselect";
+import { createSelectorCreator, defaultMemoize, Selector, createSelector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models/index";
 import schemaFormReact from "fx-schema-form-react";
+import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 
 const { schemaFormTypes } = schemaFormReact;
 
@@ -30,6 +29,15 @@ export interface ConditionPath {
      * 数据的路径，可是是相对路径，也可以是绝对路径
      */
     path: string;
+    /**
+     * 是否从meta中获取数据
+     */
+    meta: boolean;
+    /**
+     * 需要获取的meta的字段
+     * 例如 isLoading
+     */
+    metaKey: string;
     /**
      * 数据的简单处理，（暂时没用到）
      */
@@ -63,7 +71,7 @@ export const name = "condition";
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export const hoc1 = (hocFactory: BaseFactory<any>) => {
+export const innerHoc = (hocFactory: BaseFactory<any>) => {
     /**
     * 获取FormItemData的数据
     * @param state 当前的state树
@@ -84,10 +92,31 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
         };
     };
 
+    /**
+    * 获取FormItemData的数据
+    * @param state 当前的state树
+    */
+    const getFormItemMeta = (rootReducerKey: string[], parentKeys: string[], keys: string[], metaKey: string):
+        (state: Immutable.Map<string, any>) => Selector<any, any> => {
+        return (state: Immutable.Map<string, any>): any => {
+            let dataKeys = [...rootReducerKey, ...parentKeys, "meta"],
+                rootNode: TreeMap = state.getIn(dataKeys),
+                childNode = rootNode.containPath(keys);
+
+            if (childNode && childNode.value && childNode.value.has(metaKey)) {
+                return Immutable.fromJS({
+                    [[...keys].join("/")]: childNode.value.get(metaKey)
+                });
+            }
+
+            return "";
+        };
+    };
+
     return (settings: ConditionHocSettings = { paths: [] }) => {
         return (Component: any): RC<ConditionHocOutProps, any> => {
             class ComponentHoc extends React.PureComponent<ConditionHocProps, any> {
-                private ComponentWithHoc: new () => React.PureComponent = Component;
+                private ComponentWithHoc: any = Component;
                 private $condition: Immutable.Map<string, any> = Immutable.fromJS({});
 
                 constructor(props: ConditionHocProps) {
@@ -116,7 +145,11 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                         paths.forEach((path: ConditionPath) => {
                             let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
 
-                            funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
+                            if (path.meta) {
+                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[], path.metaKey));
+                            } else {
+                                funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
+                            }
                         });
                     }
 
@@ -169,5 +202,5 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
 
 export default {
     name,
-    hoc: hoc1
+    hoc: innerHoc
 };

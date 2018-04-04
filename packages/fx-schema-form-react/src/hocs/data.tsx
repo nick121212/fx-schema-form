@@ -16,6 +16,7 @@ export interface DataHocOutProps extends DefaultProps {
 }
 
 export interface DataHocSettings {
+    root?: boolean;
     data?: boolean;
     dataLength?: boolean;
     meta?: boolean;
@@ -42,8 +43,15 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
              * @param state 当前的state树
              */
             let getFormItemData = (state: Immutable.Map<string, any>) => {
-                let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
+                let dataKeys: Array<string | number> = [...rootReducerKey, ...parentKeys, "data"];
 
+                // 如果配置中root为ture，则取得所有的数据
+                if(settings.root) {
+                    return state.getIn(dataKeys);
+                }
+
+                // 否则根据单个的keys获取
+                dataKeys = [...dataKeys, ...keys];
                 if (settings.data && state.hasIn(dataKeys)) {
                     let formItemData = state.getIn(dataKeys);
 

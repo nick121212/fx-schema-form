@@ -9,6 +9,8 @@ import tempHoc from "./temp";
 import formHoc from "./form";
 import widgetHoc from "./widget";
 import dataToMetaHoc from "./datatometa";
+import formatHoc from "./format";
+import wrapperHoc from "./wrapper";
 
 export const hocs: Array<{ name: string, hoc: (hocFactory: BaseFactory<React.PureComponent>) => any }> =
-    [conditionHoc, resetKeyHoc, oneOfHoc, showHoc, tempHoc, formHoc, widgetHoc, dataToMetaHoc];
+    [conditionHoc, resetKeyHoc, oneOfHoc, showHoc, tempHoc, formHoc, widgetHoc, dataToMetaHoc, wrapperHoc, formatHoc];

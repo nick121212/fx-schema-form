@@ -2,8 +2,8 @@
 import React from "react";
 import { onlyUpdateForKeys } from "recompose";
 import Immutable from "immutable";
-import { BaseFactory, MergeLib } from "fx-schema-form-core";
-import { ConditionHocOutProps } from "./condition";
+import { BaseFactory, MergeLib, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/libs/models/index";
@@ -18,7 +18,13 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
 export interface OneHocOutSettings {
     path: string;
     key: "anyOf" | "oneOf";
-    uiSchemas?: { [key: string]: FxUiSchema };
+    uiSchemas?: {
+        [key: string]: {
+            schemaId: string;
+            uiSchemas: Array<FxUiSchema | string>;
+        }
+    };
+    condition?: ConditionHocSettings;
 }
 
 export const name = "oneOf";
@@ -39,7 +45,7 @@ export const name = "oneOf";
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
     return (settings: OneHocOutSettings) => {
-        return (Component: any): RC<Props, any> => {
+        const innerHoc = (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {
 
                 private currentSchema: any = null;
@@ -56,7 +62,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     if (!this.currentSchema) {
                         return updateItemData(props, null);
                     }
-                    // 清除当前数据
+                    // 更新当前的数据为schema的默认数据
                     updateItemData(props, await getDefaultData(ajv, this.currentSchema, null));
                 }
 
@@ -73,37 +79,31 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         arrayLevel, arrayIndex, globalOptions, parentKeys, ajv } = this.props,
                         { condition, ...extraProps } = this.props,
                         { keys = null } = uiSchema || {},
-                        options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
+                        options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as OneHocOutSettings;
 
                     if (!options.path || !condition || !keys || !uiSchema || !options.uiSchemas) {
                         return null;
                     }
 
+                    // 获取配置的字段的key，获取字段数据
                     let pathKeys = getPathKeys(keys as string[], options.path);
                     let data = condition.get(pathKeys.join("/"));
-                    let someOf: Array<any> = (uiSchema as any)[options.key || name];
 
-                    if (!someOf) {
-                        return null;
-                    }
+                    // 如果配置中配置了字段值对应的配置
+                    if (options.uiSchemas[data]) {
+                        const { schemaId: oneOfScehmaId, uiSchemas: uiSchemaInOneof } = options.uiSchemas[data];
 
-                    if (someOf && options.uiSchemas[data]) {
-                        let { index, uiSchema: uiSchemaInOneof } = options.uiSchemas[data];
-
-                        if (!someOf[index]) {
+                        // 获取配置中的schemaId，用于渲染新的表单组件
+                        if (!oneOfScehmaId || !schemaKeysFactory.has(oneOfScehmaId)) {
                             return null;
                         }
 
-                        this.currentSchema = someOf[index];
-
-                        // uiSchemaInOneof = Object.assign({}, uiSchema, someOf[index], {
-                        //     keys: keys,
-                        //     schemaPath: someOf[index].$id || someOf[index].$ref || uiSchema.schemaPath
-                        // });
+                        // 获取当前的schema，生成默认的数据
+                        this.currentSchema = schemaFieldFactory.get(schemaKeysFactory.get(oneOfScehmaId));
 
                         return <SchemaForm
-                            key={index}
-                            schemaId={someOf[index].$id}
+                            key={oneOfScehmaId}
+                            schemaId={oneOfScehmaId}
                             uiSchema={uiSchema}
                             reducerKey={reducerKey}
                             arrayLevel={arrayLevel}
@@ -113,8 +113,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             globalOptions={globalOptions}
                             ajv={ajv}
                         />;
-
-                        // return <Component {...extraProps} uiSchema={uiSchemaInOneof} />;
                     }
 
                     return null;
@@ -123,6 +121,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
             return ComponentHoc as any;
         };
+
+        return hocFactory.get("wrapper")({
+            hoc: innerHoc,
+            hocName: name
+        });
     };
 };
 

@@ -7,13 +7,24 @@ import schemaFormReact from "fx-schema-form-react";
 const { schemaFormTypes } = schemaFormReact;
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "condition";
-export const hoc1 = (hocFactory) => {
+export const innerHoc = (hocFactory) => {
     const getFormItemData = (rootReducerKey, parentKeys, keys) => {
         return (state) => {
             let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys], formItemData = state.getIn(dataKeys);
             if (formItemData !== undefined) {
                 return Immutable.fromJS({
                     [[...keys].join("/")]: formItemData
+                });
+            }
+            return "";
+        };
+    };
+    const getFormItemMeta = (rootReducerKey, parentKeys, keys, metaKey) => {
+        return (state) => {
+            let dataKeys = [...rootReducerKey, ...parentKeys, "meta"], rootNode = state.getIn(dataKeys), childNode = rootNode.containPath(keys);
+            if (childNode && childNode.value && childNode.value.has(metaKey)) {
+                return Immutable.fromJS({
+                    [[...keys].join("/")]: childNode.value.get(metaKey)
                 });
             }
             return "";
@@ -33,7 +44,12 @@ export const hoc1 = (hocFactory) => {
                     if (paths && paths.length && hoc) {
                         paths.forEach((path) => {
                             let pathKeys = getPathKeys(keys, path.path);
-                            funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));
+                            if (path.meta) {
+                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                            }
+                            else {
+                                funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));
+                            }
                         });
                     }
                     if (funcs.length) {
@@ -66,6 +82,6 @@ export const hoc1 = (hocFactory) => {
 };
 export default {
     name,
-    hoc: hoc1
+    hoc: innerHoc
 };
 //# sourceMappingURL=condition.js.map

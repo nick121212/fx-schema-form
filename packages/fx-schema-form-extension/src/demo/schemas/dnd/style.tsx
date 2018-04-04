@@ -3,8 +3,8 @@ export default {
     $id: "dnd-style",
     required: ["textAlign", "width"],
     properties: {
-        width: { type: "string" },
-        height: { type: "string" },
+        width: { type: "string", equal: "height" },
+        height: { type: "string", equal: "width"},
         fontSize: { type: "number" },
         url: { type: "string", format: "url" },
         email: { type: "string", format: "email" },
