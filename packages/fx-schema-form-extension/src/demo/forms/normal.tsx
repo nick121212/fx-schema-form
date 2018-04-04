@@ -31,7 +31,42 @@ export class NormalForm extends React.PureComponent<any> {
                 key={"designForm" + "design"}
                 RootComponent={Form}
                 schemaId={"dnd-style"}
-                uiSchemas={["*"]}
+                uiSchemas={[{
+                    key: "width",
+                    hocs: ["utils", "theme", "field", "validate", "changed", "temp"],
+                    options: Immutable.fromJS({
+                        hoc: {
+                            changed: {
+                                paths: ["../height"],
+                                condition: {
+                                    paths: [{
+                                        path: "../height"
+                                    }]
+                                },
+                                onChanged: (props: any, data: any) => {
+                                    let height = props.getPathKeys(props.uiSchema.keys as any, "../height").join("/");
+
+                                    if (data[height] !== undefined) {
+                                        // props.updateItemData(props, data[height]);
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }, {
+                    key: "height",
+                    hocs: ["utils", "theme", "field", "validate", "copyToMeta", "temp"],
+                    options: Immutable.fromJS({
+                        hoc: {
+                            copyToMeta: {
+                                condition: {
+                                    paths: [{ path: "../width" }]
+                                },
+                                paths: [{ path: "../width", defaultValue: 0, to: ["options", "widget", "number", "options", "max"] }]
+                            }
+                        }
+                    })
+                }, "*"]}
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptions}
                 ajv={curAjv} >

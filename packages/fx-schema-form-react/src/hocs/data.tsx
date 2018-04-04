@@ -46,7 +46,7 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                 let dataKeys: Array<string | number> = [...rootReducerKey, ...parentKeys, "data"];
 
                 // 如果配置中root为ture，则取得所有的数据
-                if(settings.root) {
+                if (settings.root) {
                     return state.getIn(dataKeys);
                 }
 
@@ -135,11 +135,13 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
          * arrayItems
          */
         return (Component: any): RC<DefaultProps, any> => {
-            @(shouldUpdate(() => false) as any)
+            // @(shouldUpdate(() => false) as any)
             class DataComponentHoc extends PureComponent<DefaultProps & UtilsHocOutProps, any> {
-                // private ComponentWithHoc;
+                private ComponentWithHoc: any = Component;
 
-                public render(): JSX.Element {
+                constructor(props: DefaultProps & UtilsHocOutProps) {
+                    super(props);
+
                     const { uiSchema, getOptions } = this.props,
                         { keys = [] } = this.props.uiSchema || {},
                         options = getOptions(this.props, schemaFormTypes.hoc, name);
@@ -151,6 +153,12 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
 
                     const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
                         ComponentWithHoc: any = hocWithData(Component);
+
+                    this.ComponentWithHoc = ComponentWithHoc;
+                }
+
+                public render(): JSX.Element {
+                    const ComponentWithHoc = this.ComponentWithHoc;
 
                     return <ComponentWithHoc {...this.props} />;
                 }

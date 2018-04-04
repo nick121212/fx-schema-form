@@ -51,10 +51,8 @@ let designResolve = [
 
 curAjv.addKeyword("equal", {
     async: false,
-    inline:  (it: any, keyword:string, schema:string)=> {
+    inline:  (it: any, keyword: string, schema: string) => {
         let expr = "";
-
-        console.log(schema);
 
         expr += "((" + it.util.getData((it.dataLevel||"") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + 'data' + (it.dataLevel || '') + "));";
 
@@ -62,14 +60,3 @@ curAjv.addKeyword("equal", {
     }
 });
 
-// curAjv.validate("$ref", {})
-
-let a = curAjv.getSchema("dnd-style#/properties/height");
-
-
-a("2", undefined, undefined, undefined, {
-    width: "1",
-    height: "1"
-});
-
-console.log(a.errors, a);

@@ -1,99 +1,96 @@
 
 import React from "react";
+import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
+import { connect } from "react-redux";
+import Immutable, { is } from "immutable";
+import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
-import { BaseFactory } from "fx-schema-form-core";
 import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
-import { fromJS } from "immutable";
-import { compose } from "recompose";
 
 const { schemaFormTypes } = schemaFormReact;
 
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps, ConditionHocOutProps {
+    formItemNode?: TreeMap;
 }
 
-export const name = "changed";
+export const name = "copyToMeta";
 
-export interface ChangedSettings {
-    // 需要监听的字段值
-    paths?: string[];
-    // 变化事件
-    onChanged?: (props: DefaultProps, data: any) => void;
-    // condition的配置
+export interface CopyToMetaSettings {
+    paths?: Array<{
+        path: string;
+        to: string[];
+        defaultValue: any;
+    }>;
     condition?: ConditionHocSettings;
 }
 
 /**
- * changed
- * 监听数据的变化，处理逻辑
+ * data
+ * 将data中的字段塞到meta中
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
-    return (settings: ChangedSettings = {}) => {
-
+    return (settings: CopyToMetaSettings = {}) => {
         const innerHoc = (Component: any): RC<Props, any> => {
             @hocFactory.get("data")({
                 meta: true,
-                metaKeys: ["isMountChanged"]
+                metaKeys: ["isMountCopyToMeta"]
             })
             class ComponentHoc extends React.PureComponent<Props, any> {
 
                 /**
-                 * 当condition属性变化的时候触发
+                 * 这里把数据塞到了meta中，便于后面的组件使用
                  * 遍历数组，数组元素的每一项数据合并到meta
                  * @param props 当前的props
                  */
                 public dataToMeta(props: Props) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
-                    const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
-                    let meta = fromJS({});
+                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData } = props;
+                    const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as CopyToMetaSettings;
+                    let meta = Immutable.fromJS({});
+                    let isSet = false;
 
-                    if (normalOptions.paths && normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
-                        // 从condition中提取配置中需要的字段值
-                        normalOptions.paths.forEach((path: string) => {
-                            let pathKeys = getPathKeys(uiSchema.keys as string[], path),
-                                pathStr = pathKeys.join("/");
+                    // 遍历配置项，把数据添加到meta
+                    if (normalOptions.paths && normalOptions.paths.length && condition && uiSchema && uiSchema.keys) {
+                        normalOptions.paths.forEach(({ path, to, defaultValue }) => {
+                            let pathKeys = getPathKeys(uiSchema.keys as string[], path);
 
-                            if (condition.has(pathStr)) {
-                                meta = meta.set(pathStr, condition.get(pathStr));
+                            isSet = true;
+                            meta = meta.setIn(to, defaultValue);
+                            if (condition.has(pathKeys.join("/"))) {
+                                meta = meta.setIn(to, condition.get(pathKeys.join("/")));
                             }
                         });
-                        // 触发onChanged事件
-                        if (normalOptions.onChanged) {
-                            normalOptions.onChanged(props, meta.toJS());
-                        }
+                    }
+
+                    // 更新标志位
+                    if (isSet) {
+                        // updateItemData(this.props, undefined, meta.toJS());
+                        updateItemMeta(this.props, null, meta.toJS());
                     }
                 }
 
-                /**
-                 * 第一次mount的时候触发一次onChange操作
-                 * 更新标志位
-                 */
                 public componentWillMount() {
                     const { formItemMeta, updateItemMeta } = this.props;
-                    const isMountChanged = formItemMeta ? formItemMeta.get("isMountChanged") : false;
+                    const isMountCopyToMeta = formItemMeta ? formItemMeta.get("isMountCopyToMeta") : false;
 
                     // 只有第一次mount的时候才会触发一次数据的变更
-                    if (!isMountChanged) {
+                    if (!isMountCopyToMeta) {
                         // 塞入数据
                         this.dataToMeta(this.props);
                         // 更改标志位
                         updateItemMeta(this.props, null, {
-                            isMountChanged: true
+                            isMountCopyToMeta: true
                         });
                     }
                 }
 
-                /**
-                 * 当收到新的数据的时候触发更新
-                 * @param props 新的props
-                 */
                 public componentWillReceiveProps(props: Props) {
-                    // 每次数据变更的时候
                     if (props.condition !== this.props.condition) {
                         this.dataToMeta(props);
                     }
@@ -112,7 +109,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
         };
 
         return hocFactory.get("wrapper")({
-            hoc:  innerHoc,
+            hoc: innerHoc,
             hocName: name
         });
     };

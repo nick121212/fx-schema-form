@@ -1,6 +1,4 @@
-import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
-import { shouldUpdate } from "recompose";
 import { connect } from "react-redux";
 import { createSelectorCreator, defaultMemoize } from "reselect";
 import { is } from "immutable";
@@ -71,19 +69,22 @@ export const hoc = (hocFactory) => {
             });
         };
         return (Component) => {
-            let DataComponentHoc = class DataComponentHoc extends PureComponent {
-                render() {
+            class DataComponentHoc extends PureComponent {
+                constructor(props) {
+                    super(props);
+                    this.ComponentWithHoc = Component;
                     const { uiSchema, getOptions } = this.props, { keys = [] } = this.props.uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name);
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
                     }
                     const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)), ComponentWithHoc = hocWithData(Component);
+                    this.ComponentWithHoc = ComponentWithHoc;
+                }
+                render() {
+                    const ComponentWithHoc = this.ComponentWithHoc;
                     return React.createElement(ComponentWithHoc, Object.assign({}, this.props));
                 }
-            };
-            DataComponentHoc = tslib_1.__decorate([
-                shouldUpdate(() => false)
-            ], DataComponentHoc);
+            }
             return DataComponentHoc;
         };
     };
