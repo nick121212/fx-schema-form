@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import InputNumber from "antd/lib/input-number";
+import { fromJS } from "immutable";
 const style = {
     width: "100%"
 };
@@ -19,8 +20,10 @@ export class AntdInputNumberWidget extends PureComponent {
         return props;
     }
     render() {
-        const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "number"]) : fromJS({});
         const { keys, readonly = false } = uiSchema;
+        console.log(getOptions(this.props, "widget", "number", metaOptions).options);
         return (React.createElement(InputNumber, Object.assign({ style: style, onBlur: (e) => {
                 if (this._count > 0) {
                     updateItemMeta(this.props, this.props.formItemData);
@@ -28,7 +31,7 @@ export class AntdInputNumberWidget extends PureComponent {
             }, onChange: (val) => {
                 this._count++;
                 updateItemData(this.props, val);
-            }, disabled: readonly, placeholder: getTitle(this.props) }, getOptions(this.props, "widget", "number").options, this.setDefaultProps())));
+            }, disabled: readonly, placeholder: getTitle(this.props) }, getOptions(this.props, "widget", "number", metaOptions).options, this.setDefaultProps())));
     }
 }
 //# sourceMappingURL=number.js.map

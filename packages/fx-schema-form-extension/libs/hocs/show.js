@@ -4,9 +4,6 @@ import schemaFormReact from "fx-schema-form-react";
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export const name = "show";
 export const hoc = (hocFactory) => {
-    const style = {
-        display: "none"
-    };
     return (settings = {}) => {
         return (Component) => {
             class ComponentHoc extends React.PureComponent {

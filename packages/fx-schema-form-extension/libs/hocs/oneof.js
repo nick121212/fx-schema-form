@@ -17,12 +17,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import React from "react";
 import Immutable from "immutable";
+import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export const name = "oneOf";
 export const hoc = (hocFactory) => {
     return (settings) => {
-        return (Component) => {
+        const innerHoc = (Component) => {
             class ComponentHoc extends React.PureComponent {
                 constructor() {
                     super(...arguments);
@@ -45,23 +46,23 @@ export const hoc = (hocFactory) => {
                     }
                     let pathKeys = getPathKeys(keys, options.path);
                     let data = condition.get(pathKeys.join("/"));
-                    let someOf = uiSchema[options.key || name];
-                    if (!someOf) {
-                        return null;
-                    }
-                    if (someOf && options.uiSchemas[data]) {
-                        let { index, uiSchema: uiSchemaInOneof } = options.uiSchemas[data];
-                        if (!someOf[index]) {
+                    if (options.uiSchemas[data]) {
+                        const { schemaId: oneOfScehmaId, uiSchemas: uiSchemaInOneof } = options.uiSchemas[data];
+                        if (!oneOfScehmaId || !schemaKeysFactory.has(oneOfScehmaId)) {
                             return null;
                         }
-                        this.currentSchema = someOf[index];
-                        return React.createElement(SchemaForm, { key: index, schemaId: someOf[index].$id, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [...parentKeys], globalOptions: globalOptions, ajv: ajv });
+                        this.currentSchema = schemaFieldFactory.get(schemaKeysFactory.get(oneOfScehmaId));
+                        return React.createElement(SchemaForm, { key: oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [...parentKeys], globalOptions: globalOptions, ajv: ajv });
                     }
                     return null;
                 }
             }
             return ComponentHoc;
         };
+        return hocFactory.get("wrapper")({
+            hoc: innerHoc,
+            hocName: name
+        });
     };
 };
 export default {

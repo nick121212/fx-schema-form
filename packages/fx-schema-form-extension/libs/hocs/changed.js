@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
+import { fromJS } from "immutable";
 const { schemaFormTypes } = schemaFormReact;
 export const name = "changed";
 export const hoc = (hocFactory) => {
@@ -14,8 +15,8 @@ export const hoc = (hocFactory) => {
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
                 dataToMeta(props) {
                     const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
-                    const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
-                    let meta = Immutable.fromJS({});
+                    const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
+                    let meta = fromJS({});
                     if (normalOptions.paths && normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
                         normalOptions.paths.forEach((path) => {
                             let pathKeys = getPathKeys(uiSchema.keys, path), pathStr = pathKeys.join("/");
@@ -49,10 +50,10 @@ export const hoc = (hocFactory) => {
                 }
             };
             ComponentHoc = __decorate([
-                (hocFactory.get("data")({
+                hocFactory.get("data")({
                     meta: true,
                     metaKeys: ["isMountChanged"]
-                }))
+                })
             ], ComponentHoc);
             return ComponentHoc;
         };

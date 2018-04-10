@@ -11,7 +11,7 @@ export const hoc = (hocFactory) => {
                     const { uiSchema, getOptions } = this.props, { format, widget } = uiSchema, hocOptions = getOptions(this.props, schemaFormTypes.hoc, name);
                     let newUiSchema = uiSchema;
                     if (format && hocOptions[format] && !widget) {
-                        newUiSchema = merge(fromJS(uiSchema), fromJS(hocOptions[format]));
+                        newUiSchema = merge(fromJS(uiSchema), fromJS(hocOptions[format])).toJS();
                     }
                     return React.createElement(Component, Object.assign({}, this.props, { uiSchema: newUiSchema }));
                 }

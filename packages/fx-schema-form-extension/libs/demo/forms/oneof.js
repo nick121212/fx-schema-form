@@ -34,22 +34,21 @@ let OneOfForm = class OneOfForm extends React.PureComponent {
                         })
                     }, {
                         key: "value",
-                        hocs: ["utils", "theme", "field", "validate", "condition", "array", "temp"],
+                        hocs: ["utils", "theme", "field", "validate", "oneOf", "array", "temp"],
                         options: Immutable.fromJS({
                             hoc: {
-                                condition: {
-                                    paths: [{ path: "../type" }],
-                                    hoc: hocFactory.get("oneOf")()
-                                },
                                 oneOf: {
+                                    condition: {
+                                        paths: [{ path: "../type" }]
+                                    },
                                     path: "../type",
                                     key: "oneOf",
                                     uiSchemas: {
-                                        1: { index: 0, uiSchema: ["*"] },
-                                        2: { index: 1, uiSchema: ["*"] },
-                                        3: { index: 2, uiSchema: ["*"] },
+                                        1: { schemaId: "dnd-oneof-number", uiSchemas: ["*"] },
+                                        2: { schemaId: "dnd-oneof-string1", uiSchemas: ["*"] },
+                                        3: { schemaId: "dnd-oneof-boolean", uiSchemas: ["*"] },
                                         4: {
-                                            index: 3, uiSchema: [{
+                                            schemaId: "dnd-oneof-object", uiSchemas: [{
                                                     key: "",
                                                     temps: ["formitem"],
                                                     children: ["*"]
