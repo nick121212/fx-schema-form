@@ -2,18 +2,27 @@
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { Action } from "redux-act";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { RC } from "../models/index";
 import { reducerFactory } from "../factory";
+import { SchemaFormActions } from "../reducers/schema.form";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
+
+    updateItemDataRaw: (props: DefaultProps, data: any, meta?: any) => void;
+    updateItemMetaRaw: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
+    removeItemDataRaw: (props: DefaultProps, meta?: any) => void;
+
+    combineActions: (...actions: Action<any>[]) => void;
+
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
-    getActions: () => any;
+    getActions: (raw?: boolean) => SchemaFormActions;
 }
 export const name = "validate";
 
@@ -32,17 +41,39 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 }),
                 withHandlers({
                     /**
+                     * 获取当前的reducer
+                     */
+                    getActions: (propsCur: DefaultProps) => {
+                        return (raw = false) => {
+                            let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+
+                            if (raw) {
+                                for (const key in actions) {
+                                    if (actions.hasOwnProperty(key)) {
+                                        const element = actions[key];
+
+                                        actions[key] = element.raw;
+                                    }
+                                }
+                            }
+
+                            return actions;
+                        };
+                    }
+                }),
+                withHandlers({
+                    /**
                      * 验证单个数据
                      * 使用当前组件中的uiSchema，以及传递过来的数据做验证
                      * 这里可能有远程验证
                      */
-                    validate: (propsCur: DefaultProps) => {
+                    validate: (propsCur: DefaultProps & ValidateHocOutProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
                             const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                reducerFactory.get(reducerKey || "schemaForm").actions.updateItemMeta({
+                                propsCur.getActions().updateItemMeta({
                                     parentKeys: parentKeys,
                                     keys: (schema as any).keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
@@ -95,15 +126,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                             return Object.assign({}, meta, result);
                         };
-                    },
-                    /**
-                     * 获取当前的reducer
-                     */
-                    getActions: (propsCur: DefaultProps) => {
-                        return () => {
-                            return reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
-                        };
                     }
+
                 }),
                 hocFactory.get("resetKey")({
                     excludeKeys: ["formItemData"]
@@ -113,8 +137,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      * 更新一个数据
                      */
                     updateItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
-                        return ({ parentKeys, uiSchema }: DefaultProps, data: any, meta?: any) => {
-                            return propsCur.getActions().updateItemData({
+                        return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, data: any, meta?: any) => {
+                            return propsCur.getActions(raw).updateItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 data: data,
@@ -126,10 +150,10 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      * 更新一个元数据
                      */
                     updateItemMeta: (propsCur: DefaultProps & ValidateHocOutProps) => {
-                        return async (props: DefaultProps, data: any, meta: any = null, noChange = false) => {
+                        return async (raw: boolean, props: DefaultProps, data: any, meta: any = null, noChange = false) => {
                             const { parentKeys, uiSchema } = props;
 
-                            return propsCur.getActions().updateItemMeta({
+                            return propsCur.getActions(raw).updateItemMeta({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta || await propsCur.validate(props, data),
@@ -141,15 +165,40 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      * 删除一个元素的meta和data
                      */
                     removeItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
-                        return ({ parentKeys, uiSchema }: DefaultProps, meta = true) => {
-                            return propsCur.getActions().removeItemData({
+                        return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, meta = true) => {
+                            return propsCur.getActions(raw).removeItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta
                             });
                         };
+                    },
+                    combineActions: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return (...actions: Action<any>[]) => {
+                            return propsCur.getActions().combineActions(actions);
+                        };
+                    },
+                }),
+                withHandlers({
+                    updateItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.updateItemData.bind(null, false);
+                    },
+                    updateItemMeta: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.updateItemMeta.bind(null, false);
+                    },
+                    removeItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.removeItemData.bind(null, false);
+                    },
+                    updateItemDataRaw: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.updateItemData.bind(null, true);
+                    },
+                    updateItemMetaRaw: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.updateItemMeta.bind(null, true);
+                    },
+                    removeItemDataRaw: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.removeItemData.bind(null, true);
                     }
-                }) as any) as any)
+                })) as any)
             class ArrayComponentHoc extends PureComponent<DefaultProps, any> {
                 public render(): JSX.Element {
                     return <Component {...this.props} />;

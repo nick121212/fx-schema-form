@@ -51,7 +51,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getPathProps(props: DefaultProps, path: string): DefaultProps {
                     let newProps = Object.assign({}, props, {
                         uiSchema: Object.assign({}, props.uiSchema, {
-                            keys: this.getPathKeys(props.uiSchema.keys as any, "../feature")
+                            keys: this.getPathKeys(props.uiSchema.keys as any, path)
                         })
                     });
 

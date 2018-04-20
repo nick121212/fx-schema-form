@@ -16,13 +16,28 @@ export const hoc = (hocFactory) => {
                 compose(hocFactory.get("data")({
                     root: true
                 }), withHandlers({
+                    getActions: (propsCur) => {
+                        return (raw = false) => {
+                            let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+                            if (raw) {
+                                for (const key in actions) {
+                                    if (actions.hasOwnProperty(key)) {
+                                        const element = actions[key];
+                                        actions[key] = element.raw;
+                                    }
+                                }
+                            }
+                            return actions;
+                        };
+                    }
+                }), withHandlers({
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
                             const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                reducerFactory.get(reducerKey || "schemaForm").actions.updateItemMeta({
+                                propsCur.getActions().updateItemMeta({
                                     parentKeys: parentKeys,
                                     keys: schema.keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
@@ -65,18 +80,13 @@ export const hoc = (hocFactory) => {
                             }
                             return Object.assign({}, meta, result);
                         });
-                    },
-                    getActions: (propsCur) => {
-                        return () => {
-                            return reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
-                        };
                     }
                 }), hocFactory.get("resetKey")({
                     excludeKeys: ["formItemData"]
                 }), withHandlers({
                     updateItemData: (propsCur) => {
-                        return ({ parentKeys, uiSchema }, data, meta) => {
-                            return propsCur.getActions().updateItemData({
+                        return (raw, { parentKeys, uiSchema }, data, meta) => {
+                            return propsCur.getActions(raw).updateItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 data: data,
@@ -85,9 +95,9 @@ export const hoc = (hocFactory) => {
                         };
                     },
                     updateItemMeta: (propsCur) => {
-                        return (props, data, meta = null, noChange = false) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                        return (raw, props, data, meta = null, noChange = false) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const { parentKeys, uiSchema } = props;
-                            return propsCur.getActions().updateItemMeta({
+                            return propsCur.getActions(raw).updateItemMeta({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta || (yield propsCur.validate(props, data)),
@@ -96,13 +106,37 @@ export const hoc = (hocFactory) => {
                         });
                     },
                     removeItemData: (propsCur) => {
-                        return ({ parentKeys, uiSchema }, meta = true) => {
-                            return propsCur.getActions().removeItemData({
+                        return (raw, { parentKeys, uiSchema }, meta = true) => {
+                            return propsCur.getActions(raw).removeItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta
                             });
                         };
+                    },
+                    combineActions: (propsCur) => {
+                        return (...actions) => {
+                            return propsCur.getActions().combineActions(actions);
+                        };
+                    },
+                }), withHandlers({
+                    updateItemData: (propsCur) => {
+                        return propsCur.updateItemData.bind(null, false);
+                    },
+                    updateItemMeta: (propsCur) => {
+                        return propsCur.updateItemMeta.bind(null, false);
+                    },
+                    removeItemData: (propsCur) => {
+                        return propsCur.removeItemData.bind(null, false);
+                    },
+                    updateItemDataRaw: (propsCur) => {
+                        return propsCur.updateItemData.bind(null, true);
+                    },
+                    updateItemMetaRaw: (propsCur) => {
+                        return propsCur.updateItemMeta.bind(null, true);
+                    },
+                    removeItemDataRaw: (propsCur) => {
+                        return propsCur.removeItemData.bind(null, true);
                     }
                 }))
             ], ArrayComponentHoc);

@@ -7,15 +7,17 @@ import { FxReducer, d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
 
+export type ASN = Array<string | number> | string[];
+
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     createForm: SimpleActionCreator<{ key: string, data: any }>;
-    updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>;
-    updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any, noChange?: boolean; }>;
-    addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>;
-    removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>;
-    moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
-    removeItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta?: boolean }>;
+    updateItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>;
+    updateItemMeta: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta: any, noChange?: boolean; }>;
+    addItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any }>;
+    removeItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, index: number }>;
+    moveToItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>;
+    removeItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta?: boolean }>;
     combineActions: SimpleActionCreator<Action<any, any>[]>;
 }
 
@@ -70,33 +72,33 @@ export class SchemaFormReducer<T> implements FxReducer {
     /**
      * 更新一个表单数据
      */
-    private updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>
-        = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>(__PROD__ ? "" : "更新一个表单数据");
+    private updateItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>
+        = createAction<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>(__PROD__ ? "" : "更新一个表单数据");
     /**
      * 更新一个表单元数据
      */
-    private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any, noChange?: boolean; }>
-        = createAction<{ parentKeys: string[], keys: string[], meta: any }>(__PROD__ ? "" : "更新一个表单元数据");
+    private updateItemMeta: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta: any, noChange?: boolean; }>
+        = createAction<{ parentKeys: ASN, keys: ASN, meta: any }>(__PROD__ ? "" : "更新一个表单元数据");
     /**
      * 添加一个元素到数组
      */
-    private addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
-        = createAction<{ parentKeys: string[], keys: string[], data: any }>(__PROD__ ? "" : "添加一个数据");
+    private addItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any }>
+        = createAction<{ parentKeys: ASN, keys: ASN, data: any }>(__PROD__ ? "" : "添加一个数据");
     /**
      * 从数组中删除一个元素
      */
-    private removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>
-        = createAction<{ parentKeys: string[], keys: string[], index: number }>(__PROD__ ? "" : "删除一个数据");
+    private removeItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, index: number }>
+        = createAction<{ parentKeys: ASN, keys: ASN, index: number }>(__PROD__ ? "" : "删除一个数据");
     /**
      * 移动一个数组元素
      */
-    private moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>(__PROD__ ? "" : "元素移位");
+    private moveToItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>
+        = createAction<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>(__PROD__ ? "" : "元素移位");
     /**
      * 删除一个字段的数据以及元数据
      */
-    private removeItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta?: boolean }>
-        = createAction<{ parentKeys: string[], keys: string[], meta?: boolean }>(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
+    private removeItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta?: boolean }>
+        = createAction<{ parentKeys: ASN, keys: ASN, meta?: boolean }>(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
     /**
      * 合并多个action，触发一次dispatch
      */
@@ -175,7 +177,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private removeItemDataMetaHandle(state: Map<string, any>, { parentKeys, keys, meta }: any) {
         let dataKeys = parentKeys.concat([d, ...keys]);
-        let metaKeys: string[] = parentKeys.concat([m]);
+        let metaKeys: ASN = parentKeys.concat([m]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap | null = rootNode.containPath(keys);
 
@@ -238,7 +240,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private addItemDataHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
         const dataKeys = parentKeys.concat([d, ...keys]),
-            metaKeys: string[] = parentKeys.concat([m]),
+            metaKeys: ASN = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap | null = rootNode.containPath(keys);
         let formItemData: List<any>;
@@ -265,7 +267,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private removeItemHandle(state: Map<string, any>, { parentKeys, keys, index }: any): Map<string, any> {
         const dataKeys = parentKeys.concat([d, ...keys]),
-            metaKeys: string[] = parentKeys.concat([m]),
+            metaKeys: ASN = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap | null = rootNode.addChild(keys.concat([index]));
         let formItemData: List<any>;
@@ -297,7 +299,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private moveItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
         const dataKeys = parentKeys.concat([d, ...keys]),
-            metaKeys: string[] = parentKeys.concat([m]),
+            metaKeys: ASN = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             offset = (toIndex > curIndex && false ? 1 : 0);
         let oldFormItemData: List<any> = state.getIn(dataKeys),
@@ -339,7 +341,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param param1 参数值，keys,parentKeys和data
      */
     private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, meta, noChange }: any): Map<string, any> {
-        let metaKeys: string[] = parentKeys.concat([m]);
+        let metaKeys: ASN = parentKeys.concat([m]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap | null = rootNode.containPath(keys);
         let value = childNode ? childNode.value : null;

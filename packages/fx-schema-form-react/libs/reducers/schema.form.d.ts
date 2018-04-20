@@ -3,6 +3,7 @@ import { Reducer } from "redux-act";
 import { Map } from "immutable";
 import { Store } from "react-redux";
 import { FxReducer } from "./reducer";
+export declare type ASN = Array<string | number> | string[];
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     createForm: SimpleActionCreator<{
@@ -10,36 +11,36 @@ export interface SchemaFormActions {
         data: any;
     }>;
     updateItemData: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         data: any;
         meta?: any;
     }>;
     updateItemMeta: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         meta: any;
         noChange?: boolean;
     }>;
     addItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         data: any;
     }>;
     removeItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         index: number;
     }>;
     moveToItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         curIndex: number;
         toIndex: number;
     }>;
     removeItemData: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         meta?: boolean;
     }>;
     combineActions: SimpleActionCreator<Action<any, any>[]>;
