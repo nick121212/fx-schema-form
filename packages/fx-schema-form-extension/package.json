@@ -5,8 +5,8 @@
   "main": "libs/index.js",
   "types": "libs/index.d.ts",
   "scripts": {
-    "build": "tsc --outDir libs -d",
-    "dist": "webpack",
+    "build": "rm -rf libs;tsc --outDir libs -d",
+    "dist": "webpack -p",
     "start": "webpack-dev-server --port=8004",
     "test": "exit 0",
     "test1": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx "
