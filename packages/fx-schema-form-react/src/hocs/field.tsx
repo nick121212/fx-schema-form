@@ -29,8 +29,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 public render(): JSX.Element | null {
                     const { currentTheme, getOptions, uiSchema } = this.props,
                         { field, widget, type } = uiSchema as any;
-                    let FieldComponent, WidgetComponent;
-                    let calcField = field || type as string;
+                    let FieldComponent, WidgetComponent,
+                        calcField = field || type as string;
 
                     if (currentTheme.fieldFactory.has(calcField)) {
                         FieldComponent = currentTheme.fieldFactory.get(calcField);
@@ -38,7 +38,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (currentTheme.fieldFactory.has(defaultKey)) {
                             FieldComponent = currentTheme.fieldFactory.get(defaultKey);
                         } else {
-                            console.error(`找不到field：${field || type}`);
+                            if (!__PROD__) { console.error(`找不到field：${field || type}`); }
                             return null;
                         }
                     }
@@ -49,7 +49,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (currentTheme.widgetFactory.has(defaultKey)) {
                             WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
                         } else {
-                            console.warn(`找不到widget：${widget || type}`, uiSchema);
+                            if (!__PROD__) { console.warn(`找不到widget：${widget || type}`, uiSchema); }
                         }
                     }
 

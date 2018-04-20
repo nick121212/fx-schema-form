@@ -2,7 +2,7 @@
 import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
-import Immutable from "immutable";
+import { fromJS, Map, List } from "immutable";
 import ajv, { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
@@ -12,44 +12,46 @@ import { hocFactory, reducerFactory } from "../factory";
 import { TreeMap } from "./tree";
 import { SchemaFormActions } from "../reducers/schema.form";
 import { UtilsHocOutProps } from "../hocs/utils";
+import { d, m } from "../reducers/reducer";
+import { ValidateHocOutProps } from "../hocs/validate";
 
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
     parentKeys: string[];
 }
 
-export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaFormHocOutProps {
+export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaFormHocOutProps, ValidateHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
     isValid?: boolean;
     isValidating?: boolean;
 
-    reducerKey: string;
     formKey: string;
     initData?: any;
+    shouldResetForm?: boolean;
 }
 
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
     resetForm?: () => void;
-    shouldResetForm?: boolean;
 }
+
+export const name = "schemaFormDec";
 
 /**
  * 提供全部验证等功能
  * @param Component 需要包装的组件
- * 加入属性FieldComponent   schema对应的fieldcomponent
- * 加入属性WidgetComponent  schema对应的widgetcomponent
  */
 export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component: any): RC<SchemaFormProps, any> => {
         @(compose(
             hocFactory.get("utils")(),
-            connect((state: Immutable.Map<string, any>) => {
+            hocFactory.get("validate")(),
+            connect((state: Map<string, any>) => {
                 let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
-                    dataKeys = rootKeys.concat(["data"]),
-                    metaKeys = rootKeys.concat(["meta"]),
+                    dataKeys = rootKeys.concat([d]),
+                    metaKeys = rootKeys.concat([m]),
                     root = state.getIn(metaKeys);
 
                 return {
@@ -61,24 +63,33 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 };
             }),
             withHandlers({
+                /**
+                 * 验证所有的字段
+                 */
                 validateAll: (props: SchemaFormProps) => {
-                    let { updateItemMeta } = reducerFactory.get(props.reducerKey).actions, timeId: any;
+                    let { updateItemMeta } = props.getActions(), timeId: any;
 
+                    /**
+                     * 验证所有字段
+                     * async : boolean 是否是异步的
+                     */
                     return async (async?: boolean) => {
                         let root = props.root as TreeMap,
                             validate = props.ajv.getSchema(props.schemaId),
-                            $validateBeforeData = Immutable.fromJS({
+                            $validateBeforeData = fromJS({
                                 dirty: true,
                                 isValid: true,
                                 isLoading: true
                             }),
-                            $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }),
+                            $validateAfterData = fromJS({ isLoading: false, dirty: true }),
                             normalizeDataPath = props.normalizeDataPath;
 
+                        // 如果没有root，则跳出
                         if (!root) {
                             return;
                         }
 
+                        // 如果没有validate，则报错
                         if (!validate) {
                             throw new Error(`没有找到对应的${props.schemaId};`);
                         }
@@ -103,9 +114,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                             props.ajv.errors = null;
 
-                            let valRes = await validate(props.data.toJS());
-
-                            if (!valRes) {
+                            if (!await validate(props.data.toJS())) {
                                 throw new (ValidationError as any)(validate.errors.concat(props.ajv.errors || []));
                             }
 
@@ -132,7 +141,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 let childNode = root.containPath(dataKeys);
 
                                 if (!childNode) {
-                                    childNode = root.addChild(dataKeys, Immutable.fromJS({}));
+                                    childNode = root.addChild(dataKeys, fromJS({}));
                                 }
 
                                 if (childNode) {
@@ -167,13 +176,17 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 },
                 resetForm: (props: SchemaFormProps) => {
                     return () => {
-                        if (props.formKey && props.shouldResetForm !== false) {
-                            let { createForm } = reducerFactory.get(props.reducerKey).actions;
+                        const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
 
-                            createForm({
-                                key: props.formKey,
-                                data: props.initData || {}
-                            });
+                        if (formKey && shouldResetForm !== false) {
+                            let { createForm } = props.getActions();
+
+                            if (createForm) {
+                                createForm({
+                                    key: formKey,
+                                    data: initData
+                                });
+                            }
                         }
                     };
                 }
@@ -191,9 +204,9 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
             }
 
             public render(): JSX.Element | null {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props;
-                const options = getOptions(this.props, schemaFormTypes.hoc, "schemaFormDec");
-                const extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
+                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props,
+                    options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings)),
+                    extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
 
                 return (
                     <Component

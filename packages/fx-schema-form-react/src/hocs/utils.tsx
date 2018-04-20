@@ -48,6 +48,16 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         {...this.props} />;
                 }
 
+                private getPathProps(props: DefaultProps, path: string): DefaultProps {
+                    let newProps = Object.assign({}, props, {
+                        uiSchema: Object.assign({}, props.uiSchema, {
+                            keys: this.getPathKeys(props.uiSchema.keys as any, "../feature")
+                        })
+                    });
+
+                    return newProps;
+                }
+
                 /**
                  * 过滤props中的属性，只传递所需的属性
                  * 从设置中，获取一部分的设置
@@ -58,7 +68,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getRequiredKeys(props: { [key: string]: any }, includeKeys: string[] = [], excludeKeys: string[] = [])
                     : { [key: string]: any } {
                     let extraProps: { [key: string]: any } = {};
-
 
                     if (includeKeys && includeKeys.constructor === Array && includeKeys.length) {
                         includeKeys.forEach((key: string) => {
@@ -120,11 +129,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param field         field的名称
                  * @param extraSettings 其余的设置项
                  */
-                private getOptions(props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
-                    : { [key: string]: any } {
-                    const { uiSchema = {}, globalOptions } = props;
-                    // fieldOptions = (field === schemaFormTypes.field ? null :
-                    //                 this.getOptions(props, schemaFormTypes.field, props.uiSchema.type.toString()));
+                private getOptions({ uiSchema = {}, globalOptions }: DefaultProps,
+                    category: string,
+                    field: string,
+                    ...extraSettings: Immutable.Map<string, any>[]): { [key: string]: any } {
+
                     let { options, type = "" } = uiSchema as FxUiSchema,
                         optionsArray: Immutable.Map<string, any>[] = [],
                         getOptions = (o: any, ks: string[]) => {
@@ -172,8 +181,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props         当前的props
                  * @param extraSettings 额外的配置参数
                  */
-                private getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): string {
-                    const { uiSchema } = props;
+                private getTitle({ uiSchema, arrayIndex }: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): string {
                     let { title, keys } = uiSchema as FxUiSchema;
 
                     if (!title && extraSettings && extraSettings.length) {
@@ -194,8 +202,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         return keyTitle !== undefined ? keyTitle.toString() : "";
                     }
 
-                    if (props.arrayIndex) {
-                        return props.arrayIndex.toString();
+                    if (arrayIndex) {
+                        return arrayIndex.toString();
                     }
 
                     return "";
@@ -254,7 +262,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             }
                         }, defaultValue);
                     } catch (e) {
-                        console.log(e);
+                        // console.log(e);
                         return data;
                     } finally {
                         switch (type) {

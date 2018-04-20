@@ -24,9 +24,9 @@ export class NormalField extends PureComponent<NormalFieldProps> {
     }
 
     public render(): JSX.Element | null {
-        const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props;
-        const fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name);
-        const { keys } = extraProps.uiSchema as FxUiSchema;
+        const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props,
+            fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name),
+            { keys } = extraProps.uiSchema as FxUiSchema;
         let WidgetComponentWithHoc = WidgetComponent;
 
         if (!WidgetComponent || !keys) {

@@ -1,13 +1,11 @@
-import { createAction, createReducer, SimpleActionCreator } from "redux-act";
+import { createAction, createReducer, SimpleActionCreator, BaseActionCreator, EmptyActionCreator, Action } from "redux-act";
 import { Reducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
 import { Store } from "react-redux";
 
-import { FxReducer, a } from "./reducer";
+import { FxReducer, d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
-
-const b = a;
 
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
@@ -18,24 +16,92 @@ export interface SchemaFormActions {
     removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>;
     moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>;
     removeItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta?: boolean }>;
+    combineActions: SimpleActionCreator<Action<any, any>[]>;
 }
+
+/**
+ * 解析一个路径上的数据，判断数据格式，做处理
+ * @param state 当前的state
+ * @param keys  数据路径
+ * @returns newState
+ */
+const resolveKeys = (state: Map<string, any>, keys: Array<string>): Map<string, any> => {
+    if (state.hasIn(keys)) {
+        return state;
+    }
+
+    for (let i = 0, n = keys.length; i < n; i++) {
+        let mKeys = [...keys].splice(0, i + 1);
+
+        // 如果key不存在，遍历生成数据结构
+        if (!state.hasIn(mKeys)) {
+            mKeys.pop();
+            if (!state.hasIn(mKeys)) {
+                if (keys[i].constructor === Number) {
+                    state = state.setIn(mKeys, List());
+                } else {
+                    state = state.setIn(mKeys, Map());
+                }
+            }
+        } else if (i < n) {
+            // 如果key存在，则判断数据结构是否与结构一致
+            let data = state.getIn(mKeys);
+
+            if (!Map.isMap(data) && !List.isList(data)) {
+                if (keys[i + 1].constructor === Number) {
+                    state = state.setIn(mKeys, List());
+                } else {
+                    state = state.setIn(mKeys, Map());
+                }
+            }
+        }
+    }
+
+    return state;
+};
 
 export class SchemaFormReducer<T> implements FxReducer {
 
+    /**
+     * 创建一个表单
+     */
     private createForm: SimpleActionCreator<{ key: string, data: any }>
-        = createAction<{ key: string, data: any }>("创建一个表单数据");
+        = createAction<{ key: string, data: any }>(__PROD__ ? "" : "创建一个表单数据");
+    /**
+     * 更新一个表单数据
+     */
     private updateItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any, meta?: any }>
-        = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>("更新一个表单数据");
+        = createAction<{ parentKeys: string[], keys: string[], data: any, meta?: any }>(__PROD__ ? "" : "更新一个表单数据");
+    /**
+     * 更新一个表单元数据
+     */
     private updateItemMeta: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta: any, noChange?: boolean; }>
-        = createAction<{ parentKeys: string[], keys: string[], meta: any }>("更新一个表单元数据");
+        = createAction<{ parentKeys: string[], keys: string[], meta: any }>(__PROD__ ? "" : "更新一个表单元数据");
+    /**
+     * 添加一个元素到数组
+     */
     private addItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], data: any }>
-        = createAction<{ parentKeys: string[], keys: string[], data: any }>("添加一个数据");
+        = createAction<{ parentKeys: string[], keys: string[], data: any }>(__PROD__ ? "" : "添加一个数据");
+    /**
+     * 从数组中删除一个元素
+     */
     private removeItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], index: number }>
-        = createAction<{ parentKeys: string[], keys: string[], index: number }>("删除一个数据");
+        = createAction<{ parentKeys: string[], keys: string[], index: number }>(__PROD__ ? "" : "删除一个数据");
+    /**
+     * 移动一个数组元素
+     */
     private moveToItem: SimpleActionCreator<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>
-        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>("元素移位");
+        = createAction<{ parentKeys: string[], keys: string[], curIndex: number, toIndex: number }>(__PROD__ ? "" : "元素移位");
+    /**
+     * 删除一个字段的数据以及元数据
+     */
     private removeItemData: SimpleActionCreator<{ parentKeys: string[], keys: string[], meta?: boolean }>
-        = createAction<{ parentKeys: string[], keys: string[], meta?: boolean }>("删除一个字段的数据以及meta数据");
+        = createAction<{ parentKeys: string[], keys: string[], meta?: boolean }>(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
+    /**
+     * 合并多个action，触发一次dispatch
+     */
+    private combineActions: SimpleActionCreator<Action<any, any>[]>
+        = createAction<Action<any, any>[]>(__PROD__ ? "" : "合并多个action");
 
     /**
      * 构造
@@ -53,7 +119,8 @@ export class SchemaFormReducer<T> implements FxReducer {
             addItem: this.addItem,
             removeItem: this.removeItem,
             moveToItem: this.moveToItem,
-            removeItemData: this.removeItemData
+            removeItemData: this.removeItemData,
+            combineActions: this.combineActions
         };
     }
 
@@ -84,8 +151,18 @@ export class SchemaFormReducer<T> implements FxReducer {
             [this.addItem as any]: this.addItemDataHandle.bind(this),
             [this.removeItem as any]: this.removeItemHandle.bind(this),
             [this.moveToItem as any]: this.moveItemHandle.bind(this),
-            [this.removeItemData as any]: this.removeItemDataMetaHandle.bind(this)
+            [this.removeItemData as any]: this.removeItemDataMetaHandle.bind(this),
+            [this.combineActions as any]: this.combineActionsHandle.bind(this)
         }, this.initialState);
+    }
+
+    private combineActionsHandle(state: Map<string, any>, actions: Action<any, any>[]) {
+
+        state = actions.reduce((stateNew: Map<string, any>, act2: Action<any>) => {
+            return this.reducer(stateNew, act2);
+        }, state);
+
+        return state;
     }
 
     /**
@@ -97,12 +174,12 @@ export class SchemaFormReducer<T> implements FxReducer {
      *  meta        是否要删除meta数据
      */
     private removeItemDataMetaHandle(state: Map<string, any>, { parentKeys, keys, meta }: any) {
-        let dataKeys = parentKeys.concat(["data", ...keys]);
-        let metaKeys: string[] = parentKeys.concat(["meta"]);
+        let dataKeys = parentKeys.concat([d, ...keys]);
+        let metaKeys: string[] = parentKeys.concat([m]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap | null = rootNode.containPath(keys);
 
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
 
         if (state.hasIn(dataKeys)) {
             state = state.removeIn(dataKeys);
@@ -110,46 +187,6 @@ export class SchemaFormReducer<T> implements FxReducer {
 
         if (childNode && meta) {
             childNode.removeFromParent();
-        }
-
-        return state;
-    }
-
-    /**
-     * 解析一个路径上的数据，判断数据格式，做处理
-     * @param state 当前的state
-     * @param keys  数据路径
-     */
-    private resolveKeys(state: Map<string, any>, keys: Array<string>) {
-        if (state.hasIn(keys)) {
-            return state;
-        }
-
-        for (let i = 0, n = keys.length; i < n; i++) {
-            let mKeys = [...keys].splice(0, i + 1);
-
-            // 如果key不存在，遍历生成数据结构
-            if (!state.hasIn(mKeys)) {
-                mKeys.pop();
-                if (!state.hasIn(mKeys)) {
-                    if (keys[i].constructor === Number) {
-                        state = state.setIn(mKeys, List());
-                    } else {
-                        state = state.setIn(mKeys, Map());
-                    }
-                }
-            } else if (i < n) {
-                // 如果key存在，则判断数据结构是否与结构一致
-                let data = state.getIn(mKeys);
-
-                if (!Map.isMap(data) && !List.isList(data)) {
-                    if (keys[i + 1].constructor === Number) {
-                        state = state.setIn(mKeys, List());
-                    } else {
-                        state = state.setIn(mKeys, Map());
-                    }
-                }
-            }
         }
 
         return state;
@@ -180,9 +217,9 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param param1 参数值，keys,parentKeys和data
      */
     private updateItemDataHandle(state: Map<string, any>, { parentKeys, keys, data, meta }: any): Map<string, any> {
-        let dataKeys = parentKeys.concat(["data", ...keys]);
+        let dataKeys = parentKeys.concat([d, ...keys]);
 
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         state = state.setIn(dataKeys, fromJS(data));
 
         if (meta) {
@@ -200,13 +237,13 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param param1 keys,parentKeys和data
      */
     private addItemDataHandle(state: Map<string, any>, { parentKeys, keys, data }: any): Map<string, any> {
-        const dataKeys = parentKeys.concat(["data", ...keys]),
-            metaKeys: string[] = parentKeys.concat(["meta"]),
+        const dataKeys = parentKeys.concat([d, ...keys]),
+            metaKeys: string[] = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap | null = rootNode.containPath(keys);
         let formItemData: List<any>;
 
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys) || List();
         formItemData = formItemData.push(fromJS(data));
 
@@ -227,13 +264,13 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param param1 keys,parentKeys和data
      */
     private removeItemHandle(state: Map<string, any>, { parentKeys, keys, index }: any): Map<string, any> {
-        const dataKeys = parentKeys.concat(["data", ...keys]),
-            metaKeys: string[] = parentKeys.concat(["meta"]),
+        const dataKeys = parentKeys.concat([d, ...keys]),
+            metaKeys: string[] = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             childNode: TreeMap | null = rootNode.addChild(keys.concat([index]));
         let formItemData: List<any>;
 
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
 
         if (!formItemData || !List.isList(formItemData)) {
@@ -259,8 +296,8 @@ export class SchemaFormReducer<T> implements FxReducer {
      *   toIndex       需要交换的item索引
      */
     private moveItemHandle(state: Map<string, any>, { parentKeys, keys, curIndex, toIndex }: any): Map<string, any> {
-        const dataKeys = parentKeys.concat(["data", ...keys]),
-            metaKeys: string[] = parentKeys.concat(["meta"]),
+        const dataKeys = parentKeys.concat([d, ...keys]),
+            metaKeys: string[] = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             offset = (toIndex > curIndex && false ? 1 : 0);
         let oldFormItemData: List<any> = state.getIn(dataKeys),
@@ -268,7 +305,7 @@ export class SchemaFormReducer<T> implements FxReducer {
             childNode: TreeMap | null = rootNode.containPath(keys.concat([curIndex])),
             childNodeTo: TreeMap | null = rootNode.containPath(keys.concat([toIndex]));
 
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
 
         if (!formItemData || toIndex < 0) {
             return state;
@@ -302,15 +339,17 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param param1 参数值，keys,parentKeys和data
      */
     private updateItemMetaHandle(state: Map<string, any>, { parentKeys, keys, meta, noChange }: any): Map<string, any> {
-        let metaKeys: string[] = parentKeys.concat(["meta"]);
+        let metaKeys: string[] = parentKeys.concat([m]);
         let rootNode: TreeMap = state.getIn(metaKeys);
         let childNode: TreeMap | null = rootNode.containPath(keys);
         let value = childNode ? childNode.value : null;
 
+        // 如果childNode不存在，则新建一个
         if (!childNode) {
             childNode = rootNode.addChild(keys);
         }
 
+        // 判断childNode，如果存在value，则合并value，否则创建value
         if (childNode) {
             if (value) {
                 childNode.value = merge(childNode.value, fromJS(meta), { "*": "replace" });
@@ -323,9 +362,7 @@ export class SchemaFormReducer<T> implements FxReducer {
             return state;
         }
 
-        // if (is(childNode.value, value)) {
-        //     return state;
-        // }
+        // 生成新的TreeMap
         let newRoot = new TreeMap(rootNode.getKey(), rootNode.value);
 
         newRoot.children = rootNode.children;

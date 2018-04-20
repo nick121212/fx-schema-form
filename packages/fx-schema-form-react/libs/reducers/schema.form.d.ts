@@ -1,4 +1,4 @@
-import { SimpleActionCreator } from "redux-act";
+import { SimpleActionCreator, Action } from "redux-act";
 import { Reducer } from "redux-act";
 import { Map } from "immutable";
 import { Store } from "react-redux";
@@ -42,6 +42,7 @@ export interface SchemaFormActions {
         keys: string[];
         meta?: boolean;
     }>;
+    combineActions: SimpleActionCreator<Action<any, any>[]>;
 }
 export declare class SchemaFormReducer<T> implements FxReducer {
     private initialState;
@@ -52,12 +53,13 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private removeItem;
     private moveToItem;
     private removeItemData;
+    private combineActions;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     init(store: Store<Map<string, any>>): void;
     readonly reducer: Reducer<any>;
+    private combineActionsHandle(state, actions);
     private removeItemDataMetaHandle(state, {parentKeys, keys, meta});
-    private resolveKeys(state, keys);
     private createFormHandle(state, {key, data});
     private updateItemDataHandle(state, {parentKeys, keys, data, meta});
     private addItemDataHandle(state, {parentKeys, keys, data});

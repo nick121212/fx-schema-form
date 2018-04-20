@@ -264,6 +264,7 @@ export const store = createStore(combineReducers({
     "schemaForm1": undoable(reducerFactory.get("schemaForm").reducer, {})
 }), Immutable.fromJS({}));
 
+
 reducerFactory
     .get("schemaForm")
     .init(store);
@@ -290,4 +291,3 @@ curAjv.addKeyword("equal", {
         return expr;
     }
 });
-

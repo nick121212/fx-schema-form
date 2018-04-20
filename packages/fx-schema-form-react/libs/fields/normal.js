@@ -8,9 +8,7 @@ export class NormalField extends PureComponent {
         super(props, context);
     }
     render() {
-        const _a = this.props, { WidgetComponent, FieldComponent, formItemMeta, formItemData } = _a, extraProps = tslib_1.__rest(_a, ["WidgetComponent", "FieldComponent", "formItemMeta", "formItemData"]);
-        const fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name);
-        const { keys } = extraProps.uiSchema;
+        const _a = this.props, { WidgetComponent, FieldComponent, formItemMeta, formItemData } = _a, extraProps = tslib_1.__rest(_a, ["WidgetComponent", "FieldComponent", "formItemMeta", "formItemData"]), fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name), { keys } = extraProps.uiSchema;
         let WidgetComponentWithHoc = WidgetComponent;
         if (!WidgetComponent || !keys) {
             return null;

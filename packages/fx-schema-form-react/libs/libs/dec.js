@@ -2,10 +2,12 @@ import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
-import Immutable from "immutable";
+import { fromJS } from "immutable";
 import { ValidationError } from "ajv";
 import { schemaFormTypes } from "../models/index";
-import { hocFactory, reducerFactory } from "../factory";
+import { hocFactory } from "../factory";
+import { d, m } from "../reducers/reducer";
+export const name = "schemaFormDec";
 export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component) => {
         let SchemaFormComponentHoc = class SchemaFormComponentHoc extends PureComponent {
@@ -15,15 +17,13 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 props.resetForm();
             }
             render() {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props;
-                const options = getOptions(this.props, schemaFormTypes.hoc, "schemaFormDec");
-                const extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
+                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings)), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
                 return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys, schemaId: schemaId }, extraProps)));
             }
         };
         SchemaFormComponentHoc = tslib_1.__decorate([
-            compose(hocFactory.get("utils")(), connect((state) => {
-                let rootKeys = settings.rootReducerKey.concat(settings.parentKeys), dataKeys = rootKeys.concat(["data"]), metaKeys = rootKeys.concat(["meta"]), root = state.getIn(metaKeys);
+            compose(hocFactory.get("utils")(), hocFactory.get("validate")(), connect((state) => {
+                let rootKeys = settings.rootReducerKey.concat(settings.parentKeys), dataKeys = rootKeys.concat([d]), metaKeys = rootKeys.concat([m]), root = state.getIn(metaKeys);
                 return {
                     data: state.getIn(dataKeys),
                     root: root,
@@ -33,13 +33,13 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 };
             }), withHandlers({
                 validateAll: (props) => {
-                    let { updateItemMeta } = reducerFactory.get(props.reducerKey).actions, timeId;
+                    let { updateItemMeta } = props.getActions(), timeId;
                     return (async) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                        let root = props.root, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = Immutable.fromJS({
+                        let root = props.root, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = fromJS({
                             dirty: true,
                             isValid: true,
                             isLoading: true
-                        }), $validateAfterData = Immutable.fromJS({ isLoading: false, dirty: true }), normalizeDataPath = props.normalizeDataPath;
+                        }), $validateAfterData = fromJS({ isLoading: false, dirty: true }), normalizeDataPath = props.normalizeDataPath;
                         if (!root) {
                             return;
                         }
@@ -61,8 +61,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 });
                             }, 200);
                             props.ajv.errors = null;
-                            let valRes = yield validate(props.data.toJS());
-                            if (!valRes) {
+                            if (!(yield validate(props.data.toJS()))) {
                                 throw new ValidationError(validate.errors.concat(props.ajv.errors || []));
                             }
                             root.value = root.value.merge({
@@ -85,7 +84,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
                                 let childNode = root.containPath(dataKeys);
                                 if (!childNode) {
-                                    childNode = root.addChild(dataKeys, Immutable.fromJS({}));
+                                    childNode = root.addChild(dataKeys, fromJS({}));
                                 }
                                 if (childNode) {
                                     childNode.value = childNode.value.merge($validateAfterData).merge({
@@ -117,12 +116,15 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 },
                 resetForm: (props) => {
                     return () => {
-                        if (props.formKey && props.shouldResetForm !== false) {
-                            let { createForm } = reducerFactory.get(props.reducerKey).actions;
-                            createForm({
-                                key: props.formKey,
-                                data: props.initData || {}
-                            });
+                        const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
+                        if (formKey && shouldResetForm !== false) {
+                            let { createForm } = props.getActions();
+                            if (createForm) {
+                                createForm({
+                                    key: formKey,
+                                    data: initData
+                                });
+                            }
                         }
                     };
                 }

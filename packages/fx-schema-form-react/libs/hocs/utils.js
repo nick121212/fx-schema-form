@@ -13,6 +13,14 @@ export const hoc = (hocFactory) => {
                 render() {
                     return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData }, this.props));
                 }
+                getPathProps(props, path) {
+                    let newProps = Object.assign({}, props, {
+                        uiSchema: Object.assign({}, props.uiSchema, {
+                            keys: this.getPathKeys(props.uiSchema.keys, "../feature")
+                        })
+                    });
+                    return newProps;
+                }
                 getRequiredKeys(props, includeKeys = [], excludeKeys = []) {
                     let extraProps = {};
                     if (includeKeys && includeKeys.constructor === Array && includeKeys.length) {
@@ -51,8 +59,7 @@ export const hoc = (hocFactory) => {
                     });
                     return dataKeys;
                 }
-                getOptions(props, category, field, ...extraSettings) {
-                    const { uiSchema = {}, globalOptions } = props;
+                getOptions({ uiSchema = {}, globalOptions }, category, field, ...extraSettings) {
                     let { options, type = "" } = uiSchema, optionsArray = [], getOptions = (o, ks) => {
                         if (o) {
                             if (!Immutable.Map.isMap(o)) {
@@ -79,8 +86,7 @@ export const hoc = (hocFactory) => {
                     }, fromJS({}));
                     return opts.toJS();
                 }
-                getTitle(props, ...extraSettings) {
-                    const { uiSchema } = props;
+                getTitle({ uiSchema, arrayIndex }, ...extraSettings) {
                     let { title, keys } = uiSchema;
                     if (!title && extraSettings && extraSettings.length) {
                         extraSettings.forEach((sets) => {
@@ -96,8 +102,8 @@ export const hoc = (hocFactory) => {
                         let keysCopy = [...keys], keyTitle = keysCopy.pop();
                         return keyTitle !== undefined ? keyTitle.toString() : "";
                     }
-                    if (props.arrayIndex) {
-                        return props.arrayIndex.toString();
+                    if (arrayIndex) {
+                        return arrayIndex.toString();
                     }
                     return "";
                 }
@@ -131,7 +137,6 @@ export const hoc = (hocFactory) => {
                             }, defaultValue);
                         }
                         catch (e) {
-                            console.log(e);
                             return data;
                         }
                         finally {

@@ -19,27 +19,28 @@ export const hoc = (hocFactory) => {
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
-                            const schema = Object.assign({}, props.uiSchema);
+                            const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
+                            const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                    parentKeys: props.parentKeys,
+                                reducerFactory.get(reducerKey || "schemaForm").actions.updateItemMeta({
+                                    parentKeys: parentKeys,
                                     keys: schema.keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
                                 });
                             }, 200);
                             try {
                                 let validateFunc;
-                                if (schema.schemaPath && props.ajv.getSchema(schema.schemaPath)) {
-                                    validateFunc = props.ajv.getSchema(schema.schemaPath);
+                                if (schema.schemaPath && ajv.getSchema(schema.schemaPath)) {
+                                    validateFunc = ajv.getSchema(schema.schemaPath);
                                 }
                                 else if (schema.$id) {
-                                    validateFunc = props.ajv.getSchema(schema.$id);
+                                    validateFunc = ajv.getSchema(schema.$id);
                                 }
                                 else {
                                     let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
                                     delete schemaInCache.$id;
                                     delete schemaInCache.$ref;
-                                    validateFunc = props.ajv.compile(schemaInCache);
+                                    validateFunc = ajv.compile(schemaInCache);
                                 }
                                 if (propsCur.formItemData) {
                                     result.isValid = yield validateFunc(data, undefined, undefined, undefined, propsCur.formItemData.toJS());
@@ -55,8 +56,8 @@ export const hoc = (hocFactory) => {
                             }
                             catch (err) {
                                 result.errorText = err.errors ?
-                                    props.ajv.errorsText(err.errors, {
-                                        dataVar: props.getTitle(props).toString()
+                                    ajv.errorsText(err.errors, {
+                                        dataVar: getTitle(props).toString()
                                     }) : err.message;
                             }
                             finally {
@@ -64,38 +65,41 @@ export const hoc = (hocFactory) => {
                             }
                             return Object.assign({}, meta, result);
                         });
+                    },
+                    getActions: (propsCur) => {
+                        return () => {
+                            return reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+                        };
                     }
                 }), hocFactory.get("resetKey")({
                     excludeKeys: ["formItemData"]
                 }), withHandlers({
                     updateItemData: (propsCur) => {
-                        return (props, data, meta) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemData({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                        return ({ parentKeys, uiSchema }, data, meta) => {
+                            return propsCur.getActions().updateItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 data: data,
                                 meta
                             });
-                            if (props.uiSchema.onValueChanged) {
-                                props.uiSchema.onValueChanged(props, data);
-                            }
                         };
                     },
                     updateItemMeta: (propsCur) => {
                         return (props, data, meta = null, noChange = false) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                            const { parentKeys, uiSchema } = props;
+                            return propsCur.getActions().updateItemMeta({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta || (yield propsCur.validate(props, data)),
                                 noChange: noChange
                             });
                         });
                     },
                     removeItemData: (propsCur) => {
-                        return (props, meta = true) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                        return ({ parentKeys, uiSchema }, meta = true) => {
+                            return propsCur.getActions().removeItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta
                             });
                         };

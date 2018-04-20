@@ -4,7 +4,7 @@ import { SchemaForm } from "./components";
 import { schemaFormTypes } from "./models";
 import fields from "./fields";
 import { TreeMap } from "./libs/tree";
-import { default as schemaFormDec } from "./libs/dec";
+import { default as schemaFormDec, name as schemaFormDecName } from "./libs/dec";
 import merge from "./libs/merge";
 const defaultTheme = {
     tempFactory: new BaseFactory(),
@@ -19,7 +19,7 @@ fields.forEach((field) => {
     }
 });
 themeFactory.add("default", defaultTheme);
-hocFactory.add("schemaFormDec", schemaFormDec.bind(schemaFormDec, hocFactory));
+hocFactory.add(schemaFormDecName, schemaFormDec.bind(schemaFormDec, hocFactory));
 export default {
     themeFactory,
     defaultTheme,

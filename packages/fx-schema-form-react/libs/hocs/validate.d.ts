@@ -6,6 +6,7 @@ export interface ValidateHocOutProps {
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
+    getActions: () => any;
 }
 export declare const name = "validate";
 export declare const hoc: (hocFactory: BaseFactory<any>) => (settings?: any) => (Component: any) => RC<DefaultProps, any>;

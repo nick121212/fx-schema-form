@@ -5,4 +5,5 @@ export interface FxReducer {
     reducer: Reducer<any>;
     init(store: Store<any>): void;
 }
-export declare const a = 1;
+export declare const d = "data";
+export declare const m = "meta";

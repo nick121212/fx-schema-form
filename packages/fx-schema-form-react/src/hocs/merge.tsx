@@ -1,8 +1,6 @@
 
 import React, { PureComponent } from "react";
-import { BaseFactory, MergeLib, FxJsonSchema, UiSchema } from "fx-schema-form-core";
-import { connect, Dispatch } from "react-redux";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
+import { BaseFactory, MergeLib,  UiSchema } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models/index";
@@ -71,6 +69,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         return key;
                     });
                     mergeSchema.keys.reverse();
+                    // mergeSchema.keys = normalizeDataPath(schemaId,);
 
                     return mergeSchema;
                 }

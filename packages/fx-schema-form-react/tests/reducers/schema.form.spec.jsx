@@ -108,6 +108,11 @@ describe("测试schemaReducer", () => {
     });
     it("moveToItem,更换数组元素的位置,[1,2,3]=>[2,3,1]", () => {
         let rootNode = store.getState().getIn(["schemaForm1", "present", "test", "meta"]);
+        let describeCount = 0;
+
+        store.subscribe(() => {
+            describeCount++;
+        });
 
         actions.updateItemMeta({
             parentKeys: ["test"],
@@ -144,6 +149,8 @@ describe("测试schemaReducer", () => {
 
         expect(rootNode.contains("c").contains(0).value.get("oldIndex")).to.eq(1);
         expect(rootNode.contains("c").contains(2).value.get("oldIndex")).to.eq(0);
+        expect(describeCount).to.eq(4);
+
     });
     it("removeItemData,清除一个元素的数据以及meta", () => {
         let meta = Immutable.fromJS({
@@ -173,4 +180,53 @@ describe("测试schemaReducer", () => {
         expect(store.getState().getIn(["schemaForm1", "present", "test", "data", "c"])).to.eq(undefined);
         expect(rootNode.contains("c")).to.eq(null);
     });
+
+    it("测试combineActions", () => {
+        let rootNode = store.getState().getIn(["schemaForm1", "present", "test", "meta"]);
+        let describeCount = 0;
+
+        store.subscribe(() => {
+            describeCount++;
+        });
+
+        actions.combineActions([
+            actions.updateItemMeta.raw({
+                parentKeys: ["test"],
+                keys: ["c", 0],
+                meta: {
+                    oldIndex: 0
+                }
+            }),
+            actions.updateItemMeta.raw({
+                parentKeys: ["test"],
+                keys: ["c", 1],
+                meta: {
+                    oldIndex: 1
+                }
+            }),
+            actions.updateItemMeta.raw({
+                parentKeys: ["test"],
+                keys: ["c", 2],
+                meta: {
+                    oldIndex: 2
+                }
+            }),
+
+            actions.moveToItem.raw({
+                parentKeys: ["test"],
+                keys: ["c"],
+                curIndex: 0,
+                toIndex: 2
+            })
+        ]);
+
+        expect(store.getState().getIn(["schemaForm1", "present", "test", "data", "c"]).size).to.eq(3);
+        expect(store.getState().getIn(["schemaForm1", "present", "test", "data", "c", 0])).to.eq(2);
+        expect(store.getState().getIn(["schemaForm1", "present", "test", "data", "c", 2])).to.eq(1);
+
+        expect(rootNode.contains("c").contains(0).value.get("oldIndex")).to.eq(1);
+        expect(rootNode.contains("c").contains(2).value.get("oldIndex")).to.eq(0);
+        expect(describeCount).to.eq(1);
+
+    })
 });

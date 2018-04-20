@@ -6,7 +6,7 @@
   "types": "./libs/index.d.ts",
   "scripts": {
     "dist": "NODE_ENV=production webpack ",
-    "build": "NODE_ENV=production webpack;tsc --outDir libs -d",
+    "build": "rm -rf libs;tsc --outDir libs -d",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx"
   },
   "author": "NICK",

@@ -3,10 +3,9 @@ import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 
-import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { RC } from "../models/index";
 import { reducerFactory } from "../factory";
 
 export interface ValidateHocOutProps {
@@ -14,6 +13,7 @@ export interface ValidateHocOutProps {
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
+    getActions: () => any;
 }
 export const name = "validate";
 
@@ -39,10 +39,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     validate: (propsCur: DefaultProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
-                            const schema = Object.assign({}, props.uiSchema);
+                            const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
+                            const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                    parentKeys: props.parentKeys,
+                                reducerFactory.get(reducerKey || "schemaForm").actions.updateItemMeta({
+                                    parentKeys: parentKeys,
                                     keys: (schema as any).keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
                                 });
@@ -53,17 +54,17 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 let validateFunc;
 
                                 // 使用schema.schemaPath来确定schema
-                                if (schema.schemaPath && props.ajv.getSchema(schema.schemaPath)) {
-                                    validateFunc = props.ajv.getSchema(schema.schemaPath);
+                                if (schema.schemaPath && ajv.getSchema(schema.schemaPath)) {
+                                    validateFunc = ajv.getSchema(schema.schemaPath);
                                 } else if (schema.$id) {
-                                    validateFunc = props.ajv.getSchema(schema.$id);
+                                    validateFunc = ajv.getSchema(schema.$id);
                                 } else {
                                     let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
 
                                     delete schemaInCache.$id;
                                     delete schemaInCache.$ref;
 
-                                    validateFunc = props.ajv.compile(schemaInCache);
+                                    validateFunc = ajv.compile(schemaInCache);
                                 }
 
                                 if (propsCur.formItemData) {
@@ -84,8 +85,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             } catch (err) {
                                 // 处理错误消息
                                 result.errorText = err.errors ?
-                                    props.ajv.errorsText(err.errors, {
-                                        dataVar: props.getTitle(props).toString()
+                                    ajv.errorsText(err.errors, {
+                                        dataVar: getTitle(props).toString()
                                     }) : err.message;
                             }
                             finally {
@@ -93,6 +94,14 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             }
 
                             return Object.assign({}, meta, result);
+                        };
+                    },
+                    /**
+                     * 获取当前的reducer
+                     */
+                    getActions: (propsCur: DefaultProps) => {
+                        return () => {
+                            return reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
                         };
                     }
                 }),
@@ -103,17 +112,14 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 更新一个数据
                      */
-                    updateItemData: (propsCur: DefaultProps) => {
-                        return (props: DefaultProps, data: any, meta?: any) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemData({
-                                parentKeys: props.parentKeys,
-                                keys: (props.uiSchema as any).keys,
+                    updateItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return ({ parentKeys, uiSchema }: DefaultProps, data: any, meta?: any) => {
+                            return propsCur.getActions().updateItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 data: data,
                                 meta
                             });
-                            if (props.uiSchema.onValueChanged) {
-                                props.uiSchema.onValueChanged(props, data);
-                            }
                         };
                     },
                     /**
@@ -121,9 +127,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      */
                     updateItemMeta: (propsCur: DefaultProps & ValidateHocOutProps) => {
                         return async (props: DefaultProps, data: any, meta: any = null, noChange = false) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                parentKeys: props.parentKeys,
-                                keys: (props.uiSchema as any).keys,
+                            const { parentKeys, uiSchema } = props;
+
+                            return propsCur.getActions().updateItemMeta({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta || await propsCur.validate(props, data),
                                 noChange: noChange
                             });
@@ -132,11 +140,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 删除一个元素的meta和data
                      */
-                    removeItemData: (propsCur: DefaultProps) => {
-                        return (props: DefaultProps, meta = true) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
-                                parentKeys: props.parentKeys,
-                                keys: (props.uiSchema as any).keys,
+                    removeItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return ({ parentKeys, uiSchema }: DefaultProps, meta = true) => {
+                            return propsCur.getActions().removeItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta
                             });
                         };

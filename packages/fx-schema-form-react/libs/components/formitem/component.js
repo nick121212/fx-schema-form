@@ -8,7 +8,9 @@ let SchemaFormItem = class SchemaFormItem extends PureComponent {
         const options = extraProps.getOptions(this.props, "field", uiSchema.field || uiSchema.type);
         let FieldComponentWithHoc = FieldComponent;
         if (!FieldComponent) {
-            console.log(uiSchema, "没有找到匹配的field");
+            if (!__PROD__) {
+                console.warn(uiSchema, "没有找到匹配的field");
+            }
             return null;
         }
         if (options.fieldHocs && options.fieldHocs.length) {
