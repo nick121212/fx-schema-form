@@ -2,7 +2,6 @@ import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { schemaFieldFactory } from "fx-schema-form-core";
-import { reducerFactory } from "../factory";
 export const name = "validate";
 export const hoc = (hocFactory) => {
     return (settings = {}) => {
@@ -16,28 +15,13 @@ export const hoc = (hocFactory) => {
                 compose(hocFactory.get("data")({
                     root: true
                 }), withHandlers({
-                    getActions: (propsCur) => {
-                        return (raw = false) => {
-                            let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
-                            if (raw) {
-                                for (const key in actions) {
-                                    if (actions.hasOwnProperty(key)) {
-                                        const element = actions[key];
-                                        actions[key] = element.raw;
-                                    }
-                                }
-                            }
-                            return actions;
-                        };
-                    }
-                }), withHandlers({
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
                             const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                propsCur.getActions().updateItemMeta({
+                                propsCur.getActions(propsCur).updateItemMeta({
                                     parentKeys: parentKeys,
                                     keys: schema.keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
@@ -86,7 +70,7 @@ export const hoc = (hocFactory) => {
                 }), withHandlers({
                     updateItemData: (propsCur) => {
                         return (raw, { parentKeys, uiSchema }, data, meta) => {
-                            return propsCur.getActions(raw).updateItemData({
+                            return propsCur.getActions(propsCur, raw).updateItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 data: data,
@@ -97,7 +81,7 @@ export const hoc = (hocFactory) => {
                     updateItemMeta: (propsCur) => {
                         return (raw, props, data, meta = null, noChange = false) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                             const { parentKeys, uiSchema } = props;
-                            return propsCur.getActions(raw).updateItemMeta({
+                            return propsCur.getActions(propsCur, raw).updateItemMeta({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta || (yield propsCur.validate(props, data)),
@@ -107,7 +91,7 @@ export const hoc = (hocFactory) => {
                     },
                     removeItemData: (propsCur) => {
                         return (raw, { parentKeys, uiSchema }, meta = true) => {
-                            return propsCur.getActions(raw).removeItemData({
+                            return propsCur.getActions(propsCur, raw).removeItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta
@@ -116,7 +100,7 @@ export const hoc = (hocFactory) => {
                     },
                     combineActions: (propsCur) => {
                         return (...actions) => {
-                            return propsCur.getActions().combineActions(actions);
+                            return propsCur.getActions(propsCur).combineActions(actions);
                         };
                     },
                 }), withHandlers({

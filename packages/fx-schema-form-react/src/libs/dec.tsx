@@ -20,7 +20,7 @@ export interface SchemaFormHocSettings {
     parentKeys: string[];
 }
 
-export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaFormHocOutProps, ValidateHocOutProps {
+export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaFormHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
@@ -47,7 +47,6 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
     return (Component: any): RC<SchemaFormProps, any> => {
         @(compose(
             hocFactory.get("utils")(),
-            hocFactory.get("validate")(),
             connect((state: Map<string, any>) => {
                 let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
                     dataKeys = rootKeys.concat([d]),
@@ -67,7 +66,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                  * 验证所有的字段
                  */
                 validateAll: (props: SchemaFormProps) => {
-                    let { updateItemMeta } = props.getActions(), timeId: any;
+                    let { updateItemMeta } = props.getActions(props), timeId: any;
 
                     /**
                      * 验证所有字段
@@ -179,7 +178,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
 
                         if (formKey && shouldResetForm !== false) {
-                            let { createForm } = props.getActions();
+                            let { createForm } = props.getActions(props);
 
                             if (createForm) {
                                 createForm({

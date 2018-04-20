@@ -4,6 +4,7 @@ import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
 import { DefaultProps } from "../components";
 import { RC } from "../models/index";
+import { SchemaFormActions } from "../reducers/schema.form";
 export declare const name = "utils";
 export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[]) => {
@@ -16,6 +17,7 @@ export interface UtilsHocOutProps {
         [key: string]: any;
     };
     getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
+    getActions: (props: DefaultProps, raw?: boolean) => SchemaFormActions;
 }
 export declare const hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<DefaultProps, any>;
 declare const _default: {

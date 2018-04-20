@@ -22,7 +22,6 @@ export interface ValidateHocOutProps {
     combineActions: (...actions: Action<any>[]) => void;
 
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
-    getActions: (raw?: boolean) => SchemaFormActions;
 }
 export const name = "validate";
 
@@ -41,39 +40,17 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 }),
                 withHandlers({
                     /**
-                     * 获取当前的reducer
-                     */
-                    getActions: (propsCur: DefaultProps) => {
-                        return (raw = false) => {
-                            let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
-
-                            if (raw) {
-                                for (const key in actions) {
-                                    if (actions.hasOwnProperty(key)) {
-                                        const element = actions[key];
-
-                                        actions[key] = element.raw;
-                                    }
-                                }
-                            }
-
-                            return actions;
-                        };
-                    }
-                }),
-                withHandlers({
-                    /**
                      * 验证单个数据
                      * 使用当前组件中的uiSchema，以及传递过来的数据做验证
                      * 这里可能有远程验证
                      */
-                    validate: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                    validate: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
                             const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                propsCur.getActions().updateItemMeta({
+                                propsCur.getActions(propsCur).updateItemMeta({
                                     parentKeys: parentKeys,
                                     keys: (schema as any).keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
@@ -136,9 +113,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 更新一个数据
                      */
-                    updateItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                    updateItemData: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, data: any, meta?: any) => {
-                            return propsCur.getActions(raw).updateItemData({
+                            return propsCur.getActions(propsCur, raw).updateItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 data: data,
@@ -149,11 +126,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 更新一个元数据
                      */
-                    updateItemMeta: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                    updateItemMeta: (propsCur: DefaultProps & UtilsHocOutProps & ValidateHocOutProps) => {
                         return async (raw: boolean, props: DefaultProps, data: any, meta: any = null, noChange = false) => {
                             const { parentKeys, uiSchema } = props;
 
-                            return propsCur.getActions(raw).updateItemMeta({
+                            return propsCur.getActions(propsCur, raw).updateItemMeta({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta || await propsCur.validate(props, data),
@@ -164,18 +141,18 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     /**
                      * 删除一个元素的meta和data
                      */
-                    removeItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                    removeItemData: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, meta = true) => {
-                            return propsCur.getActions(raw).removeItemData({
+                            return propsCur.getActions(propsCur, raw).removeItemData({
                                 parentKeys: parentKeys,
                                 keys: uiSchema.keys,
                                 meta: meta
                             });
                         };
                     },
-                    combineActions: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                    combineActions: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (...actions: Action<any>[]) => {
-                            return propsCur.getActions().combineActions(actions);
+                            return propsCur.getActions(propsCur).combineActions(actions);
                         };
                     },
                 }),

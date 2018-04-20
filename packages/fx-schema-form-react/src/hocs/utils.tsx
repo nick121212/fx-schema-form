@@ -11,6 +11,8 @@ import { Ajv } from "ajv";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
 import merge from "../libs/merge";
+import { reducerFactory } from "../factory";
+import { SchemaFormActions } from "../reducers/schema.form";
 
 export const name = "utils";
 
@@ -22,6 +24,7 @@ export interface UtilsHocOutProps {
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => { [key: string]: any };
     getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
+    getActions: (props: DefaultProps, raw?: boolean) => SchemaFormActions;
 }
 
 /**
@@ -45,9 +48,14 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         normalizeDataPath={this.normalizeDataPath}
                         getRequiredKeys={this.getRequiredKeys}
                         getDefaultData={this.getDefaultData}
+                        getActions={this.getActions}
+                        getPathProps={this.getPathProps}
                         {...this.props} />;
                 }
 
+                /**
+                 * 将当前的props更改成任意路径的props
+                 */
                 private getPathProps(props: DefaultProps, path: string): DefaultProps {
                     let newProps = Object.assign({}, props, {
                         uiSchema: Object.assign({}, props.uiSchema, {
@@ -56,6 +64,27 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     });
 
                     return newProps;
+                }
+
+                /**
+                 * 获取当前的reducer中的actions
+                 * @param propsCur 当前的属性
+                 * @param raw      是否为raw
+                 */
+                private getActions(propsCur: DefaultProps, raw = false) {
+                    let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+
+                    if (raw) {
+                        for (const key in actions) {
+                            if (actions.hasOwnProperty(key)) {
+                                const element = actions[key];
+
+                                actions[key] = element.raw;
+                            }
+                        }
+                    }
+
+                    return actions;
                 }
 
                 /**

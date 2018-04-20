@@ -22,7 +22,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
             }
         };
         SchemaFormComponentHoc = tslib_1.__decorate([
-            compose(hocFactory.get("utils")(), hocFactory.get("validate")(), connect((state) => {
+            compose(hocFactory.get("utils")(), connect((state) => {
                 let rootKeys = settings.rootReducerKey.concat(settings.parentKeys), dataKeys = rootKeys.concat([d]), metaKeys = rootKeys.concat([m]), root = state.getIn(metaKeys);
                 return {
                     data: state.getIn(dataKeys),
@@ -33,7 +33,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 };
             }), withHandlers({
                 validateAll: (props) => {
-                    let { updateItemMeta } = props.getActions(), timeId;
+                    let { updateItemMeta } = props.getActions(props), timeId;
                     return (async) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                         let root = props.root, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = fromJS({
                             dirty: true,
@@ -118,7 +118,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                     return () => {
                         const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
                         if (formKey && shouldResetForm !== false) {
-                            let { createForm } = props.getActions();
+                            let { createForm } = props.getActions(props);
                             if (createForm) {
                                 createForm({
                                     key: formKey,

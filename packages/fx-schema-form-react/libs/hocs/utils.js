@@ -5,13 +5,14 @@ import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
 import { schemaFormTypes } from "../models/index";
 import merge from "../libs/merge";
+import { reducerFactory } from "../factory";
 export const name = "utils";
 export const hoc = (hocFactory) => {
     return () => {
         return (Component) => {
             class ComponentHoc extends PureComponent {
                 render() {
-                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData }, this.props));
+                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData, getActions: this.getActions, getPathProps: this.getPathProps }, this.props));
                 }
                 getPathProps(props, path) {
                     let newProps = Object.assign({}, props, {
@@ -20,6 +21,18 @@ export const hoc = (hocFactory) => {
                         })
                     });
                     return newProps;
+                }
+                getActions(propsCur, raw = false) {
+                    let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+                    if (raw) {
+                        for (const key in actions) {
+                            if (actions.hasOwnProperty(key)) {
+                                const element = actions[key];
+                                actions[key] = element.raw;
+                            }
+                        }
+                    }
+                    return actions;
                 }
                 getRequiredKeys(props, includeKeys = [], excludeKeys = []) {
                     let extraProps = {};
