@@ -32,10 +32,6 @@ export interface UtilsHocOutProps {
  * 包装utils的组件HOC
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
- * 加入属性
- * getOptions    获取参数
- * getTitle      获取当前uiSchema的title
- * getPathKeys   获取相对于当前keys的路径
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
     return () => {
