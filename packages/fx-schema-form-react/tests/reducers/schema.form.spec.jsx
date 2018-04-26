@@ -228,5 +228,13 @@ describe("测试schemaReducer", () => {
         expect(rootNode.contains("c").contains(2).value.get("oldIndex")).to.eq(0);
         expect(describeCount).to.eq(1);
 
-    })
+    });
+
+    it("清除表单", () => {
+        let rootNode = store.getState().getIn(["schemaForm1", "present", "test"]);
+
+        actions.removeForm(["test"]);
+
+        expect(store.getState().hasIn(["schemaForm1", "present", "test"])).to.eq(false);
+    });
 });

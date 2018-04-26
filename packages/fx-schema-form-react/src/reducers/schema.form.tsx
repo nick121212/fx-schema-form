@@ -11,6 +11,7 @@ export type ASN = Array<string | number> | string[];
 
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
+    removeForm: SimpleActionCreator<ASN>;
     createForm: SimpleActionCreator<{ key: string, data: any }>;
     updateItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>;
     updateItemMeta: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta: any, noChange?: boolean; }>;
@@ -105,6 +106,9 @@ export class SchemaFormReducer<T> implements FxReducer {
     private combineActions: SimpleActionCreator<Action<any, any>[]>
         = createAction<Action<any, any>[]>(__PROD__ ? "" : "合并多个action");
 
+    private removeForm: SimpleActionCreator<ASN>
+        = createAction<ASN>(__PROD__ ? "" : "清除一个form的数据");
+
     /**
      * 构造
      * @param initialState 初始化状态
@@ -122,7 +126,8 @@ export class SchemaFormReducer<T> implements FxReducer {
             removeItem: this.removeItem,
             moveToItem: this.moveToItem,
             removeItemData: this.removeItemData,
-            combineActions: this.combineActions
+            combineActions: this.combineActions,
+            removeForm: this.removeForm
         };
     }
 
@@ -154,12 +159,32 @@ export class SchemaFormReducer<T> implements FxReducer {
             [this.removeItem as any]: this.removeItemHandle.bind(this),
             [this.moveToItem as any]: this.moveItemHandle.bind(this),
             [this.removeItemData as any]: this.removeItemDataMetaHandle.bind(this),
-            [this.combineActions as any]: this.combineActionsHandle.bind(this)
+            [this.combineActions as any]: this.combineActionsHandle.bind(this),
+            [this.removeForm as any]: this.removeFormHandle.bind(this)
         }, this.initialState);
     }
 
-    private combineActionsHandle(state: Map<string, any>, actions: Action<any, any>[]) {
+    /**
+     * 清除一个表单数据
+     * @param state   state
+     * @param param1  参数
+     */
+    private removeFormHandle(state: Map<string, any>, parentKeys: ASN) {
+        let dataKeys = parentKeys;
 
+        if (state.hasIn(dataKeys)) {
+            return state.removeIn(dataKeys);
+        }
+
+        return state;
+    }
+
+    /**
+     * 合并多个action
+     * @param state    state
+     * @param actions  需要调用的action
+     */
+    private combineActionsHandle(state: Map<string, any>, actions: Action<any, any>[]) {
         state = actions.reduce((stateNew: Map<string, any>, act2: Action<any>) => {
             return this.reducer(stateNew, act2);
         }, state);
