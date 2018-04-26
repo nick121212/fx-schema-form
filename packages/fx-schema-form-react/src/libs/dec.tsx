@@ -171,6 +171,8 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 meta: root.value
                             });
                         }
+
+                        return root.value.get("isValid");
                     };
                 },
                 resetForm: (props: SchemaFormProps) => {

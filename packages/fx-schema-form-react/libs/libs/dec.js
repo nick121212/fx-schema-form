@@ -112,6 +112,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 meta: root.value
                             });
                         }
+                        return root.value.get("isValid");
                     });
                 },
                 resetForm: (props) => {
