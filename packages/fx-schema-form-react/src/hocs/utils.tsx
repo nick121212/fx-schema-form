@@ -256,8 +256,12 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 /**
                  * 获取当前schema的默认的数据
                  *  通过ajv的validate方法获取默认的数据
-                 * @param props 当前的props
-                 * @param data  额外的数据
+                 *  与data和defaultData做合并处理
+                 * @param ajv          ajv实例
+                 * @param schema       json-schema
+                 * @param data         额外的数据
+                 * @param defaultData  额外的数据
+                 * @param needMerge    是否需要合并数据
                  */
                 private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, needMerge = false): Promise<any> {
                     let itemSchema: any = {},
@@ -267,9 +271,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
-                            // if (type === "object") {
-                            //     return merge(defaultValue.defaultData, dataOfType);
-                            // }
 
                             let mData: any = merge(fromJS(defaultValue.defaultData), fromJS(dataOfType));
 
@@ -288,7 +289,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             }
                         }, defaultValue);
                     } catch (e) {
-                        // console.log(e);
                         return data;
                     } finally {
                         switch (type) {
