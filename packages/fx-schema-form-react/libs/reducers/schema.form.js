@@ -45,6 +45,7 @@ export class SchemaFormReducer {
         this.moveToItem = createAction(__PROD__ ? "" : "元素移位");
         this.removeItemData = createAction(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
         this.combineActions = createAction(__PROD__ ? "" : "合并多个action");
+        this.removeForm = createAction(__PROD__ ? "" : "清除一个form的数据");
     }
     get actions() {
         return {
@@ -55,7 +56,8 @@ export class SchemaFormReducer {
             removeItem: this.removeItem,
             moveToItem: this.moveToItem,
             removeItemData: this.removeItemData,
-            combineActions: this.combineActions
+            combineActions: this.combineActions,
+            removeForm: this.removeForm
         };
     }
     init(store) {
@@ -77,8 +79,16 @@ export class SchemaFormReducer {
             [this.removeItem]: this.removeItemHandle.bind(this),
             [this.moveToItem]: this.moveItemHandle.bind(this),
             [this.removeItemData]: this.removeItemDataMetaHandle.bind(this),
-            [this.combineActions]: this.combineActionsHandle.bind(this)
+            [this.combineActions]: this.combineActionsHandle.bind(this),
+            [this.removeForm]: this.removeFormHandle.bind(this)
         }, this.initialState);
+    }
+    removeFormHandle(state, parentKeys) {
+        let dataKeys = parentKeys;
+        if (state.hasIn(dataKeys)) {
+            return state.removeIn(dataKeys);
+        }
+        return state;
     }
     combineActionsHandle(state, actions) {
         state = actions.reduce((stateNew, act2) => {

@@ -6,6 +6,7 @@ import { FxReducer } from "./reducer";
 export declare type ASN = Array<string | number> | string[];
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
+    removeForm: SimpleActionCreator<ASN>;
     createForm: SimpleActionCreator<{
         key: string;
         data: any;
@@ -55,10 +56,12 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private moveToItem;
     private removeItemData;
     private combineActions;
+    private removeForm;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     init(store: Store<Map<string, any>>): void;
     readonly reducer: Reducer<any>;
+    private removeFormHandle(state, parentKeys);
     private combineActionsHandle(state, actions);
     private removeItemDataMetaHandle(state, {parentKeys, keys, meta});
     private createFormHandle(state, {key, data});
