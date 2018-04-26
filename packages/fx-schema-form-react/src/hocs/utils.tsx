@@ -119,7 +119,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 /**
                  * dataPath中的key格式化；
                  * dataPath是一个字符串，需要把里面的数字转化一下
-                 * dataPath中可能有数组的格式，所以需要把数字转换成数字，而不是字符换
+                 * dataPath中可能有数组的格式，所以需要把数字转换成数字，而不是字符
                  * 遍历所有的key，发现是数字字符，则查找父级的schema，如果父级的type是array，则把当前key转换成数字
                  * @param schemaId schemaId
                  * @param dataPath 当前的数据路径字符串
@@ -179,10 +179,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     getOptions(globalOptions, [category, "default"]);
                     getOptions(globalOptions, [category, field]);
                     getOptions(globalOptions, [schemaFormTypes.field, type.toString(), "options", category, field]);
-
-                    // if (fieldOptions && fieldOptions.options) {
-                    //     getOptions(fieldOptions.options, category, field);
-                    // }
                     getOptions(options, [category, field]);
 
                     optionsArray = optionsArray.concat(extraSettings);
@@ -282,6 +278,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         };
 
                     try {
+                        // 调用ajv的validate方法，这里会处理defaultValue的值
                         await ajv.validate({
                             type: "object",
                             properties: {
