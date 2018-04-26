@@ -52,11 +52,13 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                 /**
                  * 将当前的props更改成任意路径的props
+                 * @param props 当前组件的props
+                 * @param path  需要转换的路径
                  */
-                private getPathProps(props: DefaultProps, path: string): DefaultProps {
+                private getPathProps(props: DefaultProps & UtilsHocOutProps, path: string): DefaultProps {
                     let newProps = Object.assign({}, props, {
                         uiSchema: Object.assign({}, props.uiSchema, {
-                            keys: this.getPathKeys(props.uiSchema.keys as any, path)
+                            keys: props.getPathKeys(props.uiSchema.keys as any, path)
                         })
                     });
 
