@@ -5,7 +5,7 @@ const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export const name = "show";
 export const hoc = (hocFactory) => {
     return (settings = {}) => {
-        return (Component) => {
+        const innerHoc = (Component) => {
             class ComponentHoc extends React.PureComponent {
                 render() {
                     const { getOptions, getPathKeys, condition, uiSchema } = this.props;
@@ -17,10 +17,17 @@ export const hoc = (hocFactory) => {
                                 return false;
                             }
                             let pathKeys = getPathKeys(uiSchema.keys, path);
-                            if (condition.has(pathKeys.join("/"))) {
-                                return !!condition.get(pathKeys.join("/")) && prev;
+                            if (!condition.has(pathKeys.join("/"))) {
+                                return false;
                             }
-                            return false;
+                            let data = condition.get(pathKeys.join("/"));
+                            if (!data) {
+                                return false;
+                            }
+                            if (Immutable.List.isList(data) && !data.size) {
+                                return false;
+                            }
+                            return true;
                         }, show);
                     }
                     if (show) {
@@ -31,6 +38,10 @@ export const hoc = (hocFactory) => {
             }
             return ComponentHoc;
         };
+        return hocFactory.get("wrapper")({
+            hoc: innerHoc,
+            hocName: name
+        });
     };
 };
 export default {

@@ -5,9 +5,14 @@ declare const _default: {
     properties: {
         width: {
             type: string;
+            title: string;
+            default: number;
         };
         height: {
             type: string;
+            equal: string;
+            title: string;
+            description: string;
         };
         fontSize: {
             type: string;

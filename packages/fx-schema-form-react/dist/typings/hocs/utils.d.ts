@@ -18,6 +18,7 @@ export interface UtilsHocOutProps {
     };
     getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
     getActions: (props: DefaultProps, raw?: boolean) => SchemaFormActions;
+    getPathProps: (props: DefaultProps, path: string) => DefaultProps;
 }
 export declare const hoc: (hocFactory: BaseFactory<any>) => () => (Component: any) => RC<DefaultProps, any>;
 declare const _default: {

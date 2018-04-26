@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "68fd0db0c46b371828e6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "c0ba071580d2eb3a52ec"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -31540,7 +31540,7 @@ var hoc = exports.hoc = function hoc(hocFactory) {
     return function () {
         var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        return function (Component) {
+        var innerHoc = function innerHoc(Component) {
             var ComponentHoc = function (_React$PureComponent) {
                 (0, _inherits3.default)(ComponentHoc, _React$PureComponent);
 
@@ -31566,10 +31566,17 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                                     return false;
                                 }
                                 var pathKeys = getPathKeys(uiSchema.keys, path);
-                                if (condition.has(pathKeys.join("/"))) {
-                                    return !!condition.get(pathKeys.join("/")) && prev;
+                                if (!condition.has(pathKeys.join("/"))) {
+                                    return false;
                                 }
-                                return false;
+                                var data = condition.get(pathKeys.join("/"));
+                                if (!data) {
+                                    return false;
+                                }
+                                if (_immutable2.default.List.isList(data) && !data.size) {
+                                    return false;
+                                }
+                                return true;
                             }, show);
                         }
                         if (show) {
@@ -31583,6 +31590,10 @@ var hoc = exports.hoc = function hoc(hocFactory) {
 
             return ComponentHoc;
         };
+        return hocFactory.get("wrapper")({
+            hoc: innerHoc,
+            hocName: name
+        });
     };
 };
 exports.default = {
