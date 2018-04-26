@@ -74,6 +74,8 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                      */
                     return async (async?: boolean) => {
                         let root = props.root as TreeMap,
+                            curAjv = props.ajv,
+                            dataRaw = props.data,
                             validate = props.ajv.getSchema(props.schemaId),
                             $validateBeforeData = fromJS({
                                 dirty: true,
@@ -111,29 +113,36 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 });
                             }, 200);
 
-                            props.ajv.errors = null;
-
-                            if (!await validate(props.data.toJS())) {
-                                throw new (ValidationError as any)(validate.errors.concat(props.ajv.errors || []));
+                            if (Map.isMap(dataRaw) || List.isList(dataRaw)) {
+                                dataRaw = dataRaw.toJS();
                             }
 
+                            // 验证数据
+                            curAjv.errors = null;
+                            if (!await validate(dataRaw)) {
+                                throw new (ValidationError as any)(validate.errors.concat(curAjv.errors || []));
+                            }
+
+                            // 设置成功的标志位
                             root.value = root.value.merge({
                                 isValid: true
                             });
 
+                            // 提交meta数据
                             updateItemMeta({
                                 parentKeys: settings.parentKeys,
                                 keys: [],
                                 meta: root.value
                             });
-
                         } catch (e) {
+                            // 错误的逻辑
                             if (!(e instanceof (ValidationError as any))) {
-                                return console.error(e);
+                                return {
+                                    isValid: false,
+                                    errMsg: e.message
+                                };
                             }
-                            if (!root) {
-                                return;
-                            }
+
                             // 处理错误
                             e.errors.forEach((element: ErrorObject) => {
                                 let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
@@ -172,7 +181,10 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             });
                         }
 
-                        return root.value.get("isValid");
+                        return {
+                            isValid: root.value.get("isValid"),
+                            data: dataRaw
+                        };
                     };
                 },
                 resetForm: (props: SchemaFormProps) => {

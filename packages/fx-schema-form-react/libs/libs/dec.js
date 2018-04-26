@@ -1,8 +1,24 @@
-import * as tslib_1 from "tslib";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
-import { fromJS } from "immutable";
+import { fromJS, Map, List } from "immutable";
 import { ValidationError } from "ajv";
 import { schemaFormTypes } from "../models/index";
 import { hocFactory } from "../factory";
@@ -21,7 +37,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys, schemaId: schemaId }, extraProps)));
             }
         };
-        SchemaFormComponentHoc = tslib_1.__decorate([
+        SchemaFormComponentHoc = __decorate([
             compose(hocFactory.get("utils")(), connect((state) => {
                 let rootKeys = settings.rootReducerKey.concat(settings.parentKeys), dataKeys = rootKeys.concat([d]), metaKeys = rootKeys.concat([m]), root = state.getIn(metaKeys);
                 return {
@@ -34,8 +50,8 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
             }), withHandlers({
                 validateAll: (props) => {
                     let { updateItemMeta } = props.getActions(props), timeId;
-                    return (async) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                        let root = props.root, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = fromJS({
+                    return (async) => __awaiter(this, void 0, void 0, function* () {
+                        let root = props.root, curAjv = props.ajv, dataRaw = props.data, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = fromJS({
                             dirty: true,
                             isValid: true,
                             isLoading: true
@@ -60,9 +76,12 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                     meta: root.value
                                 });
                             }, 200);
-                            props.ajv.errors = null;
-                            if (!(yield validate(props.data.toJS()))) {
-                                throw new ValidationError(validate.errors.concat(props.ajv.errors || []));
+                            if (Map.isMap(dataRaw) || List.isList(dataRaw)) {
+                                dataRaw = dataRaw.toJS();
+                            }
+                            curAjv.errors = null;
+                            if (!(yield validate(dataRaw))) {
+                                throw new ValidationError(validate.errors.concat(curAjv.errors || []));
                             }
                             root.value = root.value.merge({
                                 isValid: true
@@ -75,10 +94,10 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                         }
                         catch (e) {
                             if (!(e instanceof ValidationError)) {
-                                return console.error(e);
-                            }
-                            if (!root) {
-                                return;
+                                return {
+                                    isValid: false,
+                                    errMsg: e.message
+                                };
                             }
                             e.errors.forEach((element) => {
                                 let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
@@ -112,7 +131,10 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 meta: root.value
                             });
                         }
-                        return root.value.get("isValid");
+                        return {
+                            isValid: root.value.get("isValid"),
+                            data: dataRaw
+                        };
                     });
                 },
                 resetForm: (props) => {
@@ -130,7 +152,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                     };
                 }
             })),
-            tslib_1.__metadata("design:paramtypes", [Object])
+            __metadata("design:paramtypes", [Object])
         ], SchemaFormComponentHoc);
         return SchemaFormComponentHoc;
     };

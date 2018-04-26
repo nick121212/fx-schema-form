@@ -1,4 +1,11 @@
-import * as tslib_1 from "tslib";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React, { PureComponent } from "react";
 import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import Immutable, { fromJS } from "immutable";
@@ -130,7 +137,7 @@ export const hoc = (hocFactory) => {
                     return keysResolve;
                 }
                 getDefaultData(ajv, schema, data, defaultData, needMerge = false) {
-                    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+                    return __awaiter(this, void 0, void 0, function* () {
                         let itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
