@@ -284,11 +284,11 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
 }
 ```
 
-在做echart的配置界面的时候，由于参数众多，而且很多参数都重复，不得不把echart的jsonschema拆分成若干个json文件来复用。上面的json文件使用$ref来连接其他的schema，使得schema的依赖过于繁琐。如果我们要使用这个schema，就必须先解析其依赖的schema，这样就有问题了。我们能不能不关系依赖呢？
+在做echart的配置界面的时候，由于参数众多，而且很多参数都重复，不得不把echart的jsonschema拆分成若干个json文件来复用。上面的json文件使用$ref来连接其他的schema，使得schema的依赖过于繁琐。如果我们要使用这个schema，就必须先解析其依赖的schema，这样就有问题了。我们能不能不关系依赖呢？
 
 解决方案：
 
-1. 这个方法用于加载我们需要的schema文件。
+* 这个方法用于加载我们需要的schema文件。
 
 ```jsx
     /**
@@ -314,7 +314,7 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
     }
 ```
 
-2. 配置ajv中的loadSchema方法，用于加载$ref中使用的schema文件。
+* 配置ajv中的loadSchema方法，用于加载$ref中使用的schema文件。
 
 ```jsx
 // 初始化ajv实例
@@ -331,7 +331,7 @@ export const curAjv: ajv.Ajv = ajvErrors(new ajv({
 }));
 ```
 
-3. react示例
+* react示例
 
 ```jsx
     import { ResolveLib, schemaKeysFactory } from "fx-schema-form-core";
