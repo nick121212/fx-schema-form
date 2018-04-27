@@ -284,7 +284,7 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
 }
 ```
 
-在做echart的配置界面的时候，由于参数众多，而且很多参数都重复，不得不把echart的jsonschema拆分成若干个json文件来复用。上面的json文件使用$ref来连接其他的schema，使得schema的依赖过于繁琐。如果我们要使用这个schema，就必须先解析其依赖的schema，这样就有问题了。我们能不能不关系依赖呢？
+在做echart的配置界面的时候，由于参数众多，而且很多参数都重复，不得不把echart的jsonschema拆分成若干个json文件来复用。上面的json文件使用$ref来连接其他的schema，使得schema的依赖过于繁琐。如果我们要使用这个schema，就必须先解析其依赖的schema，这样就有问题了。我们能不能不关系依赖呢？
 
 解决方案：
 
