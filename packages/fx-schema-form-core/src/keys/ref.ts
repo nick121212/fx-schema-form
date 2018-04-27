@@ -7,6 +7,9 @@ import { default as ResolveLib, getDataKeys } from "../libs/resolve";
  * 解析schema中的关键字 ref
  * 如果有$ref关键字，则从ajv中获取$ref的schema
  * 如果ajv中发现了schema，则添加$ref和refKeys，返回schema
+ * @param  {JSONSchema6} schema 当前的schema
+ * @param  {Ajv}         ajv    ajv实例
+ * @return {JSONSchema6}        处理过后的schema
  */
 export default (schema: JSONSchema6, ajv: Ajv) => {
     if (schema && schema.$ref) {
@@ -23,10 +26,10 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
             });
 
             return schemaAjv;
-        } else {
-            if (!__PROD__) {
-                throw new Error("${schema.$ref} not exist.");
-            }
+        }
+
+        if (!__PROD__) {
+            throw new Error("${schema.$ref} not exist.");
         }
     }
 

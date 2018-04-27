@@ -11,7 +11,6 @@ schemaKeyWordFactory.add("ref", ref);
 schemaKeyWordFactory.add("oneof", oneof);
 schemaKeyWordFactory.add("anyof", anyof);
 
-
 schemaTypeFactory.add("array", array);
 schemaTypeFactory.add("string", none);
 schemaTypeFactory.add("undefined", none);
