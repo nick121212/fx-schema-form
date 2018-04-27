@@ -98,6 +98,9 @@ describe("测试ResolveLib类", () => {
         };
 
         new ResolveLib(ajv, schema);
+
+
+        console.log(schemaFieldFactory, schemaKeysFactory);
     });
 
 });

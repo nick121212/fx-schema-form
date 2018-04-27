@@ -12,15 +12,81 @@ schemaForm的核心组件。用于解析JsonSchema，为SchemaForm提供支持�
 jsonschema；用于描述json的结构。
 uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
+## Schema DEMO
+
+```js
+ let schema = {
+    type: "object",
+    $id: "dnd-oneof",
+    title: "oneof测试schema",
+    default: {},
+    required: ["value"],
+    properties: {
+        type: {
+            type: "number",
+            enum: [1, 2, 3, 4],
+            title: "类型选择",
+            description: "1:数字,2:字符串,3:bool,4:object"
+        },
+        value: {
+            oneOf: [{
+                $id: "dnd-oneof-number",
+                type: "number",
+                title: "这是一个数字类型"
+            }, {
+                $id: "dnd-oneof-string",
+                type: "string",
+                title: "这是一个字符串类型"
+            }, {
+                $id: "dnd-oneof-boolean",
+                type: "boolean",
+                title: "这是一个bool类型"
+            }, {
+                $id: "dnd-oneof-object",
+                type: "object",
+                title: "这是一个object类型",
+                default: {},
+                required: ["a", "b"],
+                properties: {
+                    a: {
+                        type: "string",
+                        default: "nick"
+                    },
+                    b: {
+                        type: "boolean",
+                        default: true
+                    }
+                }
+            }]
+        }
+    }
+};
+```
+
 ## API
 
 ### schemaKeysFactory
 
-> 存储了所有key与schemaKey的对应关系
+存储了所有key与schemaKey的对应关系
+
+> example: 'dnd-oneof-object/a': 'dnd-oneof-object#/properties/a',
 
 ### schemaFieldFactory
 
-> 存储了schemaKey对应的schema
+存储了schemaKey对应的schema
+
+example:
+
+```js
+{
+    'dnd-oneof-object#/properties/a': {
+        type: 'string',
+        default: 'nick',
+        keys: ['value','a'],
+        schemaPath: 'dnd-oneof-object#/properties/a'
+    }
+}
+```
 
 ### schemaKeyWordFactory
 
@@ -28,6 +94,7 @@ uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
 * ref；处理schema中的$ref关键字
 * oneOf；处理schema中的oneOf关键字
+* anyOf；处理schema中的anyOf关键字
 
 ### schemaTypeFactory
 
@@ -35,7 +102,19 @@ uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
 * array     schema中数组类型
 * object    schema中的对象类型
-* undefined schema中的其他简单类型
+* undefined schema中的其他简单类型(string,number,integer,any,boolean)
+
+```js
+schemaTypeFactory.add("array", array);
+schemaTypeFactory.add("string", none);
+schemaTypeFactory.add("undefined", none);
+schemaTypeFactory.add("number", none);
+schemaTypeFactory.add("null", none);
+schemaTypeFactory.add("any", none);
+schemaTypeFactory.add("integer", none);
+schemaTypeFactory.add("boolean", none);
+schemaTypeFactory.add("object", object);
+```
 
 ### ResolveLib
 
@@ -129,7 +208,7 @@ const schema: JSONSchema6 = {
 > 解析上一步中定义的schema,curAjv是一个ajv的实例。
 
 ```js
-let b11dfd = new ResolveLib(curAjv, schema);
+let someResolve = new ResolveLib(curAjv, schema);
 ```
 
 > 最后与定义的uiSchema做合并。
