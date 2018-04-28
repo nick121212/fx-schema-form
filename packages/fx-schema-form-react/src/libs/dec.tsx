@@ -218,7 +218,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
             public render(): JSX.Element | null {
                 const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props,
-                    options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings)),
+                    options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})),
                     extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
 
                 return (

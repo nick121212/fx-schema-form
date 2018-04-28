@@ -59,10 +59,10 @@ export const hoc = (hocFactory) => {
                 if (formItemData !== undefined && formItemData !== null) {
                     rtn.formItemData = formItemData;
                 }
-                if (formItemMeta !== undefined && formItemData !== null) {
+                if (formItemMeta !== undefined && formItemMeta !== null) {
                     rtn.formItemMeta = formItemMeta;
                 }
-                if (formItemNode !== undefined && formItemData !== null) {
+                if (formItemNode !== undefined && formItemNode !== null) {
                     rtn.formItemNode = formItemNode;
                 }
                 return rtn;

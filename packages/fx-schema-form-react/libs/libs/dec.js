@@ -33,7 +33,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 props.resetForm();
             }
             render() {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings)), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
+                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
                 return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys, schemaId: schemaId }, extraProps)));
             }
         };
