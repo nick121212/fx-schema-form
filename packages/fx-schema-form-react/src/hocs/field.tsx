@@ -1,12 +1,11 @@
 
 import React, { PureComponent } from "react";
-import { compose } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { ThemeHocOutProps } from "./theme";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { RC } from "../models";
 
 export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;
@@ -30,26 +29,29 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     const { currentTheme, getOptions, uiSchema } = this.props,
                         { field, widget, type } = uiSchema as any;
                     let FieldComponent, WidgetComponent,
-                        calcField = field || type as string;
+                        calcField = field || type as string,
+                        calcWidget = widget || type as string;
 
+                    // 查找field
                     if (currentTheme.fieldFactory.has(calcField)) {
                         FieldComponent = currentTheme.fieldFactory.get(calcField);
                     } else {
                         if (currentTheme.fieldFactory.has(defaultKey)) {
                             FieldComponent = currentTheme.fieldFactory.get(defaultKey);
                         } else {
-                            if (!__PROD__) { console.error(`找不到field：${field || type}`); }
+                            if (!__PROD__) { console.error(`找不到field：${calcField}`); }
                             return null;
                         }
                     }
 
-                    if (currentTheme.widgetFactory.has(widget || type as string)) {
-                        WidgetComponent = currentTheme.widgetFactory.get(widget || type as string);
+                    // 查找widget
+                    if (currentTheme.widgetFactory.has(calcWidget)) {
+                        WidgetComponent = currentTheme.widgetFactory.get(calcWidget);
                     } else {
                         if (currentTheme.widgetFactory.has(defaultKey)) {
                             WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
                         } else {
-                            if (!__PROD__) { console.warn(`找不到widget：${widget || type}`, uiSchema); }
+                            if (!__PROD__) { console.warn(`找不到widget：${calcWidget}`, uiSchema); }
                         }
                     }
 

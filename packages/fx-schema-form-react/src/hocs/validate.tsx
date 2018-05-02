@@ -6,7 +6,7 @@ import { Action } from "redux-act";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 import { reducerFactory } from "../factory";
 import { SchemaFormActions } from "../reducers/schema.form";
 
@@ -14,13 +14,10 @@ export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
-
     updateItemDataRaw: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMetaRaw: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemDataRaw: (props: DefaultProps, meta?: any) => void;
-
     combineActions: (...actions: Action<any>[]) => void;
-
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
 export const name = "validate";
@@ -150,6 +147,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             });
                         };
                     },
+                    /**
+                     * 合并多个action
+                     */
                     combineActions: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (...actions: Action<any>[]) => {
                             return propsCur.getActions(propsCur).combineActions(actions);

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { SchemaForm } from "../components/form";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 import { compose } from "recompose";
 export const name = "object";
 export class ObjectField extends PureComponent {

@@ -20,7 +20,7 @@ import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
 import { ValidationError } from "ajv";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 import { hocFactory } from "../factory";
 import { d, m } from "../reducers/reducer";
 export const name = "schemaFormDec";

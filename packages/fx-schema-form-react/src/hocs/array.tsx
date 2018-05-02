@@ -1,17 +1,13 @@
 
 import React, { PureComponent } from "react";
-import {
-    branch, shouldUpdate, compose,
-    withHandlers, renderNothing, onlyUpdateForKeys, ComponentEnhancer
-} from "recompose";
+import { branch, compose, withHandlers, ComponentEnhancer } from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC } from "../models";
 import { reducerFactory } from "../factory";
-import { JSONSchema6 } from "json-schema";
 
 export interface ArrayHocOutProps {
     addItem: (props: DefaultProps, data?: any) => Promise<void>;
@@ -22,9 +18,7 @@ export interface ArrayHocOutProps {
     ArrayItemComponent?: new () => React.PureComponent<DefaultProps>;
 }
 
-export interface ArrayProps extends DefaultProps, UtilsHocOutProps {
-
-}
+export interface ArrayProps extends DefaultProps, UtilsHocOutProps { }
 
 export const name = "array";
 export const hoc = (hocFactory: BaseFactory<any>) => {
@@ -33,6 +27,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             withHandlers({
                 /**
                  * 更新一个数据
+                 * @param {ArrayProps} propsCur 当前的props
                  */
                 addItem: (propsCur: ArrayProps) => {
                     return async (props: ArrayProps, data?: any) => {
@@ -43,7 +38,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                         let dData = await props.getDefaultData(props.ajv, items as any, data, defaultData, true);
 
-                        reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
+                        propsCur.getActions(propsCur).addItem({
                             parentKeys: props.parentKeys,
                             keys: keys,
                             data: dData
@@ -52,10 +47,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 },
                 /**
                  * 删除一个数组元素
+                 * @param {ArrayProps} propsCur 当前的props
                  */
-                removeItem: (propsCur: DefaultProps) => {
+                removeItem: (propsCur: ArrayProps) => {
                     return (parentKeys: any[], keys: any[], index: number) => {
-                        reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.removeItem({
+                        propsCur.getActions(propsCur).removeItem({
                             parentKeys: parentKeys,
                             keys: keys,
                             index: index
@@ -64,10 +60,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 },
                 /**
                  * 移动到某个元素后面
+                 * @param {ArrayProps} propsCur 当前的props
                  */
-                moveItem: (propsCur: DefaultProps) => {
+                moveItem: (propsCur: ArrayProps) => {
                     return (parentKeys: any[], keys: any[], curIndex: number, toIndex: number) => {
-                        reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.moveToItem({
+                        propsCur.getActions(propsCur).moveToItem({
                             parentKeys: parentKeys,
                             keys: keys,
                             curIndex: curIndex,
@@ -77,6 +74,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 },
                 /**
                  * 初始化array的操作组件
+                 * @param {ArrayProps} propsCur 当前的props
                  */
                 initArrayComponent: (propsCur: DefaultProps) => {
                     return (props: DefaultProps & ArrayHocOutProps, index?: number) => {
@@ -98,7 +96,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
          * 加入属性
          * arrayItems
          */
-        let arrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
+        const arrayHoc = (Component: any): RC<ArrayHocOutProps, any> => {
             @commHoc
             class ArrayComponentHoc extends PureComponent<ArrayProps, any> {
                 private ArrayComponent: new () => React.PureComponent;
@@ -113,6 +111,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     const { getOptions } = this.props;
                     const hocOptions: any = getOptions(this.props, "hoc", name);
 
+                    // 设置当前的arrayComponent和ArrayItemComponent
                     if (hocOptions.ArrayComponent) {
                         this.ArrayComponent = hocOptions.ArrayComponent;
                     }
@@ -141,7 +140,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             return ArrayComponentHoc as any;
         };
 
-        let pureHoc = (Component: any): RC<ArrayHocOutProps, any> => {
+        /**
+         * 如果不是数组则返回pureComponent
+         * @param Component  需要包装的组件
+         */
+        const pureHoc = (Component: any): RC<ArrayHocOutProps, any> => {
             @commHoc
             class ArrayPureComponentHoc extends React.PureComponent<ArrayProps, any> {
                 public render() {
@@ -152,6 +155,10 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             return ArrayPureComponentHoc as any;
         };
 
+        /**
+         * A/B test
+         * 如果是数组则使用A，如果不是则使用B
+         */
         return branch(
             (props: ArrayProps) => {
                 const { uiSchema = { type: "" } } = props;

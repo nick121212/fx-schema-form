@@ -1,7 +1,7 @@
 import { BaseFactory } from "fx-schema-form-core";
 import { Action } from "redux-act";
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;

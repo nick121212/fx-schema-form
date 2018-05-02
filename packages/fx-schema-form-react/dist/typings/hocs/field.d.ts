@@ -2,7 +2,7 @@ import { BaseFactory } from "fx-schema-form-core";
 import { ThemeHocOutProps } from "./theme";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;
     WidgetComponent: RC<any, any>;

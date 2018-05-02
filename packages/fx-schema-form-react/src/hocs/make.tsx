@@ -6,7 +6,7 @@ import Immutable from "immutable";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models";
 
 export interface MakeHocOutProps extends UtilsHocOutProps {
 

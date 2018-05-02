@@ -9,7 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import React, { PureComponent } from "react";
 import { compose } from "recompose";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 export const name = "normal";
 export class NormalField extends PureComponent {
     constructor(props, context) {

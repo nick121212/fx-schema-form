@@ -7,20 +7,39 @@ import { createSelector, createSelectorCreator, defaultMemoize } from "reselect"
 import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models";
 import { UtilsHocOutProps } from "./utils";
 import { TreeMap } from "../libs/tree";
 
-export interface DataHocOutProps extends DefaultProps {
+export interface DataHocOutProps extends DefaultProps { }
 
-}
-
+/**
+ * HOC的设定参数
+ */
 export interface DataHocSettings {
+    /**
+     * 是否需要root的数据
+     */
     root?: boolean;
+    /**
+     * 是否需要当前的key的数据
+     */
     data?: boolean;
+    /**
+     * 是否需要当前key的长度，只能是array格式
+     */
     dataLength?: boolean;
+    /**
+     * 是否需要当前key对应的meta数据
+     */
     meta?: boolean;
+    /**
+     * 设置当前key下所需要的meta的key值
+     */
     metaKeys?: string[];
+    /**
+     * 是否获取meta的根节点
+     */
     treeNode?: boolean;
 }
 
@@ -107,6 +126,9 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                 return rootNode.addChild([...keys]);
             };
 
+            /**
+             * re-select来缓存数据
+             */
             return fxSelectorCreator(
                 [getFormItemData, getFormItemMeta, getRoot],
                 (formItemData: any, formItemMeta: any, formItemNode: TreeMap) => {
@@ -149,12 +171,10 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
 
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
+                    } else {
+                        // 获取当前的数据hoc
+                        this.ComponentWithHoc = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys))(Component);
                     }
-
-                    const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
-                        ComponentWithHoc: any = hocWithData(Component);
-
-                    this.ComponentWithHoc = ComponentWithHoc;
                 }
 
                 public render(): JSX.Element {

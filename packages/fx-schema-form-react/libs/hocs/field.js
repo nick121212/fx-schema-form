@@ -7,7 +7,7 @@ export const hoc = (hocFactory) => {
             class FieldComponentHoc extends PureComponent {
                 render() {
                     const { currentTheme, getOptions, uiSchema } = this.props, { field, widget, type } = uiSchema;
-                    let FieldComponent, WidgetComponent, calcField = field || type;
+                    let FieldComponent, WidgetComponent, calcField = field || type, calcWidget = widget || type;
                     if (currentTheme.fieldFactory.has(calcField)) {
                         FieldComponent = currentTheme.fieldFactory.get(calcField);
                     }
@@ -17,13 +17,13 @@ export const hoc = (hocFactory) => {
                         }
                         else {
                             if (!__PROD__) {
-                                console.error(`找不到field：${field || type}`);
+                                console.error(`找不到field：${calcField}`);
                             }
                             return null;
                         }
                     }
-                    if (currentTheme.widgetFactory.has(widget || type)) {
-                        WidgetComponent = currentTheme.widgetFactory.get(widget || type);
+                    if (currentTheme.widgetFactory.has(calcWidget)) {
+                        WidgetComponent = currentTheme.widgetFactory.get(calcWidget);
                     }
                     else {
                         if (currentTheme.widgetFactory.has(defaultKey)) {
@@ -31,7 +31,7 @@ export const hoc = (hocFactory) => {
                         }
                         else {
                             if (!__PROD__) {
-                                console.warn(`找不到widget：${widget || type}`, uiSchema);
+                                console.warn(`找不到widget：${calcWidget}`, uiSchema);
                             }
                         }
                     }

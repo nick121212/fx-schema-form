@@ -26,7 +26,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import React, { PureComponent } from "react";
 import { branch, compose, withHandlers } from "recompose";
-import { reducerFactory } from "../factory";
 export const name = "array";
 export const hoc = (hocFactory) => {
     return () => {
@@ -38,7 +37,7 @@ export const hoc = (hocFactory) => {
                     }
                     const { items, keys, defaultData } = props.uiSchema;
                     let dData = yield props.getDefaultData(props.ajv, items, data, defaultData, true);
-                    reducerFactory.get(props.reducerKey || "schemaForm").actions.addItem({
+                    propsCur.getActions(propsCur).addItem({
                         parentKeys: props.parentKeys,
                         keys: keys,
                         data: dData
@@ -47,7 +46,7 @@ export const hoc = (hocFactory) => {
             },
             removeItem: (propsCur) => {
                 return (parentKeys, keys, index) => {
-                    reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.removeItem({
+                    propsCur.getActions(propsCur).removeItem({
                         parentKeys: parentKeys,
                         keys: keys,
                         index: index
@@ -56,7 +55,7 @@ export const hoc = (hocFactory) => {
             },
             moveItem: (propsCur) => {
                 return (parentKeys, keys, curIndex, toIndex) => {
-                    reducerFactory.get(propsCur.reducerKey || "schemaForm").actions.moveToItem({
+                    propsCur.getActions(propsCur).moveToItem({
                         parentKeys: parentKeys,
                         keys: keys,
                         curIndex: curIndex,
@@ -74,7 +73,7 @@ export const hoc = (hocFactory) => {
                 };
             }
         }));
-        let arrayHoc = (Component) => {
+        const arrayHoc = (Component) => {
             let ArrayComponentHoc = class ArrayComponentHoc extends PureComponent {
                 constructor(props, context) {
                     super(props, context);
@@ -107,7 +106,7 @@ export const hoc = (hocFactory) => {
             ], ArrayComponentHoc);
             return ArrayComponentHoc;
         };
-        let pureHoc = (Component) => {
+        const pureHoc = (Component) => {
             let ArrayPureComponentHoc = class ArrayPureComponentHoc extends React.PureComponent {
                 render() {
                     return React.createElement(Component, Object.assign({}, this.props));

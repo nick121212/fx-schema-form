@@ -1,5 +1,5 @@
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 import { TreeMap } from "./tree";
 import { UtilsHocOutProps } from "../hocs/utils";
 export interface SchemaFormHocSettings {

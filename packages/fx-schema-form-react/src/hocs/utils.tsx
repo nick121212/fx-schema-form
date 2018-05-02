@@ -9,7 +9,7 @@ import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models";
 import merge from "../libs/merge";
 import { reducerFactory } from "../factory";
 import { SchemaFormActions } from "../reducers/schema.form";

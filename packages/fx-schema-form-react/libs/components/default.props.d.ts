@@ -2,7 +2,7 @@
 import { Ajv } from "ajv";
 import Immutable from "immutable";
 import { ValidationMap } from "prop-types";
-import { FxUiSchema } from "../models/index";
+import { FxUiSchema } from "../models";
 export interface DefaultProps {
     schemaId: string;
     uiSchema?: FxUiSchema;

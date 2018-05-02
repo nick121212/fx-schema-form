@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { createSelectorCreator, defaultMemoize } from "reselect";
 import { is } from "immutable";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "data";
 export const hoc = (hocFactory) => {
@@ -77,8 +77,9 @@ export const hoc = (hocFactory) => {
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
                     }
-                    const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)), ComponentWithHoc = hocWithData(Component);
-                    this.ComponentWithHoc = ComponentWithHoc;
+                    else {
+                        this.ComponentWithHoc = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys))(Component);
+                    }
                 }
                 render() {
                     const ComponentWithHoc = this.ComponentWithHoc;

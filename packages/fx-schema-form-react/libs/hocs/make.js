@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import Immutable from "immutable";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 export const name = "make";
 export const hoc = (hocFactory) => {
     return (settings = {}) => {

@@ -10,7 +10,7 @@ import React, { PureComponent } from "react";
 import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 import merge from "../libs/merge";
 import { reducerFactory } from "../factory";
 export const name = "utils";

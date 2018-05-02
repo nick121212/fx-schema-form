@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { compose, shouldUpdate } from "recompose";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, schemaFormTypes } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { FieldHocOutProps } from "../hocs/field";
 

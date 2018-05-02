@@ -3,7 +3,7 @@ import Immutable from "immutable";
 import { JSONSchema6 } from "json-schema";
 import { Ajv } from "ajv";
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 import { SchemaFormActions } from "../reducers/schema.form";
 export declare const name = "utils";
 export interface UtilsHocOutProps {
