@@ -31,12 +31,15 @@ export const hoc = (hocFactory) => {
                 }
                 componentDidUpdate(props) {
                     return __awaiter(this, void 0, void 0, function* () {
-                        const { uiSchema, updateItemData, getDefaultData, removeItemData, ajv } = props;
-                        removeItemData(props, true);
+                        const { uiSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv } = props, actions = [];
+                        actions.push(updateItemDataRaw(props, true));
                         if (!this.currentSchema) {
-                            return updateItemData(props, null);
+                            actions.push(updateItemDataRaw(props, null));
                         }
-                        updateItemData(props, yield getDefaultData(ajv, this.currentSchema, null));
+                        else {
+                            actions.push(updateItemDataRaw(props, yield getDefaultData(ajv, this.currentSchema, null)));
+                        }
+                        combineActions(...actions);
                     });
                 }
                 render() {

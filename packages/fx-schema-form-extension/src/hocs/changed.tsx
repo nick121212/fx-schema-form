@@ -8,7 +8,6 @@ import schemaFormReact from "fx-schema-form-react";
 import { BaseFactory } from "fx-schema-form-core";
 import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 import { fromJS } from "immutable";
-import { compose } from "recompose";
 
 const { schemaFormTypes } = schemaFormReact;
 

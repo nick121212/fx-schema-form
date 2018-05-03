@@ -30,10 +30,10 @@ export const hoc = (hocFactory) => {
                         });
                     }
                 }
-                componentWillMount() {
+                componentDidMount() {
                     this.dataToMeta(this.props);
                 }
-                componentWillUpdate(props) {
+                componentDidUpdate(props) {
                     this.dataToMeta(props);
                 }
                 render() {

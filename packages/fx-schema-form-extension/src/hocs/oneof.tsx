@@ -12,8 +12,7 @@ import schemaFormReact from "fx-schema-form-react";
 import { JSONSchema6 } from "json-schema";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
-export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps {
-}
+export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps { }
 
 export interface OneHocOutSettings {
     path: string;
@@ -55,15 +54,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props props
                  */
                 public async componentDidUpdate(props: Props) {
-                    const { uiSchema, updateItemData, getDefaultData, removeItemData, ajv } = props;
+                    const { uiSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv } = props,
+                        actions: any = [];
 
                     // 清除meta数据
-                    removeItemData(props, true);
+                    actions.push(updateItemDataRaw(props, true));
                     if (!this.currentSchema) {
-                        return updateItemData(props, null);
+                        actions.push(updateItemDataRaw(props, null));
+                    } else {
+                        // 更新当前的数据为schema的默认数据
+                        actions.push(updateItemDataRaw(props, await getDefaultData(ajv, this.currentSchema, null)));
                     }
-                    // 更新当前的数据为schema的默认数据
-                    updateItemData(props, await getDefaultData(ajv, this.currentSchema, null));
+
+                    combineActions(...actions);
                 }
 
                 /**

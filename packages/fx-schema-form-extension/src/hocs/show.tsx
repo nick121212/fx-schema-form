@@ -1,11 +1,8 @@
 
 import React from "react";
-import { compose, shouldUpdate, ComponentEnhancer, renderNothing } from "recompose";
-import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
 
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelector, createSelectorCreator, defaultMemoize, Selector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";

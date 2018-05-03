@@ -1,12 +1,10 @@
 import React from "react";
-import { onlyUpdateForKeys } from "recompose";
-import { BaseFactory, MergeLib } from "fx-schema-form-core";
+import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/libs/models/index";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 import schemaFormReact from "fx-schema-form-react";
-import { JSONSchema6 } from "json-schema";
 import { fromJS } from "immutable";
 
 const { SchemaForm, schemaFormTypes, merge } = schemaFormReact;
@@ -40,7 +38,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     // 查看配置中是否有定义，如果有则合并到uiSchema中
                     if (format && hocOptions[format] && !widget) {
                         newUiSchema = merge(fromJS(uiSchema), fromJS(hocOptions[format])).toJS();
-                        // Object.assign(uiSchema, hocOptions[format]);
                     }
 
                     return <Component {...this.props} uiSchema={newUiSchema} />;

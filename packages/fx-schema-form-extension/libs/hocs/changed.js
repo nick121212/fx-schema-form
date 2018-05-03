@@ -13,7 +13,7 @@ export const hoc = (hocFactory) => {
     return (settings = {}) => {
         const innerHoc = (Component) => {
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
-                dataToMeta(props) {
+                dataToMeta(props, isInit = false) {
                     const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
                     let meta = fromJS({});
@@ -25,7 +25,7 @@ export const hoc = (hocFactory) => {
                             }
                         });
                         if (normalOptions.onChanged) {
-                            normalOptions.onChanged(props, meta.toJS());
+                            normalOptions.onChanged(props, meta.toJS(), isInit);
                         }
                     }
                 }
@@ -33,7 +33,7 @@ export const hoc = (hocFactory) => {
                     const { formItemMeta, updateItemMeta } = this.props;
                     const isMountChanged = formItemMeta ? formItemMeta.get("isMountChanged") : false;
                     if (!isMountChanged) {
-                        this.dataToMeta(this.props);
+                        this.dataToMeta(this.props, true);
                         updateItemMeta(this.props, null, {
                             isMountChanged: true
                         });

@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
-import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
-import { connect } from "react-redux";
+import { compose} from "recompose";
 import { RC } from "fx-schema-form-react/libs/models";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";

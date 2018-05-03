@@ -56,9 +56,7 @@ export interface ConditionHocSettings {
     hoc?: ComponentEnhancer<any, any>;
 }
 
-export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
-
-}
+export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {}
 
 export const name = "condition";
 

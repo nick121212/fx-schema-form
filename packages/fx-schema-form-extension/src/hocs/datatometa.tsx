@@ -65,11 +65,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     }
                 }
 
-                public componentWillMount() {
+                public componentDidMount() {
                     this.dataToMeta(this.props);
                 }
 
-                public componentWillUpdate(props: Props) {
+                public componentDidUpdate(props: Props) {
                     this.dataToMeta(props);
                 }
 
