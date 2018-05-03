@@ -1,14 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["SFC"] = factory();
-	else
-		root["SFC"] = factory();
-})(typeof self !== 'undefined' ? self : this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -194,11 +184,8 @@ class BaseFactory {
         this.pi = {};
     }
     add(name, intance, override = false) {
-        if (this.pi.hasOwnProperty(name)) {
-            return;
-        }
-        if (!override && this.has(name)) {
-            return;
+        if (this.pi.hasOwnProperty(name) || !override && this.has(name)) {
+            return false;
         }
         this.i[name] = intance;
         return true;
@@ -642,5 +629,4 @@ const a = 1;
 
 /***/ })
 /******/ ]);
-});
-//# sourceMappingURL=index.dev.js.map
+//# sourceMappingURL=main.js.map

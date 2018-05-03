@@ -6,7 +6,7 @@ import Ajv from "ajv";
 
 import {
     schemaKeyWordFactory
-} from "../../dist/index.dev";
+} from "../../dist/index";
 
 describe("key word of ref", () => {
     let ajv;

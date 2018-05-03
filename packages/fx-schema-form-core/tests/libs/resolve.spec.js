@@ -11,7 +11,7 @@ import {
     ResolveLib,
     getSchemaId,
     getDataKeys
-} from "../../dist/index.dev";
+} from "../../dist/index";
 
 describe("测试ResolveLib类", () => {
     let ajv;

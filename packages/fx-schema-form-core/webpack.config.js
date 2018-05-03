@@ -38,15 +38,15 @@ module.exports = {
     ]),
     output: __PROD__ || __DEV__ ? {
         path: path.resolve('./dist'),
-        filename: __PROD__ ? 'index.prd.js' : 'index.dev.js',
+        filename: __PROD__ ? 'index.js' : 'index.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        sourceMapFilename: __PROD__ ? 'index.prd.js.map' : 'index.dev.js.map',
+        sourceMapFilename: __PROD__ ? 'index.js.map' : 'index.js.map',
         library: "SFC",
         // umdNamedDefine: true,
         // libraryExport: "default"
     } : {
         path: path.resolve('./dist'),
-        filename: '[name].js',
+        filename: 'index.js',
     }
 };

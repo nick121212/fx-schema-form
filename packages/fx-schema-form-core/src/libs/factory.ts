@@ -1,3 +1,5 @@
+import { warn } from "../utils";
+
 /**
  * 实例的工厂类
  */
@@ -41,7 +43,7 @@ export class BaseFactory<T> {
             return this.i[key];
         }
         if (!__PROD__) {
-            throw new Error(`name=[${key}]not exist`);
+            warn(`name=[${key}]not exist`);
         }
 
         return null as any;

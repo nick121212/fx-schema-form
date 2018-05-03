@@ -2,6 +2,7 @@ import { Ajv, ValidateFunction } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib, getDataKeys } from "../libs/resolve";
+import { warn } from "../utils";
 
 /**
  * 解析schema中的关键字 ref
@@ -29,7 +30,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
         }
 
         if (!__PROD__) {
-            throw new Error("${schema.$ref} not exist.");
+            warn(`${schema.$ref} not exist.`);
         }
     }
 

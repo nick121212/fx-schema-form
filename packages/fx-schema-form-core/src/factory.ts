@@ -11,8 +11,9 @@ export let schemaKeysFactory = new BaseFactory<string>();
 
 /**
  * 遍历所有的keyword，解析schema
- * @param schema schema
- * @param ajv    ajv的实例
+ * @param   {JSONSchema6} schema schema
+ * @param   {Ajv}         ajv    ajv的实例
+ * @returns {JSONSchema6}        解析过后的schema
  */
 export let convertKeys = (schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
     schemaKeyWordFactory.forEach((key: string, val: (schema: JSONSchema6, ajv: Ajv) => JSONSchema6) => {

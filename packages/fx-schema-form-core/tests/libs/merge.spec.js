@@ -10,7 +10,7 @@ import {
     schemaKeysFactory,
     ResolveLib,
     MergeLib
-} from "../../dist/index.dev";
+} from "../../dist/index";
 
 describe("测试MergeLib类", () => {
     let ajv;
