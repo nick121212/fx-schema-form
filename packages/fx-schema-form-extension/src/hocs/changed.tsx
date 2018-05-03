@@ -45,9 +45,10 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 /**
                  * 当condition属性变化的时候触发
                  * 遍历数组，数组元素的每一项数据合并到meta
-                 * @param props 当前的props
+                 * @param props  当前的props
+                 * @param isInit 是否是第一次
                  */
-                public dataToMeta(props: Props) {
+                public dataToMeta(props: Props, isInit: boolean = false) {
                     const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
                     let meta = fromJS({});
@@ -64,7 +65,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         });
                         // 触发onChanged事件
                         if (normalOptions.onChanged) {
-                            normalOptions.onChanged(props, meta.toJS());
+                            normalOptions.onChanged(props, meta.toJS(), isInit);
                         }
                     }
                 }
@@ -80,7 +81,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     // 只有第一次mount的时候才会触发一次数据的变更
                     if (!isMountChanged) {
                         // 塞入数据
-                        this.dataToMeta(this.props);
+                        this.dataToMeta(this.props, true);
                         // 更改标志位
                         updateItemMeta(this.props, null, {
                             isMountChanged: true
@@ -112,7 +113,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
         };
 
         return hocFactory.get("wrapper")({
-            hoc:  innerHoc,
+            hoc: innerHoc,
             hocName: name
         });
     };
