@@ -8,6 +8,7 @@ import { RC } from "fx-schema-form-react/libs/models";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
+
 import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 
 const { schemaFormTypes } = schemaFormReact;
@@ -73,7 +74,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     }
                 }
 
-                public componentWillMount() {
+                public componentDidMount() {
                     const { formItemMeta, updateItemMeta } = this.props;
                     const isMountCopyToMeta = formItemMeta ? formItemMeta.get("isMountCopyToMeta") : false;
 
@@ -88,12 +89,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     }
                 }
 
+                /**
+                 * 当数据变更的时候进行设置
+                 * @param props 新的props
+                 */
                 public componentWillReceiveProps(props: Props) {
                     if (props.condition !== this.props.condition) {
                         this.dataToMeta(props);
                     }
                 }
 
+                /**
+                 * render
+                 */
                 public render(): JSX.Element {
                     const { getOptions, getRequiredKeys, uiSchema } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
@@ -106,6 +114,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             return ComponentHoc as any;
         };
 
+        /**
+         * 包装wrapper
+         */
         return hocFactory.get("wrapper")({
             hoc: innerHoc,
             hocName: name

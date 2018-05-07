@@ -64,10 +64,10 @@ export const name = "condition";
  * condition
  * 筛选出需要使用的字段，包装到condition这个prop中，传递到下层组件
  * 配置：
- *  paths：字段的路径以及数据处理规则，路径使用相对或者决定路径
+ *  paths： 字段的路径以及数据处理规则，路径使用相对或者决定路径
  *  hoc：   下层的包装组件
  * @param hocFactory  hoc的工厂方法
- * @param Component 需要包装的组件
+ * @param Component   需要包装的组件
  */
 export const innerHoc = (hocFactory: BaseFactory<any>) => {
     /**
@@ -119,6 +119,7 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
 
                 constructor(props: ConditionHocProps) {
                     super(props);
+
                     this.getConditionHocs();
                 }
 
@@ -151,6 +152,7 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
                         });
                     }
 
+                    // 这里选取所有的func来设置数据
                     if (funcs.length) {
                         this.ComponentWithHoc = compose(connect(
                             // connect 数据
