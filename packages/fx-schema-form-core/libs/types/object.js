@@ -1,11 +1,12 @@
 import { default as ResolveLib, getDataKeys } from "../libs/resolve";
+import { warn } from "../utils";
 const pro = "properties";
 export default (schema, schemaKey, ajv) => {
     if (schema.properties && !schema.$ref) {
         Object.keys(schema.properties).forEach((key) => {
             if ([pro, "items"].indexOf(key) >= 0) {
                 if (!__PROD__) {
-                    throw new Error(`${key}can not be key words.`);
+                    warn(`${key}can not be key words.`);
                 }
                 return;
             }

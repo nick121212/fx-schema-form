@@ -14,13 +14,13 @@ export const hoc = (hocFactory) => {
         const innerHoc = (Component) => {
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
                 dataToMeta(props) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData } = props;
+                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData, schemaId } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
                     let meta = Immutable.fromJS({});
                     let isSet = false;
                     if (normalOptions.paths && normalOptions.paths.length && condition && uiSchema && uiSchema.keys) {
                         normalOptions.paths.forEach(({ path, to, defaultValue }) => {
-                            let pathKeys = getPathKeys(uiSchema.keys, path);
+                            let pathKeys = getPathKeys(uiSchema.keys, path, schemaId);
                             isSet = true;
                             meta = meta.setIn(to, defaultValue);
                             if (condition.has(pathKeys.join("/"))) {

@@ -1,6 +1,7 @@
 import { uiSchemaSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { getDataKeys, getSchemaId } from "./resolve";
+import { warn } from "../utils";
 const getUiSchemaKeyRecursion = (uiSchemaKeys, parentKeys) => {
     while (uiSchemaKeys.length) {
         let key = uiSchemaKeys.shift() || "";
@@ -8,7 +9,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys, parentKeys) => {
         let keysStr = keys.join("/").replace(/\/$/, "");
         if (!schemaKeysFactory.has(keysStr)) {
             if (!__PROD__) {
-                throw new Error(`${keys.join("/")} did not found.`);
+                warn(`${keys.join("/")} did not found.`);
             }
             return "";
         }
@@ -39,7 +40,7 @@ const getCurrentSchemaKey = (parent, schemaPath, uiSchema) => {
 const mergeUiSchemaToArray = (uiSchema) => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
         if (!__PROD__) {
-            throw new Error(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
+            warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
         return uiSchema;
     }
@@ -67,7 +68,7 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
     let idx = uiSchemas.indexOf("*"), uiSchemasFirst = [], uiSchemasLast = [], types = ["object", "array"];
     if (uiSchemas.lastIndexOf("*") !== idx) {
         if (!__PROD__) {
-            throw new Error("uiSchema can only has one *.");
+            warn("uiSchema can only has one *.");
         }
         return [];
     }
@@ -116,7 +117,7 @@ export default class MergeLib {
         let keyPath = getDataKeys(schemaPath, true).join("/");
         if (!schemaKeysFactory.has(keyPath)) {
             if (!__PROD__) {
-                throw new Error(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
+                warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
             return;
         }

@@ -56,7 +56,7 @@ export interface ConditionHocSettings {
     hoc?: ComponentEnhancer<any, any>;
 }
 
-export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {}
+export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps { }
 
 export const name = "condition";
 
@@ -130,7 +130,7 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
                  * 4. 返回
                  */
                 private getConditionHocs() {
-                    const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props,
+                    const { getPathKeys, uiSchema, getOptions, parentKeys, schemaId } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
                         dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"),
                         { keys = [] } = uiSchema || {},
@@ -141,7 +141,7 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
                     // 获取所有需要监听的数据的值
                     if (paths && paths.length && hoc) {
                         paths.forEach((path: ConditionPath) => {
-                            let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
+                            let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path, schemaId);
 
                             if (path.meta) {
                                 funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[], path.metaKey));
@@ -185,7 +185,7 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
                  * 渲染页面
                  */
                 public render(): JSX.Element {
-                    const { getPathKeys, uiSchema } = this.props,
+                    const { uiSchema } = this.props,
                         { keys = [] } = uiSchema || {},
                         ComponentWithHoc = this.ComponentWithHoc || Component;
 

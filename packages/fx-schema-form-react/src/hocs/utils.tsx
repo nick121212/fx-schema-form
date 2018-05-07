@@ -1,7 +1,7 @@
 
 
 import React, { PureComponent } from "react";
-import { BaseFactory, MergeLib, FxJsonSchema, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { BaseFactory, MergeLib, FxJsonSchema, schemaKeysFactory, schemaFieldFactory, getSchemaId } from "fx-schema-form-core";
 import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
 import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
@@ -20,13 +20,46 @@ export interface UtilsHocOutProps {
     getOptions: (props: DefaultProps, category: string, field: string, ...extraSettings: Immutable.Map<string, any>[])
         => { [key: string]: any };
     getTitle(props: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): () => string;
-    getPathKeys: (keys: string[], path: string) => Array<string | number>;
+    getPathKeys: (keys: string[], path: string, schemaId?: string) => Array<string | number>;
     normalizeDataPath: (schemaId: string, dataPath: string) => Array<string | number>;
     getRequiredKeys: (props: DefaultProps, include: string[], exclude: string[]) => { [key: string]: any };
     getDefaultData: (ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, merge?: boolean) => Promise<any>;
     getActions: (props: DefaultProps, raw?: boolean) => SchemaFormActions;
     getPathProps: (props: DefaultProps, path: string) => DefaultProps;
 }
+
+
+/**
+ * dataPath中的key格式化；
+ * dataPath是一个字符串，需要把里面的数字转化一下
+ * dataPath中可能有数组的格式，所以需要把数字转换成数字，而不是字符
+ * 遍历所有的key，发现是数字字符，则查找父级的schema，如果父级的type是array，则把当前key转换成数字
+ * @param schemaId schemaId
+ * @param dataPath 当前的数据路径字符串
+ */
+const normalizeDataPath = (schemaId: string, dataPath: string): Array<string | number> => {
+    let dataKeys: Array<string | number> = dataPath.replace(/^\//g, "").split("/");
+
+    dataKeys = dataKeys.map((key: string | number, index: number) => {
+        if (Number.isInteger(+key)) {
+            let keys: Array<string | number> = dataKeys.slice(0, index);
+
+            keys.unshift(schemaId);
+
+            if (schemaKeysFactory.has(keys.join("/"))) {
+                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+
+                if (schema.type === "array") {
+                    return +key;
+                }
+            }
+        }
+
+        return key;
+    });
+
+    return dataKeys;
+};
 
 /**
  * 包装utils的组件HOC
@@ -42,7 +75,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         getTitle={this.getTitle}
                         getPathKeys={this.getPathKeys}
                         getOptions={this.getOptions}
-                        normalizeDataPath={this.normalizeDataPath}
+                        normalizeDataPath={normalizeDataPath}
                         getRequiredKeys={this.getRequiredKeys}
                         getDefaultData={this.getDefaultData}
                         getActions={this.getActions}
@@ -126,29 +159,29 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param schemaId schemaId
                  * @param dataPath 当前的数据路径字符串
                  */
-                private normalizeDataPath(schemaId: string, dataPath: string): Array<string | number> {
-                    let dataKeys: Array<string | number> = dataPath.replace(/^\//g, "").split("/");
+                // private normalizeDataPath(schemaId: string, dataPath: string): Array<string | number> {
+                //     let dataKeys: Array<string | number> = dataPath.replace(/^\//g, "").split("/");
 
-                    dataKeys = dataKeys.map((key: string | number, index: number) => {
-                        if (Number.isInteger(+key)) {
-                            let keys: Array<string | number> = dataKeys.slice(0, index);
+                //     dataKeys = dataKeys.map((key: string | number, index: number) => {
+                //         if (Number.isInteger(+key)) {
+                //             let keys: Array<string | number> = dataKeys.slice(0, index);
 
-                            keys.unshift(schemaId);
+                //             keys.unshift(schemaId);
 
-                            if (schemaKeysFactory.has(keys.join("/"))) {
-                                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+                //             if (schemaKeysFactory.has(keys.join("/"))) {
+                //                 let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
 
-                                if (schema.type === "array") {
-                                    return +key;
-                                }
-                            }
-                        }
+                //                 if (schema.type === "array") {
+                //                     return +key;
+                //                 }
+                //             }
+                //         }
 
-                        return key;
-                    });
+                //         return key;
+                //     });
 
-                    return dataKeys;
-                }
+                //     return dataKeys;
+                // }
 
                 /**
                  * 获取参数
@@ -238,14 +271,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param keys 当前的keys
                  * @param path 路径
                  */
-                private getPathKeys(keys: Array<string>, path: string): Array<string> {
+                private getPathKeys(keys: Array<string>, path: string, schemaId?: string): Array<string> {
                     let keysCopy = [""].concat(keys.concat([""]));
-                    let keysResolve: string[] = resolvePathname(path, keysCopy.join("/")).split("/");
+                    let keysResolve: any[] = resolvePathname(path, keysCopy.join("/")).split("/");
 
                     keysResolve.shift();
 
                     if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
                         keysResolve.pop();
+                    }
+
+                    // 这里处理一下这个字符串数字的问题把数组中的 "1" 转换成 1
+                    if (schemaId) {
+                        keysResolve = normalizeDataPath(getSchemaId(schemaId), keysResolve.join("/"));
                     }
 
                     return keysResolve;

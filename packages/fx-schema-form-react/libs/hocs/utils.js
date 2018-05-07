@@ -7,19 +7,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import React, { PureComponent } from "react";
-import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { schemaKeysFactory, schemaFieldFactory, getSchemaId } from "fx-schema-form-core";
 import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
 import { schemaFormTypes } from "../models";
 import merge from "../libs/merge";
 import { reducerFactory } from "../factory";
 export const name = "utils";
+const normalizeDataPath = (schemaId, dataPath) => {
+    let dataKeys = dataPath.replace(/^\//g, "").split("/");
+    dataKeys = dataKeys.map((key, index) => {
+        if (Number.isInteger(+key)) {
+            let keys = dataKeys.slice(0, index);
+            keys.unshift(schemaId);
+            if (schemaKeysFactory.has(keys.join("/"))) {
+                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+                if (schema.type === "array") {
+                    return +key;
+                }
+            }
+        }
+        return key;
+    });
+    return dataKeys;
+};
 export const hoc = (hocFactory) => {
     return () => {
         return (Component) => {
             class ComponentHoc extends PureComponent {
                 render() {
-                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData, getActions: this.getActions, getPathProps: this.getPathProps }, this.props));
+                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData, getActions: this.getActions, getPathProps: this.getPathProps }, this.props));
                 }
                 getPathProps(props, path) {
                     let newProps = Object.assign({}, props, {
@@ -61,23 +78,6 @@ export const hoc = (hocFactory) => {
                         });
                     }
                     return extraProps;
-                }
-                normalizeDataPath(schemaId, dataPath) {
-                    let dataKeys = dataPath.replace(/^\//g, "").split("/");
-                    dataKeys = dataKeys.map((key, index) => {
-                        if (Number.isInteger(+key)) {
-                            let keys = dataKeys.slice(0, index);
-                            keys.unshift(schemaId);
-                            if (schemaKeysFactory.has(keys.join("/"))) {
-                                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
-                                if (schema.type === "array") {
-                                    return +key;
-                                }
-                            }
-                        }
-                        return key;
-                    });
-                    return dataKeys;
                 }
                 getOptions({ uiSchema = {}, globalOptions }, category, field, ...extraSettings) {
                     let { options, type = "" } = uiSchema, optionsArray = [], getOptions = (o, ks) => {
@@ -127,12 +127,15 @@ export const hoc = (hocFactory) => {
                     }
                     return "";
                 }
-                getPathKeys(keys, path) {
+                getPathKeys(keys, path, schemaId) {
                     let keysCopy = [""].concat(keys.concat([""]));
                     let keysResolve = resolvePathname(path, keysCopy.join("/")).split("/");
                     keysResolve.shift();
                     if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
                         keysResolve.pop();
+                    }
+                    if (schemaId) {
+                        keysResolve = normalizeDataPath(getSchemaId(schemaId), keysResolve.join("/"));
                     }
                     return keysResolve;
                 }

@@ -37,6 +37,8 @@ describe("utils的hoc", () => {
         expect(roots[0].props().getPathKeys(["a", "b"], "../").join()).to.eq(["a"].join());
         expect(roots[0].props().getPathKeys(["a", "b"], "/a").join()).to.eq(["a"].join());
         expect(roots[0].props().getPathKeys(["a", "b", "c"], "../d").join()).to.eq(["a", "b", "d"].join());
+
+        expect(roots[3].props().getPathKeys(["dsModelIds", "0", "age"], "../d", "design")[1]).to.eq(0);
     });
 
     it("测试getOptions方法;", () => {

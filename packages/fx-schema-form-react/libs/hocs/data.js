@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { createSelectorCreator, defaultMemoize } from "reselect";
-import { is } from "immutable";
+import Immutable, { is } from "immutable";
 import { schemaFormTypes } from "../models";
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "data";
@@ -23,7 +23,10 @@ export const hoc = (hocFactory) => {
                             return formItemData;
                         }
                         else {
-                            return formItemData.size;
+                            if (Immutable.List.isList(formItemData)) {
+                                return formItemData.size;
+                            }
+                            return 0;
                         }
                     }
                 }

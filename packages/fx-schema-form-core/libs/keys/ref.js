@@ -1,4 +1,5 @@
 import { getDataKeys } from "../libs/resolve";
+import { warn } from "../utils";
 export default (schema, ajv) => {
     if (schema && schema.$ref) {
         let validate = ajv.getSchema(schema.$ref);
@@ -12,7 +13,7 @@ export default (schema, ajv) => {
             return schemaAjv;
         }
         if (!__PROD__) {
-            throw new Error("${schema.$ref} not exist.");
+            warn(`${schema.$ref} not exist.`);
         }
     }
     return schema;

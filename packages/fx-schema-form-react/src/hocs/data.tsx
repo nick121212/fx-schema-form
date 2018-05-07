@@ -78,7 +78,12 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                         if (!settings.dataLength) {
                             return formItemData;
                         } else {
-                            return formItemData.size;
+                            // 如果是列表，则返回size
+                            if (Immutable.List.isList(formItemData)) {
+                                return formItemData.size;
+                            }
+
+                            return 0;
                         }
                     }
                 }

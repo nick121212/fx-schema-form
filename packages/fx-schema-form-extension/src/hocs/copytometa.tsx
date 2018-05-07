@@ -48,7 +48,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props 当前的props
                  */
                 public dataToMeta(props: Props) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData } = props;
+                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData, schemaId } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as CopyToMetaSettings;
                     let meta = Immutable.fromJS({});
                     let isSet = false;
@@ -56,7 +56,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     // 遍历配置项，把数据添加到meta
                     if (normalOptions.paths && normalOptions.paths.length && condition && uiSchema && uiSchema.keys) {
                         normalOptions.paths.forEach(({ path, to, defaultValue }) => {
-                            let pathKeys = getPathKeys(uiSchema.keys as string[], path);
+                            let pathKeys = getPathKeys(uiSchema.keys as string[], path, schemaId);
 
                             isSet = true;
                             meta = meta.setIn(to, defaultValue);

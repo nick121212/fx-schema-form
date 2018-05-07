@@ -40,10 +40,10 @@ export const innerHoc = (hocFactory) => {
                     this.getConditionHocs();
                 }
                 getConditionHocs() {
-                    const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"), { keys = [] } = uiSchema || {}, funcs = [], conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(), { paths, hoc } = conditionOptions;
+                    const { getPathKeys, uiSchema, getOptions, parentKeys, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"), { keys = [] } = uiSchema || {}, funcs = [], conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(), { paths, hoc } = conditionOptions;
                     if (paths && paths.length && hoc) {
                         paths.forEach((path) => {
-                            let pathKeys = getPathKeys(keys, path.path);
+                            let pathKeys = getPathKeys(keys, path.path, schemaId);
                             if (path.meta) {
                                 funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
                             }
@@ -72,7 +72,7 @@ export const innerHoc = (hocFactory) => {
                     }
                 }
                 render() {
-                    const { getPathKeys, uiSchema } = this.props, { keys = [] } = uiSchema || {}, ComponentWithHoc = this.ComponentWithHoc || Component;
+                    const { uiSchema } = this.props, { keys = [] } = uiSchema || {}, ComponentWithHoc = this.ComponentWithHoc || Component;
                     return React.createElement(ComponentWithHoc, Object.assign({}, this.props));
                 }
             }
