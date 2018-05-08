@@ -1,8 +1,8 @@
 
 import React from "react";
-import { onlyUpdateForKeys, lifecycle } from "recompose";
+import { lifecycle } from "recompose";
 import Immutable from "immutable";
-import { BaseFactory, MergeLib, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC, FxUiSchema } from "fx-schema-form-react/libs/models/index";
@@ -117,7 +117,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         // 更新当前的数据为schema的默认数据
                         actions.push(updateItemDataRaw(props, await getDefaultData(ajv, currentSchema, null)));
                     }
-
+                    // 合并提交代码
                     combineActions(...actions);
                 }
 
@@ -135,6 +135,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         { currentSchema, oneOfScehmaId, uiSchemaInOneof, condition } = this.props;
 
                     if (currentSchema) {
+                        // 渲染form
                         return <SchemaForm
                             key={oneOfScehmaId}
                             schemaId={oneOfScehmaId}
