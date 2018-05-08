@@ -22,10 +22,6 @@ describe("key word of ref", () => {
     });
 
     it("抛出一个找不到test2的异常。", () => {
-        // console.log(schemaKeyWordFactory.get("ref")({
-        //     $ref: "test5#"
-        // }, ajv));
-
         assert.throw(() => {
             schemaKeyWordFactory.get("ref")({
                 $ref: "test5#"

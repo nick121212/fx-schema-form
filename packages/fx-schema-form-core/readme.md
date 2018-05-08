@@ -12,6 +12,10 @@ schemaForm的核心组件。用于解析JsonSchema，为SchemaForm提供支持�
 jsonschema；用于描述json的结构。
 uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
+## todolist
+
+1. 去掉ajv的依赖
+
 ## Schema DEMO
 
 ```js

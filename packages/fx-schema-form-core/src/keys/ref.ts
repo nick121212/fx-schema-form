@@ -3,6 +3,7 @@ import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib, getDataKeys } from "../libs/resolve";
 import { warn } from "../utils";
+import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 
 /**
  * 解析schema中的关键字 ref
@@ -30,6 +31,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
         }
 
         if (__DEV__) {
+            // console.log(schemaFieldFactory);
             warn(`${schema.$ref} not exist.`);
         }
     }
