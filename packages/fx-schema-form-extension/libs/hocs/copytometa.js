@@ -32,7 +32,7 @@ export const hoc = (hocFactory) => {
                         updateItemMeta(this.props, null, meta.toJS());
                     }
                 }
-                componentWillMount() {
+                componentDidMount() {
                     const { formItemMeta, updateItemMeta } = this.props;
                     const isMountCopyToMeta = formItemMeta ? formItemMeta.get("isMountCopyToMeta") : false;
                     if (!isMountCopyToMeta) {

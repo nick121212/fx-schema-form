@@ -116,12 +116,29 @@ module.exports = {
     plugins: !__PROD__ ? [
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(env),
+            },
+            "__DEV__": JSON.stringify(__DEV__),
+            "__PROD__": JSON.stringify(__PROD__)
+        }),
         new HtmlWebpackPlugin({
             template: "index.html"
         })
     ] : [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(env),
+            },
+            "__DEV__": JSON.stringify(__DEV__),
+            "__PROD__": JSON.stringify(__PROD__)
+        }),
         new UglifyJsPlugin({
             sourceMap: true
+        }),
+        new HtmlWebpackPlugin({
+            template: "index.html"
         })
     ],
     output: __PROD__ ? {
