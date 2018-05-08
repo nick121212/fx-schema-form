@@ -51,10 +51,11 @@ let designResolve = [
 
 curAjv.addKeyword("equal", {
     async: false,
-    inline:  (it: any, keyword: string, schema: string) => {
+    inline: (it: any, keyword: string, schema: string) => {
         let expr = "";
 
-        expr += "((" + it.util.getData((it.dataLevel||"") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + 'data' + (it.dataLevel || '') + "));";
+        expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema,
+            it.dataLevel, it.dataPathArr) + ") === (" + "data" + (it.dataLevel || "") + "));";
 
         return expr;
     }

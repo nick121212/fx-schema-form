@@ -68,11 +68,11 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
         const { uiSchema, formItemData, getOptions } = this.props,
             options = getOptions(this.props, schemaFormTypes.field, name);
 
-        if (options.formHocs && options.formHocs.constructor === Array) {
+        if (options.formHocs && options.formHocs.constructor === Array && options.formHocs.length) {
             this.SchemaFormWithHoc = compose(...options.formHocs)(DesignFieldComponent);
         }
 
-        if (options.formItemHocs && options.formItemHocs.constructor === Array) {
+        if (options.formItemHocs && options.formItemHocs.constructor === Array && options.formItemHocs.length) {
             this.SchemaFormItemWithHoc = compose(...options.formItemHocs)(SchemaForm as any);
         }
     }

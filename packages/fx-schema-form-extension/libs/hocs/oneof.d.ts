@@ -1,10 +1,14 @@
 import { BaseFactory } from "fx-schema-form-core";
-import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { FxUiSchema } from "fx-schema-form-react/libs/models/index";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+import { JSONSchema6 } from "json-schema";
+import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutProps, ValidateHocOutProps {
+    currentSchema: JSONSchema6;
+    oneOfScehmaId: string;
+    uiSchemaInOneof: FxUiSchema[];
 }
 export interface OneHocOutSettings {
     path: string;

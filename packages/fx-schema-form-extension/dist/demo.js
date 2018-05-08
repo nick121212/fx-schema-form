@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "69450b1f46df73ce7f05"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "cd0c2c3943891c24989b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -759,7 +759,7 @@ exports.default = function (instance, Constructor) {
 
 exports.__esModule = true;
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -790,7 +790,7 @@ var _create = __webpack_require__(264);
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -6468,7 +6468,7 @@ const field_hoc = (hocFactory) => {
 });
 //# sourceMappingURL=field.js.map
 // EXTERNAL MODULE: ./node_modules/recompose/es/Recompose.js
-var Recompose = __webpack_require__(12);
+var Recompose = __webpack_require__(13);
 
 // CONCATENATED MODULE: ./node_modules/fx-schema-form-react/libs/hocs/array.js
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -7846,6 +7846,33 @@ exports.default = function (obj, key, value) {
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _iterator = __webpack_require__(244);
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = __webpack_require__(250);
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+
+/***/ }),
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8924,7 +8951,7 @@ var createEventHandler = createEventHandlerWithConfig(config);
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -8977,33 +9004,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	}
 }());
 
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _iterator = __webpack_require__(244);
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = __webpack_require__(250);
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-};
 
 /***/ }),
 /* 15 */
@@ -18892,7 +18892,7 @@ curAjv.addKeyword("equal", {
     async: false,
     inline: function inline(it, keyword, schema) {
         var expr = "";
-        expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + 'data' + (it.dataLevel || '') + "));";
+        expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + "data" + (it.dataLevel || "") + "));";
         return expr;
     }
 });
@@ -21914,7 +21914,7 @@ function mergeChildren(prev, next) {
   return ret;
 }
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/typeof.js
-var helpers_typeof = __webpack_require__(14);
+var helpers_typeof = __webpack_require__(12);
 var typeof_default = /*#__PURE__*/__webpack_require__.n(helpers_typeof);
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
@@ -29843,7 +29843,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _fxSchemaFormReact = __webpack_require__(10);
 
@@ -29901,10 +29901,10 @@ var DesignField = exports.DesignField = function (_React$PureComponent2) {
                 getOptions = _props.getOptions,
                 options = getOptions(this.props, schemaFormTypes.field, name);
 
-            if (options.formHocs && options.formHocs.constructor === Array) {
+            if (options.formHocs && options.formHocs.constructor === Array && options.formHocs.length) {
                 this.SchemaFormWithHoc = _recompose.compose.apply(undefined, (0, _toConsumableArray3.default)(options.formHocs))(DesignFieldComponent);
             }
-            if (options.formItemHocs && options.formItemHocs.constructor === Array) {
+            if (options.formItemHocs && options.formItemHocs.constructor === Array && options.formItemHocs.length) {
                 this.SchemaFormItemWithHoc = _recompose.compose.apply(undefined, (0, _toConsumableArray3.default)(options.formItemHocs))(SchemaForm);
             }
         }
@@ -30903,7 +30903,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _fxSchemaFormReact = __webpack_require__(10);
 
@@ -31073,7 +31073,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _reactRedux = __webpack_require__(55);
 
@@ -31322,6 +31322,10 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _typeof2 = __webpack_require__(12);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
@@ -31338,6 +31342,14 @@ var _fxSchemaFormReact2 = _interopRequireDefault(_fxSchemaFormReact);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if ((typeof Reflect === "undefined" ? "undefined" : (0, _typeof3.default)(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+        if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    }return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) {
@@ -31375,66 +31387,16 @@ var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
 var name = exports.name = "oneOf";
 var hoc = exports.hoc = function hoc(hocFactory) {
     return function (settings) {
-        var innerHoc = function innerHoc(Component) {
+        var innerHoc1 = function innerHoc1(Component) {
             var ComponentHoc = function (_React$PureComponent) {
                 (0, _inherits3.default)(ComponentHoc, _React$PureComponent);
 
                 function ComponentHoc() {
                     (0, _classCallCheck3.default)(this, ComponentHoc);
-
-                    var _this = (0, _possibleConstructorReturn3.default)(this, (ComponentHoc.__proto__ || Object.getPrototypeOf(ComponentHoc)).apply(this, arguments));
-
-                    _this.currentSchema = null;
-                    return _this;
+                    return (0, _possibleConstructorReturn3.default)(this, (ComponentHoc.__proto__ || Object.getPrototypeOf(ComponentHoc)).apply(this, arguments));
                 }
 
                 (0, _createClass3.default)(ComponentHoc, [{
-                    key: "componentDidUpdate",
-                    value: function componentDidUpdate(props) {
-                        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                            var uiSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv, actions;
-                            return _regenerator2.default.wrap(function _callee$(_context) {
-                                while (1) {
-                                    switch (_context.prev = _context.next) {
-                                        case 0:
-                                            uiSchema = props.uiSchema, updateItemDataRaw = props.updateItemDataRaw, getDefaultData = props.getDefaultData, removeItemDataRaw = props.removeItemDataRaw, combineActions = props.combineActions, ajv = props.ajv, actions = [];
-
-                                            actions.push(updateItemDataRaw(props, true));
-
-                                            if (this.currentSchema) {
-                                                _context.next = 6;
-                                                break;
-                                            }
-
-                                            actions.push(updateItemDataRaw(props, null));
-                                            _context.next = 14;
-                                            break;
-
-                                        case 6:
-                                            _context.t0 = actions;
-                                            _context.t1 = updateItemDataRaw;
-                                            _context.t2 = props;
-                                            _context.next = 11;
-                                            return getDefaultData(ajv, this.currentSchema, null);
-
-                                        case 11:
-                                            _context.t3 = _context.sent;
-                                            _context.t4 = (0, _context.t1)(_context.t2, _context.t3);
-
-                                            _context.t0.push.call(_context.t0, _context.t4);
-
-                                        case 14:
-                                            combineActions.apply(undefined, actions);
-
-                                        case 15:
-                                        case "end":
-                                            return _context.stop();
-                                    }
-                                }
-                            }, _callee, this);
-                        }));
-                    }
-                }, {
                     key: "render",
                     value: function render() {
                         var _props = this.props,
@@ -31469,8 +31431,8 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                             if (!oneOfScehmaId || !_fxSchemaFormCore.schemaKeysFactory.has(oneOfScehmaId)) {
                                 return null;
                             }
-                            this.currentSchema = _fxSchemaFormCore.schemaFieldFactory.get(_fxSchemaFormCore.schemaKeysFactory.get(oneOfScehmaId));
-                            return _react2.default.createElement(SchemaForm, { key: oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [].concat((0, _toConsumableArray3.default)(parentKeys)), globalOptions: globalOptions, ajv: ajv });
+                            var currentSchema = _fxSchemaFormCore.schemaFieldFactory.get(_fxSchemaFormCore.schemaKeysFactory.get(oneOfScehmaId));
+                            return _react2.default.createElement(Component, Object.assign({}, this.props, { oneOfScehmaId: oneOfScehmaId, uiSchemaInOneof: uiSchemaInOneof, currentSchema: currentSchema }));
                         }
                         return null;
                     }
@@ -31478,6 +31440,92 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                 return ComponentHoc;
             }(_react2.default.PureComponent);
 
+            return ComponentHoc;
+        };
+        var innerHoc = function innerHoc(Component) {
+            var ComponentHoc = function (_React$PureComponent2) {
+                (0, _inherits3.default)(ComponentHoc, _React$PureComponent2);
+
+                function ComponentHoc() {
+                    (0, _classCallCheck3.default)(this, ComponentHoc);
+                    return (0, _possibleConstructorReturn3.default)(this, (ComponentHoc.__proto__ || Object.getPrototypeOf(ComponentHoc)).apply(this, arguments));
+                }
+
+                (0, _createClass3.default)(ComponentHoc, [{
+                    key: "componentWillUpdate",
+                    value: function componentWillUpdate(props) {
+                        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+                            var uiSchema, currentSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv, actions;
+                            return _regenerator2.default.wrap(function _callee$(_context) {
+                                while (1) {
+                                    switch (_context.prev = _context.next) {
+                                        case 0:
+                                            uiSchema = props.uiSchema, currentSchema = props.currentSchema, updateItemDataRaw = props.updateItemDataRaw, getDefaultData = props.getDefaultData, removeItemDataRaw = props.removeItemDataRaw, combineActions = props.combineActions, ajv = props.ajv, actions = [];
+
+                                            actions.push(updateItemDataRaw(props, true));
+
+                                            if (currentSchema) {
+                                                _context.next = 6;
+                                                break;
+                                            }
+
+                                            actions.push(updateItemDataRaw(props, null));
+                                            _context.next = 14;
+                                            break;
+
+                                        case 6:
+                                            _context.t0 = actions;
+                                            _context.t1 = updateItemDataRaw;
+                                            _context.t2 = props;
+                                            _context.next = 11;
+                                            return getDefaultData(ajv, currentSchema, null);
+
+                                        case 11:
+                                            _context.t3 = _context.sent;
+                                            _context.t4 = (0, _context.t1)(_context.t2, _context.t3);
+
+                                            _context.t0.push.call(_context.t0, _context.t4);
+
+                                        case 14:
+                                            combineActions.apply(undefined, actions);
+
+                                        case 15:
+                                        case "end":
+                                            return _context.stop();
+                                    }
+                                }
+                            }, _callee, this);
+                        }));
+                    }
+                }, {
+                    key: "render",
+                    value: function render() {
+                        var _props2 = this.props,
+                            getPathKeys = _props2.getPathKeys,
+                            uiSchema = _props2.uiSchema,
+                            getOptions = _props2.getOptions,
+                            schemaId = _props2.schemaId,
+                            reducerKey = _props2.reducerKey,
+                            arrayLevel = _props2.arrayLevel,
+                            arrayIndex = _props2.arrayIndex,
+                            globalOptions = _props2.globalOptions,
+                            parentKeys = _props2.parentKeys,
+                            ajv = _props2.ajv,
+                            _props3 = this.props,
+                            currentSchema = _props3.currentSchema,
+                            oneOfScehmaId = _props3.oneOfScehmaId,
+                            uiSchemaInOneof = _props3.uiSchemaInOneof,
+                            condition = _props3.condition;
+
+                        if (currentSchema) {
+                            return _react2.default.createElement(SchemaForm, { key: oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [].concat((0, _toConsumableArray3.default)(parentKeys)), globalOptions: globalOptions, ajv: ajv });
+                        }
+                        return null;
+                    }
+                }]);
+                return ComponentHoc;
+            }(_react2.default.PureComponent);
+            ComponentHoc = __decorate([innerHoc1], ComponentHoc);
             return ComponentHoc;
         };
         return hocFactory.get("wrapper")({
@@ -32407,7 +32455,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -32415,7 +32463,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _fxSchemaFormReact = __webpack_require__(10);
 
@@ -32533,7 +32581,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -32541,7 +32589,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _immutable = __webpack_require__(9);
 
@@ -32683,7 +32731,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -32795,7 +32843,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -32803,7 +32851,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _fxSchemaFormReact = __webpack_require__(10);
 
@@ -32859,13 +32907,14 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                         }
                     }
                 }, {
-                    key: "componentDidMount",
-                    value: function componentDidMount() {
+                    key: "componentWillMount",
+                    value: function componentWillMount() {
+                        console.log("this.props = ok; ");
                         this.dataToMeta(this.props);
                     }
                 }, {
-                    key: "componentDidUpdate",
-                    value: function componentDidUpdate(props) {
+                    key: "componentWillUpdate",
+                    value: function componentWillUpdate(props) {
                         this.dataToMeta(props);
                     }
                 }, {
@@ -33094,7 +33143,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -33241,7 +33290,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -35903,7 +35952,7 @@ var _extends2 = __webpack_require__(8);
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -36149,7 +36198,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -42526,7 +42575,7 @@ var _extends4 = __webpack_require__(8);
 
 var _extends5 = _interopRequireDefault(_extends4);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -42550,7 +42599,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -42790,7 +42839,7 @@ var _extends3 = __webpack_require__(8);
 
 var _extends4 = _interopRequireDefault(_extends3);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -42818,7 +42867,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -42973,7 +43022,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -42995,7 +43044,7 @@ var _button = __webpack_require__(312);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _recompose = __webpack_require__(12);
+var _recompose = __webpack_require__(13);
 
 var _reactDndHtml5Backend = __webpack_require__(565);
 
@@ -44484,7 +44533,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -44634,7 +44683,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -44880,7 +44929,7 @@ var _rcSelect = __webpack_require__(687);
 
 var _rcSelect2 = _interopRequireDefault(_rcSelect);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -56809,7 +56858,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -56952,7 +57001,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -58879,7 +58928,7 @@ var helpers_extends = __webpack_require__(8);
 var extends_default = /*#__PURE__*/__webpack_require__.n(helpers_extends);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/typeof.js
-var helpers_typeof = __webpack_require__(14);
+var helpers_typeof = __webpack_require__(12);
 var typeof_default = /*#__PURE__*/__webpack_require__.n(helpers_typeof);
 
 // CONCATENATED MODULE: ./node_modules/async-validator/es/util.js
@@ -61506,7 +61555,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -62284,7 +62333,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -62510,7 +62559,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -68630,7 +68679,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -68638,7 +68687,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -69285,7 +69334,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -69333,7 +69382,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -69410,7 +69459,7 @@ var _defineProperty2 = __webpack_require__(11);
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -69450,7 +69499,7 @@ var _TabContent = __webpack_require__(665);
 
 var _TabContent2 = _interopRequireDefault(_TabContent);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -69678,7 +69727,7 @@ var create_react_class = __webpack_require__(42);
 var create_react_class_default = /*#__PURE__*/__webpack_require__.n(create_react_class);
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(13);
+var classnames = __webpack_require__(14);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // CONCATENATED MODULE: ./node_modules/rc-tabs/es/utils.js
@@ -70194,7 +70243,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames2 = __webpack_require__(13);
+var _classnames2 = __webpack_require__(14);
 
 var _classnames3 = _interopRequireDefault(_classnames2);
 
@@ -70362,7 +70411,7 @@ var _defineProperty2 = __webpack_require__(11);
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _classnames5 = __webpack_require__(13);
+var _classnames5 = __webpack_require__(14);
 
 var _classnames6 = _interopRequireDefault(_classnames5);
 
@@ -71002,7 +71051,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames2 = __webpack_require__(13);
+var _classnames2 = __webpack_require__(14);
 
 var _classnames3 = _interopRequireDefault(_classnames2);
 
@@ -71161,7 +71210,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames2 = __webpack_require__(13);
+var _classnames2 = __webpack_require__(14);
 
 var _classnames3 = _interopRequireDefault(_classnames2);
 
@@ -71689,7 +71738,7 @@ var AntdCheckboxWidget = exports.AntdCheckboxWidget = function (_PureComponent) 
                 keys = _ref$keys === undefined ? [] : _ref$keys,
                 _ref$readonly = _ref.readonly,
                 readonly = _ref$readonly === undefined ? false : _ref$readonly,
-                metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) : (0, _immutable.fromJS)({}),
+                metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) || (0, _immutable.fromJS)({}) : (0, _immutable.fromJS)({}),
                 widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
 
             return _react2.default.createElement(_checkbox2.default, Object.assign({ onChange: function onChange(e) {
@@ -71791,7 +71840,7 @@ var PureRenderMixin = __webpack_require__(675);
 var PureRenderMixin_default = /*#__PURE__*/__webpack_require__.n(PureRenderMixin);
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(13);
+var classnames = __webpack_require__(14);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // CONCATENATED MODULE: ./node_modules/rc-checkbox/es/Checkbox.js
@@ -72069,7 +72118,7 @@ var _propTypes = __webpack_require__(5);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -72354,7 +72403,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -72419,7 +72468,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -72559,7 +72608,7 @@ var _omit = __webpack_require__(92);
 
 var _omit2 = _interopRequireDefault(_omit);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -72874,6 +72923,7 @@ var AntdInputNumberWidget = exports.AntdInputNumberWidget = function (_PureCompo
             } else {
                 props.value = 0;
             }
+            console.log(props.value);
             return props;
         }
     }, {
@@ -72950,7 +73000,7 @@ var _react = __webpack_require__(0);
 
 var React = _interopRequireWildcard(_react);
 
-var _classnames = __webpack_require__(13);
+var _classnames = __webpack_require__(14);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -73048,7 +73098,7 @@ var prop_types = __webpack_require__(5);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(13);
+var classnames = __webpack_require__(14);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // EXTERNAL MODULE: ./node_modules/babel-runtime/helpers/objectWithoutProperties.js
@@ -74573,7 +74623,7 @@ function toArray(children) {
   return ret;
 }
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(13);
+var classnames = __webpack_require__(14);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // EXTERNAL MODULE: ./node_modules/rc-animate/es/Animate.js + 5 modules
@@ -82014,7 +82064,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -82143,7 +82193,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -82284,7 +82334,7 @@ var _inherits2 = __webpack_require__(3);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _typeof2 = __webpack_require__(14);
+var _typeof2 = __webpack_require__(12);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -82342,7 +82392,9 @@ var TreeForm = function (_React$PureComponent) {
             return _react2.default.createElement("div", null, _react2.default.createElement(SchemaForm, { key: "designForm" + "design", RootComponent: _form2.default, schemaId: "dnd-tree", uiSchemas: [{
                     key: "root",
                     field: "tree"
-                }], arrayLevel: [0], parentKeys: this.props.parentKeys, globalOptions: _init.treeGlobalOptions, ajv: _init.curAjv }), _react2.default.createElement("div", { className: "tc" }, _react2.default.createElement("textarea", { cols: 30, rows: 10, value: JSON.stringify(data.toJS(), null, 4) }), _react2.default.createElement("button", { key: "submit" + isValidating + isValid, type: "primary", className: "pa3 mt5 ba b--dashed w-90", onClick: this.props.validateAll }, "validate is ", isValid ? "true" : "false")));
+                }], arrayLevel: [0], parentKeys: this.props.parentKeys, globalOptions: _init.treeGlobalOptions, ajv: _init.curAjv }), _react2.default.createElement("div", { className: "tc" }, _react2.default.createElement("textarea", { cols: 30, rows: 10, onChange: function onChange() {
+                    return console.log;
+                }, value: JSON.stringify(data.toJS(), null, 4) }), _react2.default.createElement("button", { key: "submit" + isValidating + isValid, type: "primary", className: "pa3 mt5 ba b--dashed w-90", onClick: this.props.validateAll }, "validate is ", isValid ? "true" : "false")));
         }
     }]);
     return TreeForm;

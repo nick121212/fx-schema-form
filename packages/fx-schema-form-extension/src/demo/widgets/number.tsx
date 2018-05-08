@@ -25,6 +25,8 @@ export class AntdInputNumberWidget extends PureComponent<AntdInputWidgetProps, a
             props.value = 0;
         }
 
+        console.log( props.value);
+
         return props;
     }
 
