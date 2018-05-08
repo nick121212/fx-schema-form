@@ -25,7 +25,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentKeys: string[]): 
         let keysStr = keys.join("/").replace(/\/$/, "");
 
         if (!schemaKeysFactory.has(keysStr)) {
-            if (!__PROD__) {
+            if (__DEV__) {
                 warn(`${keys.join("/")} did not found.`);
             }
 
@@ -85,7 +85,7 @@ const getCurrentSchemaKey = (parent: UiSchema, schemaPath: string, uiSchema: UiS
  */
 const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
-        if (!__PROD__) {
+        if (__DEV__) {
             warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
 
@@ -156,7 +156,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 如果存在多个*，则报错
     if (uiSchemas.lastIndexOf("*") !== idx) {
-        if (!__PROD__) {
+        if (__DEV__) {
             // throw new Error("uiSchema can only has one *.");
             warn("uiSchema can only has one *.");
         }
@@ -250,7 +250,7 @@ export default class MergeLib {
         let keyPath: string = getDataKeys(schemaPath, true).join("/");
 
         if (!schemaKeysFactory.has(keyPath)) {
-            if (!__PROD__) {
+            if (__DEV__) {
                 warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
 

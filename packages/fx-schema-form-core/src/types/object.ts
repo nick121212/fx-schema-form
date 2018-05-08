@@ -19,7 +19,7 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
         Object.keys(schema.properties).forEach((key: string) => {
 
             if ([pro, "items"].indexOf(key) >= 0) {
-                if (!__PROD__) {
+                if (__DEV__) {
                     warn(`${key}can not be key words.`);
                     // throw new Error(`${key}can not be key words.`);
                 }

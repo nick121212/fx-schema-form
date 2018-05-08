@@ -9,7 +9,8 @@
     "test"
   ],
   "scripts": {
-    "dist": "NODE_ENV=production1 webpack",
+    "dist": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=dev webpack",
     "build": "rm -rf libs;tsc --outDir libs -d",
     "test": "mocha ./tests/**/*.spec.js --require babel-register"
   },

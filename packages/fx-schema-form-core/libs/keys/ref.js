@@ -12,7 +12,7 @@ export default (schema, ajv) => {
             });
             return schemaAjv;
         }
-        if (!__PROD__) {
+        if (__DEV__) {
             warn(`${schema.$ref} not exist.`);
         }
     }

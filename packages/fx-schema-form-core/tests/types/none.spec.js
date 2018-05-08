@@ -9,7 +9,7 @@ import {
     schemaFieldFactory,
     schemaKeysFactory,
     ResolveLib
-} from "../../dist/index";
+} from "../../dist/index.dev";
 
 describe("普通类型的解析", () => {
     let ajv, schema;

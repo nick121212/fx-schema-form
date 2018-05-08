@@ -7,7 +7,7 @@ import Ajv from "ajv";
 import {
     schemaKeyWordFactory,
     ResolveLib
-} from "../../dist/index";
+} from "../../dist/index.dev";
 
 describe("key word of anyOf", () => {
     let ajv;

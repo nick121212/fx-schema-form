@@ -1,2 +1,2 @@
 
-declare var __PROD__: boolean;
+declare var __DEV__: boolean;

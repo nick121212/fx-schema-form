@@ -9,7 +9,7 @@ import {
     schemaFieldFactory,
     schemaKeysFactory,
     ResolveLib
-} from "../../dist/index";
+} from "../../dist/index.dev";
 
 describe("测试Factory类", () => {
     let ajv;
@@ -60,21 +60,23 @@ describe("测试Factory类", () => {
     it("Factory测试add,has,get功能", () => {
         expect(schemaFieldFactory.add("1", {})).to.equal(true);
         expect(schemaFieldFactory.add("1", {}, true)).to.equal(true);
-        expect(schemaFieldFactory.add("1", {})).to.equal(undefined);
+        expect(schemaFieldFactory.add("1", {})).to.equal(false);
 
         expect(schemaFieldFactory.has("1")).to.equal(true);
         expect(schemaFieldFactory.has("2")).to.equal(false);
         expect(schemaFieldFactory.get("1")).to.be.a("object");
-        assert.throw(() => {
-            schemaFieldFactory.get("2");
-        }, "name=[2]not exist");
+
+        expect(schemaFieldFactory.get("2")).to.eq(null);
+        // assert.throw(() => {
+        //     schemaFieldFactory.get("2");
+        // }, "name=[2]not exist");
     });
 
     it("Factory测试lock,unlock功能", () => {
         schemaFieldFactory.add("3");
         schemaFieldFactory.lock("3");
 
-        expect(schemaFieldFactory.add("3", true, true)).to.equal(undefined);
+        expect(schemaFieldFactory.add("3", true, true)).to.equal(false);
         schemaFieldFactory.unLock("3");
         expect(schemaFieldFactory.add("3", {}, true)).to.equal(true);
     });

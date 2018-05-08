@@ -8,7 +8,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys, parentKeys) => {
         let keys = key ? parentKeys.concat([key]) : parentKeys;
         let keysStr = keys.join("/").replace(/\/$/, "");
         if (!schemaKeysFactory.has(keysStr)) {
-            if (!__PROD__) {
+            if (__DEV__) {
                 warn(`${keys.join("/")} did not found.`);
             }
             return "";
@@ -39,7 +39,7 @@ const getCurrentSchemaKey = (parent, schemaPath, uiSchema) => {
 };
 const mergeUiSchemaToArray = (uiSchema) => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
-        if (!__PROD__) {
+        if (__DEV__) {
             warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
         return uiSchema;
@@ -67,7 +67,7 @@ const pushMergeResult = (uiSchemasFirst, uiSchemasLast, uiSchema) => {
 const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
     let idx = uiSchemas.indexOf("*"), uiSchemasFirst = [], uiSchemasLast = [], types = ["object", "array"];
     if (uiSchemas.lastIndexOf("*") !== idx) {
-        if (!__PROD__) {
+        if (__DEV__) {
             warn("uiSchema can only has one *.");
         }
         return [];
@@ -116,7 +116,7 @@ export default class MergeLib {
         }
         let keyPath = getDataKeys(schemaPath, true).join("/");
         if (!schemaKeysFactory.has(keyPath)) {
-            if (!__PROD__) {
+            if (__DEV__) {
                 warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
             return;

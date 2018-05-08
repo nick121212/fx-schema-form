@@ -5,7 +5,7 @@ export default (schema, schemaKey, ajv) => {
     if (schema.properties && !schema.$ref) {
         Object.keys(schema.properties).forEach((key) => {
             if ([pro, "items"].indexOf(key) >= 0) {
-                if (!__PROD__) {
+                if (__DEV__) {
                     warn(`${key}can not be key words.`);
                 }
                 return;

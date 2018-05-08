@@ -6,14 +6,14 @@ import Ajv from "ajv";
 
 import {
     schemaKeyWordFactory
-} from "../../dist/index";
+} from "../../dist/index.dev";
 
 describe("key word of ref", () => {
     let ajv;
 
     before(() => {
         ajv = new Ajv();
-
+        // schemaKeyWordFactory.clear();
         ajv.addSchema({
             $id: "test",
             type: "string",
@@ -21,10 +21,14 @@ describe("key word of ref", () => {
         });
     });
 
-    it("抛出一个找不到test1的异常。", () => {
+    it("抛出一个找不到test2的异常。", () => {
+        // console.log(schemaKeyWordFactory.get("ref")({
+        //     $ref: "test5#"
+        // }, ajv));
+
         assert.throw(() => {
             schemaKeyWordFactory.get("ref")({
-                $ref: "test1#"
+                $ref: "test5#"
             }, ajv);
         });
     });

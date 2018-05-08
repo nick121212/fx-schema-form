@@ -1,4 +1,5 @@
 import { schemaTypeFactory } from "../factory";
+import { warn } from "../utils";
 const regexp = /#$/g;
 export const getDataKeys = (schemaKey, keepFirst = false) => {
     let keys = schemaKey.split("/").map((key, index) => {
@@ -21,8 +22,8 @@ export const getDataKeys = (schemaKey, keepFirst = false) => {
 export const getSchemaId = (schemaKey) => {
     const keys = schemaKey.split("/");
     if (!keys.length) {
-        if (!__PROD__) {
-            throw new Error(`${schemaKey} not a valid schemaPath.`);
+        if (__DEV__) {
+            warn(`${schemaKey} not a valid schemaPath.`);
         }
         return "";
     }
@@ -41,8 +42,8 @@ export default class ResolveLib {
     initSchema(ajv, schema) {
         let $id = schema.$id;
         if (!$id && !schema.$ref) {
-            if (!__PROD__) {
-                throw new Error(`id is required.`);
+            if (__DEV__) {
+                warn("id is required");
             }
             return schema;
         }
@@ -61,8 +62,8 @@ export default class ResolveLib {
             return;
         }
         if (schema.type.constructor !== String) {
-            if (!__PROD__) {
-                throw new Error(`schema type[${schema.type}] can only be string.`);
+            if (__DEV__) {
+                warn(`schema type[${schema.type}] can only be string.`);
             }
             return;
         }

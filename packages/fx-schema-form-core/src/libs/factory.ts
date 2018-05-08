@@ -42,9 +42,9 @@ export class BaseFactory<T> {
         if (this.has(key)) {
             return this.i[key];
         }
-        if (!__PROD__) {
-            warn(`name=[${key}]not exist`);
-        }
+        // if (__DEV__) {
+        //     warn(`name=[${key}]not exist`);
+        // }
 
         return null as any;
     }

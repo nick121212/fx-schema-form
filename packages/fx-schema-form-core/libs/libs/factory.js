@@ -1,4 +1,3 @@
-import { warn } from "../utils";
 export class BaseFactory {
     constructor() {
         this.i = {};
@@ -17,9 +16,6 @@ export class BaseFactory {
     get(key) {
         if (this.has(key)) {
             return this.i[key];
-        }
-        if (!__PROD__) {
-            warn(`name=[${key}]not exist`);
         }
         return null;
     }

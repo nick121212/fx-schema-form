@@ -11,7 +11,7 @@ import {
     ResolveLib,
     getSchemaId,
     getDataKeys
-} from "../../dist/index";
+} from "../../dist/index.dev";
 
 describe("测试ResolveLib类", () => {
     let ajv;
@@ -49,7 +49,7 @@ describe("测试ResolveLib类", () => {
         expect(getDataKeys("test#/properties/names/items").join()).to.equal(["names", "-"].join());
     });
 
-    it("", () => {
+    it("nick", () => {
         let schema = {
             type: "object",
             $id: "dnd-oneof",
@@ -98,9 +98,6 @@ describe("测试ResolveLib类", () => {
         };
 
         new ResolveLib(ajv, schema);
-
-
-        console.log(schemaFieldFactory, schemaKeysFactory);
     });
 
 });

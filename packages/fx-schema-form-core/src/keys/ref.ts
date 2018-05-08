@@ -29,7 +29,7 @@ export default (schema: JSONSchema6, ajv: Ajv) => {
             return schemaAjv;
         }
 
-        if (!__PROD__) {
+        if (__DEV__) {
             warn(`${schema.$ref} not exist.`);
         }
     }
