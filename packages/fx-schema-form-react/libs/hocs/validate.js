@@ -1,8 +1,20 @@
-import * as tslib_1 from "tslib";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { schemaFieldFactory } from "fx-schema-form-core";
-import { reducerFactory } from "../factory";
 export const name = "validate";
 export const hoc = (hocFactory) => {
     return (settings = {}) => {
@@ -12,34 +24,42 @@ export const hoc = (hocFactory) => {
                     return React.createElement(Component, Object.assign({}, this.props));
                 }
             };
-            ArrayComponentHoc = tslib_1.__decorate([
-                compose(withHandlers({
+            ArrayComponentHoc = __decorate([
+                compose(hocFactory.get("data")({
+                    root: true
+                }), withHandlers({
                     validate: (propsCur) => {
-                        return (props, data) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                        return (props, data, meta = {}) => __awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
-                            const schema = Object.assign({}, props.uiSchema);
+                            const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
+                            const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
-                                reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                    parentKeys: props.parentKeys,
+                                propsCur.getActions(propsCur).updateItemMeta({
+                                    parentKeys: parentKeys,
                                     keys: schema.keys,
                                     meta: { isLoading: true, isValid: false, errorText: false }
                                 });
                             }, 200);
                             try {
                                 let validateFunc;
-                                if (schema.schemaPath && props.ajv.getSchema(schema.schemaPath)) {
-                                    validateFunc = props.ajv.getSchema(schema.schemaPath);
+                                if (schema.schemaPath && ajv.getSchema(schema.schemaPath)) {
+                                    validateFunc = ajv.getSchema(schema.schemaPath);
                                 }
                                 else if (schema.$id) {
-                                    validateFunc = props.ajv.getSchema(schema.$id);
+                                    validateFunc = ajv.getSchema(schema.$id);
                                 }
                                 else {
                                     let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
                                     delete schemaInCache.$id;
                                     delete schemaInCache.$ref;
-                                    validateFunc = props.ajv.compile(schemaInCache);
+                                    validateFunc = ajv.compile(schemaInCache);
                                 }
-                                result.isValid = yield validateFunc(data);
+                                if (propsCur.formItemData) {
+                                    result.isValid = yield validateFunc(data, undefined, undefined, undefined, propsCur.formItemData.toJS());
+                                }
+                                else {
+                                    result.isValid = yield validateFunc(data);
+                                }
                                 if (!result.isValid) {
                                     let error = new Error();
                                     error.errors = validateFunc.errors;
@@ -48,48 +68,72 @@ export const hoc = (hocFactory) => {
                             }
                             catch (err) {
                                 result.errorText = err.errors ?
-                                    props.ajv.errorsText(err.errors, {
-                                        dataVar: props.getTitle(props).toString()
+                                    ajv.errorsText(err.errors, {
+                                        dataVar: getTitle(props).toString()
                                     }) : err.message;
                             }
                             finally {
                                 clearTimeout(timeId);
                             }
-                            return result;
+                            return Object.assign({}, meta, result);
                         });
                     }
+                }), hocFactory.get("resetKey")({
+                    excludeKeys: ["formItemData"]
                 }), withHandlers({
                     updateItemData: (propsCur) => {
-                        return (props, data, meta) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemData({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                        return (raw, { parentKeys, uiSchema }, data, meta) => {
+                            return propsCur.getActions(propsCur, raw).updateItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 data: data,
                                 meta
                             });
-                            if (props.uiSchema.onValueChanged) {
-                                props.uiSchema.onValueChanged(props, data);
-                            }
                         };
                     },
                     updateItemMeta: (propsCur) => {
-                        return (props, data, meta = null, noChange = false) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.updateItemMeta({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                        return (raw, props, data, meta = null, noChange = false) => __awaiter(this, void 0, void 0, function* () {
+                            const { parentKeys, uiSchema } = props;
+                            return propsCur.getActions(propsCur, raw).updateItemMeta({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta || (yield propsCur.validate(props, data)),
                                 noChange: noChange
                             });
                         });
                     },
                     removeItemData: (propsCur) => {
-                        return (props, meta = true) => {
-                            reducerFactory.get(props.reducerKey || "schemaForm").actions.removeItemData({
-                                parentKeys: props.parentKeys,
-                                keys: props.uiSchema.keys,
+                        return (raw, { parentKeys, uiSchema }, meta = true) => {
+                            return propsCur.getActions(propsCur, raw).removeItemData({
+                                parentKeys: parentKeys,
+                                keys: uiSchema.keys,
                                 meta: meta
                             });
                         };
+                    },
+                    combineActions: (propsCur) => {
+                        return (...actions) => {
+                            return propsCur.getActions(propsCur).combineActions(actions);
+                        };
+                    },
+                }), withHandlers({
+                    updateItemData: (propsCur) => {
+                        return propsCur.updateItemData.bind(null, false);
+                    },
+                    updateItemMeta: (propsCur) => {
+                        return propsCur.updateItemMeta.bind(null, false);
+                    },
+                    removeItemData: (propsCur) => {
+                        return propsCur.removeItemData.bind(null, false);
+                    },
+                    updateItemDataRaw: (propsCur) => {
+                        return propsCur.updateItemData.bind(null, true);
+                    },
+                    updateItemMetaRaw: (propsCur) => {
+                        return propsCur.updateItemMeta.bind(null, true);
+                    },
+                    removeItemDataRaw: (propsCur) => {
+                        return propsCur.removeItemData.bind(null, true);
                     }
                 }))
             ], ArrayComponentHoc);

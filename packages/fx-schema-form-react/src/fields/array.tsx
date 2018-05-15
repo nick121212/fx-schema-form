@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { shouldUpdate, compose } from "recompose";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, schemaFormTypes } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models";
 
 import { SchemaForm } from "../components/form";
 import { hocFactory } from "../factory";
@@ -84,7 +84,6 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
         return (
             <SchemaFormWithHoc
                 key={idx}
-                index={idx}
                 arrayIndex={idx}
                 uiSchema={uiSchema}
                 RootComponent={options.Root}
@@ -103,9 +102,10 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      */
     public render(): JSX.Element | null {
         const { uiSchema, formItemData, getOptions, getRequiredKeys } = this.props, child = [],
-            options = getOptions(this.props, schemaFormTypes.field, name);
-        let SchemaFormWithHoc = this.SchemaFormWithHoc;
-        const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
+            options = getOptions(this.props, schemaFormTypes.field, name),
+            SchemaFormWithHoc = this.SchemaFormWithHoc,
+            { fieldIncludeKeys, fieldExcludeKeys } = options,
+            extraProps = getRequiredKeys(this.props, fieldIncludeKeys, fieldExcludeKeys);
 
         for (let i = 0; i < +formItemData; i++) {
             child.push(this.renderItem(i));

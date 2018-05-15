@@ -1,16 +1,62 @@
-import * as tslib_1 from "tslib";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React, { PureComponent } from "react";
-import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
-import Immutable from "immutable";
+import { schemaKeysFactory, schemaFieldFactory, getSchemaId } from "fx-schema-form-core";
+import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
+import merge from "../libs/merge";
+import { reducerFactory } from "../factory";
 export const name = "utils";
+const normalizeDataPath = (schemaId, dataPath) => {
+    let dataKeys = dataPath.replace(/^\//g, "").split("/");
+    dataKeys = dataKeys.map((key, index) => {
+        if (Number.isInteger(+key)) {
+            let keys = dataKeys.slice(0, index);
+            keys.unshift(schemaId);
+            if (schemaKeysFactory.has(keys.join("/"))) {
+                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
+                if (schema.type === "array") {
+                    return +key;
+                }
+            }
+        }
+        return key;
+    });
+    return dataKeys;
+};
 export const hoc = (hocFactory) => {
     return () => {
         return (Component) => {
             class ComponentHoc extends PureComponent {
                 render() {
-                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: this.normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData }, this.props));
+                    return React.createElement(Component, Object.assign({ getTitle: this.getTitle, getPathKeys: this.getPathKeys, getOptions: this.getOptions, normalizeDataPath: normalizeDataPath, getRequiredKeys: this.getRequiredKeys, getDefaultData: this.getDefaultData, getActions: this.getActions, getPathProps: this.getPathProps }, this.props));
+                }
+                getPathProps(props, path) {
+                    let newProps = Object.assign({}, props, {
+                        uiSchema: Object.assign({}, props.uiSchema, {
+                            keys: props.getPathKeys(props.uiSchema.keys, path)
+                        })
+                    });
+                    return newProps;
+                }
+                getActions(propsCur, raw = false) {
+                    let actions = reducerFactory.get(propsCur.reducerKey || "schemaForm").actions;
+                    if (raw) {
+                        for (const key in actions) {
+                            if (actions.hasOwnProperty(key)) {
+                                const element = actions[key];
+                                actions[key] = element.raw;
+                            }
+                        }
+                    }
+                    return actions;
                 }
                 getRequiredKeys(props, includeKeys = [], excludeKeys = []) {
                     let extraProps = {};
@@ -33,25 +79,7 @@ export const hoc = (hocFactory) => {
                     }
                     return extraProps;
                 }
-                normalizeDataPath(schemaId, dataPath) {
-                    let dataKeys = dataPath.replace(/^\//g, "").split("/");
-                    dataKeys = dataKeys.map((key, index) => {
-                        if (Number.isInteger(+key)) {
-                            let keys = dataKeys.slice(0, index);
-                            keys.unshift(schemaId);
-                            if (schemaKeysFactory.has(keys.join("/"))) {
-                                let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
-                                if (schema.type === "array") {
-                                    return +key;
-                                }
-                            }
-                        }
-                        return key;
-                    });
-                    return dataKeys;
-                }
-                getOptions(props, category, field, ...extraSettings) {
-                    const { uiSchema = {}, globalOptions } = props;
+                getOptions({ uiSchema = {}, globalOptions }, category, field, ...extraSettings) {
                     let { options, type = "" } = uiSchema, optionsArray = [], getOptions = (o, ks) => {
                         if (o) {
                             if (!Immutable.Map.isMap(o)) {
@@ -70,16 +98,15 @@ export const hoc = (hocFactory) => {
                     let opts = optionsArray.reverse().reduce((prev, next) => {
                         if (next) {
                             if (!Immutable.Map.isMap(next)) {
-                                next = Immutable.fromJS(next);
+                                next = fromJS(next);
                             }
-                            return next.merge(prev);
+                            return merge(next, prev, { "*": "replace" });
                         }
                         return prev;
-                    }, Immutable.fromJS({})).toJS();
-                    return opts;
+                    }, fromJS({}));
+                    return opts.toJS();
                 }
-                getTitle(props, ...extraSettings) {
-                    const { uiSchema } = props;
+                getTitle({ uiSchema, arrayIndex }, ...extraSettings) {
                     let { title, keys } = uiSchema;
                     if (!title && extraSettings && extraSettings.length) {
                         extraSettings.forEach((sets) => {
@@ -95,30 +122,34 @@ export const hoc = (hocFactory) => {
                         let keysCopy = [...keys], keyTitle = keysCopy.pop();
                         return keyTitle !== undefined ? keyTitle.toString() : "";
                     }
-                    if (props.arrayIndex) {
-                        return props.arrayIndex.toString();
+                    if (arrayIndex) {
+                        return arrayIndex.toString();
                     }
                     return "";
                 }
-                getPathKeys(keys, path) {
+                getPathKeys(keys, path, schemaId) {
                     let keysCopy = [""].concat(keys.concat([""]));
                     let keysResolve = resolvePathname(path, keysCopy.join("/")).split("/");
                     keysResolve.shift();
                     if (keysResolve.length && !keysResolve[keysResolve.length - 1]) {
                         keysResolve.pop();
                     }
+                    if (schemaId) {
+                        keysResolve = normalizeDataPath(getSchemaId(schemaId), keysResolve.join("/"));
+                    }
                     return keysResolve;
                 }
-                getDefaultData(ajv, schema, data, merge = false) {
-                    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+                getDefaultData(ajv, schema, data, defaultData, needMerge = false) {
+                    return __awaiter(this, void 0, void 0, function* () {
                         let itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
-                            if (!merge) {
+                            if (!needMerge) {
                                 return defaultValue.defaultData;
                             }
-                            if (type === "object") {
-                                return Immutable.fromJS({}).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                            let mData = merge(fromJS(defaultValue.defaultData), fromJS(dataOfType));
+                            if (defaultData) {
+                                return merge(mData, fromJS(defaultData));
                             }
-                            return Immutable.fromJS([]).merge(defaultValue.defaultData).merge(dataOfType).toJS();
+                            return mData.toJS();
                         };
                         try {
                             yield ajv.validate({
@@ -129,7 +160,6 @@ export const hoc = (hocFactory) => {
                             }, defaultValue);
                         }
                         catch (e) {
-                            console.log(e);
                             return data;
                         }
                         finally {

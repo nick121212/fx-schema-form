@@ -13,7 +13,7 @@ describe("key word of ref", () => {
 
     before(() => {
         ajv = new Ajv();
-
+        // schemaKeyWordFactory.clear();
         ajv.addSchema({
             $id: "test",
             type: "string",
@@ -21,10 +21,10 @@ describe("key word of ref", () => {
         });
     });
 
-    it("抛出一个找不到test1的异常。", () => {
+    it("抛出一个找不到test2的异常。", () => {
         assert.throw(() => {
             schemaKeyWordFactory.get("ref")({
-                $ref: "test1#"
+                $ref: "test5#"
             }, ajv);
         });
     });

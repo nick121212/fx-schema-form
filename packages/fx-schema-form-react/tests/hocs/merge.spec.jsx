@@ -24,9 +24,9 @@ describe("merge的hoc", () => {
         expect(root.find(AppCom).props().mergeSchemaList.length).to.eq(6);
     });
 
-    it("合并schema和uiSchema,输入错入的schemaId", () => {
-        assert.throw(() => {
-            let root = mount(<App schemaId={"design1"} uiSchemas={["*"]} ajv={curAjv} globalOptions={gloabelOptions}  />);
-        });
-    });
+    // it("合并schema和uiSchema,输入错入的schemaId", () => {
+    //     assert.throw(() => {
+    //         let root = mount(<App schemaId={"design1"} uiSchemas={["*"]} ajv={curAjv} globalOptions={gloabelOptions}  />);
+    //     });
+    // });
 });

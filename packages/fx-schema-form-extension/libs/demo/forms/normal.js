@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
+import Immutable from "immutable";
 import { globalOptions, curAjv } from "../init";
 const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
 let NormalForm = class NormalForm extends React.PureComponent {
@@ -16,7 +17,40 @@ let NormalForm = class NormalForm extends React.PureComponent {
             return null;
         }
         return React.createElement("div", null,
-            React.createElement(SchemaForm, { key: "designForm" + "design", RootComponent: Form, schemaId: "dnd-style", uiSchemas: ["*"], parentKeys: this.props.parentKeys, globalOptions: globalOptions, ajv: curAjv }),
+            React.createElement(SchemaForm, { key: "designForm" + "design", RootComponent: Form, schemaId: "dnd-style", uiSchemas: [{
+                        key: "width",
+                        hocs: ["utils", "theme", "field", "validate", "changed", "temp"],
+                        options: Immutable.fromJS({
+                            hoc: {
+                                changed: {
+                                    paths: ["../height"],
+                                    condition: {
+                                        paths: [{
+                                                path: "../height"
+                                            }]
+                                    },
+                                    onChanged: (props, data) => {
+                                        let height = props.getPathKeys(props.uiSchema.keys, "../height").join("/");
+                                        if (data[height] !== undefined) {
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }, {
+                        key: "height",
+                        hocs: ["utils", "theme", "field", "validate", "copyToMeta", "temp"],
+                        options: Immutable.fromJS({
+                            hoc: {
+                                copyToMeta: {
+                                    condition: {
+                                        paths: [{ path: "../width" }]
+                                    },
+                                    paths: [{ path: "../width", defaultValue: 0, to: ["options", "widget", "number", "options", "max"] }]
+                                }
+                            }
+                        })
+                    }, "*"], parentKeys: this.props.parentKeys, globalOptions: globalOptions, ajv: curAjv }),
             React.createElement("div", { className: "tc" },
                 React.createElement("button", { key: "submit" + isValidating + isValid, type: "primary", className: "pa3 mt5 ba b--dashed w-90", onClick: this.props.validateAll },
                     "validate is ",

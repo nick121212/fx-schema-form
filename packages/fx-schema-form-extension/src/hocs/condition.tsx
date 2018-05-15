@@ -1,15 +1,14 @@
-
 import React from "react";
 import { compose, shouldUpdate, ComponentEnhancer, onlyUpdateForKeys } from "recompose";
 import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
-
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelectorCreator, defaultMemoize, Selector, createSelector, OutputSelector } from "reselect";
+import { createSelectorCreator, defaultMemoize, Selector, createSelector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models/index";
 import schemaFormReact from "fx-schema-form-react";
+import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 
 const { schemaFormTypes } = schemaFormReact;
 
@@ -31,6 +30,15 @@ export interface ConditionPath {
      */
     path: string;
     /**
+     * 是否从meta中获取数据
+     */
+    meta: boolean;
+    /**
+     * 需要获取的meta的字段
+     * 例如 isLoading
+     */
+    metaKey: string;
+    /**
      * 数据的简单处理，（暂时没用到）
      */
     jsonata?: string;
@@ -48,9 +56,7 @@ export interface ConditionHocSettings {
     hoc?: ComponentEnhancer<any, any>;
 }
 
-export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps {
-
-}
+export interface ConditionHocProps extends DefaultProps, UtilsHocOutProps { }
 
 export const name = "condition";
 
@@ -58,12 +64,12 @@ export const name = "condition";
  * condition
  * 筛选出需要使用的字段，包装到condition这个prop中，传递到下层组件
  * 配置：
- *  paths：字段的路径以及数据处理规则，路径使用相对或者决定路径
+ *  paths： 字段的路径以及数据处理规则，路径使用相对或者决定路径
  *  hoc：   下层的包装组件
  * @param hocFactory  hoc的工厂方法
- * @param Component 需要包装的组件
+ * @param Component   需要包装的组件
  */
-export const hoc1 = (hocFactory: BaseFactory<any>) => {
+export const innerHoc = (hocFactory: BaseFactory<any>) => {
     /**
     * 获取FormItemData的数据
     * @param state 当前的state树
@@ -84,14 +90,36 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
         };
     };
 
+    /**
+    * 获取FormItemData的数据
+    * @param state 当前的state树
+    */
+    const getFormItemMeta = (rootReducerKey: string[], parentKeys: string[], keys: string[], metaKey: string):
+        (state: Immutable.Map<string, any>) => Selector<any, any> => {
+        return (state: Immutable.Map<string, any>): any => {
+            let dataKeys = [...rootReducerKey, ...parentKeys, "meta"],
+                rootNode: TreeMap = state.getIn(dataKeys),
+                childNode = rootNode.containPath(keys);
+
+            if (childNode && childNode.value && childNode.value.has(metaKey)) {
+                return Immutable.fromJS({
+                    [[...keys].join("/")]: childNode.value.get(metaKey)
+                });
+            }
+
+            return "";
+        };
+    };
+
     return (settings: ConditionHocSettings = { paths: [] }) => {
         return (Component: any): RC<ConditionHocOutProps, any> => {
             class ComponentHoc extends React.PureComponent<ConditionHocProps, any> {
-                private ComponentWithHoc: new () => React.PureComponent = Component;
+                private ComponentWithHoc: any = Component;
                 private $condition: Immutable.Map<string, any> = Immutable.fromJS({});
 
                 constructor(props: ConditionHocProps) {
                     super(props);
+
                     this.getConditionHocs();
                 }
 
@@ -103,7 +131,7 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                  * 4. 返回
                  */
                 private getConditionHocs() {
-                    const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props,
+                    const { getPathKeys, uiSchema, getOptions, parentKeys, schemaId } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
                         dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"),
                         { keys = [] } = uiSchema || {},
@@ -114,12 +142,17 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                     // 获取所有需要监听的数据的值
                     if (paths && paths.length && hoc) {
                         paths.forEach((path: ConditionPath) => {
-                            let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path);
+                            let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path, schemaId);
 
-                            funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
+                            if (path.meta) {
+                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[], path.metaKey));
+                            } else {
+                                funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
+                            }
                         });
                     }
 
+                    // 这里选取所有的func来设置数据
                     if (funcs.length) {
                         this.ComponentWithHoc = compose(connect(
                             // connect 数据
@@ -154,7 +187,7 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
                  * 渲染页面
                  */
                 public render(): JSX.Element {
-                    const { getPathKeys, uiSchema } = this.props,
+                    const { uiSchema } = this.props,
                         { keys = [] } = uiSchema || {},
                         ComponentWithHoc = this.ComponentWithHoc || Component;
 
@@ -169,5 +202,5 @@ export const hoc1 = (hocFactory: BaseFactory<any>) => {
 
 export default {
     name,
-    hoc: hoc1
+    hoc: innerHoc
 };

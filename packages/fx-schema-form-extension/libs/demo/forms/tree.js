@@ -21,7 +21,7 @@ let TreeForm = class TreeForm extends React.PureComponent {
                         field: "tree"
                     }], arrayLevel: [0], parentKeys: this.props.parentKeys, globalOptions: treeGlobalOptions, ajv: curAjv }),
             React.createElement("div", { className: "tc" },
-                React.createElement("textarea", { cols: 30, rows: 10, value: JSON.stringify(data.toJS(), null, 4) }),
+                React.createElement("textarea", { cols: 30, rows: 10, onChange: () => console.log, value: JSON.stringify(data.toJS(), null, 4) }),
                 React.createElement("button", { key: "submit" + isValidating + isValid, type: "primary", className: "pa3 mt5 ba b--dashed w-90", onClick: this.props.validateAll },
                     "validate is ",
                     isValid ? "true" : "false")));

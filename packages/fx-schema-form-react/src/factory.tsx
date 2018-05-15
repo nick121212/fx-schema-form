@@ -2,7 +2,6 @@ import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { FxReducer } from "./reducers/reducer";
-import { SchemaFormReducer } from "./reducers/schema.form";
 import { DefaultProps } from "./components";
 import { FxUiSchema, RC, NsFactory, SchemaFormNs } from "./models";
 import { hocs } from "./hocs";

@@ -1,7 +1,7 @@
 import { BaseFactory } from "fx-schema-form-core";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { RC } from "../models/index";
+import { RC } from "../models";
 export interface MakeHocOutProps extends UtilsHocOutProps {
 }
 export declare const name = "make";

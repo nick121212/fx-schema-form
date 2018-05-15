@@ -31,6 +31,7 @@ export const hoc = (hocFactory) => {
                     }
                 }
                 componentWillMount() {
+                    console.log("this.props = ok; ");
                     this.dataToMeta(this.props);
                 }
                 componentWillUpdate(props) {

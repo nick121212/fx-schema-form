@@ -35,6 +35,8 @@ export interface FxUiSchema extends UiSchema {
     hocs?: any[];
     // 数据更改的时候触发的方法
     onValueChanged?: <T>(props: DefaultProps, data: T) => void;
+    // 数组的默认添加数据
+    defaultData?: any;
 }
 export type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 

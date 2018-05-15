@@ -1,47 +1,50 @@
-import { SimpleActionCreator } from "redux-act";
+import { SimpleActionCreator, Action } from "redux-act";
 import { Reducer } from "redux-act";
 import { Map } from "immutable";
-import { FxReducer } from "./reducer";
 import { Store } from "react-redux";
+import { FxReducer } from "./reducer";
+export declare type ASN = Array<string | number> | string[];
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
+    removeForm: SimpleActionCreator<ASN>;
     createForm: SimpleActionCreator<{
         key: string;
         data: any;
     }>;
     updateItemData: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         data: any;
         meta?: any;
     }>;
     updateItemMeta: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         meta: any;
         noChange?: boolean;
     }>;
     addItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         data: any;
     }>;
     removeItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         index: number;
     }>;
     moveToItem: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         curIndex: number;
         toIndex: number;
     }>;
     removeItemData: SimpleActionCreator<{
-        parentKeys: string[];
-        keys: string[];
+        parentKeys: ASN;
+        keys: ASN;
         meta?: boolean;
     }>;
+    combineActions: SimpleActionCreator<Action<any, any>[]>;
 }
 export declare class SchemaFormReducer<T> implements FxReducer {
     private initialState;
@@ -52,12 +55,15 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private removeItem;
     private moveToItem;
     private removeItemData;
+    private combineActions;
+    private removeForm;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     init(store: Store<Map<string, any>>): void;
     readonly reducer: Reducer<any>;
+    private removeFormHandle(state, parentKeys);
+    private combineActionsHandle(state, actions);
     private removeItemDataMetaHandle(state, {parentKeys, keys, meta});
-    private resolveKeys(state, keys);
     private createFormHandle(state, {key, data});
     private updateItemDataHandle(state, {parentKeys, keys, data, meta});
     private addItemDataHandle(state, {parentKeys, keys, data});

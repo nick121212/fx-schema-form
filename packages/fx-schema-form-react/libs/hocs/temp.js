@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import { compose } from "recompose";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 export const name = "temp";
 export const hoc = (hocFactory) => {
     return (settings = {
-            tempField: "temps",
-            templates: []
-        }) => {
+        tempField: "temps",
+        templates: []
+    }) => {
         return (Component) => {
             class TempComponentHoc extends PureComponent {
                 render() {

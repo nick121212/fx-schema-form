@@ -21,7 +21,7 @@ export class SchemaFormItem extends PureComponent<Props, any> {
         let FieldComponentWithHoc: any = FieldComponent;
 
         if (!FieldComponent) {
-            console.log(uiSchema, "没有找到匹配的field");
+            if (!__PROD__) { console.warn(uiSchema, "没有找到匹配的field"); }
             return null;
         }
 

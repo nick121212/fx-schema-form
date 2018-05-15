@@ -1,26 +1,24 @@
 
 import React from "react";
-import { compose, shouldUpdate, ComponentEnhancer, renderNothing } from "recompose";
-import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
 
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelector, createSelectorCreator, defaultMemoize, Selector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";
 import schemaFormReact from "fx-schema-form-react";
 
-import { ConditionHocOutProps } from "./condition";
+import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, ConditionHocOutProps, UtilsHocOutProps {
-
 }
 
-export interface ResetKeysHocOutSettings {
+export interface ShowHideHocOutSettings {
     paths?: string[];
     renderNothing?: boolean;
+    // condition的配置
+    condition?: ConditionHocSettings;
 }
 
 export const name = "show";
@@ -35,12 +33,8 @@ export const name = "show";
  * @param Component 需要包装的组件
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
-    const style = {
-        display: "none"
-    };
-
-    return (settings: ResetKeysHocOutSettings = {}) => {
-        return (Component: any): RC<Props, any> => {
+    return (settings: ShowHideHocOutSettings = {}) => {
+        const innerHoc = (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {
                 /**
                  * 渲染组件
@@ -61,13 +55,25 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             // 从condition中获取数据，判断是否为空
                             let pathKeys = getPathKeys(uiSchema.keys as string[], path);
 
-                            if (condition.has(pathKeys.join("/"))) {
-                                return !!condition.get(pathKeys.join("/")) && prev;
+                            if (!condition.has(pathKeys.join("/"))) {
+                                return false;
                             }
 
-                            return false;
+                            let data = condition.get(pathKeys.join("/"));
+
+                            if (!data) {
+                                return false;
+                            }
+
+                            // 如果是列表，判断名下size
+                            if (Immutable.List.isList(data) && !data.size) {
+                                return false;
+                            }
+
+                            return true;
                         }, show);
                     }
+
 
                     if (show) {
                         return <Component {...this.props} />;
@@ -79,6 +85,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
             return ComponentHoc as any;
         };
+
+        return hocFactory.get("wrapper")({
+            hoc: innerHoc,
+            hocName: name
+        });
     };
 };
 

@@ -45,7 +45,7 @@
 
 ![架构图](./images/constructor.png)
 
-SchemaForm的难点在于
+## SchemaForm的难点
 
 - 数据结构的复杂程度。
 - 解决JsonSchema和UiSchema之间的关联。因为JsonSchema是可以互相嵌套的。以及各种关键字。比如anyOf,oneOf,allOf等。
@@ -190,6 +190,10 @@ SchemaForm的难点在于
     }
 }
 ```
+
+## 核心思想
+
+同样的数据可以有不同的展现形式；一个number类型，可以使用input、select、radio等来渲染，如果是时间戳还可以使用日期选择器。
 
 ## [fx-schema-form-core](./packages/fx-schema-form-core/readme.md)
 

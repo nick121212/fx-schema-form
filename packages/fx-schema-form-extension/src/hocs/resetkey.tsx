@@ -1,20 +1,15 @@
 
 import React from "react";
-import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
-import { connect } from "react-redux";
 import Immutable, { is } from "immutable";
 
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelector, createSelectorCreator, defaultMemoize, Selector } from "reselect";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";
 import schemaFormReact from "fx-schema-form-react";
 
 const { SchemaForm, schemaFormTypes } = schemaFormReact;
-export interface Props extends DefaultProps, UtilsHocOutProps {
-
-}
+export interface Props extends DefaultProps, UtilsHocOutProps { }
 
 export interface ResetKeysHocOutSettings {
     excludeKeys: string[];

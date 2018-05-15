@@ -22,7 +22,7 @@ export class AntdCheckboxWidget extends PureComponent {
         return { options: props };
     }
     render() {
-        const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props, { keys = [], readonly = false } = uiSchema || {}, metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) : fromJS({}), widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
+        const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props, { keys = [], readonly = false } = uiSchema || {}, metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) || fromJS({}) : fromJS({}), widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
         return (React.createElement(Checkbox, Object.assign({ onChange: (e) => __awaiter(this, void 0, void 0, function* () {
                 if (updateItemData) {
                     updateItemData(this.props, e.target.checked, yield validate(this.props, e.target.checked));

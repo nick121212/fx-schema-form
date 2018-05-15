@@ -27,7 +27,7 @@ export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
     public render(): JSX.Element {
         const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props,
             { keys = [], readonly = false } = uiSchema || {},
-            metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) : fromJS({}),
+            metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) || fromJS({}) : fromJS({}),
             widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
 
         return (

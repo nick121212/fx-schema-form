@@ -10,7 +10,7 @@ import {
 import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
 import { shallow, render, mount } from 'enzyme';
 
-describe("theme的hoc", () => {
+describe("temp的hoc", () => {
     let App, merge, roots;
 
     before(() => {
@@ -18,18 +18,18 @@ describe("theme的hoc", () => {
         App = hocFactory.get("theme")()(AppCom);
     });
 
-    it("获取正确的theme", () => {
-        let root = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={merge.mergeUiSchemaList[0]} />);
+    // it("获取正确的theme", () => {
+    //     let root = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={merge.mergeUiSchemaList[0]} />);
 
-        expect(root.find(AppCom).props().currentTheme).to.be.a("object");
-    });
+    //     expect(root.find(AppCom).props().currentTheme).to.be.a("object");
+    // });
 
-    it("获取错误的theme", () => {
-        assert.throw(() => {
-            let root = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={Object.assign({}, merge.mergeUiSchemaList[0], {
-                theme: "antd"
-            })} />);
-        }, "没有找到antd的样式！");
-    });
+    // it("获取错误的theme", () => {
+    //     assert.throw(() => {
+    //         let root = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={Object.assign({}, merge.mergeUiSchemaList[0], {
+    //             theme: "antd"
+    //         })} />);
+    //     }, "没有找到antd的样式！");
+    // });
 
 });

@@ -4,6 +4,7 @@ import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 import { FxUiSchema } from "fx-schema-form-react/libs/models";
+import { fromJS } from "immutable";
 
 
 export interface AntdInputWidgetProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
@@ -24,12 +25,18 @@ export class AntdInputNumberWidget extends PureComponent<AntdInputWidgetProps, a
             props.value = 0;
         }
 
+        console.log( props.value);
+
         return props;
     }
 
     public render(): JSX.Element {
-        const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "number"]) : fromJS({});
+
         const { keys, readonly = false } = uiSchema as FxUiSchema;
+
+        console.log(getOptions(this.props, "widget", "number", metaOptions).options);
 
         return (
             <InputNumber
@@ -45,8 +52,8 @@ export class AntdInputNumberWidget extends PureComponent<AntdInputWidgetProps, a
                 }}
                 disabled={readonly}
                 placeholder={getTitle(this.props)}
-                {...getOptions(this.props, "widget", "number").options }
-                {...this.setDefaultProps() }>
+                {...getOptions(this.props, "widget", "number", metaOptions).options}
+                {...this.setDefaultProps()}>
             </InputNumber>
         );
     }

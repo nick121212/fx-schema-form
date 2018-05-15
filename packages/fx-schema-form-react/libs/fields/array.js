@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { compose } from "recompose";
-import { schemaFormTypes } from "../models/index";
+import { schemaFormTypes } from "../models";
 import { SchemaForm } from "../components/form";
 let arrayFieldStyle = {
     width: "100%",
@@ -36,12 +36,10 @@ export class ArrayField extends PureComponent {
         if (uiSchema.children === null || !uiSchema.schemaPath) {
             return null;
         }
-        return (React.createElement(SchemaFormWithHoc, { key: idx, index: idx, arrayIndex: idx, uiSchema: uiSchema, RootComponent: options.Root, ArrayItemComponent: ArrayItemComponent, arrayLevel: arrayLevel.concat([idx]), reducerKey: reducerKey, schemaId: uiSchema.schemaPath, uiSchemas: uiSchema.children || ["-"], parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv }));
+        return (React.createElement(SchemaFormWithHoc, { key: idx, arrayIndex: idx, uiSchema: uiSchema, RootComponent: options.Root, ArrayItemComponent: ArrayItemComponent, arrayLevel: arrayLevel.concat([idx]), reducerKey: reducerKey, schemaId: uiSchema.schemaPath, uiSchemas: uiSchema.children || ["-"], parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv }));
     }
     render() {
-        const { uiSchema, formItemData, getOptions, getRequiredKeys } = this.props, child = [], options = getOptions(this.props, schemaFormTypes.field, name);
-        let SchemaFormWithHoc = this.SchemaFormWithHoc;
-        const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
+        const { uiSchema, formItemData, getOptions, getRequiredKeys } = this.props, child = [], options = getOptions(this.props, schemaFormTypes.field, name), SchemaFormWithHoc = this.SchemaFormWithHoc, { fieldIncludeKeys, fieldExcludeKeys } = options, extraProps = getRequiredKeys(this.props, fieldIncludeKeys, fieldExcludeKeys);
         for (let i = 0; i < +formItemData; i++) {
             child.push(this.renderItem(i));
         }

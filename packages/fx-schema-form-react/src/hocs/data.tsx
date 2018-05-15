@@ -7,19 +7,39 @@ import { createSelector, createSelectorCreator, defaultMemoize } from "reselect"
 import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models";
 import { UtilsHocOutProps } from "./utils";
 import { TreeMap } from "../libs/tree";
 
-export interface DataHocOutProps extends DefaultProps {
+export interface DataHocOutProps extends DefaultProps { }
 
-}
-
+/**
+ * HOC的设定参数
+ */
 export interface DataHocSettings {
+    /**
+     * 是否需要root的数据
+     */
+    root?: boolean;
+    /**
+     * 是否需要当前的key的数据
+     */
     data?: boolean;
+    /**
+     * 是否需要当前key的长度，只能是array格式
+     */
     dataLength?: boolean;
+    /**
+     * 是否需要当前key对应的meta数据
+     */
     meta?: boolean;
+    /**
+     * 设置当前key下所需要的meta的key值
+     */
     metaKeys?: string[];
+    /**
+     * 是否获取meta的根节点
+     */
     treeNode?: boolean;
 }
 
@@ -42,8 +62,15 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
              * @param state 当前的state树
              */
             let getFormItemData = (state: Immutable.Map<string, any>) => {
-                let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
+                let dataKeys: Array<string | number> = [...rootReducerKey, ...parentKeys, "data"];
 
+                // 如果配置中root为ture，则取得所有的数据
+                if (settings.root) {
+                    return state.getIn(dataKeys);
+                }
+
+                // 否则根据单个的keys获取
+                dataKeys = [...dataKeys, ...keys];
                 if (settings.data && state.hasIn(dataKeys)) {
                     let formItemData = state.getIn(dataKeys);
 
@@ -51,7 +78,12 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                         if (!settings.dataLength) {
                             return formItemData;
                         } else {
-                            return formItemData.size;
+                            // 如果是列表，则返回size
+                            if (Immutable.List.isList(formItemData)) {
+                                return formItemData.size;
+                            }
+
+                            return 0;
                         }
                     }
                 }
@@ -99,6 +131,9 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                 return rootNode.addChild([...keys]);
             };
 
+            /**
+             * re-select来缓存数据
+             */
             return fxSelectorCreator(
                 [getFormItemData, getFormItemMeta, getRoot],
                 (formItemData: any, formItemMeta: any, formItemNode: TreeMap) => {
@@ -107,10 +142,10 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                     if (formItemData !== undefined && formItemData !== null) {
                         rtn.formItemData = formItemData;
                     }
-                    if (formItemMeta !== undefined && formItemData !== null) {
+                    if (formItemMeta !== undefined && formItemMeta !== null) {
                         rtn.formItemMeta = formItemMeta;
                     }
-                    if (formItemNode !== undefined && formItemData !== null) {
+                    if (formItemNode !== undefined && formItemNode !== null) {
                         rtn.formItemNode = formItemNode;
                     }
 
@@ -127,11 +162,13 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
          * arrayItems
          */
         return (Component: any): RC<DefaultProps, any> => {
-            @(shouldUpdate(() => false) as any)
+            // @(shouldUpdate(() => false) as any)
             class DataComponentHoc extends PureComponent<DefaultProps & UtilsHocOutProps, any> {
-                // private ComponentWithHoc;
+                private ComponentWithHoc: any = Component;
 
-                public render(): JSX.Element {
+                constructor(props: DefaultProps & UtilsHocOutProps) {
+                    super(props);
+
                     const { uiSchema, getOptions } = this.props,
                         { keys = [] } = this.props.uiSchema || {},
                         options = getOptions(this.props, schemaFormTypes.hoc, name);
@@ -139,10 +176,14 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
 
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
+                    } else {
+                        // 获取当前的数据hoc
+                        this.ComponentWithHoc = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys))(Component);
                     }
+                }
 
-                    const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)),
-                        ComponentWithHoc: any = hocWithData(Component);
+                public render(): JSX.Element {
+                    const ComponentWithHoc = this.ComponentWithHoc;
 
                     return <ComponentWithHoc {...this.props} />;
                 }

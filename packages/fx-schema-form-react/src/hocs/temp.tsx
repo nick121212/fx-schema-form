@@ -4,7 +4,7 @@ import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure
 import { connect } from "react-redux";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models/index";
+import { FxUiSchema, RC, schemaFormTypes } from "../models";
 import { ThemeHocOutProps } from "./theme";
 import { MakeHocOutProps } from "./make";
 import { UtilsHocOutProps } from "./utils";

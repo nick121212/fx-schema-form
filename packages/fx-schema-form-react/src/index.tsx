@@ -10,8 +10,9 @@ import { RC, SchemaFormNs, schemaFormTypes } from "./models";
 
 import fields from "./fields";
 import { TreeMap } from "./libs/tree";
-import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec } from "./libs/dec";
+import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec, name as schemaFormDecName } from "./libs/dec";
 import { SchemaFormProps } from "./libs/dec";
+import merge from "./libs/merge";
 
 /**
  * 默认样式配置
@@ -36,7 +37,7 @@ fields.forEach((field: any) => {
 
 themeFactory.add("default", defaultTheme as any);
 
-hocFactory.add("schemaFormDec", schemaFormDec.bind(schemaFormDec, hocFactory));
+hocFactory.add(schemaFormDecName, schemaFormDec.bind(schemaFormDec, hocFactory));
 
 export default {
     themeFactory,
@@ -46,6 +47,7 @@ export default {
     reducerFactory,
     SchemaForm,
     hocFactory,
-    schemaFormTypes
+    schemaFormTypes,
+    merge
 };
 

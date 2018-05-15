@@ -1,19 +1,21 @@
-import * as tslib_1 from "tslib";
 import React, { PureComponent } from "react";
-import { shouldUpdate } from "recompose";
 import { connect } from "react-redux";
 import { createSelectorCreator, defaultMemoize } from "reselect";
-import { is } from "immutable";
-import { schemaFormTypes } from "../models/index";
+import Immutable, { is } from "immutable";
+import { schemaFormTypes } from "../models";
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "data";
 export const hoc = (hocFactory) => {
     return (settings = {
-            data: true
-        }) => {
+        data: true
+    }) => {
         const getItemDataHoc = (parentKeys, rootReducerKey, keys) => {
             let getFormItemData = (state) => {
-                let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys];
+                let dataKeys = [...rootReducerKey, ...parentKeys, "data"];
+                if (settings.root) {
+                    return state.getIn(dataKeys);
+                }
+                dataKeys = [...dataKeys, ...keys];
                 if (settings.data && state.hasIn(dataKeys)) {
                     let formItemData = state.getIn(dataKeys);
                     if (formItemData !== undefined) {
@@ -21,7 +23,10 @@ export const hoc = (hocFactory) => {
                             return formItemData;
                         }
                         else {
-                            return formItemData.size;
+                            if (Immutable.List.isList(formItemData)) {
+                                return formItemData.size;
+                            }
+                            return 0;
                         }
                     }
                 }
@@ -57,29 +62,33 @@ export const hoc = (hocFactory) => {
                 if (formItemData !== undefined && formItemData !== null) {
                     rtn.formItemData = formItemData;
                 }
-                if (formItemMeta !== undefined && formItemData !== null) {
+                if (formItemMeta !== undefined && formItemMeta !== null) {
                     rtn.formItemMeta = formItemMeta;
                 }
-                if (formItemNode !== undefined && formItemData !== null) {
+                if (formItemNode !== undefined && formItemNode !== null) {
                     rtn.formItemNode = formItemNode;
                 }
                 return rtn;
             });
         };
         return (Component) => {
-            let DataComponentHoc = class DataComponentHoc extends PureComponent {
-                render() {
+            class DataComponentHoc extends PureComponent {
+                constructor(props) {
+                    super(props);
+                    this.ComponentWithHoc = Component;
                     const { uiSchema, getOptions } = this.props, { keys = [] } = this.props.uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name);
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
                     }
-                    const hocWithData = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys)), ComponentWithHoc = hocWithData(Component);
+                    else {
+                        this.ComponentWithHoc = connect(getItemDataHoc(this.props.parentKeys, options.rootReducerKey, keys))(Component);
+                    }
+                }
+                render() {
+                    const ComponentWithHoc = this.ComponentWithHoc;
                     return React.createElement(ComponentWithHoc, Object.assign({}, this.props));
                 }
-            };
-            DataComponentHoc = tslib_1.__decorate([
-                shouldUpdate(() => false)
-            ], DataComponentHoc);
+            }
             return DataComponentHoc;
         };
     };

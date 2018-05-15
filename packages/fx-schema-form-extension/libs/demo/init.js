@@ -34,4 +34,12 @@ let designResolve = [
     new ResolveLib(curAjv, oneof),
     new ResolveLib(curAjv, tree),
 ];
+curAjv.addKeyword("equal", {
+    async: false,
+    inline: (it, keyword, schema) => {
+        let expr = "";
+        expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + "data" + (it.dataLevel || "") + "));";
+        return expr;
+    }
+});
 //# sourceMappingURL=init.js.map

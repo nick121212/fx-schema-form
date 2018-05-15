@@ -41,7 +41,8 @@ export class TreeForm extends React.PureComponent<any> {
             </SchemaForm>
             <div className="tc">
 
-                <textarea cols={30} rows={10} value={JSON.stringify(data.toJS(), null, 4)}>
+                <textarea cols={30} rows={10} onChange={() => console.log}
+                    value={JSON.stringify(data.toJS(), null, 4)}>
                 </textarea>
 
                 <button key={"submit" + isValidating + isValid}

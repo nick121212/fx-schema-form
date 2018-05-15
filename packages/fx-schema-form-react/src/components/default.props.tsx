@@ -3,7 +3,7 @@ import { Ajv } from "ajv";
 import Immutable from "immutable";
 import propTypes, { ValidationMap } from "prop-types";
 
-import { FxUiSchema } from "../models/index";
+import { FxUiSchema } from "../models";
 /**
  * 默认的组件参数
  */

@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 
 import { SchemaForm } from "../components/form";
 import { DefaultProps } from "../components";
-import { FxUiSchema, schemaFormTypes } from "../models/index";
+import { FxUiSchema, schemaFormTypes } from "../models";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { compose } from "recompose";
 

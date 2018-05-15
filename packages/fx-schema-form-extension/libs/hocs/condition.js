@@ -7,13 +7,24 @@ import schemaFormReact from "fx-schema-form-react";
 const { schemaFormTypes } = schemaFormReact;
 const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
 export const name = "condition";
-export const hoc1 = (hocFactory) => {
+export const innerHoc = (hocFactory) => {
     const getFormItemData = (rootReducerKey, parentKeys, keys) => {
         return (state) => {
             let dataKeys = [...rootReducerKey, ...parentKeys, "data", ...keys], formItemData = state.getIn(dataKeys);
             if (formItemData !== undefined) {
                 return Immutable.fromJS({
                     [[...keys].join("/")]: formItemData
+                });
+            }
+            return "";
+        };
+    };
+    const getFormItemMeta = (rootReducerKey, parentKeys, keys, metaKey) => {
+        return (state) => {
+            let dataKeys = [...rootReducerKey, ...parentKeys, "meta"], rootNode = state.getIn(dataKeys), childNode = rootNode.containPath(keys);
+            if (childNode && childNode.value && childNode.value.has(metaKey)) {
+                return Immutable.fromJS({
+                    [[...keys].join("/")]: childNode.value.get(metaKey)
                 });
             }
             return "";
@@ -29,11 +40,16 @@ export const hoc1 = (hocFactory) => {
                     this.getConditionHocs();
                 }
                 getConditionHocs() {
-                    const { getPathKeys, uiSchema, getOptions, parentKeys } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"), { keys = [] } = uiSchema || {}, funcs = [], conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(), { paths, hoc } = conditionOptions;
+                    const { getPathKeys, uiSchema, getOptions, parentKeys, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), dataHocOptions = getOptions(this.props, schemaFormTypes.hoc, "data"), { keys = [] } = uiSchema || {}, funcs = [], conditionOptions = Immutable.fromJS(settings || {}).merge(options).toJS(), { paths, hoc } = conditionOptions;
                     if (paths && paths.length && hoc) {
                         paths.forEach((path) => {
-                            let pathKeys = getPathKeys(keys, path.path);
-                            funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));
+                            let pathKeys = getPathKeys(keys, path.path, schemaId);
+                            if (path.meta) {
+                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                            }
+                            else {
+                                funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));
+                            }
                         });
                     }
                     if (funcs.length) {
@@ -56,7 +72,7 @@ export const hoc1 = (hocFactory) => {
                     }
                 }
                 render() {
-                    const { getPathKeys, uiSchema } = this.props, { keys = [] } = uiSchema || {}, ComponentWithHoc = this.ComponentWithHoc || Component;
+                    const { uiSchema } = this.props, { keys = [] } = uiSchema || {}, ComponentWithHoc = this.ComponentWithHoc || Component;
                     return React.createElement(ComponentWithHoc, Object.assign({}, this.props));
                 }
             }
@@ -66,6 +82,6 @@ export const hoc1 = (hocFactory) => {
 };
 export default {
     name,
-    hoc: hoc1
+    hoc: innerHoc
 };
 //# sourceMappingURL=condition.js.map

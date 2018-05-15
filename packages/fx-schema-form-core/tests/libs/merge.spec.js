@@ -23,9 +23,10 @@ describe("测试MergeLib类", () => {
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
 
-
-
         let b = [new ResolveLib(ajv, {
+            type: "string",
+            $id: "simpleString"
+        }), new ResolveLib(ajv, {
             type: "object",
             $id: "design1",
             required: ["name", "dsModelIds"],
@@ -160,10 +161,12 @@ describe("测试MergeLib类", () => {
         expect(merge2.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-', 'name'].join());
     });
 
-    it("实例化MergeLib，测试$ref", () => {
-        let merge = new MergeLib(ajv, "design", null, ["name"]);
-        
-        console.log(merge);
+    it("实例化MergeLib，测试type为string", () => {
+        let merge = new MergeLib(ajv, "simpleString", null, ["/"]);
+
+        expect(merge.mergeUiSchemaList.length).to.equal(1);
+        expect(merge.mergeUiSchemaList[0].keys.join('')).to.equal("");
+        // console.log(merge);
     });
 
     it("实例化MergeLib，测试无限级数组", () => {

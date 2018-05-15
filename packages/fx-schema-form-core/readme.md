@@ -12,15 +12,85 @@ schemaForm的核心组件。用于解析JsonSchema，为SchemaForm提供支持�
 jsonschema；用于描述json的结构。
 uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
+## todolist
+
+1. 去掉ajv的依赖
+
+## Schema DEMO
+
+```js
+ let schema = {
+    type: "object",
+    $id: "dnd-oneof",
+    title: "oneof测试schema",
+    default: {},
+    required: ["value"],
+    properties: {
+        type: {
+            type: "number",
+            enum: [1, 2, 3, 4],
+            title: "类型选择",
+            description: "1:数字,2:字符串,3:bool,4:object"
+        },
+        value: {
+            oneOf: [{
+                $id: "dnd-oneof-number",
+                type: "number",
+                title: "这是一个数字类型"
+            }, {
+                $id: "dnd-oneof-string",
+                type: "string",
+                title: "这是一个字符串类型"
+            }, {
+                $id: "dnd-oneof-boolean",
+                type: "boolean",
+                title: "这是一个bool类型"
+            }, {
+                $id: "dnd-oneof-object",
+                type: "object",
+                title: "这是一个object类型",
+                default: {},
+                required: ["a", "b"],
+                properties: {
+                    a: {
+                        type: "string",
+                        default: "nick"
+                    },
+                    b: {
+                        type: "boolean",
+                        default: true
+                    }
+                }
+            }]
+        }
+    }
+};
+```
+
 ## API
 
 ### schemaKeysFactory
 
-> 存储了所有key与schemaKey的对应关系
+存储了所有key与schemaKey的对应关系
+
+> example: 'dnd-oneof-object/a': 'dnd-oneof-object#/properties/a',
 
 ### schemaFieldFactory
 
-> 存储了schemaKey对应的schema
+存储了schemaKey对应的schema
+
+example:
+
+```js
+{
+    'dnd-oneof-object#/properties/a': {
+        type: 'string',
+        default: 'nick',
+        keys: ['value','a'],
+        schemaPath: 'dnd-oneof-object#/properties/a'
+    }
+}
+```
 
 ### schemaKeyWordFactory
 
@@ -28,6 +98,7 @@ uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
 * ref；处理schema中的$ref关键字
 * oneOf；处理schema中的oneOf关键字
+* anyOf；处理schema中的anyOf关键字
 
 ### schemaTypeFactory
 
@@ -35,7 +106,19 @@ uischema；用于描述界面的表现形式，是jsonschema的增强属性。
 
 * array     schema中数组类型
 * object    schema中的对象类型
-* undefined schema中的其他简单类型
+* undefined schema中的其他简单类型(string,number,integer,any,boolean)
+
+```js
+schemaTypeFactory.add("array", array);
+schemaTypeFactory.add("string", none);
+schemaTypeFactory.add("undefined", none);
+schemaTypeFactory.add("number", none);
+schemaTypeFactory.add("null", none);
+schemaTypeFactory.add("any", none);
+schemaTypeFactory.add("integer", none);
+schemaTypeFactory.add("boolean", none);
+schemaTypeFactory.add("object", object);
+```
 
 ### ResolveLib
 
@@ -129,7 +212,7 @@ const schema: JSONSchema6 = {
 > 解析上一步中定义的schema,curAjv是一个ajv的实例。
 
 ```js
-let b11dfd = new ResolveLib(curAjv, schema);
+let someResolve = new ResolveLib(curAjv, schema);
 ```
 
 > 最后与定义的uiSchema做合并。
@@ -169,6 +252,117 @@ let merge = new MergeLib(curAjv, "design", null, ["infoOptions/-"]);
     "schemaPath": "design#/properties/infoOptions/items",
     "key": "design/infoOptions/-"
 }]
+```
+
+## 如何使用ajv的功能动态获取jsonschema
+
+```json
+{
+    "type": "object",
+    "$id": "echart",
+    "title": "echarts参数设置",
+    "default": {},
+    "properties": {
+        "title": {
+            "$ref": "echart-title#"
+        },
+        "toolbox": {
+            "$ref": "echart-toolbox#"
+        },
+        "tooltip": {
+            "$ref": "echart-tooltip#"
+        },
+        "legend": {
+            "$ref": "echart-legend#"
+        },
+        "series": {
+            "$ref": "echart-series#"
+        },
+        "xAxis": {
+            "$ref": "echart-axis#"
+        },
+        "yAxis": {
+            "$ref": "echart-axis#"
+        }
+    }
+}
+```
+
+在做echart的配置界面的时候，由于参数众多，而且很多参数都重复，不得不把echart的jsonschema拆分成若干个json文件来复用。上面的json文件使用$ref来连接其他的schema，使得schema的依赖过于繁琐。如果我们要使用这个schema，就必须先解析其依赖的schema，这样就有问题了。我们能不能不关系依赖呢？
+
+解决方案：
+
+* 这个方法用于加载我们需要的schema文件。
+
+```jsx
+    /**
+     * 动态加载schema方法
+     * 可以在组件中去使用
+    */
+    const initSchema = (schemaId: string) => {
+        // getSchema是一个接口方法，用来获取json的数据
+        return getSchema.get(null, {
+            params: {
+                id: schemaId + ".json"
+            }
+        }).then((schema: JSONSchema6) => {
+            // 这里使用compileAsync来获取schema的验证信息
+            // 这个方法可以解析依赖关系，然后使用ajv中的loadSchema来加载依赖的jsonschema
+            curAjv.compileAsync(schema).then(() => {
+                // 解析获取的schema，这里已经解析完了所有的依赖
+                let resolve = new ResolveLib(curAjv, schema);
+            });
+        }).catch(() => {
+            console.error("fetch schema [" + uri + "] error!");
+        });
+    }
+```
+
+* 配置ajv中的loadSchema方法，用于加载$ref中使用的schema文件。
+
+```jsx
+// 初始化ajv实例
+export const curAjv: ajv.Ajv = ajvErrors(new ajv({
+    allErrors: true,
+    jsonPointers: true,
+    useDefaults: true,
+    format: "full",
+    $data: true,
+    errorDataPath: "property",
+    removeAdditional: true,
+    // 关键参数
+    loadSchema: initSchema
+}));
+```
+
+* react示例
+
+```jsx
+    import { ResolveLib, schemaKeysFactory } from "fx-schema-form-core";
+
+    class ComponentHoc extends React.PureComponent<any, any> {
+
+        /**
+         * 加载完毕后，update当前组件
+         */
+        private initSchema(schemaId: string){
+            initSchema(schemaId).then(this.forceUpdate);
+        }
+
+        /**
+        * 如果当前的schema不存在，则远程拉取
+        */
+        public render(): JSX.Element | null {
+            const { schemaId, ...extraProps } = this.props;
+
+            if (!schemaKeysFactory.has(schemaId)) {
+                this.initSchema(schemaId);
+                return null;
+            }
+
+            return <span>schema已经解析好了</span>;
+        }
+    }
 ```
 
 ## 命令

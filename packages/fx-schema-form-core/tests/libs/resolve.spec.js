@@ -49,7 +49,7 @@ describe("测试ResolveLib类", () => {
         expect(getDataKeys("test#/properties/names/items").join()).to.equal(["names", "-"].join());
     });
 
-    it("", () => {
+    it("nick", () => {
         let schema = {
             type: "object",
             $id: "dnd-oneof",

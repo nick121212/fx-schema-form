@@ -66,6 +66,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 }
 
                 public componentWillMount() {
+                    console.log("this.props = ok; ");
                     this.dataToMeta(this.props);
                 }
 

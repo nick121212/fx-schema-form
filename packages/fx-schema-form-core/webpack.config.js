@@ -27,8 +27,7 @@ module.exports = {
         'process.env': {
             'NODE_ENV': JSON.stringify(env),
         },
-        "__DEV__": JSON.stringify(__DEV__),
-        "__PROD__": JSON.stringify(__PROD__)
+        "__DEV__": JSON.stringify(__DEV__)
     })].concat(!__PROD__ ? [
 
     ] : [
@@ -36,17 +35,14 @@ module.exports = {
             sourceMap: true
         })
     ]),
-    output: __PROD__ || __DEV__ ? {
+    output: {
         path: path.resolve('./dist'),
-        filename: __PROD__ ? 'index.prd.js' : 'index.dev.js',
+        filename: __PROD__ ? 'index.js' : 'index.dev.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        sourceMapFilename: __PROD__ ? 'index.prd.js.map' : 'index.dev.js.map',
+        sourceMapFilename: __PROD__ ? 'index.js.map' : 'index.dev.js.map',
         library: "SFC",
         // umdNamedDefine: true,
         // libraryExport: "default"
-    } : {
-        path: path.resolve('./dist'),
-        filename: '[name].js',
     }
 };

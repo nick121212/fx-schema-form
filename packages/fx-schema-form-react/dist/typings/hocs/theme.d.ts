@@ -1,6 +1,6 @@
 import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "../components";
-import { RC, NsFactory } from "../models/index";
+import { RC, NsFactory } from "../models";
 export interface ThemeHocOutProps {
     currentTheme: NsFactory;
 }

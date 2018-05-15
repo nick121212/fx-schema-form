@@ -5,6 +5,7 @@ import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { default as ResolveLib, getDataKeys, getSchemaId } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
+import { warn } from "../utils";
 
 /**
 * 根据给出的parentKeys和uiSchemaKeys来获取uiSchema的key
@@ -13,8 +14,9 @@ import { FxJsonSchema } from "../models/jsonschema";
 * 3. 判断找到的schema中是否带有 $ref
 * 4. 如果有$ref，则更改parentKeys为$ref的路径
 * 5. 如果没有，则更改parentKeys为当前合并的keys
-* @param uiSchemaKeys 当前的keys
-* @param parentKeys   父亲的keys
+* @param  {String[]} uiSchemaKeys 当前的keys
+* @param  {String[]} parentKeys   父亲的keys
+* @return {String}                返回的key
 */
 const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentKeys: string[]): string => {
     while (uiSchemaKeys.length) {
@@ -23,9 +25,10 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentKeys: string[]): 
         let keysStr = keys.join("/").replace(/\/$/, "");
 
         if (!schemaKeysFactory.has(keysStr)) {
-            if (!__PROD__) {
-                throw new Error(`${keys.join("/")} did not found.`);
+            if (__DEV__) {
+                warn(`${keys.join("/")} did not found.`);
             }
+
             return "";
         }
 
@@ -42,12 +45,12 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentKeys: string[]): 
 };
 /**
   * 获取父亲的keys
+  * @param  {UiSchema}               parent 父亲schema
+  * @return {Array<string | number>}
   */
 const getParentSchemaKeys = (parent: UiSchema): Array<string | number> => {
-    if (parent) {
-        if (parent.keys) {
-            return parent.keys;
-        }
+    if (parent && parent.keys) {
+        return parent.keys;
     }
 
     return [];
@@ -57,13 +60,16 @@ const getParentSchemaKeys = (parent: UiSchema): Array<string | number> => {
  * 获取当前uiSchema的key
  * 如果没有父亲节点
  * 默认返回父亲的key+当前uiSchema的key
- * @param uiSchema uiSchma
+ * @param  {UiSchema} parent      父亲schema
+ * @param  {string}   schemaPath  schema的路径
+ * @param  {UiSchema} uiSchema    uiSchma
+ * @return {String}               返回的key
  */
 const getCurrentSchemaKey = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): string => {
     const $id = getSchemaId(schemaPath);
     let uiSchemaKeys = uiSchema.key.split("/");
 
-    // 如果父亲节点的shcemaId不是传入的schemaId，则不适用父亲的key做计算
+    // 如果父亲节点的shcemaId不是传入的schemaId，则不使用父亲的key做计算
     if (parent && getSchemaId(parent.key) === $id) {
         return getUiSchemaKeyRecursion(uiSchemaKeys, parent.key.split("/"));
     }
@@ -74,13 +80,15 @@ const getCurrentSchemaKey = (parent: UiSchema, schemaPath: string, uiSchema: UiS
 /**
  * 如果在【schemaKeysFactory】中没有发现uiSchema.key,则报错
  * 从【schemaKeysFactory】获取对应的schema，与uiSchema合并之后返回
- * @param uiSchema uiSchema
+ * @param  {UiSchema} uiSchema uiSchema
+ * @return {UiSchema}          返回uiSchema
  */
 const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
-        if (!__PROD__) {
-            throw new Error(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
+        if (__DEV__) {
+            warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
+
         return uiSchema;
     }
 
@@ -94,7 +102,10 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
  * 初始化uiSchema
  * 如果是字符串；用$id合并之后，获取schema
  * 如果是【UiSchema】；合并key之后，获取schema
- * @param uiSchema uiSchema
+ * @param {UiSchema} parent      父亲schema
+ * @param {string}   schemaPath  schema的路径
+ * @param {UiSchema} uiSchema    uiSchma
+ * @return {UiSchema}            返回uiSchema
  */
 const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {
     let parentKeys = getParentSchemaKeys(parent),
@@ -108,7 +119,14 @@ const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema):
     });
 };
 
-const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], uiSchema: UiSchema) => {
+/**
+ * 合并后的数据添加到数组中去
+ * 这里因为可以使用*,所有拆成了前面和后面以及*三个部分
+ * @param {UiSchema[]} uiSchemasFirst 前面部分
+ * @param {UiSchema[]} uiSchemasLast  后面部分
+ * @param {UiSchema}   uiSchema       需要处理的uiSchema
+ */
+const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], uiSchema: UiSchema): void => {
     if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
         return val.key === uiSchema.key;
     }).length) {
@@ -125,10 +143,11 @@ const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], 
  * 4. 遍历当前的schema：
  *    如果是object，则遍历properties，然后合并数据
  *    如果是array，则直接返回items，然后合并数据
- * @param parent
- * @param schemaPath
- * @param uiSchemas
- * @param curSchema
+ * @param  {UiSchema}                    parent      父亲的uiSchema
+ * @param  {string}                      schemaPath  当前的schema路径
+ * @param  {Array<UiSchema | string>}    uiSchemas   全部的uiSchemas
+ * @param  {FxJsonSchema}                curSchema   当前的Schema
+ * @return {UiSchema[]}                              合并后的uiSchemas
  */
 const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<UiSchema | string>, curSchema: FxJsonSchema): UiSchema[] => {
     let idx: number = uiSchemas.indexOf("*"),
@@ -137,9 +156,11 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 如果存在多个*，则报错
     if (uiSchemas.lastIndexOf("*") !== idx) {
-        if (!__PROD__) {
-            throw new Error("uiSchema can only has one *.");
+        if (__DEV__) {
+            // throw new Error("uiSchema can only has one *.");
+            warn("uiSchema can only has one *.");
         }
+
         return [];
     }
 
@@ -172,12 +193,6 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
         Object.keys(curSchema.properties).forEach((us: string) => {
             let uiSchema = initUiSchema(parent, schemaPath, { key: us } as UiSchema);
 
-            // if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-            //     return val.key === uiSchema.key;
-            // }).length) {
-            //     uiSchema = mergeUiSchemaToArray(uiSchema);
-            //     uiSchemasFirst.push(uiSchema);
-            // }
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
     }
@@ -187,23 +202,8 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
         let uiSchema = initUiSchema(parent, schemaPath, {
             key: getDataKeys(curSchema.schemaPath || "").join("/")
         });
-        // let uiSchemaItems = this.initUiSchema(ResolveLib.getDataKeys(this.curSchema.schemaPath).concat(["-"]).join("/"));
-
-        // if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-        //     return val.key === uiSchema.key;
-        // }).length) {
-        //     uiSchema = mergeUiSchemaToArray(uiSchema);
-        //     uiSchemasFirst.push(uiSchema);
-        // }
 
         pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
-
-        // if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-        //     return val.key === uiSchemaItems.key;
-        // }).length) {
-        //     uiSchemaItems = this.mergeUiSchemaToArray(uiSchemaItems);
-        //     uiSchemasFirst.push(uiSchemaItems);
-        // }
     }
 
     // 是普通对象
@@ -211,13 +211,6 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
         let uiSchema = initUiSchema(parent, schemaPath, {
             key: getDataKeys(curSchema.schemaPath || "", false).join("/")
         });
-
-        // if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-        //     return val.key === uiSchema.key;
-        // }).length) {
-        //     uiSchema = mergeUiSchemaToArray(uiSchema);
-        //     uiSchemasFirst.push(uiSchema);
-        // }
 
         pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
     }
@@ -240,10 +233,10 @@ export default class MergeLib {
      * 1. 验证uiSchema的正确性
      * 2. 处理uiSchema中带*号的数据
      * 3. 返回合并后的数据
-     * @param ajv         当前的ajv实例
-     * @param $id         schema的$id
-     * @param parent      父亲的schema
-     * @param uiSchemas   uiSchema
+     * @param {Ajv}                       ajv         当前的ajv实例
+     * @param {string}                    $id         schema的$id
+     * @param {UiSchema}                  parent      父亲的schema
+     * @param {Array<UiSchema | string>}  uiSchemas   uiSchema
      */
     constructor(ajv: Ajv, schemaPath: string, parent: UiSchema, uiSchemas?: Array<UiSchema | string>) {
 
@@ -253,21 +246,25 @@ export default class MergeLib {
             throw ajv.errors;
         }
 
+        // 获取schemaPath对应的schemaId
         let keyPath: string = getDataKeys(schemaPath, true).join("/");
 
         if (!schemaKeysFactory.has(keyPath)) {
-            if (!__PROD__) {
-                throw new Error(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
+            if (__DEV__) {
+                warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
+
             return;
         }
 
         const curSchema = schemaFieldFactory.get(schemaKeysFactory.get(keyPath));
+
         if (curSchema.$id) {
             curSchema.$ref = curSchema.$id;
             curSchema.$id = undefined;
             delete curSchema.$id;
         }
+
         this.mergeUiSchemaList = initMergeSchema(parent, schemaPath, uiSchemas, curSchema);
     }
 }

@@ -1,18 +1,51 @@
 import { createAction, createReducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
-import { a } from "./reducer";
+import { d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
-const b = a;
+import merge from "../libs/merge";
+const resolveKeys = (state, keys) => {
+    if (state.hasIn(keys)) {
+        return state;
+    }
+    for (let i = 0, n = keys.length; i < n; i++) {
+        let mKeys = [...keys].splice(0, i + 1);
+        if (!state.hasIn(mKeys)) {
+            mKeys.pop();
+            if (!state.hasIn(mKeys)) {
+                if (keys[i].constructor === Number) {
+                    state = state.setIn(mKeys, List());
+                }
+                else {
+                    state = state.setIn(mKeys, Map());
+                }
+            }
+        }
+        else if (i < n) {
+            let data = state.getIn(mKeys);
+            if (!Map.isMap(data) && !List.isList(data)) {
+                if (keys[i + 1].constructor === Number) {
+                    state = state.setIn(mKeys, List());
+                }
+                else {
+                    state = state.setIn(mKeys, Map());
+                }
+            }
+        }
+    }
+    return state;
+};
 export class SchemaFormReducer {
     constructor(initialState) {
         this.initialState = initialState;
-        this.createForm = createAction("创建一个表单数据");
-        this.updateItemData = createAction("更新一个表单数据");
-        this.updateItemMeta = createAction("更新一个表单元数据");
-        this.addItem = createAction("添加一个数据");
-        this.removeItem = createAction("删除一个数据");
-        this.moveToItem = createAction("元素移位");
-        this.removeItemData = createAction("删除一个字段的数据以及meta数据");
+        this.createForm = createAction(__PROD__ ? "" : "创建一个表单数据");
+        this.updateItemData = createAction(__PROD__ ? "" : "更新一个表单数据");
+        this.updateItemMeta = createAction(__PROD__ ? "" : "更新一个表单元数据");
+        this.addItem = createAction(__PROD__ ? "" : "添加一个数据");
+        this.removeItem = createAction(__PROD__ ? "" : "删除一个数据");
+        this.moveToItem = createAction(__PROD__ ? "" : "元素移位");
+        this.removeItemData = createAction(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
+        this.combineActions = createAction(__PROD__ ? "" : "合并多个action");
+        this.removeForm = createAction(__PROD__ ? "" : "清除一个form的数据");
     }
     get actions() {
         return {
@@ -22,7 +55,9 @@ export class SchemaFormReducer {
             addItem: this.addItem,
             removeItem: this.removeItem,
             moveToItem: this.moveToItem,
-            removeItemData: this.removeItemData
+            removeItemData: this.removeItemData,
+            combineActions: this.combineActions,
+            removeForm: this.removeForm
         };
     }
     init(store) {
@@ -43,51 +78,35 @@ export class SchemaFormReducer {
             [this.addItem]: this.addItemDataHandle.bind(this),
             [this.removeItem]: this.removeItemHandle.bind(this),
             [this.moveToItem]: this.moveItemHandle.bind(this),
-            [this.removeItemData]: this.removeItemDataMetaHandle.bind(this)
+            [this.removeItemData]: this.removeItemDataMetaHandle.bind(this),
+            [this.combineActions]: this.combineActionsHandle.bind(this),
+            [this.removeForm]: this.removeFormHandle.bind(this)
         }, this.initialState);
     }
+    removeFormHandle(state, parentKeys) {
+        let dataKeys = parentKeys;
+        if (state.hasIn(dataKeys)) {
+            return state.removeIn(dataKeys);
+        }
+        return state;
+    }
+    combineActionsHandle(state, actions) {
+        state = actions.reduce((stateNew, act2) => {
+            return this.reducer(stateNew, act2);
+        }, state);
+        return state;
+    }
     removeItemDataMetaHandle(state, { parentKeys, keys, meta }) {
-        let dataKeys = parentKeys.concat(["data", ...keys]);
-        let metaKeys = parentKeys.concat(["meta"]);
+        let dataKeys = parentKeys.concat([d, ...keys]);
+        let metaKeys = parentKeys.concat([m]);
         let rootNode = state.getIn(metaKeys);
         let childNode = rootNode.containPath(keys);
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         if (state.hasIn(dataKeys)) {
             state = state.removeIn(dataKeys);
         }
         if (childNode && meta) {
             childNode.removeFromParent();
-        }
-        return state;
-    }
-    resolveKeys(state, keys) {
-        if (state.hasIn(keys)) {
-            return state;
-        }
-        for (let i = 0, n = keys.length; i < n; i++) {
-            let mKeys = [...keys].splice(0, i + 1);
-            if (!state.hasIn(mKeys)) {
-                mKeys.pop();
-                if (!state.hasIn(mKeys)) {
-                    if (keys[i].constructor === Number) {
-                        state = state.setIn(mKeys, List());
-                    }
-                    else {
-                        state = state.setIn(mKeys, Map());
-                    }
-                }
-            }
-            else if (i < n) {
-                let data = state.getIn(mKeys);
-                if (!Map.isMap(data) && !List.isList(data)) {
-                    if (keys[i + 1].constructor === Number) {
-                        state = state.setIn(mKeys, List());
-                    }
-                    else {
-                        state = state.setIn(mKeys, Map());
-                    }
-                }
-            }
         }
         return state;
     }
@@ -103,8 +122,8 @@ export class SchemaFormReducer {
         return state.set(key, stateData);
     }
     updateItemDataHandle(state, { parentKeys, keys, data, meta }) {
-        let dataKeys = parentKeys.concat(["data", ...keys]);
-        state = this.resolveKeys(state, dataKeys);
+        let dataKeys = parentKeys.concat([d, ...keys]);
+        state = resolveKeys(state, dataKeys);
         state = state.setIn(dataKeys, fromJS(data));
         if (meta) {
             state = this.updateItemMetaHandle(state, { parentKeys, keys, meta });
@@ -112,9 +131,9 @@ export class SchemaFormReducer {
         return state;
     }
     addItemDataHandle(state, { parentKeys, keys, data }) {
-        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), childNode = rootNode.containPath(keys);
+        const dataKeys = parentKeys.concat([d, ...keys]), metaKeys = parentKeys.concat([m]), rootNode = state.getIn(metaKeys), childNode = rootNode.containPath(keys);
         let formItemData;
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys) || List();
         formItemData = formItemData.push(fromJS(data));
         if (childNode && childNode.value) {
@@ -125,9 +144,9 @@ export class SchemaFormReducer {
         return state.setIn(dataKeys, formItemData);
     }
     removeItemHandle(state, { parentKeys, keys, index }) {
-        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), childNode = rootNode.addChild(keys.concat([index]));
+        const dataKeys = parentKeys.concat([d, ...keys]), metaKeys = parentKeys.concat([m]), rootNode = state.getIn(metaKeys), childNode = rootNode.addChild(keys.concat([index]));
         let formItemData;
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         formItemData = state.getIn(dataKeys);
         if (!formItemData || !List.isList(formItemData)) {
             return state;
@@ -138,9 +157,9 @@ export class SchemaFormReducer {
         return state.setIn(dataKeys, formItemData.remove(index));
     }
     moveItemHandle(state, { parentKeys, keys, curIndex, toIndex }) {
-        const dataKeys = parentKeys.concat(["data", ...keys]), metaKeys = parentKeys.concat(["meta"]), rootNode = state.getIn(metaKeys), offset = (toIndex > curIndex && false ? 1 : 0);
+        const dataKeys = parentKeys.concat([d, ...keys]), metaKeys = parentKeys.concat([m]), rootNode = state.getIn(metaKeys), offset = (toIndex > curIndex && false ? 1 : 0);
         let oldFormItemData = state.getIn(dataKeys), formItemData = state.getIn(dataKeys), childNode = rootNode.containPath(keys.concat([curIndex])), childNodeTo = rootNode.containPath(keys.concat([toIndex]));
-        state = this.resolveKeys(state, dataKeys);
+        state = resolveKeys(state, dataKeys);
         if (!formItemData || toIndex < 0) {
             return state;
         }
@@ -158,7 +177,7 @@ export class SchemaFormReducer {
         return state.setIn(dataKeys, formItemData);
     }
     updateItemMetaHandle(state, { parentKeys, keys, meta, noChange }) {
-        let metaKeys = parentKeys.concat(["meta"]);
+        let metaKeys = parentKeys.concat([m]);
         let rootNode = state.getIn(metaKeys);
         let childNode = rootNode.containPath(keys);
         let value = childNode ? childNode.value : null;
@@ -167,7 +186,7 @@ export class SchemaFormReducer {
         }
         if (childNode) {
             if (value) {
-                childNode.value = childNode.value.merge(meta);
+                childNode.value = merge(childNode.value, fromJS(meta), { "*": "replace" });
             }
             else {
                 childNode.value = fromJS(meta);

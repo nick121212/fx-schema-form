@@ -95,7 +95,9 @@ export const globalOptions = Immutable.fromJS({
         default: {
             temps: ["formitem"],
             widgetHocs: [schemaFormReact.hocFactory.get("data")({
-                    data: true
+                    data: true,
+                    meta: true,
+                    metaKeys: ["options"]
                 })]
         },
         array: {

@@ -37,6 +37,8 @@ describe("utils的hoc", () => {
         expect(roots[0].props().getPathKeys(["a", "b"], "../").join()).to.eq(["a"].join());
         expect(roots[0].props().getPathKeys(["a", "b"], "/a").join()).to.eq(["a"].join());
         expect(roots[0].props().getPathKeys(["a", "b", "c"], "../d").join()).to.eq(["a", "b", "d"].join());
+
+        expect(roots[3].props().getPathKeys(["dsModelIds", "0", "age"], "../d", "design")[1]).to.eq(0);
     });
 
     it("测试getOptions方法;", () => {
@@ -72,10 +74,10 @@ describe("utils的hoc", () => {
         // expect().to.eq(undefined);
 
         return Promise.all([
-            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema, defaultData, true),
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema, defaultData, null, true),
             roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema),
             roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema.items),
-            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema.items, { age: 20, name: "nick" }, true)
+            roots[3].props().getDefaultData(roots[3].props().ajv, roots[3].props().uiSchema.items, { age: 20, name: "nick" }, null, true)
         ]).then((datas) => {
             expect(datas[0].length).to.equal(1);
             expect(datas[0][0].age).to.equal(23);

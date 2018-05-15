@@ -1,11 +1,9 @@
 
 import React, { PureComponent } from "react";
-import { BaseFactory, MergeLib, FxJsonSchema, UiSchema } from "fx-schema-form-core";
-import { connect, Dispatch } from "react-redux";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
+import { BaseFactory, MergeLib,  UiSchema } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC } from "../models/index";
+import { FxUiSchema, RC } from "../models";
 
 /**
  * MergeHoc 添加的属性
@@ -45,6 +43,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         uiSchema.keys = uiSchema.originKeys;
                     }
 
+                    // 这里做数据合并处理
+                    // 将合并之后的数据传递到下一层的Component
                     const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas as any);
 
                     this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v: any) => {

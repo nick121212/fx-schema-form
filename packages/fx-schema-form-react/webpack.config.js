@@ -108,7 +108,13 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.js']
     },
-    plugins: !__PROD__ ? [
+    plugins: [new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': JSON.stringify(env),
+        },
+        "__DEV__": JSON.stringify(__DEV__),
+        "__PROD__": JSON.stringify(__PROD__)
+    })].concat(!__PROD__ ? [
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new CheckerPlugin(),
@@ -119,7 +125,7 @@ module.exports = {
         new UglifyJsPlugin({
             sourceMap: true
         })
-    ],
+    ]),
     output: __PROD__ ? {
         path: path.resolve('./dist'),
         filename: 'index.js',

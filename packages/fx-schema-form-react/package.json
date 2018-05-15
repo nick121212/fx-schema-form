@@ -1,12 +1,12 @@
 {
   "name": "fx-schema-form-react",
-  "version": "3.0.50",
+  "version": "3.0.75",
   "description": "自动生成表单组件",
   "main": "libs/index.js",
   "types": "./libs/index.d.ts",
   "scripts": {
     "dist": "NODE_ENV=production webpack ",
-    "build": "NODE_ENV=production webpack;tsc --outDir libs -d",
+    "build": "rm -rf libs;tsc --outDir libs -d",
     "test": "mocha ./tests/**/*.spec.jsx --require babel-register --require ./tests/setup.jsx"
   },
   "author": "NICK",
@@ -62,7 +62,7 @@
     "eslint-plugin-react": "^6.4.1",
     "expect": "^1.20.1",
     "extract-text-webpack-plugin": "^3.0.2",
-    "fx-schema-form-core": "^3.0.42",
+    "fx-schema-form-core": "^3.0.73",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.2",

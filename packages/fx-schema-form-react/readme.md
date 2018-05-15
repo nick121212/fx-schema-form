@@ -159,26 +159,13 @@ defaultTheme.widgetFactory.add("number", AntdInputNumberWidget as any);
  * errors         当前表单的所有错误信息。
  */
 @(schemaFormDec({
-    rootReducerKey: ["schemaForm"],
-    parentKeys: ["designForm"]
+    ajv: curAjv,
+    schemaId: "design",
+    reducerKey: "schemaForm",
+    formKey: "designForm",
+    initData:{}
 }) as any)
 class TestForm extends React.PureComponent<any> {
-    private _validateAll: () => Promise<void>;
-    constructor(props: any) {
-        super(props);
-        /**
-         * 创建一个form的数据，key为form的数据根路径；data是form的默认数据。
-         */
-        actions.createForm({
-            key: "designForm",
-            data: {
-                dsModelIds: [],
-                name: "nick"
-            }
-        });
-        this._validateAll = props.validateAll.bind(this);
-    }
-
     /**
      * @param RootComponent     使用Form来创建根元素
      * @param schemaId          schema的id是design
@@ -189,18 +176,28 @@ class TestForm extends React.PureComponent<any> {
      * @param ajv               ajv的实例
      */
     public render() {
-        return (<div>
-            <SchemaForm
-                key={"designForm" + "design"}
-                RootComponent={Form}
-                schemaId="design"
-                uiSchemas={["*"]}
-                uiSchema={null as any}
-                parentKeys={this.props.parentKeys}
-                globalOptions={gloabelOptions}
-                ajv={curAjv} />
-            <Button key={"submit"} type="primary" onClick={this.props.validateAll} loading={this.props.isValidating}>提交表单</Button>
-        </div>);
+        const { isValidating = false, isValid = false, validateAll, parentKeys, resetForm, schemaId } = this.props;
+
+        if (!this.props.root) {
+            return null;
+        }
+
+        return <>
+            <FormComponent
+                validateAll={validateAll}
+                isValid={isValid}
+                resetForm={resetForm}
+                RootComponent={NoneComponent}
+                schemaId={schemaId}
+                uiSchemas={[{
+                    key: "children",
+                    field: "design"
+                }]}
+                parentKeys={parentKeys}
+                globalOptions={globalOptionsOfDesign}
+                ajv={curAjv} >
+            </FormComponent>
+        </>;
     }
 }
 ```
@@ -211,8 +208,7 @@ class TestForm extends React.PureComponent<any> {
 ReactDOM.render(
   <Provider store={store}>
       <div>
-          <TestForm ajv={curAjv} schemaId="design" />
-          {/*<ReactPerfTool perf={Perf} />*/}
+          <TestForm />
       </div>
   </Provider>,
   document.getElementById("root"),
@@ -393,6 +389,7 @@ uiSchema的参数配置：
 
 - updateItemData: (props, data, meta?) => void; 提交数据，触发更改数据action
 - updateItemMeta: (props, data, meta?, noChange?) => void; 提交meta数据，触发更改meta的action
+- removeItemData: (props, meta?) => void; 删除当前数据和meta数据
 - validate: (props, data, meta) => any; 验证data的合法性
 
 #### ArrayHoc
@@ -520,7 +517,46 @@ uiSchema的参数配置：
 
 hoc是schema-form的核心功能；比如接口请求，条件判断，数据处理等等。举个例子:
 
-我们需要一个条件判断的功能，比如当a=1的时候，b才显示。具体代码查看[这里](../fx-schema-form-extension/src/hocs/condition.tsx)
+JsonSchema中有format字段配置，我们想根据format来更改渲染组件。
+
+```jsx
+/**
+ * format装饰器
+ * 根据指定的format来配置相对应的组件
+ * 例如：当format=date的时候，使用datetime组件
+ * @param hocFactory  hoc的工厂方法
+ * @param Component   需要包装的组件
+ */
+export const hoc = (hocFactory: BaseFactory<any>) => {
+    const name = "format";
+
+    return () => {
+        return (Component: any): RC<Props, any> => {
+            class ComponentHoc extends React.PureComponent<Props, any> {
+                /**
+                 * 渲染组件
+                 */
+                public render(): JSX.Element | null {
+                    const { uiSchema, getOptions } = this.props,
+                        { format, field } = uiSchema,
+                        hocOptions = getOptions(this.props, schemaFormTypes.hoc, name);
+
+                    // 根据当前jsonschema中配置的format
+                    // 查看配置中是否有定义，如果有则合并到uiSchema中
+                    if (format && hocOptions[format] && !field) {
+                        Object.assign(uiSchema, hocOptions[format]);
+                    }
+
+                    return <Component {...this.props} />;
+                }
+            }
+
+            return ComponentHoc as any;
+        };
+    };
+};
+
+```
 
 ### 自定义字段
 
@@ -528,20 +564,47 @@ hoc是schema-form的核心功能；比如接口请求，条件判断，数据处
 
 ```json
 {
-    "type":"object",
-    "$id":"tree",
-    "properties":{
-        "children":{
-            "type":"array",
-            "items":{
-                "$ref":"tree#"
+    "type": "object",
+    "$id": "design",
+    "required": ["title"],
+    "properties": {
+        "title": {
+            "type": "string",
+            "title": "名称"
+        },
+        "children": {
+            "type": "array",
+            "title": "图表组件",
+            "items": {
+                "type": "object",
+                "required": ["data"],
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "sourceId": {
+                        "type": "number"
+                    },
+                    "data": {
+                        "type": "object",
+                        "default": {},
+                        "design": true
+                    },
+                    "children": {
+                        "$ref": "design#/properties/children"
+                    }
+                }
             }
         }
     }
 }
 ```
 
-这里是一个树形结构，如果我们想渲染成tree。默认的ArrayField显然不能满足需求。具体请[查看源码](../fx-schema-form-extension/src/fields/design.tsx)
+这里是一个树形结构，如果我们想渲染成tree。默认的ArrayField显然不能满足需求。具体请[查看源码](https://github.com/nick121212/fx-schema-form/blob/master/packages/fx-schema-form-extension/src/fields/design.tsx)
+
+![树形结构](../../images/design1.jpg)
+
+这里使用了3个Form组件，只是使用的field不同。
 
 ### 自定义模板
 
