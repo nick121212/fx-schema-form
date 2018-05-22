@@ -47,6 +47,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
     return (Component: any): RC<SchemaFormProps, any> => {
         @(compose(
             hocFactory.get("utils")(),
+            // 绑定数据
             connect((state: Map<string, any>) => {
                 let rootKeys = settings.rootReducerKey.concat(settings.parentKeys),
                     dataKeys = rootKeys.concat([d]),
