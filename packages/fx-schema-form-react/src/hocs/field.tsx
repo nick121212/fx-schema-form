@@ -6,6 +6,7 @@ import { ThemeHocOutProps } from "./theme";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { RC } from "../models";
+import { isProd } from "../utils";
 
 export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;
@@ -39,7 +40,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (currentTheme.fieldFactory.has(defaultKey)) {
                             FieldComponent = currentTheme.fieldFactory.get(defaultKey);
                         } else {
-                            if (!__PROD__) { console.error(`找不到field：${calcField}`); }
+                            if (!isProd()) { console.error(`找不到field：${calcField}`); }
                             return null;
                         }
                     }
@@ -51,7 +52,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         if (currentTheme.widgetFactory.has(defaultKey)) {
                             WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
                         } else {
-                            if (!__PROD__) { console.warn(`找不到widget：${calcWidget}`, uiSchema); }
+                            if (!isProd()) { console.warn(`找不到widget：${calcWidget}`, uiSchema); }
                         }
                     }
 

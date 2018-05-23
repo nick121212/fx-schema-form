@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { isProd } from "../utils";
 export const name = "field";
 export const hoc = (hocFactory) => {
     return () => {
@@ -16,7 +17,7 @@ export const hoc = (hocFactory) => {
                             FieldComponent = currentTheme.fieldFactory.get(defaultKey);
                         }
                         else {
-                            if (!__PROD__) {
+                            if (!isProd()) {
                                 console.error(`找不到field：${calcField}`);
                             }
                             return null;
@@ -30,7 +31,7 @@ export const hoc = (hocFactory) => {
                             WidgetComponent = currentTheme.widgetFactory.get(defaultKey);
                         }
                         else {
-                            if (!__PROD__) {
+                            if (!isProd()) {
                                 console.warn(`找不到widget：${calcWidget}`, uiSchema);
                             }
                         }

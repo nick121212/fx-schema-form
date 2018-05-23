@@ -6,6 +6,7 @@ import { Store } from "react-redux";
 import { FxReducer, d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
+import { isProd } from "../utils";
 
 export type ASN = Array<string | number> | string[];
 
@@ -69,45 +70,45 @@ export class SchemaFormReducer<T> implements FxReducer {
      * 创建一个表单
      */
     private createForm: SimpleActionCreator<{ key: string, data: any }>
-        = createAction<{ key: string, data: any }>(__PROD__ ? "" : "创建一个表单数据");
+        = createAction<{ key: string, data: any }>(isProd() ? "" : "创建一个表单数据");
     /**
      * 更新一个表单数据
      */
     private updateItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>
-        = createAction<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>(__PROD__ ? "" : "更新一个表单数据");
+        = createAction<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>(isProd() ? "" : "更新一个表单数据");
     /**
      * 更新一个表单元数据
      */
     private updateItemMeta: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta: any, noChange?: boolean; }>
-        = createAction<{ parentKeys: ASN, keys: ASN, meta: any }>(__PROD__ ? "" : "更新一个表单元数据");
+        = createAction<{ parentKeys: ASN, keys: ASN, meta: any }>(isProd() ? "" : "更新一个表单元数据");
     /**
      * 添加一个元素到数组
      */
     private addItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any }>
-        = createAction<{ parentKeys: ASN, keys: ASN, data: any }>(__PROD__ ? "" : "添加一个数据");
+        = createAction<{ parentKeys: ASN, keys: ASN, data: any }>(isProd() ? "" : "添加一个数据");
     /**
      * 从数组中删除一个元素
      */
     private removeItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, index: number }>
-        = createAction<{ parentKeys: ASN, keys: ASN, index: number }>(__PROD__ ? "" : "删除一个数据");
+        = createAction<{ parentKeys: ASN, keys: ASN, index: number }>(isProd() ? "" : "删除一个数据");
     /**
      * 移动一个数组元素
      */
     private moveToItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>
-        = createAction<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>(__PROD__ ? "" : "元素移位");
+        = createAction<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>(isProd() ? "" : "元素移位");
     /**
      * 删除一个字段的数据以及元数据
      */
     private removeItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta?: boolean }>
-        = createAction<{ parentKeys: ASN, keys: ASN, meta?: boolean }>(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
+        = createAction<{ parentKeys: ASN, keys: ASN, meta?: boolean }>(isProd() ? "" : "删除一个字段的数据以及meta数据");
     /**
      * 合并多个action，触发一次dispatch
      */
     private combineActions: SimpleActionCreator<Action<any, any>[]>
-        = createAction<Action<any, any>[]>(__PROD__ ? "" : "合并多个action");
+        = createAction<Action<any, any>[]>(isProd() ? "" : "合并多个action");
 
     private removeForm: SimpleActionCreator<ASN>
-        = createAction<ASN>(__PROD__ ? "" : "清除一个form的数据");
+        = createAction<ASN>(isProd() ? "" : "清除一个form的数据");
 
     /**
      * 构造

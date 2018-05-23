@@ -3,6 +3,7 @@ import { List, Map, fromJS } from "immutable";
 import { d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
+import { isProd } from "../utils";
 const resolveKeys = (state, keys) => {
     if (state.hasIn(keys)) {
         return state;
@@ -37,15 +38,15 @@ const resolveKeys = (state, keys) => {
 export class SchemaFormReducer {
     constructor(initialState) {
         this.initialState = initialState;
-        this.createForm = createAction(__PROD__ ? "" : "创建一个表单数据");
-        this.updateItemData = createAction(__PROD__ ? "" : "更新一个表单数据");
-        this.updateItemMeta = createAction(__PROD__ ? "" : "更新一个表单元数据");
-        this.addItem = createAction(__PROD__ ? "" : "添加一个数据");
-        this.removeItem = createAction(__PROD__ ? "" : "删除一个数据");
-        this.moveToItem = createAction(__PROD__ ? "" : "元素移位");
-        this.removeItemData = createAction(__PROD__ ? "" : "删除一个字段的数据以及meta数据");
-        this.combineActions = createAction(__PROD__ ? "" : "合并多个action");
-        this.removeForm = createAction(__PROD__ ? "" : "清除一个form的数据");
+        this.createForm = createAction(isProd() ? "" : "创建一个表单数据");
+        this.updateItemData = createAction(isProd() ? "" : "更新一个表单数据");
+        this.updateItemMeta = createAction(isProd() ? "" : "更新一个表单元数据");
+        this.addItem = createAction(isProd() ? "" : "添加一个数据");
+        this.removeItem = createAction(isProd() ? "" : "删除一个数据");
+        this.moveToItem = createAction(isProd() ? "" : "元素移位");
+        this.removeItemData = createAction(isProd() ? "" : "删除一个字段的数据以及meta数据");
+        this.combineActions = createAction(isProd() ? "" : "合并多个action");
+        this.removeForm = createAction(isProd() ? "" : "清除一个form的数据");
     }
     get actions() {
         return {

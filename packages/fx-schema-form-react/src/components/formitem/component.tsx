@@ -6,6 +6,7 @@ import { DefaultProps } from "../default.props";
 import { hoc } from "./container";
 import { FieldHocOutProps } from "../../hocs/field";
 import { UtilsHocOutProps } from "../../hocs/utils";
+import { isProd } from "../../utils";
 
 export interface Props extends DefaultProps {
 
@@ -21,7 +22,7 @@ export class SchemaFormItem extends PureComponent<Props, any> {
         let FieldComponentWithHoc: any = FieldComponent;
 
         if (!FieldComponent) {
-            if (!__PROD__) { console.warn(uiSchema, "没有找到匹配的field"); }
+            if (!isProd()) { console.warn(uiSchema, "没有找到匹配的field"); }
             return null;
         }
 

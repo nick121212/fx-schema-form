@@ -16,13 +16,14 @@ var __rest = (this && this.__rest) || function (s, e) {
 import React, { PureComponent } from "react";
 import { compose } from "redux";
 import { hoc } from "./container";
+import { isProd } from "../../utils";
 let SchemaFormItem = class SchemaFormItem extends PureComponent {
     render() {
         const _a = this.props, { FieldComponent, uiSchema } = _a, extraProps = __rest(_a, ["FieldComponent", "uiSchema"]);
         const options = extraProps.getOptions(this.props, "field", uiSchema.field || uiSchema.type);
         let FieldComponentWithHoc = FieldComponent;
         if (!FieldComponent) {
-            if (!__PROD__) {
+            if (!isProd()) {
                 console.warn(uiSchema, "没有找到匹配的field");
             }
             return null;
