@@ -1,17 +1,18 @@
 {
   "name": "fx-schema-form-core",
-  "version": "3.0.76",
+  "version": "3.0.78",
   "description": "",
-  "main": "libs/index.js",
-  "types": "libs/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/typings/index.d.ts",
   "pre-commit": [
     "lint",
     "test"
   ],
   "scripts": {
-    "dist": "NODE_ENV=production webpack",
+    "dist": "NODE_ENV=production webpack;",
     "dev": "NODE_ENV=dev webpack",
-    "build": "rm -rf libs;tsc --outDir libs -d",
+    "build": "npm run dist;npm run dev;",
+    "libs": "rm -rf libs;tsc --outDir libs -d",
     "test": "mocha ./tests/**/*.spec.js --require babel-register"
   },
   "repository": {
