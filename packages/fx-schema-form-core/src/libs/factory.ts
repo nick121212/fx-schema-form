@@ -1,4 +1,4 @@
-import { warn } from "../utils";
+import { warn, hasOwnProperty } from "../utils";
 
 /**
  * 实例的工厂类
@@ -15,7 +15,7 @@ export class BaseFactory<T> {
      * @return {void | boolean}     是否添加成功
      */
     public add(name: string, intance: T, override = false): boolean {
-        if (this.pi.hasOwnProperty(name) || !override && this.has(name)) {
+        if (hasOwnProperty.call(this.pi, name) || !override && this.has(name)) {
             return false;
         }
 
@@ -30,7 +30,8 @@ export class BaseFactory<T> {
      * @return {Boolean}
      */
     public has(key: string): boolean {
-        return this.i.hasOwnProperty(key);
+        return hasOwnProperty.call(this.i, key);
+        // return this.i.hasOwnProperty(key);
     }
 
     /**
@@ -78,7 +79,7 @@ export class BaseFactory<T> {
         }
 
         for (const key in this.i) {
-            if (this.i.hasOwnProperty(key)) {
+            if (this.has(key)) {
                 const element = this.i[key];
 
                 if (func(key, element) === false) {

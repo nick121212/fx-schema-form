@@ -37,10 +37,10 @@ module.exports = {
     ]),
     output: {
         path: path.resolve('./dist'),
-        filename: __PROD__ ? 'index.js' : 'index.dev.js',
+        filename: __PROD__ ? 'index.prd.js' : 'index.dev.js',
         // chunkFilename: "[name].min.js",
         libraryTarget: "umd",
-        sourceMapFilename: __PROD__ ? 'index.js.map' : 'index.dev.js.map',
+        sourceMapFilename: __PROD__ ? 'index.prd.js.map' : 'index.dev.js.map',
         library: "SFC",
         // umdNamedDefine: true,
         // libraryExport: "default"
