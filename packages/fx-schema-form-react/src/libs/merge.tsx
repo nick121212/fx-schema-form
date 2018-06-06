@@ -69,13 +69,23 @@ function mergeDeep(param1: any, param2: any, schema?: any) {
     const immutableType = param1.constructor.name;
     let merged: any;
 
-    switch (immutableType) {
-        case "List": merged = List([]); break;
-        case "Map": merged = Map({}); break;
-        case "OrderedMap": merged = OrderedMap({}); break;
-        default:
-            throw new Error("Unsupported type");
+    if (List.isList(param1)) {
+        merged = List([]);
+    } else if (Map.isMap(param1)) {
+        merged = Map({});
+    } else if (OrderedMap.isOrderedMap(param1)) {
+        merged = OrderedMap({});
+    } else {
+        throw new Error("Unsupported type");
     }
+
+    // switch (immutableType) {
+    //     case "List": merged = List([]); break;
+    //     case "Map": merged = Map({}); break;
+    //     case "OrderedMap": merged = OrderedMap({}); break;
+    //     default:
+    //         throw new Error("Unsupported type");
+    // }
 
     param1.forEach((value: any, key: string) => {
         if (param2.has(key)) {
