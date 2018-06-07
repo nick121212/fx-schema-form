@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
-import ajv, { Ajv, ErrorObject, ValidationError } from "ajv";
+import { Ajv, ErrorObject, ValidationError } from "ajv";
 import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
@@ -34,7 +34,7 @@ export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaF
 
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
-    resetForm?: () => void;
+    resetForm?: () => Promise<void>;
 }
 
 export const name = "schemaFormDec";
@@ -189,16 +189,17 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     };
                 },
                 resetForm: (props: SchemaFormProps) => {
-                    return () => {
-                        const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
+                    return async () => {
+                        const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
 
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
+                            let schema: any = ajv.getSchema(schemaId).schema;
 
-                            if (createForm) {
+                            if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    data: initData
+                                    data: await getDefaultData(ajv, schema, initData)
                                 });
                             }
                         }

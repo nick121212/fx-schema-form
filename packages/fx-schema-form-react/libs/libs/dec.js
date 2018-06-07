@@ -138,18 +138,19 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                     });
                 },
                 resetForm: (props) => {
-                    return () => {
-                        const { formKey, shouldResetForm, reducerKey, initData = {} } = props;
+                    return () => __awaiter(this, void 0, void 0, function* () {
+                        const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
-                            if (createForm) {
+                            let schema = ajv.getSchema(schemaId).schema;
+                            if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    data: initData
+                                    data: yield getDefaultData(ajv, schema, initData)
                                 });
                             }
                         }
-                    };
+                    });
                 }
             })),
             __metadata("design:paramtypes", [Object])
