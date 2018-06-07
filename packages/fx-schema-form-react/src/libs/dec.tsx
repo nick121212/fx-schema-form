@@ -20,14 +20,14 @@ export interface SchemaFormHocSettings {
     parentKeys: string[];
 }
 
-export interface SchemaFormProps extends DefaultProps, UtilsHocOutProps, SchemaFormHocOutProps {
+export interface SchemaFormProps extends  UtilsHocOutProps, SchemaFormHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
     isValid?: boolean;
     isValidating?: boolean;
 
-    formKey: string;
+    formKey?: string;
     initData?: any;
     shouldResetForm?: boolean;
 }
@@ -44,7 +44,7 @@ export const name = "schemaFormDec";
  * @param Component 需要包装的组件
  */
 export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
-    return (Component: any): RC<SchemaFormProps, any> => {
+    return (Component: any): RC<SchemaFormProps & DefaultProps, any> => {
         @(compose(
             hocFactory.get("utils")(),
             // 绑定数据
@@ -66,7 +66,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 /**
                  * 验证所有的字段
                  */
-                validateAll: (props: SchemaFormProps) => {
+                validateAll: (props: SchemaFormProps & DefaultProps) => {
                     let { updateItemMeta } = props.getActions(props), timeId: any;
 
                     /**
@@ -188,7 +188,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         };
                     };
                 },
-                resetForm: (props: SchemaFormProps) => {
+                resetForm: (props: SchemaFormProps & DefaultProps) => {
                     return async () => {
                         const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
 
@@ -206,10 +206,10 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     };
                 }
             })) as any)
-        class SchemaFormComponentHoc extends PureComponent<SchemaFormProps, any> {
+        class SchemaFormComponentHoc extends PureComponent<SchemaFormProps & DefaultProps, any> {
             private _validateAll: (async?: boolean) => Promise<void>;
 
-            constructor(props: SchemaFormProps) {
+            constructor(props: SchemaFormProps & DefaultProps) {
                 super(props);
 
                 // 绑定当前的方法，可以使用autobind

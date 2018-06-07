@@ -14,7 +14,7 @@ declare const _default: {
         fieldFactory: BaseFactory<RC<DefaultProps, any>>;
         widgetFactory: BaseFactory<RC<DefaultProps, any>>;
     };
-    schemaFormDec: (settings?: SchemaFormHocSettings) => (Component: any) => RC<SchemaFormProps, any>;
+    schemaFormDec: (settings?: SchemaFormHocSettings) => (Component: any) => RC<SchemaFormProps & DefaultProps, any>;
     TreeMap: typeof TreeMap;
     reducerFactory: BaseFactory<FxReducer>;
     SchemaForm: typeof SchemaForm;
