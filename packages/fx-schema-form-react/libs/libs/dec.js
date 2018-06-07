@@ -146,7 +146,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    data: yield getDefaultData(ajv, schema, initData)
+                                    data: yield getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }
                         }

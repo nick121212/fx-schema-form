@@ -199,7 +199,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    data: await getDefaultData(ajv, schema, initData)
+                                    data: await getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }
                         }
