@@ -20,7 +20,7 @@ export interface SchemaFormHocSettings {
     parentKeys: string[];
 }
 
-export interface SchemaFormProps extends  UtilsHocOutProps, SchemaFormHocOutProps {
+export interface SchemaFormProps extends SchemaFormHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
@@ -66,7 +66,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 /**
                  * 验证所有的字段
                  */
-                validateAll: (props: SchemaFormProps & DefaultProps) => {
+                validateAll: (props: SchemaFormProps & DefaultProps & UtilsHocOutProps) => {
                     let { updateItemMeta } = props.getActions(props), timeId: any;
 
                     /**
@@ -188,7 +188,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         };
                     };
                 },
-                resetForm: (props: SchemaFormProps & DefaultProps) => {
+                resetForm: (props: SchemaFormProps & DefaultProps & UtilsHocOutProps) => {
                     return async () => {
                         const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
 
@@ -206,10 +206,10 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     };
                 }
             })) as any)
-        class SchemaFormComponentHoc extends PureComponent<SchemaFormProps & DefaultProps, any> {
+        class SchemaFormComponentHoc extends PureComponent<SchemaFormProps & DefaultProps & UtilsHocOutProps, any> {
             private _validateAll: (async?: boolean) => Promise<void>;
 
-            constructor(props: SchemaFormProps & DefaultProps) {
+            constructor(props: SchemaFormProps & DefaultProps & UtilsHocOutProps) {
                 super(props);
 
                 // 绑定当前的方法，可以使用autobind

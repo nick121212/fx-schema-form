@@ -1,12 +1,11 @@
 import { DefaultProps } from "../components";
 import { RC } from "../models";
 import { TreeMap } from "./tree";
-import { UtilsHocOutProps } from "../hocs/utils";
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
     parentKeys: string[];
 }
-export interface SchemaFormProps extends UtilsHocOutProps, SchemaFormHocOutProps {
+export interface SchemaFormProps extends SchemaFormHocOutProps {
     root?: TreeMap;
     data?: any;
     errors?: any;
