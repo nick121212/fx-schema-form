@@ -53,7 +53,7 @@
   },
   "include":[
     "src",
-    "dts",
+    "typings",
     "node_modules/@types"
   ],
   "exclude": [

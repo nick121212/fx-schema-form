@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import React from "react";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
@@ -10,8 +9,8 @@ export declare class DesignField extends React.PureComponent<DesignFieldProps, a
     private SchemaFormWithHoc;
     private SchemaFormItemWithHoc;
     constructor(props: DesignFieldProps, context: any);
-    private initComponent();
-    private renderItem(idx);
+    private initComponent;
+    private renderItem;
     render(): any;
 }
 declare const _default: {

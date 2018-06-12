@@ -134,7 +134,7 @@ export const globalOptions = Immutable.fromJS({
                             props.moveItem(props.parentKeys, props.uiSchema.keys, monitorItem.arrayIndex, arrayIndex || 0);
                         }
                     }
-                }, (connect, monitor) => ({
+                }, (connect: any, monitor: any) => ({
                     connectDropTarget: connect.dropTarget(),
                     isHover: monitor.isOver(),
                     canDrop: monitor.canDrop()
@@ -143,7 +143,7 @@ export const globalOptions = Immutable.fromJS({
                     beginDrag: (props: DefaultProps) => {
                         return props;
                     }
-                }, (connect, monitor) => ({
+                }, (connect: any, monitor: any) => ({
                     connectDragSource: connect.dragSource(),
                     isDragging: monitor.isDragging()
                 })),

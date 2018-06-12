@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { PureComponent } from "react";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";

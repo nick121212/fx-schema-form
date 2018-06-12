@@ -3,7 +3,7 @@ import { compose, shouldUpdate } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
-import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
+// import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 
 const { schemaFormTypes, SchemaForm } = schemaFormReact;
 

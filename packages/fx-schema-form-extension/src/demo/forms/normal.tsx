@@ -1,7 +1,6 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
-
 import Immutable from "immutable";
 
 import { globalOptions, curAjv } from "../init";

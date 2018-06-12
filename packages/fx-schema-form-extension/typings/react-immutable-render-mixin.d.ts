@@ -1,0 +1,1 @@
+declare module "react-immutable-render-mixin";

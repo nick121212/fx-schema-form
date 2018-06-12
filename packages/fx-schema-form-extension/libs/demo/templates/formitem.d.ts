@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { PureComponent } from "react";
 import { ArrayHocOutProps } from "fx-schema-form-react/libs/hocs/array";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
