@@ -53,7 +53,7 @@ export class DesignForm extends React.PureComponent<any> {
                         key={"designForm" + "design"}
                         RootComponent={Form}
                         schemaId="design"
-                        uiSchemas={uiSchema}
+                        uiSchemas={uiSchema as any}
                         parentKeys={this.props.parentKeys}
                         globalOptions={globalOptionsOfDesign}
                         ajv={curAjv} >
@@ -65,7 +65,7 @@ export class DesignForm extends React.PureComponent<any> {
                         RootComponent={Form}
                         reducerKey="schemaForm"
                         schemaId="design"
-                        uiSchemas={uiSchema}
+                        uiSchemas={uiSchema as any}
                         parentKeys={this.props.parentKeys}
                         globalOptions={globalOptionsOfDesign1}
                         ajv={curAjv} >

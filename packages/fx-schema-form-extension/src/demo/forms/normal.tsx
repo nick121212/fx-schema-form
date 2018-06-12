@@ -1,18 +1,12 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 
 import Immutable from "immutable";
-import Button from "antd/lib/button";
-import propTypes from "prop-types";
 
-import { globalOptions, curAjv, globalOptionsOfDesign, globalOptionsOfDesign1 } from "../init";
-import div from "../dnd/div";
-import checkbox from "../dnd/checkbox";
+import { globalOptions, curAjv } from "../init";
 
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
 
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
@@ -66,7 +60,7 @@ export class NormalForm extends React.PureComponent<any> {
                             }
                         }
                     })
-                }, "*"]}
+                }, "*"] as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptions}
                 ajv={curAjv} >

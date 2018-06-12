@@ -4,7 +4,7 @@ module.exports = {
     inline: true, //设置为true，当源文件改变时会自动刷新页面
     stats: { colors: true, progress: true }, //此选项允许你精确控制 bundle 信息展示。这可以是一个很好的中间层，如果你想要只展示某些 bundle 信息，但不是所有的信息。
     compress: false, //一切服务都启用gzip 压缩：
-    quiet: true, // 启用 quiet 后，除了初始启动信息之外的任何内容都不会被打印到控制台。这也意味着来自 webpack 的错误或警告在控制台不可见。当前配置的结果为显示信息
+    quiet: false, // 启用 quiet 后，除了初始启动信息之外的任何内容都不会被打印到控制台。这也意味着来自 webpack 的错误或警告在控制台不可见。当前配置的结果为显示信息
     historyApiFallback: {
         "index": "/dist/index.html",
         rewrites: [

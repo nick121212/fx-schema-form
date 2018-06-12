@@ -19,7 +19,7 @@ export class ArrayField extends PureComponent {
         this.initComponent();
     }
     initComponent() {
-        const { uiSchema, formItemData, getOptions } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
+        const { getOptions } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = null, SchemaFormItemWithHoc = null;
         if (options.formHocs && options.formHocs.constructor === Array) {
             SchemaFormWithHoc = compose(...options.formHocs)(options.ArrayFieldComponent || ArrayFieldComponent);

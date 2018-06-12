@@ -12,5 +12,5 @@ import { default as temp } from "./temp";
 import { default as data } from "./data";
 import { default as resetkey } from "./resetkey";
 
-export const hocs: Array<{ name: string, hoc: (hocFactory: BaseFactory<React.PureComponent>) => any }> =
+export const hocs: Array<{ name: string, hoc: (hocFactory: BaseFactory<any>) => any }> =
     [merge, utils, theme, field, array, validate, make, temp, data, resetkey];

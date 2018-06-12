@@ -182,6 +182,8 @@ export class TreeMap {
             if (!node) {
                 return null;
             }
+
+            return null;
         });
 
         return node;

@@ -38,6 +38,9 @@ export const hoc = (hocFactory) => {
                     if (childNode && childNode.value) {
                         if (settings.metaKeys) {
                             return childNode.value.filter((val, key) => {
+                                if (!settings.metaKeys) {
+                                    return false;
+                                }
                                 return settings.metaKeys.indexOf(key) >= 0;
                             });
                         }
@@ -76,7 +79,7 @@ export const hoc = (hocFactory) => {
                 constructor(props) {
                     super(props);
                     this.ComponentWithHoc = Component;
-                    const { uiSchema, getOptions } = this.props, { keys = [] } = this.props.uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name);
+                    const { getOptions } = this.props, { keys = [] } = this.props.uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name);
                     if (!options.rootReducerKey || options.rootReducerKey.constructor !== Array) {
                         console.error("dataHoc missing property rootReducerKey.should be a Array.");
                     }

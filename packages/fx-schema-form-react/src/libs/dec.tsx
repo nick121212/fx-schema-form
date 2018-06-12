@@ -3,17 +3,14 @@ import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
-import { Ajv, ErrorObject, ValidationError } from "ajv";
-import { schemaFieldFactory, schemaKeysFactory } from "fx-schema-form-core";
+import { ErrorObject, ValidationError } from "ajv";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models";
-import { hocFactory, reducerFactory } from "../factory";
+import { RC, schemaFormTypes } from "../models";
+import { hocFactory, errorFactory } from "../factory";
 import { TreeMap } from "./tree";
-import { SchemaFormActions } from "../reducers/schema.form";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { d, m } from "../reducers/reducer";
-import { ValidateHocOutProps } from "../hocs/validate";
 
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
@@ -62,7 +59,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     isValidating: root ? root.value.get("isLoading") : false
                 };
             }),
-            withHandlers({
+            withHandlers<any, any>({
                 /**
                  * 验证所有的字段
                  */
@@ -119,8 +116,11 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             }
 
                             // 验证数据
-                            curAjv.errors = null;
+                            curAjv.errors = undefined;
                             if (!await validate(dataRaw)) {
+                                if (!validate.errors) {
+                                    validate.errors = [];
+                                }
                                 throw new (ValidationError as any)(validate.errors.concat(curAjv.errors || []));
                             }
 
@@ -156,7 +156,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 if (childNode) {
                                     childNode.value = childNode.value.merge($validateAfterData).merge({
                                         isValid: false,
-                                        errorText: dataKeys.pop() + " " + element.message
+                                        errorText: errorFactory.get("default")(element, dataKeys)
                                     });
                                 }
                             });
@@ -213,13 +213,18 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 super(props);
 
                 // 绑定当前的方法，可以使用autobind
-                this._validateAll = props.validateAll.bind(this);
+                if (props.validateAll) {
+                    this._validateAll = props.validateAll.bind(this);
+                }
+
                 // 这里创建一个form，如果当前存在formKey，则覆盖掉当前的数据
-                props.resetForm();
+                if (props.resetForm) {
+                    props.resetForm();
+                }
             }
 
             public render(): JSX.Element | null {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props,
+                const { getRequiredKeys, getOptions, schemaId } = this.props,
                     options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})),
                     extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
 

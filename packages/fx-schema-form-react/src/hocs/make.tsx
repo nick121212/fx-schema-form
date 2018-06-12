@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from "react";
-import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
+import { compose, ComponentEnhancer } from "recompose";
 import { BaseFactory } from "fx-schema-form-core";
 import Immutable from "immutable";
 
@@ -27,14 +27,13 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             class MakeComponentHoc extends PureComponent<DefaultProps & MakeHocOutProps, any> {
                 public render(): JSX.Element {
                     const { uiSchema, getOptions } = this.props;
-                    const { type, field } = uiSchema as FxUiSchema;
+                    const { type, field, hocs: uiSchemaHocs } = uiSchema as FxUiSchema;
                     const fieldOptions = getOptions(this.props, schemaFormTypes.field, field || type as string,
-                        Immutable.fromJS(uiSchema.hocs ? { hocs: uiSchema.hocs } : {}),
+                        Immutable.fromJS(uiSchemaHocs ? { hocs: uiSchemaHocs } : {}),
                         Immutable.fromJS(settings || {}));
                     const hocs: Array<string | ComponentEnhancer<any, any>> = fieldOptions.hocs
                         || ["utils", "theme", "field", "validate", "array", "temp"];
-
-                    let ComponentWithHocs: any = compose<DefaultProps & MakeHocOutProps, any>
+                    const ComponentWithHocs: any = compose<DefaultProps & MakeHocOutProps, any>
                         (...([...hocs].map(hoc1 => {
                             if (typeof hoc1 !== "string") {
                                 return hoc1;

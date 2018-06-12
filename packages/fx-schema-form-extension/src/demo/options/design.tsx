@@ -1,9 +1,6 @@
-import React from "react";
 import Immutable from "immutable";
 import schemaFormReact from "fx-schema-form-react";
 import { immutableRenderDecorator } from "react-immutable-render-mixin";
-import { Button } from "antd";
-import { compose, shouldUpdate } from "recompose";
 import { globalOptions } from "./normal";
 
 export const globalOptionsOfDesign = Immutable.fromJS({

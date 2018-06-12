@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { compose, shouldUpdate } from "recompose";
+import { compose } from "recompose";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, schemaFormTypes } from "../models";

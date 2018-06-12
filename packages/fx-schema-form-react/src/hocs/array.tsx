@@ -1,13 +1,12 @@
 
 import React, { PureComponent } from "react";
 import { branch, compose, withHandlers, ComponentEnhancer } from "recompose";
-import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
-import { reducerFactory } from "../factory";
+import { ASN } from "../reducers/schema.form";
 
 export interface ArrayHocOutProps {
     addItem: (props: DefaultProps, data?: any) => Promise<void>;
@@ -24,7 +23,7 @@ export const name = "array";
 export const hoc = (hocFactory: BaseFactory<any>) => {
     return () => {
         const commHoc = compose(
-            withHandlers({
+            withHandlers<ArrayProps, any>({
                 /**
                  * 更新一个数据
                  * @param {ArrayProps} propsCur 当前的props
@@ -35,12 +34,11 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                             return;
                         }
                         const { items, keys, defaultData } = props.uiSchema;
-
-                        let dData = await props.getDefaultData(props.ajv, items as any, data, defaultData, true);
+                        const dData = await props.getDefaultData(props.ajv, items as any, data, defaultData, true);
 
                         propsCur.getActions(propsCur).addItem({
                             parentKeys: props.parentKeys,
-                            keys: keys,
+                            keys: keys as string[],
                             data: dData
                         });
                     };

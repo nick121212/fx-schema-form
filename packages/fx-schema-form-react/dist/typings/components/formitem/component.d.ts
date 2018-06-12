@@ -6,5 +6,5 @@ export interface Props extends DefaultProps {
 }
 export declare class SchemaFormItem extends PureComponent<Props, any> {
     static propTypes: ValidationMap<Props>;
-    render(): JSX.Element;
+    render(): JSX.Element | null;
 }

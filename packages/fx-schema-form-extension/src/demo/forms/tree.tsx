@@ -1,17 +1,10 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import Select from "antd/lib/select";
-
-import Immutable from "immutable";
-import Button from "antd/lib/button";
-import propTypes from "prop-types";
 
 import { treeGlobalOptions, curAjv } from "../init";
 
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
 
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
@@ -33,7 +26,7 @@ export class TreeForm extends React.PureComponent<any> {
                 uiSchemas={[{
                     key: "root",
                     field: "tree"
-                }]}
+                }] as any}
                 arrayLevel={[0]}
                 parentKeys={this.props.parentKeys}
                 globalOptions={treeGlobalOptions}

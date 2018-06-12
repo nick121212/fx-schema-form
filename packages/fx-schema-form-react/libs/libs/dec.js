@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
 import { ValidationError } from "ajv";
 import { schemaFormTypes } from "../models";
-import { hocFactory } from "../factory";
+import { hocFactory, errorFactory } from "../factory";
 import { d, m } from "../reducers/reducer";
 export const name = "schemaFormDec";
 export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
@@ -29,11 +29,15 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
         let SchemaFormComponentHoc = class SchemaFormComponentHoc extends PureComponent {
             constructor(props) {
                 super(props);
-                this._validateAll = props.validateAll.bind(this);
-                props.resetForm();
+                if (props.validateAll) {
+                    this._validateAll = props.validateAll.bind(this);
+                }
+                if (props.resetForm) {
+                    props.resetForm();
+                }
             }
             render() {
-                const { errors, isValid = false, isValidating = false, getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
+                const { getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
                 return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys, schemaId: schemaId }, extraProps)));
             }
         };
@@ -79,8 +83,11 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                             if (Map.isMap(dataRaw) || List.isList(dataRaw)) {
                                 dataRaw = dataRaw.toJS();
                             }
-                            curAjv.errors = null;
+                            curAjv.errors = undefined;
                             if (!(yield validate(dataRaw))) {
+                                if (!validate.errors) {
+                                    validate.errors = [];
+                                }
                                 throw new ValidationError(validate.errors.concat(curAjv.errors || []));
                             }
                             root.value = root.value.merge({
@@ -108,7 +115,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 if (childNode) {
                                     childNode.value = childNode.value.merge($validateAfterData).merge({
                                         isValid: false,
-                                        errorText: dataKeys.pop() + " " + element.message
+                                        errorText: errorFactory.get("default")(element, dataKeys)
                                     });
                                 }
                             });

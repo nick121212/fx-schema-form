@@ -1,13 +1,12 @@
 
 import React, { PureComponent } from "react";
-import { compose, shouldUpdate } from "recompose";
 import { connect, Dispatch } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
-import { createSelector, createSelectorCreator, defaultMemoize } from "reselect";
+import { createSelectorCreator, defaultMemoize } from "reselect";
 import Immutable, { is } from "immutable";
 
 import { DefaultProps } from "../components";
-import { FxUiSchema, RC, schemaFormTypes } from "../models";
+import { RC, schemaFormTypes } from "../models";
 import { UtilsHocOutProps } from "./utils";
 import { TreeMap } from "../libs/tree";
 
@@ -44,7 +43,7 @@ export interface DataHocSettings {
 }
 
 // 自定义选择器创建函数
-const fxSelectorCreator = createSelectorCreator(defaultMemoize, is);
+const fxSelectorCreator: any = createSelectorCreator(defaultMemoize, is);
 
 export const name = "data";
 export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
@@ -103,6 +102,9 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                     if (childNode && childNode.value) {
                         if (settings.metaKeys) {
                             return childNode.value.filter((val: any, key: string) => {
+                                if (!settings.metaKeys) {
+                                    return false;
+                                }
                                 return settings.metaKeys.indexOf(key) >= 0;
                             });
                         }
@@ -169,7 +171,7 @@ export const hoc = (hocFactory: BaseFactory<RC<DefaultProps, {}>>) => {
                 constructor(props: DefaultProps & UtilsHocOutProps) {
                     super(props);
 
-                    const { uiSchema, getOptions } = this.props,
+                    const { getOptions } = this.props,
                         { keys = [] } = this.props.uiSchema || {},
                         options = getOptions(this.props, schemaFormTypes.hoc, name);
 

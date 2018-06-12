@@ -4,7 +4,7 @@ export declare class TreeMap {
     value: any;
     private parent;
     children: TreeMap[];
-    constructor(key: string, value: any, parent?: TreeMap);
+    constructor(key: string, value: any, parent?: TreeMap | undefined);
     addChild(keys: Array<Tsn>, value?: any): TreeMap | null;
     getKey(): string;
     getCurrentKeys(): Array<Tsn>;

@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from "react";
-import { BaseFactory, MergeLib,  UiSchema } from "fx-schema-form-core";
+import { BaseFactory, MergeLib, UiSchema } from "fx-schema-form-core";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, RC } from "../models";
@@ -39,13 +39,14 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     const uiSchema = props.uiSchema ? Object.assign({}, props.uiSchema) : undefined;
 
+
                     if (uiSchema) {
                         uiSchema.keys = uiSchema.originKeys;
                     }
 
                     // 这里做数据合并处理
                     // 将合并之后的数据传递到下一层的Component
-                    const merge = new MergeLib(props.ajv, props.schemaId, uiSchema, props.uiSchemas as any);
+                    const merge = new MergeLib(props.ajv, props.schemaId, uiSchema as any, props.uiSchemas as any);
 
                     this._mergeUiSchemaList = merge.mergeUiSchemaList.map((v: any) => {
                         return this.mergeKeys(v);

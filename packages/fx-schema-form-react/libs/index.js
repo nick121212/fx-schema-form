@@ -1,6 +1,6 @@
 import { BaseFactory } from "fx-schema-form-core";
 import { reducerFactory, hocFactory, themeFactory } from "./factory";
-import { SchemaForm } from "./components";
+import { SchemaForm, SchemaFormItem } from "./components";
 import { schemaFormTypes } from "./models";
 import fields from "./fields";
 import { TreeMap } from "./libs/tree";
@@ -29,6 +29,7 @@ export default {
     SchemaForm,
     hocFactory,
     schemaFormTypes,
+    SchemaFormItem,
     merge
 };
 //# sourceMappingURL=index.js.map

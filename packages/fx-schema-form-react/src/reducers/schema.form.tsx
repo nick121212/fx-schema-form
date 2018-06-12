@@ -142,7 +142,7 @@ export class SchemaFormReducer<T> implements FxReducer {
                 const action = this.actions[key];
 
                 if (!action.assigned()) {
-                    action.assignTo(store);
+                    action.assignTo(store as any);
                 }
             }
         }

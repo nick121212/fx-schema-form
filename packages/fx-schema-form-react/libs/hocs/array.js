@@ -36,7 +36,7 @@ export const hoc = (hocFactory) => {
                         return;
                     }
                     const { items, keys, defaultData } = props.uiSchema;
-                    let dData = yield props.getDefaultData(props.ajv, items, data, defaultData, true);
+                    const dData = yield props.getDefaultData(props.ajv, items, data, defaultData, true);
                     propsCur.getActions(propsCur).addItem({
                         parentKeys: props.parentKeys,
                         keys: keys,

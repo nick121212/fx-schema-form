@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter as Router, Switch, Route, Redirect, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 
 import { DesignForm, children } from "./forms/design";
 import { NormalForm } from "./forms/normal";
@@ -43,8 +43,6 @@ export class RouterComponent extends React.Component<any, any> {
                 <Route path="/form/tree" component={() => {
                     return <TreeForm ajv={curAjv} schemaId="dnd-tree" reducerKey="schemaForm" formKey="treeForm" initData={{}} />;
                 }} />
-                {/* <Route key="panel-create" path="/panel/create" component={CreateComponent} />, */}
-                {/* <Route key="panel-edit" path="/panel/edit/:id" component={CreateComponent} />, */}
             </div>
         </div>;
     }

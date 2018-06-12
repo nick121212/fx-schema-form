@@ -31,7 +31,7 @@ export const hoc = (hocFactory) => {
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => __awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
-                            const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
+                            const { uiSchema, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
                                 propsCur.getActions(propsCur).updateItemMeta({
@@ -49,7 +49,7 @@ export const hoc = (hocFactory) => {
                                     validateFunc = ajv.getSchema(schema.$id);
                                 }
                                 else {
-                                    let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
+                                    let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath || ""));
                                     delete schemaInCache.$id;
                                     delete schemaInCache.$ref;
                                     validateFunc = ajv.compile(schemaInCache);
@@ -83,10 +83,11 @@ export const hoc = (hocFactory) => {
                 }), withHandlers({
                     updateItemData: (propsCur) => {
                         return (raw, { parentKeys, uiSchema }, data, meta) => {
+                            const { keys = [] } = uiSchema || {};
                             return propsCur.getActions(propsCur, raw).updateItemData({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
-                                data: data,
+                                parentKeys,
+                                keys,
+                                data,
                                 meta
                             });
                         };
@@ -94,20 +95,22 @@ export const hoc = (hocFactory) => {
                     updateItemMeta: (propsCur) => {
                         return (raw, props, data, meta = null, noChange = false) => __awaiter(this, void 0, void 0, function* () {
                             const { parentKeys, uiSchema } = props;
+                            const { keys = [] } = uiSchema || {};
                             return propsCur.getActions(propsCur, raw).updateItemMeta({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
+                                parentKeys,
+                                keys,
                                 meta: meta || (yield propsCur.validate(props, data)),
-                                noChange: noChange
+                                noChange
                             });
                         });
                     },
                     removeItemData: (propsCur) => {
                         return (raw, { parentKeys, uiSchema }, meta = true) => {
+                            const { keys = [] } = uiSchema || {};
                             return propsCur.getActions(propsCur, raw).removeItemData({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
-                                meta: meta
+                                parentKeys,
+                                keys,
+                                meta
                             });
                         };
                     },

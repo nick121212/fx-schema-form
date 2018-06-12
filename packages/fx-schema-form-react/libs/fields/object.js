@@ -5,9 +5,9 @@ import { compose } from "recompose";
 export const name = "object";
 export class ObjectField extends PureComponent {
     render() {
-        const { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, schemaId, getOptions, reducerKey, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
+        const { arrayIndex, arrayLevel, parentKeys, globalOptions, ajv, getOptions, reducerKey, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = SchemaForm;
-        if (uiSchema.children === null || !uiSchema.schemaPath) {
+        if (!uiSchema || uiSchema.children === null || !uiSchema.schemaPath) {
             return null;
         }
         if (options.formHocs && options.formHocs.constructor === Array) {

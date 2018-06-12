@@ -43,11 +43,11 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
     /**
      * 包装之后的字段组件
      */
-    private SchemaFormWithHoc: new () => React.PureComponent = DesignFieldComponent;
+    private SchemaFormWithHoc: any = DesignFieldComponent;
     /**
      * 包装之后的子元素组件
      */
-    private SchemaFormItemWithHoc: new () => React.PureComponent = SchemaForm;
+    private SchemaFormItemWithHoc: any = SchemaForm;
 
     /**
      * 构造函数

@@ -11,7 +11,6 @@ export const hoc = (hocFactory) => {
             class TempComponentHoc extends PureComponent {
                 render() {
                     const { uiSchema, getOptions, reducerKey } = this.props;
-                    const { options: uiSchemaOptions, keys } = uiSchema;
                     const TempComponents = this.getTemplates();
                     return TempComponents.reduce((prev, { key, Temp }) => {
                         const tempOptions = getOptions(this.props, schemaFormTypes.template, key), TempWithHoc = compose(hocFactory.get("utils")(), ...(tempOptions.tempHocs || []))(Temp);
@@ -19,7 +18,7 @@ export const hoc = (hocFactory) => {
                     }, React.createElement(Component, Object.assign({}, this.props)));
                 }
                 getTemplates() {
-                    const { uiSchema, currentTheme, getOptions } = this.props, { keys, type, temps } = uiSchema, typeDefaultOptions = getOptions(this.props, schemaFormTypes.field, type), TempComponent = [];
+                    const { uiSchema, currentTheme, getOptions } = this.props, { type, temps } = uiSchema, typeDefaultOptions = getOptions(this.props, schemaFormTypes.field, type), TempComponent = [];
                     let template;
                     if (temps) {
                         template = temps;

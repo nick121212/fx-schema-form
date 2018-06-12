@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import PropTypes, { ValidationMap } from "prop-types";
+import { ValidationMap } from "prop-types";
 
 import { DefaultProps } from "../index";
 import { hoc } from "./container";

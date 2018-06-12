@@ -1,14 +1,12 @@
 
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
-import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
+import { BaseFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { Action } from "redux-act";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { RC } from "../models";
-import { reducerFactory } from "../factory";
-import { SchemaFormActions } from "../reducers/schema.form";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
@@ -35,7 +33,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 hocFactory.get("data")({
                     root: true
                 }),
-                withHandlers({
+                withHandlers<any, any>({
                     /**
                      * 验证单个数据
                      * 使用当前组件中的uiSchema，以及传递过来的数据做验证
@@ -44,7 +42,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     validate: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
-                            const { uiSchema, reducerKey, parentKeys, ajv, getTitle } = props;
+                            const { uiSchema, parentKeys, ajv, getTitle } = props;
                             const schema = Object.assign({}, uiSchema);
                             const timeId = setTimeout(() => {
                                 propsCur.getActions(propsCur).updateItemMeta({
@@ -64,7 +62,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 } else if (schema.$id) {
                                     validateFunc = ajv.getSchema(schema.$id);
                                 } else {
-                                    let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath));
+                                    let schemaInCache = Object.assign({}, schemaFieldFactory.get(schema.schemaPath || ""));
 
                                     delete schemaInCache.$id;
                                     delete schemaInCache.$ref;
@@ -89,7 +87,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 }
                             } catch (err) {
                                 // 处理错误消息
-                                result.errorText = err.errors ?
+                                result.errorText =  err.errors ?
                                     ajv.errorsText(err.errors, {
                                         dataVar: getTitle(props).toString()
                                     }) : err.message;
@@ -106,16 +104,18 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 hocFactory.get("resetKey")({
                     excludeKeys: ["formItemData"]
                 }),
-                withHandlers({
+                withHandlers<any, any>({
                     /**
                      * 更新一个数据
                      */
                     updateItemData: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, data: any, meta?: any) => {
+                            const { keys = [] } = uiSchema || {};
+
                             return propsCur.getActions(propsCur, raw).updateItemData({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
-                                data: data,
+                                parentKeys,
+                                keys,
+                                data,
                                 meta
                             });
                         };
@@ -126,12 +126,13 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     updateItemMeta: (propsCur: DefaultProps & UtilsHocOutProps & ValidateHocOutProps) => {
                         return async (raw: boolean, props: DefaultProps, data: any, meta: any = null, noChange = false) => {
                             const { parentKeys, uiSchema } = props;
+                            const { keys = [] } = uiSchema || {};
 
                             return propsCur.getActions(propsCur, raw).updateItemMeta({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
+                                parentKeys,
+                                keys,
                                 meta: meta || await propsCur.validate(props, data),
-                                noChange: noChange
+                                noChange
                             });
                         };
                     },
@@ -140,10 +141,12 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                      */
                     removeItemData: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, meta = true) => {
+                            const { keys = [] } = uiSchema || {};
+
                             return propsCur.getActions(propsCur, raw).removeItemData({
-                                parentKeys: parentKeys,
-                                keys: uiSchema.keys,
-                                meta: meta
+                                parentKeys,
+                                keys,
+                                meta
                             });
                         };
                     },
@@ -156,7 +159,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         };
                     },
                 }),
-                withHandlers({
+                withHandlers<any, any>({
                     updateItemData: (propsCur: DefaultProps & ValidateHocOutProps) => {
                         return propsCur.updateItemData.bind(null, false);
                     },

@@ -37,6 +37,8 @@ export interface FxUiSchema extends UiSchema {
     onValueChanged?: <T>(props: DefaultProps, data: T) => void;
     // 数组的默认添加数据
     defaultData?: any;
+    // 数据的format验证
+    format: string;
 }
 export type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 

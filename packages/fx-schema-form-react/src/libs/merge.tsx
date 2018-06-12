@@ -3,9 +3,10 @@ import { Iterable, Map, OrderedMap, List, OrderedSet, Set, Stack } from "immutab
 function doSetOp(param1: any, param2: any, op: string) {
     const type = param1.constructor.name;
 
-    if (type === "Set" || type === "OrderedSet") {
+    if (Set.isSet(param1) || OrderedSet.isOrderedSet(param1)) {
         return param1[op](param2);
     }
+
     return param1.toOrderedSet()[op](param2)[`to${type}`]();
 }
 
@@ -66,7 +67,7 @@ function mergeDeep(param1: any, param2: any, schema?: any) {
         throw new Error("Sets and Stacks can't be merged with schema");
     }
 
-    const immutableType = param1.constructor.name;
+    // const immutableType = param1.constructor.name;
     let merged: any;
 
     if (List.isList(param1)) {

@@ -7,7 +7,7 @@ import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
 
-const { SchemaForm, schemaFormTypes, merge } = schemaFormReact;
+const { schemaFormTypes, merge } = schemaFormReact;
 
 export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
 }

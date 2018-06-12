@@ -141,7 +141,7 @@ export const hoc = (hocFactory) => {
                 }
                 getDefaultData(ajv, schema, data, defaultData, needMerge = false) {
                     return __awaiter(this, void 0, void 0, function* () {
-                        let itemSchema = {}, defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
+                        let defaultValue = {}, type = schema.type, mergeData = (dataOfType) => {
                             if (!needMerge) {
                                 return defaultValue.defaultData;
                             }

@@ -1,7 +1,5 @@
 
 import React from "react";
-import { compose, shouldUpdate, ComponentEnhancer } from "recompose";
-import { connect } from "react-redux";
 import { BaseFactory } from "fx-schema-form-core";
 import { fromJS } from "immutable";
 

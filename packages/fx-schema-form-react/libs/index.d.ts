@@ -1,12 +1,11 @@
 /// <reference types="react" />
 import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
-import { FxReducer } from "./reducers/reducer";
-import { SchemaForm, DefaultProps } from "./components";
+import { SchemaForm, DefaultProps, SchemaFormItem } from "./components";
 import { RC, SchemaFormNs } from "./models";
 import { TreeMap } from "./libs/tree";
-import { SchemaFormHocSettings } from "./libs/dec";
-import { SchemaFormProps } from "./libs/dec";
+import { SchemaFormHocSettings, SchemaFormProps } from "./libs/dec";
+import { FxReducer } from "./reducers/reducer";
 declare const _default: {
     themeFactory: BaseFactory<SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>>;
     defaultTheme: {
@@ -25,6 +24,7 @@ declare const _default: {
         template: string;
         field: string;
     };
+    SchemaFormItem: typeof SchemaFormItem;
     merge: (param1: any, param2: any, schema?: any) => any;
 };
 export default _default;

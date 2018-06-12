@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
-import { shouldUpdate, compose } from "recompose";
+import { compose } from "recompose";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, schemaFormTypes } from "../models";
 
 import { SchemaForm } from "../components/form";
-import { hocFactory } from "../factory";
+// import { hocFactory } from "../factory";
 import { UtilsHocOutProps } from "../hocs/utils";
 
 export interface ArrayFieldProps extends DefaultProps, UtilsHocOutProps {
@@ -31,8 +31,8 @@ export const name = "array";
  * 循环生成元素个数的SchemaForm
  */
 export class ArrayField extends PureComponent<ArrayFieldProps, any> {
-    private SchemaFormWithHoc: new () => React.PureComponent = ArrayFieldComponent;
-    private SchemaFormItemWithHoc: new () => React.PureComponent;
+    private SchemaFormWithHoc: any = ArrayFieldComponent;
+    private SchemaFormItemWithHoc: any;
 
     constructor(props: ArrayFieldProps) {
         super(props);
@@ -44,7 +44,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
      * 初始化Component
      */
     private initComponent() {
-        const { uiSchema, formItemData, getOptions } = this.props,
+        const { getOptions } = this.props,
             options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = null, SchemaFormItemWithHoc = null;
 
@@ -53,7 +53,7 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
         }
 
         if (options.formItemHocs && options.formItemHocs.constructor === Array) {
-            SchemaFormItemWithHoc = compose(...options.formItemHocs)(SchemaForm);
+            SchemaFormItemWithHoc = compose(...options.formItemHocs)(SchemaForm as any);
         }
 
         this.SchemaFormWithHoc = SchemaFormWithHoc;

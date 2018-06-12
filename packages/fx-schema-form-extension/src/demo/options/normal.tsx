@@ -147,7 +147,7 @@ export const globalOptions = Immutable.fromJS({
                     connectDragSource: connect.dragSource(),
                     isDragging: monitor.isDragging()
                 })),
-                (Component: new () => React.PureComponent) => {
+                (Component: any) => {
                     return class Com extends React.PureComponent<DefaultProps &
                         {
                             connectDragSource: any, isDragging: any, canDrop: boolean,

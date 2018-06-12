@@ -1,20 +1,16 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 import Select from "antd/lib/select";
 
 import Immutable from "immutable";
-import Button from "antd/lib/button";
-import propTypes from "prop-types";
 
 import { globalOptions, curAjv } from "../init";
 
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
 
 // ReactDOM.findDOMNode()
-
+const SelectOption: any = Select.Option;
 
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
@@ -41,7 +37,7 @@ export class OneOfForm extends React.PureComponent<any> {
                             select: {
                                 options: {
                                     children: [1, 2, 3, 4].map((val: number, index: number) => {
-                                        return <Select.Option key={index} value={val}>{val}</Select.Option>;
+                                        return (<SelectOption key={index} value={val}>{val}</SelectOption>) as any;
                                     })
                                 }
                             }
@@ -73,7 +69,7 @@ export class OneOfForm extends React.PureComponent<any> {
                             }
                         }
                     })
-                }]}
+                }] as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptions}
                 ajv={curAjv} >

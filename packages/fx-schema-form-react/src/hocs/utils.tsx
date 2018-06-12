@@ -1,8 +1,7 @@
 
 
 import React, { PureComponent } from "react";
-import { BaseFactory, MergeLib, FxJsonSchema, schemaKeysFactory, schemaFieldFactory, getSchemaId } from "fx-schema-form-core";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
+import { BaseFactory, schemaKeysFactory, schemaFieldFactory, getSchemaId } from "fx-schema-form-core";
 import Immutable, { fromJS } from "immutable";
 import resolvePathname from "resolve-pathname";
 import { JSONSchema6 } from "json-schema";
@@ -91,7 +90,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 private getPathProps(props: DefaultProps & UtilsHocOutProps, path: string): DefaultProps {
                     let newProps = Object.assign({}, props, {
                         uiSchema: Object.assign({}, props.uiSchema, {
-                            keys: props.getPathKeys(props.uiSchema.keys as any, path)
+                            keys: props.getPathKeys((props.uiSchema as any).keys as any, path)
                         })
                     });
 
@@ -150,38 +149,6 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
 
                     return extraProps;
                 }
-
-                /**
-                 * dataPath中的key格式化；
-                 * dataPath是一个字符串，需要把里面的数字转化一下
-                 * dataPath中可能有数组的格式，所以需要把数字转换成数字，而不是字符
-                 * 遍历所有的key，发现是数字字符，则查找父级的schema，如果父级的type是array，则把当前key转换成数字
-                 * @param schemaId schemaId
-                 * @param dataPath 当前的数据路径字符串
-                 */
-                // private normalizeDataPath(schemaId: string, dataPath: string): Array<string | number> {
-                //     let dataKeys: Array<string | number> = dataPath.replace(/^\//g, "").split("/");
-
-                //     dataKeys = dataKeys.map((key: string | number, index: number) => {
-                //         if (Number.isInteger(+key)) {
-                //             let keys: Array<string | number> = dataKeys.slice(0, index);
-
-                //             keys.unshift(schemaId);
-
-                //             if (schemaKeysFactory.has(keys.join("/"))) {
-                //                 let schema = schemaFieldFactory.get(schemaKeysFactory.get(keys.join("/")));
-
-                //                 if (schema.type === "array") {
-                //                     return +key;
-                //                 }
-                //             }
-                //         }
-
-                //         return key;
-                //     });
-
-                //     return dataKeys;
-                // }
 
                 /**
                  * 获取参数
@@ -300,8 +267,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param needMerge    是否需要合并数据
                  */
                 private async getDefaultData(ajv: Ajv, schema: JSONSchema6, data: any, defaultData?: any, needMerge = false): Promise<any> {
-                    let itemSchema: any = {},
-                        defaultValue: any = {},
+                    let defaultValue: any = {},
                         type = schema.type,
                         mergeData = (dataOfType: any) => {
                             if (!needMerge) {

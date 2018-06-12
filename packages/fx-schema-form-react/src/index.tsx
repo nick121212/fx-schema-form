@@ -1,18 +1,15 @@
 import React from "react";
 import { BaseFactory } from "fx-schema-form-core";
 
-import { SchemaFormReducer } from "./reducers/schema.form";
 import { reducerFactory, hocFactory, themeFactory } from "./factory";
-import { FxReducer } from "./reducers/reducer";
-import { SchemaFormActions } from "./reducers/schema.form";
 import { SchemaForm, DefaultProps, SchemaFormItem } from "./components";
-import { RC, SchemaFormNs, schemaFormTypes } from "./models";
+import { RC,  schemaFormTypes, SchemaFormNs } from "./models";
 
 import fields from "./fields";
 import { TreeMap } from "./libs/tree";
-import { SchemaFormHocSettings, SchemaFormHocOutProps, default as schemaFormDec, name as schemaFormDecName } from "./libs/dec";
-import { SchemaFormProps } from "./libs/dec";
+import {  default as schemaFormDec, name as schemaFormDecName, SchemaFormHocSettings, SchemaFormProps } from "./libs/dec";
 import merge from "./libs/merge";
+import { FxReducer } from "./reducers/reducer";
 
 /**
  * 默认样式配置
@@ -23,6 +20,8 @@ const defaultTheme = {
     fieldFactory: new BaseFactory<RC<DefaultProps, any>>(),
     widgetFactory: new BaseFactory<RC<DefaultProps, any>>()
 };
+
+// const a :SchemaFormProps;
 
 /**
  * 添加默认的fields
@@ -48,6 +47,7 @@ export default {
     SchemaForm,
     hocFactory,
     schemaFormTypes,
+    SchemaFormItem,
     merge
 };
 
