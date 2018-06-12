@@ -13,8 +13,6 @@ export interface ObjectFieldProps extends DefaultProps, UtilsHocOutProps {
 
 export const name = "tree";
 
-
-
 /**
  * Object类型的字段解析
  * 嵌套一层SchemaForm

@@ -8,6 +8,7 @@ export default {
         fontSize: { type: "number" },
         url: { type: "string", format: "url" },
         email: { type: "string", format: "email" },
+        isEighteen: { type: "boolean", title: "已满18岁" },
         ids: {
             type: "array",
             description: "拖动元素试试",

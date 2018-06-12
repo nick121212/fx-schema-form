@@ -8,7 +8,7 @@ import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
 import { treeGlobalOptions, curAjv } from "../init";
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
 let TreeForm = class TreeForm extends React.PureComponent {
     render() {
         const { isValidating = false, isValid = false, validateAll, data } = this.props;

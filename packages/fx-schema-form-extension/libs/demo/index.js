@@ -19,9 +19,8 @@ store.subscribe(() => {
     console.log(store.getState().toJS());
 });
 ReactDOM.render(React.createElement(Provider, { store: store },
-    React.createElement("div", null,
-        React.createElement(Router, null,
-            React.createElement(RouterComponent, { key: "rootRouter" })))), document.getElementById("root"), () => {
+    React.createElement(Router, null,
+        React.createElement(RouterComponent, { key: "rootRouter" }))), document.getElementById("root"), () => {
     console.log("form ok!");
 });
 //# sourceMappingURL=index.js.map

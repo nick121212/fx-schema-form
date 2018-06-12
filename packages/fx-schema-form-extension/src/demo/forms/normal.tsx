@@ -60,6 +60,19 @@ export class NormalForm extends React.PureComponent<any> {
                             }
                         }
                     })
+                }, "isEighteen", {
+                    key: "textAlign",
+                    hocs: ["utils", "theme", "field", "validate", "show", "temp"],
+                    options: Immutable.fromJS({
+                        hoc: {
+                            show: {
+                                condition: {
+                                    paths: [{ path: "../isEighteen" }]
+                                },
+                                paths: ["../isEighteen"]
+                            }
+                        }
+                    })
                 }, "*"] as any}
                 parentKeys={this.props.parentKeys}
                 globalOptions={globalOptions}

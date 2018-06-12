@@ -1,7 +1,7 @@
 import React from "react";
 import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
-const { SchemaForm, schemaFormTypes, merge } = schemaFormReact;
+const { schemaFormTypes, merge } = schemaFormReact;
 export const name = "format";
 export const hoc = (hocFactory) => {
     return () => {

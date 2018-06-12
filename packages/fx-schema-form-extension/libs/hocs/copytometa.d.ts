@@ -8,12 +8,13 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
     formItemNode?: TreeMap;
 }
 export declare const name = "copyToMeta";
+export interface CopyToMetaPath {
+    path: string;
+    to: string[];
+    defaultValue?: any;
+}
 export interface CopyToMetaSettings {
-    paths?: Array<{
-        path: string;
-        to: string[];
-        defaultValue: any;
-    }>;
+    paths?: Array<CopyToMetaPath>;
     condition?: ConditionHocSettings;
 }
 export declare const hoc: (hocFactory: BaseFactory<any>) => (settings?: CopyToMetaSettings) => any;

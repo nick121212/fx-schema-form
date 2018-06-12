@@ -38,7 +38,7 @@ npm install --save fx-schema-form-extendsion
 
 ### condition
 
-条件hoc，可以设置需要使用的数据。
+条件hoc，可以设置需要使用的数据，一般不单独使用。
 
 配置参数:
 
@@ -48,12 +48,13 @@ npm install --save fx-schema-form-extendsion
 ```typescript
 export interface ConditionPath {
     /**
-     * 数据的路径，可是是相对路径，也可以是绝对路径
+     * 数据的路径，可以是相对路径
      * example: ./height, ../height, /height
      */
     path: string;
     /**
      * 是否从meta中获取数据
+     * 如果是从meta中获取数据，额需要配置metaKey
      */
     meta: boolean;
     /**
@@ -80,6 +81,37 @@ export interface ConditionPath {
 
 返回属性: null
 
+实例: [demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html#/form/normal)
+
+```ts
+
+// 下面是一个uiSchema的配置
+// 监听高度的变化，做一些操作
+{
+  key: "width",
+  hocs: ["utils", "theme", "field", "validate", "changed", "temp"],
+  options: Immutable.fromJS({
+      hoc: {
+          changed: {
+              paths: ["../height"],
+              condition: {
+                  paths: [{
+                      path: "../height"
+                  }]
+              },
+              onChanged: (props: any, data: any) => {
+                  let height = props.getPathKeys(props.uiSchema.keys as any, "../height").join("/");
+
+                  if (data[height] !== undefined) {
+                    // do something
+                  }
+              }
+          }
+      }
+  })
+}
+```
+
 ### copytometa
 
 把数据拷贝到meta中。
@@ -101,6 +133,28 @@ export interface CopyToMetaPath {
 ```
 
 返回属性: null
+
+实例: [demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html#/form/normal)
+
+```ts
+// 这是一个uiSchema的配置
+// 这里当宽度变化的时候，把宽度的值设置到高度的meta中去
+// 即宽度是高度的最大值
+{
+  key: "height",
+  hocs: ["utils", "theme", "field", "validate", "copyToMeta", "temp"],
+  options: Immutable.fromJS({
+      hoc: {
+          copyToMeta: {
+              condition: {
+                  paths: [{ path: "../width" }]
+              },
+              paths: [{ path: "../width", defaultValue: 0, to: ["options", "widget", "number", "options", "max"] }]
+          }
+      }
+  })
+}
+```
 
 ### datatometa
 
@@ -140,6 +194,54 @@ export interface CopyToMetaPath {
 
 返回属性: null
 
+实例: [demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html#/form/oneof)
+
+```ts
+// 这里对type的值做检测
+// 当type的值变化的时候，value的表单会变化
+[{
+  key: "type",
+  widget: "select",
+  options: Immutable.fromJS({
+      widget: {
+          select: {
+              options: {
+                  children: [1, 2, 3, 4].map((val: number, index: number) => {
+                      return (<SelectOption key={index} value={val}>{val}</SelectOption>) as any;
+                  })
+              }
+          }
+      }
+  })
+}, {
+  key: "value",
+  hocs: ["utils", "theme", "field", "validate", "oneOf", "array", "temp"],
+  options: Immutable.fromJS({
+      hoc: {
+          oneOf: {
+              condition: {
+                  paths: [{ path: "../type" }]
+              },
+              path: "../type",
+              key: "oneOf",
+              uiSchemas: {
+                  1: { schemaId: "dnd-oneof-number", uiSchemas: ["*"] },
+                  2: { schemaId: "dnd-oneof-string1", uiSchemas: ["*"] },
+                  3: { schemaId: "dnd-oneof-boolean", uiSchemas: ["*"] },
+                  4: {
+                      schemaId: "dnd-oneof-object", uiSchemas: [{
+                          key: "",
+                          temps: ["formitem"],
+                          children: ["*"]
+                      }]
+                  }
+              }
+          }
+      }
+  })
+}]
+```
+
 ### resetkey
 
 处理下一级hoc的props属性的列表。
@@ -162,6 +264,26 @@ export interface CopyToMetaPath {
 - condition: ConditionHocSettings; [condition](#condition)的设置参数。
 
 返回属性: null
+
+实例: [demo](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html#/form/normal)
+
+```ts
+// 这里户根据isEighteen的值，来决定现不现实textAlign这个字段
+{
+    key: "textAlign",
+    hocs: ["utils", "theme", "field", "validate", "show", "temp"],
+    options: Immutable.fromJS({
+        hoc: {
+            show: {
+                condition: {
+                    paths: [{ path: "../isEighteen" }]
+                },
+                paths: ["../isEighteen"]
+            }
+        }
+    })
+}
+```
 
 ### wrapper
 

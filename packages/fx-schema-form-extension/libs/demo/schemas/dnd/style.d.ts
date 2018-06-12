@@ -25,6 +25,10 @@ declare const _default: {
             type: string;
             format: string;
         };
+        isEighteen: {
+            type: string;
+            title: string;
+        };
         ids: {
             type: string;
             description: string;

@@ -10,7 +10,8 @@ import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Immutable from "immutable";
 import { globalOptions, curAjv } from "../init";
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
+const SelectOption = Select.Option;
 let OneOfForm = class OneOfForm extends React.PureComponent {
     render() {
         const { isValidating = false, isValid = false, validateAll } = this.props;
@@ -26,7 +27,7 @@ let OneOfForm = class OneOfForm extends React.PureComponent {
                                 select: {
                                     options: {
                                         children: [1, 2, 3, 4].map((val, index) => {
-                                            return React.createElement(Select.Option, { key: index, value: val }, val);
+                                            return (React.createElement(SelectOption, { key: index, value: val }, val));
                                         })
                                     }
                                 }

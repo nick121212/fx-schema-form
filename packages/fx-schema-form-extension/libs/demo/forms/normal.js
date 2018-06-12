@@ -9,7 +9,7 @@ import schemaFormReact from "fx-schema-form-react";
 import Form from "antd/lib/form";
 import Immutable from "immutable";
 import { globalOptions, curAjv } from "../init";
-const { SchemaForm, hocFactory, schemaFormDec, reducerFactory } = schemaFormReact;
+const { SchemaForm, schemaFormDec } = schemaFormReact;
 let NormalForm = class NormalForm extends React.PureComponent {
     render() {
         const { isValidating = false, isValid = false, validateAll } = this.props;
@@ -47,6 +47,19 @@ let NormalForm = class NormalForm extends React.PureComponent {
                                         paths: [{ path: "../width" }]
                                     },
                                     paths: [{ path: "../width", defaultValue: 0, to: ["options", "widget", "number", "options", "max"] }]
+                                }
+                            }
+                        })
+                    }, "isEighteen", {
+                        key: "textAlign",
+                        hocs: ["utils", "theme", "field", "validate", "show", "temp"],
+                        options: Immutable.fromJS({
+                            hoc: {
+                                show: {
+                                    condition: {
+                                        paths: [{ path: "../isEighteen" }]
+                                    },
+                                    paths: ["../isEighteen"]
                                 }
                             }
                         })

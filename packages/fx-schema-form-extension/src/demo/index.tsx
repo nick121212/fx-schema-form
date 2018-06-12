@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Perf from "react-addons-perf";
-import ReactPerfTool from "react-perf-tool";
+// import Perf from "react-addons-perf";
+// import ReactPerfTool from "react-perf-tool";
 import { createStore } from "redux";
 import { combineReducers } from "redux-immutable";
 import schemaFormReact from "fx-schema-form-react";
@@ -29,12 +29,9 @@ store.subscribe(() => {
 
 ReactDOM.render(
     <Provider store={store}>
-        <div>
-            <Router>
-                <RouterComponent key={"rootRouter"} />
-            </Router>
-            {/* <ReactPerfTool perf={Perf} /> */}
-        </div>
+        <Router>
+            <RouterComponent key={"rootRouter"} />
+        </Router>
     </Provider>,
     document.getElementById("root"),
     () => {
