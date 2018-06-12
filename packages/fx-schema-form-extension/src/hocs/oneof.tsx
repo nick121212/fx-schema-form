@@ -19,15 +19,17 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ConditionHocOutPr
     uiSchemaInOneof: FxUiSchema[];
 }
 
+export interface UiSchemas {
+    [key: string]: {
+        schemaId: string;
+        uiSchemas: Array<FxUiSchema | string>;
+    };
+}
+
 export interface OneHocOutSettings {
     path: string;
     key: "anyOf" | "oneOf";
-    uiSchemas?: {
-        [key: string]: {
-            schemaId: string;
-            uiSchemas: Array<FxUiSchema | string>;
-        }
-    };
+    uiSchemas?: UiSchemas;
     condition?: ConditionHocSettings;
 }
 

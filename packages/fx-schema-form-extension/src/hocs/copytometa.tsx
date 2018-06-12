@@ -19,12 +19,15 @@ export interface Props extends DefaultProps, UtilsHocOutProps, ValidateHocOutPro
 
 export const name = "copyToMeta";
 
+
+export interface CopyToMetaPath {
+    path: string;
+    to: string[];
+    defaultValue?: any;
+}
+
 export interface CopyToMetaSettings {
-    paths?: Array<{
-        path: string;
-        to: string[];
-        defaultValue: any;
-    }>;
+    paths?: Array<CopyToMetaPath>;
     condition?: ConditionHocSettings;
 }
 

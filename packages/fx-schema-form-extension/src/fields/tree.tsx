@@ -38,12 +38,14 @@ export class TreeField extends PureComponent<ObjectFieldProps, any> {
         }
 
         if (formItemData) {
+            // 如果用户点击了左节点，则push左节点的值
             if (formItemData.hasIn(["leftNode"])) {
                 children.push({
                     key: "leftNode",
                     field: "tree"
                 });
             }
+            // 如果用户点击了右节点，则push右节点的值
             if (formItemData.hasIn(["rightNode"])) {
                 children.push({
                     key: "rightNode",
