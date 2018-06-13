@@ -45,7 +45,7 @@
     "ajv": "^6.1.0",
     "ajv-errors": "^1.0.0",
     "ajv-i18n": "^3.0.0",
-    "antd": "^3.2.2",
+    "antd": "^3.6.2",
     "awesome-typescript-loader": "^3.2.3",
     "babel": "^6.0.0",
     "babel-core": "^6.26.0",

@@ -2,7 +2,11 @@
 
 爬虫前端核心组件。用于生成静态或者动态表单；
 
+## [outlook界面](https://nick121212.github.io/react-fabric-outlook/build/index.html#/)
+
 ## [DEMO](https://nick121212.github.io/fx-schema-form/packages/fx-schema-form-extension/dist/index.html)
+
+## [所见即所得](https://nick121212.github.io/fx-schema-form-react-demo/dist/index.html#/panel/create)
 
 ## 一个一直有想法但并没有花时间去实现的功能
 
