@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
+import { DatePicker } from "antd";
 import { DesignForm, children } from "./forms/design";
 import { NormalForm } from "./forms/normal";
 import { OneOfForm } from "./forms/oneof";
@@ -31,7 +32,8 @@ export class RouterComponent extends React.Component {
                     } }),
                 React.createElement(Route, { path: "/form/tree", component: () => {
                         return React.createElement(TreeForm, { ajv: curAjv, schemaId: "dnd-tree", reducerKey: "schemaForm", formKey: "treeForm", initData: {} });
-                    } })));
+                    } })),
+            React.createElement(DatePicker, { showTime: { format: "HH:mm" }, format: "YYYY-MM-DD HH:mm" }));
     }
 }
 //# sourceMappingURL=router.js.map

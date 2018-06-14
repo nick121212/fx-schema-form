@@ -40,7 +40,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 constructor(props: any) {
                     super(props);
 
-                    const { getOptions, getRequiredKeys, uiSchema } = this.props,
+                    const { getOptions } = this.props,
                         options: WrapperHocSettings = getOptions(this.props, schemaFormTypes.hoc, settings.hocName || "");
 
                     // 使用conditionhoc包装当前的hoc

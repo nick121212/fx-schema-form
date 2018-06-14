@@ -75,7 +75,7 @@ export interface ConditionPath {
 
 配置参数:
 
-- paths: string[]; 需要监听变化的数据数组;
+- paths?: string[]; 需要监听变化的数据数组;(已废弃)
 - condition: ConditionHocSettings; [condition](#condition)的设置参数;
 - onChanged: (props: DefaultProps, data: any) => void; 数据变化时候的回调;
 
@@ -93,7 +93,7 @@ export interface ConditionPath {
   options: Immutable.fromJS({
       hoc: {
           changed: {
-              paths: ["../height"],
+            //   paths: ["../height"],
               condition: {
                   paths: [{
                       path: "../height"
@@ -259,7 +259,7 @@ export interface CopyToMetaPath {
 
 配置参数:
 
-- paths?: string[]; 需要验证的数据字段路径。
+- paths?: string[]; 需要验证的数据字段路径。(已废弃)
 - renderNothings?:boolean; 如果不显示，是否返回null，否则把display设置成none。
 - condition: ConditionHocSettings; [condition](#condition)的设置参数。
 
@@ -278,7 +278,7 @@ export interface CopyToMetaPath {
                 condition: {
                     paths: [{ path: "../isEighteen" }]
                 },
-                paths: ["../isEighteen"]
+                // paths: ["../isEighteen"]
             }
         }
     })

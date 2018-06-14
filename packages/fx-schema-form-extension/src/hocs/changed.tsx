@@ -52,19 +52,21 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
                     let meta = fromJS({});
 
-                    if (normalOptions.paths && normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
-                        // 从condition中提取配置中需要的字段值
-                        normalOptions.paths.forEach((path: string) => {
-                            let pathKeys = getPathKeys(uiSchema.keys as string[], path),
-                                pathStr = pathKeys.join("/");
+                    if (normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
+                        // 去掉了normalOptions.paths的定义，没有什么意思，直接从condition中获取字段就行了
 
-                            if (condition.has(pathStr)) {
-                                meta = meta.set(pathStr, condition.get(pathStr));
-                            }
-                        });
+                        // 从condition中提取配置中需要的字段值
+                        // normalOptions.paths.forEach((path: string) => {
+                        //     let pathKeys = getPathKeys(uiSchema.keys as string[], path),
+                        //         pathStr = pathKeys.join("/");
+
+                        //     if (condition.has(pathStr)) {
+                        //         meta = meta.set(pathStr, condition.get(pathStr));
+                        //     }
+                        // });
                         // 触发onChanged事件
                         if (normalOptions.onChanged) {
-                            normalOptions.onChanged(props, meta.toJS(), isInit);
+                            normalOptions.onChanged(props, condition.toJS(), isInit);
                         }
                     }
                 }

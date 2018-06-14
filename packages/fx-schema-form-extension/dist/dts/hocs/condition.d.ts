@@ -1,4 +1,3 @@
-/// <reference types="recompose" />
 import { ComponentEnhancer } from "recompose";
 import Immutable from "immutable";
 import { BaseFactory } from "fx-schema-form-core";

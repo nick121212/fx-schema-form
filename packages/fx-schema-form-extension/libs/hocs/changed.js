@@ -17,15 +17,9 @@ export const hoc = (hocFactory) => {
                     const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
                     let meta = fromJS({});
-                    if (normalOptions.paths && normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
-                        normalOptions.paths.forEach((path) => {
-                            let pathKeys = getPathKeys(uiSchema.keys, path), pathStr = pathKeys.join("/");
-                            if (condition.has(pathStr)) {
-                                meta = meta.set(pathStr, condition.get(pathStr));
-                            }
-                        });
+                    if (normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
                         if (normalOptions.onChanged) {
-                            normalOptions.onChanged(props, meta.toJS(), isInit);
+                            normalOptions.onChanged(props, condition.toJS(), isInit);
                         }
                     }
                 }

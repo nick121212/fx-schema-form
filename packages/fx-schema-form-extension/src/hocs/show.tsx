@@ -47,32 +47,40 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     const normalOptions = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
                     let show = true;
 
-                    if (normalOptions.paths && condition && uiSchema && uiSchema.keys) {
-                        show = normalOptions.paths.reduce((prev: boolean, path: string) => {
-                            if (!prev) {
-                                return false;
-                            }
-                            // 从condition中获取数据，判断是否为空
-                            let pathKeys = getPathKeys(uiSchema.keys as string[], path);
-
-                            if (!condition.has(pathKeys.join("/"))) {
-                                return false;
-                            }
-
-                            let data = condition.get(pathKeys.join("/"));
-
-                            if (!data) {
-                                return false;
-                            }
-
-                            // 如果是列表，判断名下size
-                            if (Immutable.List.isList(data) && !data.size) {
-                                return false;
-                            }
-
-                            return true;
-                        }, show);
+                    if (condition && uiSchema && uiSchema.keys) {
+                        show = condition.some((val: any) => {
+                            return !!val;
+                        });
                     }
+
+                    // 去掉了normalOptions.paths的定义，没啥用
+
+                    // if (normalOptions.paths && condition && uiSchema && uiSchema.keys) {
+                    //     show = normalOptions.paths.reduce((prev: boolean, path: string) => {
+                    //         if (!prev) {
+                    //             return false;
+                    //         }
+                    //         // 从condition中获取数据，判断是否为空
+                    //         let pathKeys = getPathKeys(uiSchema.keys as string[], path);
+
+                    //         if (!condition.has(pathKeys.join("/"))) {
+                    //             return false;
+                    //         }
+
+                    //         let data = condition.get(pathKeys.join("/"));
+
+                    //         if (!data) {
+                    //             return false;
+                    //         }
+
+                    //         // 如果是列表，判断名下size
+                    //         if (Immutable.List.isList(data) && !data.size) {
+                    //             return false;
+                    //         }
+
+                    //         return true;
+                    //     }, show);
+                    // }
 
 
                     if (show) {
