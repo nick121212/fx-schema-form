@@ -2,7 +2,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { schemaFieldFactory, schemaKeysFactory, convertKeys } from "../factory";
-import { default as ResolveLib, getDataKeys, getSchemaId } from "../libs/resolve";
+import { getDataKeys, getSchemaId } from "../libs/resolve";
 
 /**
  * 解析schema中的type!=array && type!=object的结构

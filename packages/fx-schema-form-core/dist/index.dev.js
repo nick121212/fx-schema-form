@@ -182,23 +182,28 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return schemaFieldFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return schemaKeyWordFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return schemaTypeFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return schemaKeysFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return convertKeys; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_factory__ = __webpack_require__(3);
 
-let schemaFieldFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaKeyWordFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let convertKeys = (schema, ajv) => {
+const schemaFieldFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["b"] = schemaFieldFactory;
+
+const schemaKeyWordFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["c"] = schemaKeyWordFactory;
+
+const schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["e"] = schemaTypeFactory;
+
+const schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["d"] = schemaKeysFactory;
+
+const convertKeys = (schema, ajv) => {
     schemaKeyWordFactory.forEach((key, val) => {
         schema = val(schema, ajv);
     });
     return schema;
 };
+/* harmony export (immutable) */ __webpack_exports__["a"] = convertKeys;
+
 
 /***/ }),
 /* 3 */

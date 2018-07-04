@@ -1,4 +1,4 @@
-import { warn, hasOwnProperty } from "../utils";
+import { hasOwnProperty } from "../utils";
 
 /**
  * 实例的工厂类

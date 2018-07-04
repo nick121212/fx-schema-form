@@ -3,7 +3,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib } from "../libs/resolve";
-import MergeLib from "../libs/merge";
+// import MergeLib from "../libs/merge";
 
 /**
  * 解析schema中的关键字 oneOf
