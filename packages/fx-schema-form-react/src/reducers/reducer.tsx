@@ -1,5 +1,5 @@
 import { Reducer } from "redux-act";
-import { Store } from "react-redux";
+import { Store } from "redux";
 
 export interface FxReducer {
     actions: any;

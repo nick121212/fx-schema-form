@@ -1,7 +1,7 @@
 import { createAction, createReducer, SimpleActionCreator, BaseActionCreator, EmptyActionCreator, Action } from "redux-act";
 import { Reducer } from "redux-act";
 import { List, Map, fromJS } from "immutable";
-import { Store } from "react-redux";
+import { Store } from "redux";
 
 import { FxReducer, d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
@@ -35,7 +35,7 @@ const resolveKeys = (state: Map<string, any>, keys: Array<string>): Map<string, 
     }
 
     for (let i = 0, n = keys.length; i < n; i++) {
-        let mKeys = [...keys].splice(0, i + 1);
+        const mKeys = [...keys].splice(0, i + 1);
 
         // 如果key不存在，遍历生成数据结构
         if (!state.hasIn(mKeys)) {
@@ -49,7 +49,7 @@ const resolveKeys = (state: Map<string, any>, keys: Array<string>): Map<string, 
             }
         } else if (i < n) {
             // 如果key存在，则判断数据结构是否与结构一致
-            let data = state.getIn(mKeys);
+            const data = state.getIn(mKeys);
 
             if (!Map.isMap(data) && !List.isList(data)) {
                 if (keys[i + 1].constructor === Number) {
@@ -343,10 +343,6 @@ export class SchemaFormReducer<T> implements FxReducer {
 
         formItemData = formItemData.remove(curIndex);
         formItemData = formItemData.insert(toIndex - offset, curItemData);
-
-        // if (formItemData.equals(oldFormItemData)) {
-        //     return state;
-        // }
 
         if (childNode) {
             childNode.insertToFromParent(toIndex);

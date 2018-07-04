@@ -9,7 +9,7 @@ const resolveKeys = (state, keys) => {
         return state;
     }
     for (let i = 0, n = keys.length; i < n; i++) {
-        let mKeys = [...keys].splice(0, i + 1);
+        const mKeys = [...keys].splice(0, i + 1);
         if (!state.hasIn(mKeys)) {
             mKeys.pop();
             if (!state.hasIn(mKeys)) {
@@ -22,7 +22,7 @@ const resolveKeys = (state, keys) => {
             }
         }
         else if (i < n) {
-            let data = state.getIn(mKeys);
+            const data = state.getIn(mKeys);
             if (!Map.isMap(data) && !List.isList(data)) {
                 if (keys[i + 1].constructor === Number) {
                     state = state.setIn(mKeys, List());

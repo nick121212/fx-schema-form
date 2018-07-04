@@ -1,7 +1,7 @@
 import { SimpleActionCreator, Action } from "redux-act";
 import { Reducer } from "redux-act";
 import { Map } from "immutable";
-import { Store } from "react-redux";
+import { Store } from "redux";
 import { FxReducer } from "./reducer";
 export declare type ASN = Array<string | number> | string[];
 export interface SchemaFormActions {
