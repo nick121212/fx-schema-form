@@ -1,9 +1,9 @@
 import { Ajv } from "ajv";
-import { JSONSchema6 } from "json-schema";
+// import { JSONSchema6 } from "json-schema";
 
 import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
-import { default as ResolveLib, getDataKeys, getSchemaId } from "./resolve";
+import { getDataKeys, getSchemaId } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
 import { warn } from "../utils";
 

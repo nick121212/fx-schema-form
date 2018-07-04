@@ -96,9 +96,10 @@ example:
 
 > 所有的keyword处理方式。目前有ref和oneOf；
 
-* ref；处理schema中的$ref关键字
-* oneOf；处理schema中的oneOf关键字
-* anyOf；处理schema中的anyOf关键字
+* ref: 处理schema中的$ref关键字
+* oneOf: 处理schema中的oneOf关键字
+* anyOf: 处理schema中的anyOf关键字
+* definitions: 处理schema中的definitions关键字
 
 ### schemaTypeFactory
 

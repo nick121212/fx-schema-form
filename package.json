@@ -25,7 +25,8 @@
   "author": "NICK",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^2.0.0-rc.5"
+    "lerna": "^2.0.0-rc.5",
+    "webpack": "^4.14.0"
   },
   "dependencies": {}
 }
