@@ -3,7 +3,7 @@ import schemaFormReact from "fx-schema-form-react";
 import { fromJS } from "immutable";
 const { schemaFormTypes, merge } = schemaFormReact;
 export const name = "format";
-export const hoc = (hocFactory) => {
+export const hoc = (_hocFactory) => {
     return () => {
         return (Component) => {
             class ComponentHoc extends React.PureComponent {

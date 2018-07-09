@@ -12,15 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
 import React from "react";
 import Immutable from "immutable";
 import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
@@ -32,7 +23,7 @@ export const hoc = (hocFactory) => {
         const innerHoc1 = (Component) => {
             class ComponentHoc extends React.PureComponent {
                 render() {
-                    const { getPathKeys, uiSchema, getOptions, schemaId, reducerKey, arrayLevel, arrayIndex, globalOptions, parentKeys, ajv } = this.props, _a = this.props, { condition } = _a, extraProps = __rest(_a, ["condition"]), { keys = null } = uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
+                    const { getPathKeys, uiSchema, getOptions } = this.props, { condition } = this.props, { keys = null } = uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
                     if (!options.path || !condition || !keys || !uiSchema || !options.uiSchemas) {
                         return null;
                     }
@@ -51,11 +42,11 @@ export const hoc = (hocFactory) => {
             }
             return ComponentHoc;
         };
-        const innerHoc = (Component) => {
+        const innerHoc = (_Component) => {
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
                 componentWillUpdate(props) {
                     return __awaiter(this, void 0, void 0, function* () {
-                        const { uiSchema, currentSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv } = props, actions = [];
+                        const { currentSchema, updateItemDataRaw, getDefaultData, combineActions, ajv } = props, actions = [];
                         actions.push(updateItemDataRaw(props, true));
                         if (!currentSchema) {
                             actions.push(updateItemDataRaw(props, null));
@@ -67,9 +58,9 @@ export const hoc = (hocFactory) => {
                     });
                 }
                 render() {
-                    const { getPathKeys, uiSchema, getOptions, schemaId, reducerKey, arrayLevel, arrayIndex, globalOptions, parentKeys, ajv } = this.props, { currentSchema, oneOfScehmaId, uiSchemaInOneof, condition } = this.props;
+                    const { uiSchema, reducerKey, arrayLevel, arrayIndex, globalOptions, parentKeys, ajv, getPathKeys, getOptions } = this.props, { currentSchema, oneOfScehmaId, uiSchemaInOneof } = this.props, { condition } = this.props, { keys = null } = uiSchema || {}, options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})), pathKeys = getPathKeys(keys, options.path), data = condition ? condition.get(pathKeys.join("/")) : "";
                     if (currentSchema) {
-                        return React.createElement(SchemaForm, { key: oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [...parentKeys], globalOptions: globalOptions, ajv: ajv });
+                        return React.createElement(SchemaForm, { key: data ? data.toString() : oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [...parentKeys], globalOptions: globalOptions, ajv: ajv });
                     }
                     return null;
                 }

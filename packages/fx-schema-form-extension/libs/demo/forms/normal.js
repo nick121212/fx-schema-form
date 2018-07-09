@@ -23,7 +23,6 @@ let NormalForm = class NormalForm extends React.PureComponent {
                         options: Immutable.fromJS({
                             hoc: {
                                 changed: {
-                                    paths: ["../height"],
                                     condition: {
                                         paths: [{
                                                 path: "../height"
@@ -59,7 +58,6 @@ let NormalForm = class NormalForm extends React.PureComponent {
                                     condition: {
                                         paths: [{ path: "../isEighteen" }]
                                     },
-                                    paths: ["../isEighteen"]
                                 }
                             }
                         })

@@ -18,8 +18,8 @@ export class AntdSelectWidget extends PureComponent {
         return { options: props };
     }
     render() {
-        const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props, { keys = [], readonly = false } = uiSchema || {}, metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "select"]) : fromJS({}), widgetOptions = getOptions(this.props, "widget", "select", metaOptions);
-        return (React.createElement(Select, Object.assign({ onChange: (value, option) => __awaiter(this, void 0, void 0, function* () {
+        const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props, { readonly = false } = uiSchema || {}, metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "select"]) : fromJS({}), widgetOptions = getOptions(this.props, "widget", "select", metaOptions);
+        return (React.createElement(Select, Object.assign({ onChange: (value) => __awaiter(this, void 0, void 0, function* () {
                 updateItemData(this.props, value, yield validate(this.props, value));
             }), disabled: readonly, placeholder: getTitle(this.props) }, widgetOptions.options, this.setDefaultProps())));
     }

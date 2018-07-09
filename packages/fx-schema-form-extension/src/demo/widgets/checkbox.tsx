@@ -4,7 +4,6 @@ import Checkbox from "antd/lib/checkbox";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
-import { FxUiSchema } from "fx-schema-form-react/libs/models";
 import { fromJS } from "immutable";
 
 export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps, ValidateHocOutProps {
@@ -12,7 +11,6 @@ export interface AntdCheckBoxProps extends DefaultProps, UtilsHocOutProps, Valid
 
 export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
     private setDefaultProps(): any {
-        const { uiSchema } = this.props;
         const props: any = {};
 
         if (this.props.formItemData !== undefined) {
@@ -26,7 +24,7 @@ export class AntdCheckboxWidget extends PureComponent<AntdCheckBoxProps, any> {
 
     public render(): JSX.Element {
         const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props,
-            { keys = [], readonly = false } = uiSchema || {},
+            { readonly = false } = uiSchema || {},
             metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "checkbox"]) || fromJS({}) : fromJS({}),
             widgetOptions = getOptions(this.props, "widget", "checkbox", metaOptions);
 

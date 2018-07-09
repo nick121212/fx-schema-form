@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b16949c6f97e3ba0ee2f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "78b994911389e077df7b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -7078,7 +7078,7 @@ const resolveKeys = (state, keys) => {
         return state;
     }
     for (let i = 0, n = keys.length; i < n; i++) {
-        let mKeys = [...keys].splice(0, i + 1);
+        const mKeys = [...keys].splice(0, i + 1);
         if (!state.hasIn(mKeys)) {
             mKeys.pop();
             if (!state.hasIn(mKeys)) {
@@ -7091,7 +7091,7 @@ const resolveKeys = (state, keys) => {
             }
         }
         else if (i < n) {
-            let data = state.getIn(mKeys);
+            const data = state.getIn(mKeys);
             if (!immutable["Map"].isMap(data) && !immutable["List"].isList(data)) {
                 if (keys[i + 1].constructor === Number) {
                     state = state.setIn(mKeys, Object(immutable["List"])());
@@ -14900,23 +14900,28 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return schemaFieldFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return schemaKeyWordFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return schemaTypeFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return schemaKeysFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return convertKeys; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_factory__ = __webpack_require__(3);
 
-let schemaFieldFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaKeyWordFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
-let convertKeys = (schema, ajv) => {
+const schemaFieldFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["b"] = schemaFieldFactory;
+
+const schemaKeyWordFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["c"] = schemaKeyWordFactory;
+
+const schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["e"] = schemaTypeFactory;
+
+const schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
+/* harmony export (immutable) */ __webpack_exports__["d"] = schemaKeysFactory;
+
+const convertKeys = (schema, ajv) => {
     schemaKeyWordFactory.forEach((key, val) => {
         schema = val(schema, ajv);
     });
     return schema;
 };
+/* harmony export (immutable) */ __webpack_exports__["a"] = convertKeys;
+
 
 /***/ }),
 /* 3 */
@@ -14984,14 +14989,14 @@ class BaseFactory {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__keys_index__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__types_index__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__types_index__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_factory__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__factory__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_resolve__ = __webpack_require__(0);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ResolveLib", function() { return __WEBPACK_IMPORTED_MODULE_4__libs_resolve__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "getSchemaId", function() { return __WEBPACK_IMPORTED_MODULE_4__libs_resolve__["c"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "getDataKeys", function() { return __WEBPACK_IMPORTED_MODULE_4__libs_resolve__["b"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__libs_merge__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__libs_merge__ = __webpack_require__(14);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MergeLib", function() { return __WEBPACK_IMPORTED_MODULE_5__libs_merge__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BaseFactory", function() { return __WEBPACK_IMPORTED_MODULE_2__libs_factory__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "schemaKeysFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["d"]; });
@@ -15004,8 +15009,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("ref", __WEBPACK_IMPORTED_MODULE_0__keys_index__["c" /* ref */]);
-__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("oneof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["b" /* oneof */]);
+__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("definitions", __WEBPACK_IMPORTED_MODULE_0__keys_index__["b" /* definitions */]);
+__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("ref", __WEBPACK_IMPORTED_MODULE_0__keys_index__["d" /* ref */]);
+__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("oneof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["c" /* oneof */]);
 __WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("anyof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["a" /* anyof */]);
 __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array", __WEBPACK_IMPORTED_MODULE_1__types_index__["a" /* array */]);
 __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("string", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]);
@@ -15024,11 +15030,14 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ref__ = __webpack_require__(6);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__ref__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_0__ref__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__oneof__ = __webpack_require__(7);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__oneof__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__oneof__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__anyof__ = __webpack_require__(8);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__anyof__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__defined__ = __webpack_require__(9);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__defined__["a"]; });
+
 
 
 
@@ -15108,18 +15117,43 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__array__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
+
+/* harmony default export */ __webpack_exports__["a"] = ((schema, ajv) => {
+    if (!schema) {
+        return schema;
+    }
+    const definitions = schema.definitions;
+    if (definitions) {
+        for (const key in definitions) {
+            if (definitions.hasOwnProperty(key)) {
+                const element = definitions[key];
+                if (element !== false && element !== true) {
+                    new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, element, `${schema.$id}#/definitions/${key}`);
+                }
+            }
+        }
+    }
+    return schema;
+});
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__array__ = __webpack_require__(11);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__array__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__object__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__object__ = __webpack_require__(12);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__object__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__none__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__none__ = __webpack_require__(13);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__none__["a"]; });
 
 
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15139,7 +15173,7 @@ const itemsName = "items";
 });
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15172,7 +15206,7 @@ const pro = "properties";
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15196,11 +15230,11 @@ const pro = "properties";
 });
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_uischema__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_uischema__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__factory__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resolve__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(1);
@@ -15343,11 +15377,11 @@ class MergeLib {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jsonschema__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jsonschema__ = __webpack_require__(16);
 
 let string = "string";
 const uiSchemaSchema = {
@@ -15369,7 +15403,7 @@ const uiSchemaSchema = {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23022,12 +23056,8 @@ var DesignField = exports.DesignField = function (_React$PureComponent2) {
     (0, _createClass3.default)(DesignField, [{
         key: "initComponent",
         value: function initComponent() {
-            var _props = this.props,
-                uiSchema = _props.uiSchema,
-                formItemData = _props.formItemData,
-                getOptions = _props.getOptions,
+            var getOptions = this.props.getOptions,
                 options = getOptions(this.props, schemaFormTypes.field, name);
-
             if (options.formHocs && options.formHocs.constructor === Array && options.formHocs.length) {
                 this.SchemaFormWithHoc = _recompose.compose.apply(undefined, (0, _toConsumableArray3.default)(options.formHocs))(DesignFieldComponent);
             }
@@ -23038,16 +23068,14 @@ var DesignField = exports.DesignField = function (_React$PureComponent2) {
     }, {
         key: "renderItem",
         value: function renderItem(idx) {
-            var _props2 = this.props,
-                parentKeys = _props2.parentKeys,
-                globalOptions = _props2.globalOptions,
-                getOptions = _props2.getOptions,
-                _props2$arrayLevel = _props2.arrayLevel,
-                arrayLevel = _props2$arrayLevel === undefined ? [] : _props2$arrayLevel,
-                getRequiredKeys = _props2.getRequiredKeys,
-                ajv = _props2.ajv,
-                ArrayItemComponent = _props2.ArrayItemComponent,
-                reducerKey = _props2.reducerKey,
+            var _props = this.props,
+                parentKeys = _props.parentKeys,
+                globalOptions = _props.globalOptions,
+                _props$arrayLevel = _props.arrayLevel,
+                arrayLevel = _props$arrayLevel === undefined ? [] : _props$arrayLevel,
+                ajv = _props.ajv,
+                ArrayItemComponent = _props.ArrayItemComponent,
+                reducerKey = _props.reducerKey,
                 uiSchema = this.props.uiSchema;
 
             var SchemaFormWithHoc = this.SchemaFormItemWithHoc;
@@ -23059,12 +23087,11 @@ var DesignField = exports.DesignField = function (_React$PureComponent2) {
     }, {
         key: "render",
         value: function render() {
-            var _props3 = this.props,
-                uiSchema = _props3.uiSchema,
-                formItemData = _props3.formItemData,
-                getOptions = _props3.getOptions,
-                getRequiredKeys = _props3.getRequiredKeys,
-                children = _props3.children,
+            var _props2 = this.props,
+                formItemData = _props2.formItemData,
+                getOptions = _props2.getOptions,
+                getRequiredKeys = _props2.getRequiredKeys,
+                children = _props2.children,
                 child = [],
                 options = getOptions(this.props, "field", name);
 
@@ -23986,13 +24013,11 @@ var TreeField = exports.TreeField = function (_PureComponent) {
         key: "render",
         value: function render() {
             var _props = this.props,
-                arrayIndex = _props.arrayIndex,
                 arrayLevel = _props.arrayLevel,
                 parentKeys = _props.parentKeys,
                 globalOptions = _props.globalOptions,
                 formItemData = _props.formItemData,
                 ajv = _props.ajv,
-                schemaId = _props.schemaId,
                 getOptions = _props.getOptions,
                 reducerKey = _props.reducerKey,
                 uiSchema = _props.uiSchema,
@@ -24305,10 +24330,9 @@ var _fxSchemaFormReact2 = _interopRequireDefault(_fxSchemaFormReact);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
-    schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
+var schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
 var name = exports.name = "resetKey";
-var hoc = exports.hoc = function hoc(hocFactory) {
+var hoc = exports.hoc = function hoc(_hocFactory) {
     return function () {
         var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { excludeKeys: [], includeKeys: [] };
 
@@ -24433,14 +24457,6 @@ var __awaiter = undefined && undefined.__awaiter || function (thisArg, _argument
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = undefined && undefined.__rest || function (s, e) {
-    var t = {};
-    for (var p in s) {
-        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
-    }return t;
-};
 var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
     schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
 var name = exports.name = "oneOf";
@@ -24462,16 +24478,7 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                             getPathKeys = _props.getPathKeys,
                             uiSchema = _props.uiSchema,
                             getOptions = _props.getOptions,
-                            schemaId = _props.schemaId,
-                            reducerKey = _props.reducerKey,
-                            arrayLevel = _props.arrayLevel,
-                            arrayIndex = _props.arrayIndex,
-                            globalOptions = _props.globalOptions,
-                            parentKeys = _props.parentKeys,
-                            ajv = _props.ajv,
-                            _a = this.props,
-                            condition = _a.condition,
-                            extraProps = __rest(_a, ["condition"]),
+                            condition = this.props.condition,
                             _ref = uiSchema || {},
                             _ref$keys = _ref.keys,
                             keys = _ref$keys === undefined ? null : _ref$keys,
@@ -24501,7 +24508,7 @@ var hoc = exports.hoc = function hoc(hocFactory) {
 
             return ComponentHoc;
         };
-        var innerHoc = function innerHoc(Component) {
+        var innerHoc = function innerHoc(_Component) {
             var ComponentHoc = function (_React$PureComponent2) {
                 (0, _inherits3.default)(ComponentHoc, _React$PureComponent2);
 
@@ -24514,12 +24521,12 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     key: "componentWillUpdate",
                     value: function componentWillUpdate(props) {
                         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                            var uiSchema, currentSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv, actions;
+                            var currentSchema, updateItemDataRaw, getDefaultData, combineActions, ajv, actions;
                             return _regenerator2.default.wrap(function _callee$(_context) {
                                 while (1) {
                                     switch (_context.prev = _context.next) {
                                         case 0:
-                                            uiSchema = props.uiSchema, currentSchema = props.currentSchema, updateItemDataRaw = props.updateItemDataRaw, getDefaultData = props.getDefaultData, removeItemDataRaw = props.removeItemDataRaw, combineActions = props.combineActions, ajv = props.ajv, actions = [];
+                                            currentSchema = props.currentSchema, updateItemDataRaw = props.updateItemDataRaw, getDefaultData = props.getDefaultData, combineActions = props.combineActions, ajv = props.ajv, actions = [];
 
                                             actions.push(updateItemDataRaw(props, true));
 
@@ -24560,24 +24567,29 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     key: "render",
                     value: function render() {
                         var _props2 = this.props,
-                            getPathKeys = _props2.getPathKeys,
                             uiSchema = _props2.uiSchema,
-                            getOptions = _props2.getOptions,
-                            schemaId = _props2.schemaId,
                             reducerKey = _props2.reducerKey,
                             arrayLevel = _props2.arrayLevel,
                             arrayIndex = _props2.arrayIndex,
                             globalOptions = _props2.globalOptions,
                             parentKeys = _props2.parentKeys,
                             ajv = _props2.ajv,
+                            getPathKeys = _props2.getPathKeys,
+                            getOptions = _props2.getOptions,
                             _props3 = this.props,
                             currentSchema = _props3.currentSchema,
                             oneOfScehmaId = _props3.oneOfScehmaId,
                             uiSchemaInOneof = _props3.uiSchemaInOneof,
-                            condition = _props3.condition;
+                            condition = this.props.condition,
+                            _ref2 = uiSchema || {},
+                            _ref2$keys = _ref2.keys,
+                            keys = _ref2$keys === undefined ? null : _ref2$keys,
+                            options = getOptions(this.props, schemaFormTypes.hoc, name, _immutable2.default.fromJS(settings || {})),
+                            pathKeys = getPathKeys(keys, options.path),
+                            data = condition ? condition.get(pathKeys.join("/")) : "";
 
                         if (currentSchema) {
-                            return _react2.default.createElement(SchemaForm, { key: oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [].concat((0, _toConsumableArray3.default)(parentKeys)), globalOptions: globalOptions, ajv: ajv });
+                            return _react2.default.createElement(SchemaForm, { key: data ? data.toString() : oneOfScehmaId, schemaId: oneOfScehmaId, uiSchema: uiSchema, reducerKey: reducerKey, arrayLevel: arrayLevel, arrayIndex: arrayIndex, uiSchemas: uiSchemaInOneof, parentKeys: [].concat((0, _toConsumableArray3.default)(parentKeys)), globalOptions: globalOptions, ajv: ajv });
                         }
                         return null;
                     }
@@ -25404,18 +25416,13 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _immutable = __webpack_require__(11);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _fxSchemaFormReact = __webpack_require__(13);
 
 var _fxSchemaFormReact2 = _interopRequireDefault(_fxSchemaFormReact);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
-    schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
+var schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
 var name = exports.name = "show";
 var hoc = exports.hoc = function hoc(hocFactory) {
     return function () {
@@ -25434,31 +25441,14 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     key: "render",
                     value: function render() {
                         var _props = this.props,
-                            getOptions = _props.getOptions,
-                            getPathKeys = _props.getPathKeys,
                             condition = _props.condition,
                             uiSchema = _props.uiSchema;
 
-                        var normalOptions = getOptions(this.props, schemaFormTypes.hoc, name, _immutable2.default.fromJS(settings || {}));
                         var show = true;
-                        if (normalOptions.paths && condition && uiSchema && uiSchema.keys) {
-                            show = normalOptions.paths.reduce(function (prev, path) {
-                                if (!prev) {
-                                    return false;
-                                }
-                                var pathKeys = getPathKeys(uiSchema.keys, path);
-                                if (!condition.has(pathKeys.join("/"))) {
-                                    return false;
-                                }
-                                var data = condition.get(pathKeys.join("/"));
-                                if (!data) {
-                                    return false;
-                                }
-                                if (_immutable2.default.List.isList(data) && !data.size) {
-                                    return false;
-                                }
-                                return true;
-                            }, show);
+                        if (condition && uiSchema && uiSchema.keys) {
+                            show = condition.some(function (val) {
+                                return !!val;
+                            });
                         }
                         if (show) {
                             return _react2.default.createElement(Component, Object.assign({}, this.props));
@@ -25538,8 +25528,7 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
         if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
-    schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
+var schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
 var name = exports.name = "extraTemp";
 var hoc = exports.hoc = function hoc(hocFactory) {
     return function () {
@@ -25687,7 +25676,6 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     value: function render() {
                         var _props = this.props,
                             formItemNode = _props.formItemNode,
-                            schemaId = _props.schemaId,
                             uiSchema = _props.uiSchema,
                             parentKeys = _props.parentKeys,
                             getOptions = _props.getOptions,
@@ -25730,13 +25718,7 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     value: function render() {
                         var _props2 = this.props,
                             formItemNode = _props2.formItemNode,
-                            schemaId = _props2.schemaId,
-                            uiSchema = _props2.uiSchema,
-                            parentKeys = _props2.parentKeys,
-                            getOptions = _props2.getOptions,
-                            ajv = _props2.ajv,
-                            arrayLevel = _props2.arrayLevel,
-                            arrayIndex = _props2.arrayIndex;
+                            uiSchema = _props2.uiSchema;
 
                         if (formItemNode && formItemNode.value && uiSchema && uiSchema.originKeys) {
                             return _react2.default.createElement("div", null, _react2.default.createElement(Component, Object.assign({}, this.props)), _react2.default.createElement(EditFormComponent, Object.assign({}, this.props)));
@@ -25812,8 +25794,7 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
         if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var SchemaForm = _fxSchemaFormReact2.default.SchemaForm,
-    schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
+var schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes;
 var name = exports.name = "extraWidget";
 var hoc = exports.hoc = function hoc(hocFactory) {
     return function () {
@@ -25962,13 +25943,13 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                                 } else {
                                     childNode.value = child.get("data");
                                 }
+                                return childNode;
                             });
                         }
                     }
                 }, {
                     key: "componentWillMount",
                     value: function componentWillMount() {
-                        console.log("this.props = ok; ");
                         this.dataToMeta(this.props);
                     }
                 }, {
@@ -26047,7 +26028,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var schemaFormTypes = _fxSchemaFormReact2.default.schemaFormTypes,
     merge = _fxSchemaFormReact2.default.merge;
 var name = exports.name = "format";
-var hoc = exports.hoc = function hoc(hocFactory) {
+var hoc = exports.hoc = function hoc(_hocFactory) {
     return function () {
         return function (Component) {
             var ComponentHoc = function (_React$PureComponent) {
@@ -26141,12 +26122,8 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                     var _this = (0, _possibleConstructorReturn3.default)(this, (WrapperComponentHoc.__proto__ || Object.getPrototypeOf(WrapperComponentHoc)).call(this, props));
 
                     _this.ComponentWithHoc = Component;
-                    var _this$props = _this.props,
-                        getOptions = _this$props.getOptions,
-                        getRequiredKeys = _this$props.getRequiredKeys,
-                        uiSchema = _this$props.uiSchema,
+                    var getOptions = _this.props.getOptions,
                         options = getOptions(_this.props, schemaFormTypes.hoc, settings.hocName || "");
-
                     if (options.condition && settings.hoc && settings.hocName) {
                         options.condition.hoc = settings.hoc;
                         _this.ComponentWithHoc = hocFactory.get("condition")(options.condition)(Component);
@@ -26246,13 +26223,9 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                         var isInit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
                         var getOptions = props.getOptions,
                             condition = props.condition,
-                            uiSchema = props.uiSchema,
-                            getPathKeys = props.getPathKeys,
-                            updateItemMeta = props.updateItemMeta,
-                            formItemMeta = props.formItemMeta;
+                            uiSchema = props.uiSchema;
 
                         var normalOptions = getOptions(props, schemaFormTypes.hoc, name, (0, _immutable.fromJS)(settings || {}));
-                        var meta = (0, _immutable.fromJS)({});
                         if (normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
                             if (normalOptions.onChanged) {
                                 normalOptions.onChanged(props, condition.toJS(), isInit);
@@ -26287,7 +26260,6 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                         var _props2 = this.props,
                             getOptions = _props2.getOptions,
                             getRequiredKeys = _props2.getRequiredKeys,
-                            uiSchema = _props2.uiSchema,
                             options = getOptions(this.props, schemaFormTypes.hoc, name),
                             extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
 
@@ -26390,7 +26362,6 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                             uiSchema = props.uiSchema,
                             getPathKeys = props.getPathKeys,
                             updateItemMeta = props.updateItemMeta,
-                            updateItemData = props.updateItemData,
                             schemaId = props.schemaId;
 
                         var normalOptions = getOptions(props, schemaFormTypes.hoc, name, _immutable2.default.fromJS(settings || {}));
@@ -26442,7 +26413,6 @@ var hoc = exports.hoc = function hoc(hocFactory) {
                         var _props2 = this.props,
                             getOptions = _props2.getOptions,
                             getRequiredKeys = _props2.getRequiredKeys,
-                            uiSchema = _props2.uiSchema,
                             options = getOptions(this.props, schemaFormTypes.hoc, name),
                             extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
 

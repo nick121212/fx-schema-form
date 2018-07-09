@@ -5,7 +5,7 @@ const { schemaFormTypes, SchemaForm } = schemaFormReact;
 export const name = "tree";
 export class TreeField extends PureComponent {
     render() {
-        const { arrayIndex, arrayLevel, parentKeys, globalOptions, formItemData, ajv, schemaId, getOptions, reducerKey, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
+        const { arrayLevel, parentKeys, globalOptions, formItemData, ajv, getOptions, reducerKey, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc = SchemaForm, children = ["value"];
         if (!uiSchema || uiSchema.children === null || !uiSchema.schemaPath) {
             return null;

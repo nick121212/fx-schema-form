@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
-import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
-import { connect } from "react-redux";
+// import { shallowEqual, compose, shouldUpdate, onlyUpdateForKeys, lifecycle, pure } from "recompose";
+// import { connect } from "react-redux";
 import { RC } from "fx-schema-form-react/libs/models";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
@@ -9,7 +9,7 @@ import { ThemeHocOutProps } from "fx-schema-form-react/libs/hocs/theme";
 import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
 
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
+const { schemaFormTypes } = schemaFormReact;
 
 export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps {
     formItemNode?: TreeMap;

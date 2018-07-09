@@ -1,12 +1,12 @@
 
 import React from "react";
-import { onlyUpdateForKeys, compose } from "recompose";
+import { compose } from "recompose";
 import Immutable from "immutable";
 import { BaseFactory } from "fx-schema-form-core";
 import { ConditionHocOutProps } from "./condition";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
-import { RC, FxUiSchema } from "fx-schema-form-react/libs/models/index";
+import { RC } from "fx-schema-form-react/libs/models/index";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
 import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
@@ -34,7 +34,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
              */
             class EditFormComponent extends React.PureComponent<any, any> {
                 public render() {
-                    const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv,
+                    const { formItemNode, uiSchema, parentKeys, getOptions, ajv,
                         arrayLevel, arrayIndex, reducerKey } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
                         { temps = [], widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {},
@@ -75,7 +75,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             ) as any)
             class ComponentHoc extends React.PureComponent<Props, any> {
                 public render(): JSX.Element | null {
-                    const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex } = this.props;
+                    const { formItemNode, uiSchema } = this.props;
 
                     if (formItemNode && formItemNode.value && uiSchema && uiSchema.originKeys) {
                         return <div>

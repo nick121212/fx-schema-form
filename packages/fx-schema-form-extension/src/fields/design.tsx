@@ -1,5 +1,5 @@
 import React from "react";
-import { compose, shouldUpdate } from "recompose";
+import { compose } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
@@ -65,7 +65,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      * 包装配置参数formItemHocs中的hoc
      */
     private initComponent() {
-        const { uiSchema, formItemData, getOptions } = this.props,
+        const { getOptions } = this.props,
             options = getOptions(this.props, schemaFormTypes.field, name);
 
         if (options.formHocs && options.formHocs.constructor === Array && options.formHocs.length) {
@@ -81,7 +81,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      * @param idx 数组的索引
      */
     private renderItem(idx: number): JSX.Element | null {
-        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent, reducerKey } = this.props,
+        const { parentKeys, globalOptions, arrayLevel = [], ajv, ArrayItemComponent, reducerKey } = this.props,
             uiSchema = this.props.uiSchema as any;
         let SchemaFormWithHoc: any = this.SchemaFormItemWithHoc;
 
@@ -109,7 +109,7 @@ export class DesignField extends React.PureComponent<DesignFieldProps, any> {
      * 渲染页面
      */
     public render(): any {
-        const { uiSchema, formItemData, getOptions, getRequiredKeys, children } = this.props, child = [],
+        const { formItemData, getOptions, getRequiredKeys, children } = this.props, child = [],
             options = getOptions(this.props, "field", name);
         let SchemaFormWithHoc = this.SchemaFormWithHoc;
         const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);

@@ -14,7 +14,7 @@ export const hoc = (hocFactory) => {
         const innerHoc = (Component) => {
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
                 dataToMeta(props) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData, schemaId } = props;
+                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, schemaId } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
                     let meta = Immutable.fromJS({});
                     let isSet = false;
@@ -48,7 +48,7 @@ export const hoc = (hocFactory) => {
                     }
                 }
                 render() {
-                    const { getOptions, getRequiredKeys, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
+                    const { getOptions, getRequiredKeys } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
                     return React.createElement(Component, Object.assign({}, extraProps));
                 }
             };

@@ -24,12 +24,12 @@ export class AntdInputWidget extends PureComponent<AntdInputWidgetProps, any> {
     }
 
     public render(): JSX.Element {
-        const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
-        const { keys, readonly = false } = uiSchema as FxUiSchema;
+        const { getOptions, uiSchema, getTitle, updateItemData, updateItemMeta } = this.props;
+        const { readonly = false } = uiSchema as FxUiSchema;
 
         return (
             <Input
-                onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
+                onBlur={(_e: SyntheticEvent<HTMLInputElement>) => {
                     if (this._count > 0) {
                         updateItemMeta(this.props, this.props.formItemData);
                     }

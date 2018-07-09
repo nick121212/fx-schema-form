@@ -1,6 +1,6 @@
 
 import React from "react";
-import Immutable, { is } from "immutable";
+import Immutable from "immutable";
 import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
@@ -52,7 +52,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props 当前的props
                  */
                 public dataToMeta(props: Props) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, updateItemData, schemaId } = props;
+                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, schemaId } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as CopyToMetaSettings;
                     let meta = Immutable.fromJS({});
                     let isSet = false;
@@ -106,7 +106,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * render
                  */
                 public render(): JSX.Element {
-                    const { getOptions, getRequiredKeys, uiSchema } = this.props,
+                    const { getOptions, getRequiredKeys } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
                         extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
 

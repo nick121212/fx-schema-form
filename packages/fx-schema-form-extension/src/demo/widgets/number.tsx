@@ -31,17 +31,17 @@ export class AntdInputNumberWidget extends PureComponent<AntdInputWidgetProps, a
     }
 
     public render(): JSX.Element {
-        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const { getOptions, uiSchema, getTitle, formItemMeta, updateItemData, updateItemMeta } = this.props;
         const metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "number"]) : fromJS({});
 
-        const { keys, readonly = false } = uiSchema as FxUiSchema;
+        const { readonly = false } = uiSchema as FxUiSchema;
 
         console.log(getOptions(this.props, "widget", "number", metaOptions).options);
 
         return (
             <InputNumber
                 style={style}
-                onBlur={(e: SyntheticEvent<HTMLInputElement>) => {
+                onBlur={(_e: SyntheticEvent<HTMLInputElement>) => {
                     if (this._count > 0) {
                         updateItemMeta(this.props, this.props.formItemData);
                     }

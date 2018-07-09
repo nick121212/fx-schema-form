@@ -48,9 +48,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param isInit 是否是第一次
                  */
                 public dataToMeta(props: Props, isInit: boolean = false) {
-                    const { getOptions, condition, uiSchema, getPathKeys, updateItemMeta, formItemMeta } = props;
+                    const { getOptions, condition, uiSchema } = props;
                     const normalOptions = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings || {}));
-                    let meta = fromJS({});
 
                     if (normalOptions.onChanged && condition && uiSchema && uiSchema.keys) {
                         // 去掉了normalOptions.paths的定义，没有什么意思，直接从condition中获取字段就行了
@@ -102,7 +101,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                 }
 
                 public render(): JSX.Element {
-                    const { getOptions, getRequiredKeys, uiSchema } = this.props,
+                    const { getOptions, getRequiredKeys } = this.props,
                         options = getOptions(this.props, schemaFormTypes.hoc, name),
                         extraProps = getRequiredKeys(this.props, options.includeKeys, options.excludeKeys);
 

@@ -9,7 +9,7 @@ export const hoc = (hocFactory) => {
                 constructor(props) {
                     super(props);
                     this.ComponentWithHoc = Component;
-                    const { getOptions, getRequiredKeys, uiSchema } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, settings.hocName || "");
+                    const { getOptions } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, settings.hocName || "");
                     if (options.condition && settings.hoc && settings.hocName) {
                         options.condition.hoc = settings.hoc;
                         this.ComponentWithHoc = hocFactory.get("condition")(options.condition)(Component);

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
+const { schemaFormTypes } = schemaFormReact;
 export const name = "extraTemp";
 export const hoc = (hocFactory) => {
     return () => {

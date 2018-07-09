@@ -1,6 +1,5 @@
 
 import React from "react";
-import Immutable, { is } from "immutable";
 
 import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
@@ -10,7 +9,6 @@ import schemaFormReact from "fx-schema-form-react";
 
 import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, ConditionHocOutProps, UtilsHocOutProps {
 }
 
@@ -33,7 +31,7 @@ export const name = "show";
  * @param Component 需要包装的组件
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
-    return (settings: ShowHideHocOutSettings = {}) => {
+    return (_settings: ShowHideHocOutSettings = {}) => {
         const innerHoc = (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {
                 /**
@@ -43,8 +41,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * 3. 否则正常显示组件
                  */
                 public render(): JSX.Element | null {
-                    const { getOptions, getPathKeys, condition, uiSchema } = this.props;
-                    const normalOptions = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {}));
+                    const { condition, uiSchema } = this.props;
                     let show = true;
 
                     if (condition && uiSchema && uiSchema.keys) {

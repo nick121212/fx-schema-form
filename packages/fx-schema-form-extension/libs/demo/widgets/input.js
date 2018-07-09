@@ -16,8 +16,8 @@ export class AntdInputWidget extends PureComponent {
         return props;
     }
     render() {
-        const { getOptions, uiSchema, getTitle, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
-        const { keys, readonly = false } = uiSchema;
+        const { getOptions, uiSchema, getTitle, updateItemData, updateItemMeta } = this.props;
+        const { readonly = false } = uiSchema;
         return (React.createElement(Input, Object.assign({ onBlur: (e) => {
                 if (this._count > 0) {
                     updateItemMeta(this.props, this.props.formItemData);

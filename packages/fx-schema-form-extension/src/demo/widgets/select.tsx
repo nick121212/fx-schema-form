@@ -1,9 +1,8 @@
-import React, { PureComponent, SyntheticEvent } from "react";
+import React, { PureComponent } from "react";
 import Select, { SelectValue } from "antd/lib/select";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { ValidateHocOutProps } from "fx-schema-form-react/libs/hocs/validate";
-import { FxUiSchema } from "fx-schema-form-react/libs/models";
 import { fromJS } from "immutable";
 
 
@@ -23,13 +22,13 @@ export class AntdSelectWidget extends PureComponent<AntdInputWidgetProps, any> {
 
     public render(): JSX.Element {
         const { getOptions, uiSchema, updateItemData, validate, getTitle, formItemMeta } = this.props,
-            { keys = [], readonly = false } = uiSchema || {},
+            { readonly = false } = uiSchema || {},
             metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "select"]) : fromJS({}),
             widgetOptions = getOptions(this.props, "widget", "select", metaOptions);
 
         return (
             <Select
-                onChange={async (value: SelectValue, option: any) => {
+                onChange={async (value: SelectValue) => {
                     updateItemData(this.props, value, await validate(this.props, value));
                 }}
                 disabled={readonly}

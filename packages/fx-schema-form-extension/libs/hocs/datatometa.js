@@ -27,11 +27,11 @@ export const hoc = (hocFactory) => {
                             else {
                                 childNode.value = child.get("data");
                             }
+                            return childNode;
                         });
                     }
                 }
                 componentWillMount() {
-                    console.log("this.props = ok; ");
                     this.dataToMeta(this.props);
                 }
                 componentWillUpdate(props) {

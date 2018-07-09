@@ -1,9 +1,9 @@
 import React from "react";
 import Immutable from "immutable";
 import schemaFormReact from "fx-schema-form-react";
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
+const { schemaFormTypes } = schemaFormReact;
 export const name = "resetKey";
-export const hoc = (hocFactory) => {
+export const hoc = (_hocFactory) => {
     return (settings = { excludeKeys: [], includeKeys: [] }) => {
         return (Component) => {
             class ComponentHoc extends React.PureComponent {

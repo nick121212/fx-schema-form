@@ -9,7 +9,7 @@ import { TreeMap } from "fx-schema-form-react/libs/libs/tree";
 import schemaFormReact from "fx-schema-form-react";
 
 
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
+const {  schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, ThemeHocOutProps, UtilsHocOutProps {
     formItemNode?: TreeMap;
 }

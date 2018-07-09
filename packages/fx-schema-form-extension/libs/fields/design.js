@@ -20,7 +20,7 @@ export class DesignField extends React.PureComponent {
         this.initComponent();
     }
     initComponent() {
-        const { uiSchema, formItemData, getOptions } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
+        const { getOptions } = this.props, options = getOptions(this.props, schemaFormTypes.field, name);
         if (options.formHocs && options.formHocs.constructor === Array && options.formHocs.length) {
             this.SchemaFormWithHoc = compose(...options.formHocs)(DesignFieldComponent);
         }
@@ -29,7 +29,7 @@ export class DesignField extends React.PureComponent {
         }
     }
     renderItem(idx) {
-        const { parentKeys, globalOptions, getOptions, arrayLevel = [], getRequiredKeys, ajv, ArrayItemComponent, reducerKey } = this.props, uiSchema = this.props.uiSchema;
+        const { parentKeys, globalOptions, arrayLevel = [], ajv, ArrayItemComponent, reducerKey } = this.props, uiSchema = this.props.uiSchema;
         let SchemaFormWithHoc = this.SchemaFormItemWithHoc;
         return (React.createElement(SchemaFormWithHoc, { key: idx, index: idx, arrayIndex: idx, reducerKey: reducerKey, uiSchema: uiSchema, ArrayItemComponent: ArrayItemComponent, arrayLevel: arrayLevel.concat([idx]), schemaId: uiSchema.schemaPath, uiSchemas: [{
                     key: "-/children",
@@ -37,7 +37,7 @@ export class DesignField extends React.PureComponent {
                 }], parentKeys: parentKeys, globalOptions: globalOptions, ajv: ajv }));
     }
     render() {
-        const { uiSchema, formItemData, getOptions, getRequiredKeys, children } = this.props, child = [], options = getOptions(this.props, "field", name);
+        const { formItemData, getOptions, getRequiredKeys, children } = this.props, child = [], options = getOptions(this.props, "field", name);
         let SchemaFormWithHoc = this.SchemaFormWithHoc;
         const extraProps = getRequiredKeys(this.props, options.fieldIncludeKeys, options.fieldExcludeKeys);
         for (let i = 0; i < +formItemData; i++) {

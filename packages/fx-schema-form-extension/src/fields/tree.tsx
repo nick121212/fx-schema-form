@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { compose, shouldUpdate } from "recompose";
+import { compose } from "recompose";
 import schemaFormReact from "fx-schema-form-react";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
@@ -19,8 +19,8 @@ export const name = "tree";
  */
 export class TreeField extends PureComponent<ObjectFieldProps, any> {
     public render(): JSX.Element | null {
-        const { arrayIndex, arrayLevel, parentKeys, globalOptions, formItemData,
-            ajv, schemaId, getOptions, reducerKey, uiSchema } = this.props,
+        const { arrayLevel, parentKeys, globalOptions, formItemData,
+            ajv, getOptions, reducerKey, uiSchema } = this.props,
             options = getOptions(this.props, schemaFormTypes.field, name);
         let SchemaFormWithHoc: any = SchemaForm,
             children: any[] = ["value"];

@@ -34,9 +34,10 @@ let designResolve = [
     new ResolveLib(curAjv, oneof),
     new ResolveLib(curAjv, tree),
 ];
+console.log(designResolve);
 curAjv.addKeyword("equal", {
     async: false,
-    inline: (it, keyword, schema) => {
+    inline: (it, _keyword, schema) => {
         let expr = "";
         expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema, it.dataLevel, it.dataPathArr) + ") === (" + "data" + (it.dataLevel || "") + "));";
         return expr;

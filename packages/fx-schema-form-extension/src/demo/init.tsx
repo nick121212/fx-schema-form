@@ -1,16 +1,9 @@
-import Immutable from "immutable";
-import { immutableRenderDecorator } from "react-immutable-render-mixin";
 import ajv from "ajv";
-import React, { PureComponent } from "react";
-import ajvErrors from "ajv-errors";
-import { compose, shouldUpdate, onlyUpdateForKeys } from "recompose";
-import { Button } from "antd";
 // import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 import { ResolveLib } from "fx-schema-form-core";
 import schemaFormReact from "fx-schema-form-react";
 import { NoneTemp, AntdCardTemp, AntdFormItemTemp, DivTemp } from "./templates";
 import { AntdCheckboxWidget, AntdInputWidget, AntdInputNumberWidget, AntdSelectWidget } from "./widgets";
-import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { design, div, checkbox, style, oneof, tree } from "./schemas";
 
 export { globalOptions } from "./options/normal";
@@ -49,9 +42,11 @@ let designResolve = [
     new ResolveLib(curAjv, tree as any),
 ];
 
+console.log(designResolve);
+
 curAjv.addKeyword("equal", {
     async: false,
-    inline: (it: any, keyword: string, schema: string) => {
+    inline: (it: any, _keyword: string, schema: string) => {
         let expr = "";
 
         expr += "((" + it.util.getData((it.dataLevel || "") + "/" + schema,

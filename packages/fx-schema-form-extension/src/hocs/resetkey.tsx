@@ -1,6 +1,6 @@
 
 import React from "react";
-import Immutable, { is } from "immutable";
+import Immutable from "immutable";
 
 import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
@@ -8,7 +8,7 @@ import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";
 import schemaFormReact from "fx-schema-form-react";
 
-const { SchemaForm, schemaFormTypes } = schemaFormReact;
+const { schemaFormTypes } = schemaFormReact;
 export interface Props extends DefaultProps, UtilsHocOutProps { }
 
 export interface ResetKeysHocOutSettings {
@@ -27,7 +27,7 @@ export const name = "resetKey";
  * @param hocFactory  hoc的工厂方法
  * @param Component 需要包装的组件
  */
-export const hoc = (hocFactory: BaseFactory<any>) => {
+export const hoc = (_hocFactory: BaseFactory<any>) => {
     return (settings: ResetKeysHocOutSettings = { excludeKeys: [], includeKeys: [] }) => {
         return (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {

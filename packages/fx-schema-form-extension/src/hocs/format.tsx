@@ -21,7 +21,7 @@ export const name = "format";
  * @param hocFactory  hoc的工厂方法
  * @param Component   需要包装的组件
  */
-export const hoc = (hocFactory: BaseFactory<any>) => {
+export const hoc = (_hocFactory: BaseFactory<any>) => {
     return () => {
         return (Component: any): RC<Props, any> => {
             class ComponentHoc extends React.PureComponent<Props, any> {

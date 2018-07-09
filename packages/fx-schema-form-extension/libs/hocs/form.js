@@ -15,7 +15,7 @@ export const hoc = (hocFactory) => {
         return (Component) => {
             class EditFormComponent extends React.PureComponent {
                 render() {
-                    const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex, reducerKey } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), { temps = [], widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {}, dataKeys = uiSchema && uiSchema.originKeys ? uiSchema.originKeys.slice(0, uiSchema.originKeys.length - 1) : [], forms = [...temps, widget];
+                    const { formItemNode, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex, reducerKey } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name), { temps = [], widget = null } = (formItemNode && formItemNode.value) ? formItemNode.value.toJS() : {}, dataKeys = uiSchema && uiSchema.originKeys ? uiSchema.originKeys.slice(0, uiSchema.originKeys.length - 1) : [], forms = [...temps, widget];
                     return React.createElement("div", { className: "ba b-dashed" }, forms.map((temp) => {
                         if (!temp) {
                             return null;
@@ -29,7 +29,7 @@ export const hoc = (hocFactory) => {
             }
             let ComponentHoc = class ComponentHoc extends React.PureComponent {
                 render() {
-                    const { formItemNode, schemaId, uiSchema, parentKeys, getOptions, ajv, arrayLevel, arrayIndex } = this.props;
+                    const { formItemNode, uiSchema } = this.props;
                     if (formItemNode && formItemNode.value && uiSchema && uiSchema.originKeys) {
                         return React.createElement("div", null,
                             React.createElement(Component, Object.assign({}, this.props)),

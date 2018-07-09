@@ -1,6 +1,5 @@
 
 import React from "react";
-import { lifecycle } from "recompose";
 import Immutable from "immutable";
 import { BaseFactory, schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
@@ -63,9 +62,8 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * 5. 更改当前的uiSchema，渲染Component组件
                  */
                 public render(): JSX.Element | null {
-                    const { getPathKeys, uiSchema, getOptions, schemaId, reducerKey,
-                        arrayLevel, arrayIndex, globalOptions, parentKeys, ajv } = this.props,
-                        { condition, ...extraProps } = this.props,
+                    const { getPathKeys, uiSchema, getOptions } = this.props,
+                        { condition } = this.props,
                         { keys = null } = uiSchema || {},
                         options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as OneHocOutSettings;
 
@@ -100,7 +98,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
             return ComponentHoc as any;
         };
 
-        const innerHoc = (Component: any): RC<Props, any> => {
+        const innerHoc = (_Component: any): RC<Props, any> => {
             @(innerHoc1 as any)
             class ComponentHoc extends React.PureComponent<Props, any> {
                 /**
@@ -108,7 +106,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param props props
                  */
                 public async componentWillUpdate(props: Props) {
-                    const { uiSchema, currentSchema, updateItemDataRaw, getDefaultData, removeItemDataRaw, combineActions, ajv } = props,
+                    const { currentSchema, updateItemDataRaw, getDefaultData, combineActions, ajv } = props,
                         actions: any = [];
 
                     // 清除meta数据
@@ -132,14 +130,19 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * 5. 更改当前的uiSchema，渲染Component组件
                  */
                 public render(): JSX.Element | null {
-                    const { getPathKeys, uiSchema, getOptions, schemaId, reducerKey,
-                        arrayLevel, arrayIndex, globalOptions, parentKeys, ajv } = this.props,
-                        { currentSchema, oneOfScehmaId, uiSchemaInOneof, condition } = this.props;
+                    const { uiSchema, reducerKey,
+                        arrayLevel, arrayIndex, globalOptions, parentKeys, ajv, getPathKeys, getOptions } = this.props,
+                        { currentSchema, oneOfScehmaId, uiSchemaInOneof } = this.props,
+                        { condition } = this.props,
+                        { keys = null } = uiSchema || {},
+                        options = getOptions(this.props, schemaFormTypes.hoc, name, Immutable.fromJS(settings || {})) as OneHocOutSettings,
+                        pathKeys = getPathKeys(keys as string[], options.path),
+                        data = condition ? condition.get(pathKeys.join("/")) : "";
 
                     if (currentSchema) {
                         // 渲染form
                         return <SchemaForm
-                            key={oneOfScehmaId}
+                            key={data ? data.toString() : oneOfScehmaId}
                             schemaId={oneOfScehmaId}
                             uiSchema={uiSchema}
                             reducerKey={reducerKey}

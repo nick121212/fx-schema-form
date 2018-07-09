@@ -21,11 +21,11 @@ export class AntdInputNumberWidget extends PureComponent {
         return props;
     }
     render() {
-        const { getOptions, uiSchema, getTitle, formItemMeta, parentKeys, schemaId, updateItemData, updateItemMeta, validate } = this.props;
+        const { getOptions, uiSchema, getTitle, formItemMeta, updateItemData, updateItemMeta } = this.props;
         const metaOptions = formItemMeta ? formItemMeta.getIn(["options", "widget", "number"]) : fromJS({});
-        const { keys, readonly = false } = uiSchema;
+        const { readonly = false } = uiSchema;
         console.log(getOptions(this.props, "widget", "number", metaOptions).options);
-        return (React.createElement(InputNumber, Object.assign({ style: style, onBlur: (e) => {
+        return (React.createElement(InputNumber, Object.assign({ style: style, onBlur: (_e) => {
                 if (this._count > 0) {
                     updateItemMeta(this.props, this.props.formItemData);
                 }
