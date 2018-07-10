@@ -12,9 +12,11 @@ import { getDataKeys, getSchemaId } from "../libs/resolve";
  * @return {JSONSchema6}           返回处理过后的schema
  */
 export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
-    const currentSchema = convertKeys(schema, ajv),
-        keys: string[] = getDataKeys(schemaKey),
-        $id = getSchemaId(schemaKey);
+    const keys: string[] = getDataKeys(schemaKey),
+        $id = getSchemaId(schemaKey),
+        currentSchema = convertKeys(schemaKey, schema, ajv);
+
+    // console.log(schemaKey);
 
     // 如果已经存在，则直接返回
     if (schemaFieldFactory.has(schemaKey)) {

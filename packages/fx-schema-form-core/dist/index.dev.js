@@ -129,6 +129,7 @@ class ResolveLib {
         let $id = schema.$id;
         if (!$id && !schema.$ref) {
             if (true) {
+                console.log(schema);
                 Object(__WEBPACK_IMPORTED_MODULE_1__utils__["b" /* warn */])("id is required");
             }
             return schema;
@@ -142,7 +143,7 @@ class ResolveLib {
         return schema;
     }
     compileSchema(schema, $id) {
-        schema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get("undefined")(schema, $id || schema.$id + "#", this.ajv);
+        schema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get("undefined")(schema, $id || (schema.$id || "") + "#", this.ajv);
         this.mergeSchema = schema;
         if (!schema.type || schema.$ref) {
             return;
@@ -196,9 +197,9 @@ const schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /*
 const schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
 /* harmony export (immutable) */ __webpack_exports__["d"] = schemaKeysFactory;
 
-const convertKeys = (schema, ajv) => {
+const convertKeys = ($id, schema, ajv) => {
     schemaKeyWordFactory.forEach((key, val) => {
-        schema = val(schema, ajv);
+        schema = val($id, schema, ajv);
     });
     return schema;
 };
@@ -333,9 +334,15 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
 
 
-/* harmony default export */ __webpack_exports__["a"] = ((schema, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
     if (schema && schema.$ref) {
-        let validate = ajv.getSchema(schema.$ref);
+        const schemaId = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])(schema.$ref);
+        if (schema.$id) {
+            schema.$ref = schema.$id + schema.$ref;
+        } else if (!schemaId) {
+            schema.$ref = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id) + schema.$ref;
+        }
+        const validate = ajv.getSchema(schema.$ref);
         if (validate && validate.schema) {
             let schemaAjv = Object.assign({}, validate.schema);
             schemaAjv.$ref = schema.$ref;
@@ -359,7 +366,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
-/* harmony default export */ __webpack_exports__["a"] = ((schema, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
     if (!schema) {
         return schema;
     }
@@ -380,14 +387,14 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
-/* harmony default export */ __webpack_exports__["a"] = ((schema, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
     if (!schema) {
         return schema;
     }
     let anyOf = schema.anyOf;
     if (anyOf && anyOf.constructor === Array) {
-        schema.anyOf = anyOf.map(schemaOfOne => {
-            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne);
+        schema.anyOf = anyOf.map((schemaOfOne, index) => {
+            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne, schema.$id || schema.$ref ? undefined : $id);
             return mergeSchema;
         });
     }
@@ -401,7 +408,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
-/* harmony default export */ __webpack_exports__["a"] = ((schema, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
     if (!schema) {
         return schema;
     }
@@ -497,9 +504,9 @@ const pro = "properties";
 
 
 /* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
-    const currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schema, ajv),
-          keys = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["b" /* getDataKeys */])(schemaKey),
-          $id = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["c" /* getSchemaId */])(schemaKey);
+    const keys = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["b" /* getDataKeys */])(schemaKey),
+          $id = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["c" /* getSchemaId */])(schemaKey),
+          currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schemaKey, schema, ajv);
     if (__WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].has(schemaKey)) {
         return currentSchema || schema;
     }

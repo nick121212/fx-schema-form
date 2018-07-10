@@ -106,6 +106,7 @@ export default class ResolveLib {
         if (!$id && !schema.$ref) {
             if (__DEV__) {
                 // throw new Error(`id is required.`);
+                console.log(schema);
                 warn("id is required");
             }
             return schema;
@@ -132,7 +133,7 @@ export default class ResolveLib {
      * @param {String}      $id     id
      */
     private compileSchema(schema: JSONSchema6, $id: string): void {
-        schema = schemaTypeFactory.get("undefined")(schema, $id || (schema.$id + "#"), this.ajv);
+        schema = schemaTypeFactory.get("undefined")(schema, $id || ((schema.$id || "") + "#"), this.ajv);
 
         this.mergeSchema = schema;
 
