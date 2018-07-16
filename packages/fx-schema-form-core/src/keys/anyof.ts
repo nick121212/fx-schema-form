@@ -2,7 +2,7 @@
 import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
-import { default as ResolveLib } from "../libs/resolve";
+import { default as ResolveLib, getSchemaId } from "../libs/resolve";
 // import MergeLib from "../libs/merge";
 
 /**
@@ -22,7 +22,8 @@ export default ($id: string, schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
 
     if (anyOf && anyOf.constructor === Array) {
         schema.anyOf = anyOf.map((schemaOfOne: JSONSchema6, index: number) => {
-            let { mergeSchema } = new ResolveLib(ajv, schemaOfOne, (schema.$id ||  schema.$ref) ? undefined : $id);
+            // console.log(schemaOfOne, (schema.$id || schema.$ref) ? undefined : getSchemaId($id));
+            let { mergeSchema } = new ResolveLib(ajv, schemaOfOne, (schema.$id || getSchemaId(schema.$ref || "")) ? undefined : getSchemaId($id));
 
             return mergeSchema;
         });

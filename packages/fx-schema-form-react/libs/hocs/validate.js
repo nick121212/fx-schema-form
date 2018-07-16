@@ -26,7 +26,7 @@ export const hoc = (hocFactory) => {
             };
             ArrayComponentHoc = __decorate([
                 compose(hocFactory.get("data")({
-                    root: true
+                    root: settings.root
                 }), withHandlers({
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => __awaiter(this, void 0, void 0, function* () {

@@ -81,6 +81,7 @@
     "immutable": "^3.8.2",
     "immutable-devtools": "^0.0.7",
     "jsdom": "^7.0.0",
+    "json-schema-editor-visual": "^1.0.17",
     "mocha": "^5.0.0",
     "node-sass": "^4.6.1",
     "pre-commit": "1.x",

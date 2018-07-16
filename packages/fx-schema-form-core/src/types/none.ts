@@ -12,15 +12,21 @@ import { getDataKeys, getSchemaId } from "../libs/resolve";
  * @return {JSONSchema6}           返回处理过后的schema
  */
 export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
-    const keys: string[] = getDataKeys(schemaKey),
+    let keys: string[] = getDataKeys(schemaKey, false),
         $id = getSchemaId(schemaKey),
         currentSchema = convertKeys(schemaKey, schema, ajv);
-
-    // console.log(schemaKey);
 
     // 如果已经存在，则直接返回
     if (schemaFieldFactory.has(schemaKey)) {
         return currentSchema || schema;
+    }
+
+    if (!$id) {
+        $id = schema.$id || "";
+    }
+
+    if (schema.$id && schema.$ref) {
+        schemaKeysFactory.add(schema.$id, schema.$ref);
     }
 
     // 将当前获取的schema加入到schemaFieldFactory中

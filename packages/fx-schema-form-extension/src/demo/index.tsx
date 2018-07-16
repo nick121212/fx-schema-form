@@ -14,6 +14,8 @@ import "react-perf-tool/lib/styles.css";
 import "../";
 import { RouterComponent } from "./router";
 
+import "json-schema-editor-visual/dist/main.css";
+
 // 将schemaForm加入到store
 let store = createStore<any>(combineReducers({
     "schemaForm": schemaFormReact.reducerFactory.get("schemaForm").reducer as any

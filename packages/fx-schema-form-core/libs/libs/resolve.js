@@ -1,11 +1,20 @@
 import { schemaTypeFactory } from "../factory";
 import { warn } from "../utils";
-const regexp = /#$/g;
 export const getDataKeys = (schemaKey, keepFirst = false) => {
+    let removeNextKey = false;
     let keys = schemaKey.split("/").map((key, index) => {
+        const regexp = /#$/g;
         if (index === 0 && regexp.test(key)) {
             regexp.lastIndex = 0;
             return keepFirst ? key.replace(regexp, "") : null;
+        }
+        if (removeNextKey) {
+            removeNextKey = false;
+            return null;
+        }
+        if (key === "definitions") {
+            removeNextKey = true;
+            return null;
         }
         if (key === "properties") {
             return null;
@@ -21,6 +30,7 @@ export const getDataKeys = (schemaKey, keepFirst = false) => {
 };
 export const getSchemaId = (schemaKey) => {
     const keys = schemaKey.split("/");
+    const regexp = /#$/g;
     if (!keys.length) {
         if (__DEV__) {
             warn(`${schemaKey} not a valid schemaPath.`);
@@ -70,7 +80,7 @@ export default class ResolveLib {
         }
         let type = schema.type.toString();
         if (schemaTypeFactory.has(type)) {
-            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || (schema.$id + "#"), this.ajv);
+            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || ((schema.$id || "") + "#"), this.ajv);
         }
     }
 }

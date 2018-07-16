@@ -42,7 +42,7 @@ describe("key word of oneof", () => {
     });
 
     it("oneOf中的schema被替换成了正确的schema;数量为2；$ids = [test2,test1]", () => {
-        let schema = schemaKeyWordFactory.get("oneof")(ajv.getSchema("test").schema, ajv);
+        let schema = schemaKeyWordFactory.get("oneof")("",ajv.getSchema("test").schema, ajv);
 
         expect(schema).to.be.a("object");
         expect(schema.oneOf.length).to.equal(2);

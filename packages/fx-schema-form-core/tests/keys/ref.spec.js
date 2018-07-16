@@ -23,18 +23,18 @@ describe("key word of ref", () => {
 
     it("抛出一个找不到test2的异常。", () => {
         assert.throw(() => {
-            schemaKeyWordFactory.get("ref")({
+            schemaKeyWordFactory.get("ref")("",{
                 $ref: "test5#"
             }, ajv);
-        });
     });
+});
 
-    it("返回一个schema的对象，$id=test", () => {
-        let schema = schemaKeyWordFactory.get("ref")({
-            $ref: "test#"
-        }, ajv);
+it("返回一个schema的对象，$id=test", () => {
+    let schema = schemaKeyWordFactory.get("ref")("", {
+        $ref: "test#"
+    }, ajv);
 
-        expect(schema).to.be.a("object");
-        expect(schema.$ref).to.equal("test#");
-    });
+    expect(schema).to.be.a("object");
+    expect(schema.$ref).to.equal("test#");
+});
 });

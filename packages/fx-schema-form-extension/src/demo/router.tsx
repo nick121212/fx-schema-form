@@ -7,6 +7,8 @@ import { DesignForm, children } from "./forms/design";
 import { NormalForm } from "./forms/normal";
 import { OneOfForm } from "./forms/oneof";
 import { TreeForm } from "./forms/tree";
+import { default as EditComponent } from "./forms/edit";
+
 import { curAjv } from "./init";
 
 /**
@@ -20,7 +22,8 @@ export class RouterComponent extends React.Component<any, any> {
                     <Link className="link dim white dib mr3" to="/form/design">所见即所得</Link>
                     <Link className="link dim white dib mr3" to="/form/normal">表单模式</Link>
                     <Link className="link dim white dib mr3" to="/form/oneof" title="OneOf">OneOf关键字</Link>
-                    <Link className="link dim white dib" to="/form/tree" title="Tree">二叉树</Link>
+                    <Link className="link dim white dib mr3" to="/form/tree" title="Tree">二叉树</Link>
+                    <Link className="link dim white dib" to="/form/edit" title="Tree">可视化</Link>
 
                     <a className="dib fr" href="https://github.com/nick121212/fx-schema-form">GITHUB</a>
                 </nav>
@@ -44,6 +47,9 @@ export class RouterComponent extends React.Component<any, any> {
                 }} />
                 <Route path="/form/tree" component={() => {
                     return <TreeForm ajv={curAjv} schemaId="dnd-tree" reducerKey="schemaForm" formKey="treeForm" initData={{}} />;
+                }} />
+                <Route path="/form/edit" component={() => {
+                    return <EditComponent />;
                 }} />
             </div>
 

@@ -1,4 +1,4 @@
-import { default as ResolveLib } from "../libs/resolve";
+import { default as ResolveLib, getSchemaId } from "../libs/resolve";
 export default ($id, schema, ajv) => {
     if (!schema) {
         return schema;
@@ -6,7 +6,7 @@ export default ($id, schema, ajv) => {
     let anyOf = schema.anyOf;
     if (anyOf && anyOf.constructor === Array) {
         schema.anyOf = anyOf.map((schemaOfOne, index) => {
-            let { mergeSchema } = new ResolveLib(ajv, schemaOfOne, (schema.$id || schema.$ref) ? undefined : $id);
+            let { mergeSchema } = new ResolveLib(ajv, schemaOfOne, (schema.$id || getSchemaId(schema.$ref || "")) ? undefined : getSchemaId($id));
             return mergeSchema;
         });
     }

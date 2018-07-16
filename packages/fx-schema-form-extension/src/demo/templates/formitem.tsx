@@ -36,7 +36,14 @@ export class AntdFormItemTemp extends PureComponent<AntdFormItemTempProps, any> 
             <Form.Item
                 key={(uiSchema.keys || []).join() + tempKey + isValid}
                 required={uiSchema.isRequired}
-                label={getTitle(this.props)}
+                label={
+                    tempOptions.showTitle === false ? getTitle(this.props) : (
+                        <span>
+                            {initArrayComponent ? initArrayComponent(this.props) : null}
+                            {getTitle(this.props)}
+                        </span>
+                    )
+                }
                 extra={uiSchema.description}
                 hasFeedback={dirty && hasFeedback}
                 help={isValid ? "" : errorText}

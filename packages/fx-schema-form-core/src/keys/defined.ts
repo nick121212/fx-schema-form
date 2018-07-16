@@ -29,6 +29,10 @@ export default ($id: string, schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
                 if (element !== false && element !== true) {
                     // tslint:disable-next-line:no-unused-expression
                     new ResolveLib(ajv, element, `${schema.$id}#/definitions/${key}`);
+
+                    // console.log("-----------------------", `${schema.$id}#/${key}`);
+                    // tslint:disable-next-line:no-unused-expression
+                    // new ResolveLib(ajv, element, `${schema.$id}#/${key}`);
                 }
             }
         }

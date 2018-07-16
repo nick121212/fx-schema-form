@@ -4,9 +4,6 @@ import { JSONSchema6 } from "json-schema";
 import { schemaTypeFactory } from "../factory";
 import { warn } from "../utils";
 
-// 去掉末尾的#正则
-const regexp = /#$/g;
-
 /**
 * 解析path成成数据的路径
 * 最终schema需要与uiSchema做合并，uiSchema中的key配置的是数组 ["appType', '-','type']，所以需要做一下转换
@@ -19,7 +16,10 @@ const regexp = /#$/g;
 * @param {Boolean}  keepFirst 是否需要保留第一个
 */
 export const getDataKeys = (schemaKey: string, keepFirst = false): string[] => {
+    let removeNextKey = false;
     let keys = schemaKey.split("/").map((key: string, index: number) => {
+        const regexp = /#$/g;
+
         // 第一个替换末尾的#
         if (index === 0 && regexp.test(key)) {
             // 这里是regexp的陷阱,需要修改lastIndex = 0
@@ -55,6 +55,7 @@ export const getDataKeys = (schemaKey: string, keepFirst = false): string[] => {
 */
 export const getSchemaId = (schemaKey: string): string => {
     const keys = schemaKey.split("/");
+    const regexp = /#$/g;
 
     if (!keys.length) {
         if (__DEV__) {
@@ -66,7 +67,6 @@ export const getSchemaId = (schemaKey: string): string => {
 
     return keys[0].replace(regexp, "");
 };
-
 
 /**
  * 解析schema中的字段，缓存到【schemaFieldFactory】中
@@ -119,6 +119,7 @@ export default class ResolveLib {
 
         // 把schema加入到ajv
         if ($id && !ajv.getSchema($id)) {
+            // console.log("add Schema", schema);
             ajv.addSchema(schema);
         }
 
@@ -155,7 +156,7 @@ export default class ResolveLib {
 
         // 这里调用相对应的type的方法，来解析schema
         if (schemaTypeFactory.has(type)) {
-            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || (schema.$id + "#"), this.ajv);
+            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || ((schema.$id || "") + "#"), this.ajv);
         }
     }
 }

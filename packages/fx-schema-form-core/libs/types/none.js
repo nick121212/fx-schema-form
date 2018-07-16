@@ -1,9 +1,15 @@
 import { schemaFieldFactory, schemaKeysFactory, convertKeys } from "../factory";
 import { getDataKeys, getSchemaId } from "../libs/resolve";
 export default (schema, schemaKey, ajv) => {
-    const keys = getDataKeys(schemaKey), $id = getSchemaId(schemaKey), currentSchema = convertKeys(schemaKey, schema, ajv);
+    let keys = getDataKeys(schemaKey, false), $id = getSchemaId(schemaKey), currentSchema = convertKeys(schemaKey, schema, ajv);
     if (schemaFieldFactory.has(schemaKey)) {
         return currentSchema || schema;
+    }
+    if (!$id) {
+        $id = schema.$id || "";
+    }
+    if (schema.$id && schema.$ref) {
+        schemaKeysFactory.add(schema.$id, schema.$ref);
     }
     schemaFieldFactory.add(schemaKey, Object.assign({}, currentSchema || schema, {
         keys,

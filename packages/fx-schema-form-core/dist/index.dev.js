@@ -82,9 +82,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
 
 
-const regexp = /#$/g;
 const getDataKeys = (schemaKey, keepFirst = false) => {
+    let removeNextKey = false;
     let keys = schemaKey.split("/").map((key, index) => {
+        const regexp = /#$/g;
         if (index === 0 && regexp.test(key)) {
             regexp.lastIndex = 0;
             return keepFirst ? key.replace(regexp, "") : null;
@@ -105,6 +106,7 @@ const getDataKeys = (schemaKey, keepFirst = false) => {
 
 const getSchemaId = schemaKey => {
     const keys = schemaKey.split("/");
+    const regexp = /#$/g;
     if (!keys.length) {
         if (true) {
             Object(__WEBPACK_IMPORTED_MODULE_1__utils__["b" /* warn */])(`${schemaKey} not a valid schemaPath.`);
@@ -156,7 +158,7 @@ class ResolveLib {
         }
         let type = schema.type.toString();
         if (__WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].has(type)) {
-            this.mergeSchema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get(type)(schema, $id || schema.$id + "#", this.ajv);
+            this.mergeSchema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get(type)(schema, $id || (schema.$id || "") + "#", this.ajv);
         }
     }
 }
@@ -394,7 +396,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("object"
     let anyOf = schema.anyOf;
     if (anyOf && anyOf.constructor === Array) {
         schema.anyOf = anyOf.map((schemaOfOne, index) => {
-            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne, schema.$id || schema.$ref ? undefined : $id);
+            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne, schema.$id || Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])(schema.$ref || "") ? undefined : Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id));
             return mergeSchema;
         });
     }
@@ -504,11 +506,17 @@ const pro = "properties";
 
 
 /* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
-    const keys = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["b" /* getDataKeys */])(schemaKey),
-          $id = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["c" /* getSchemaId */])(schemaKey),
-          currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schemaKey, schema, ajv);
+    let keys = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["b" /* getDataKeys */])(schemaKey, false),
+        $id = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["c" /* getSchemaId */])(schemaKey),
+        currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schemaKey, schema, ajv);
     if (__WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].has(schemaKey)) {
         return currentSchema || schema;
+    }
+    if (!$id) {
+        $id = schema.$id || "";
+    }
+    if (schema.$id && schema.$ref) {
+        __WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */].add(schema.$id, schema.$ref);
     }
     __WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].add(schemaKey, Object.assign({}, currentSchema || schema, {
         keys,
@@ -531,25 +539,27 @@ const pro = "properties";
 
 
 
-const getUiSchemaKeyRecursion = (uiSchemaKeys, parentKeys) => {
+const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
+    let parentKeysWithDef = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(parentSchemaPath, true);
     while (uiSchemaKeys.length) {
         let key = uiSchemaKeys.shift() || "";
-        let keys = key ? parentKeys.concat([key]) : parentKeys;
-        let keysStr = keys.join("/").replace(/\/$/, "");
+        parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
+        let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].has(keysStr)) {
             if (true) {
-                Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* warn */])(`${keys.join("/")} did not found.`);
+                console.log(__WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */], __WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */]);
+                Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* warn */])(`${keysStr} did not found.`);
             }
             return "";
         }
         let schema = __WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].get(__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].get(keysStr));
         if (schema.$ref) {
-            parentKeys = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(schema.$ref, true);
+            parentKeysWithDef = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(schema.$ref, true);
         } else {
-            parentKeys = keys;
+            parentKeysWithDef = parentKeysWithDef;
         }
     }
-    return parentKeys.join("/");
+    return parentKeysWithDef.join("/");
 };
 const getParentSchemaKeys = parent => {
     if (parent && parent.keys) {
@@ -561,13 +571,14 @@ const getCurrentSchemaKey = (parent, schemaPath, uiSchema) => {
     const $id = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["c" /* getSchemaId */])(schemaPath);
     let uiSchemaKeys = uiSchema.key.split("/");
     if (parent && Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["c" /* getSchemaId */])(parent.key) === $id) {
-        return getUiSchemaKeyRecursion(uiSchemaKeys, parent.key.split("/"));
+        return getUiSchemaKeyRecursion(uiSchemaKeys, parent.schemaPath || "");
     }
-    return getUiSchemaKeyRecursion(uiSchemaKeys, [$id]);
+    return getUiSchemaKeyRecursion(uiSchemaKeys, schemaPath);
 };
 const mergeUiSchemaToArray = uiSchema => {
     if (!__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].has(uiSchema.key)) {
         if (true) {
+            console.log(__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */]);
             Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* warn */])(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
         return uiSchema;
@@ -612,22 +623,23 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
         return uiSchemasFirst;
     }
     uiSchemas.slice(0, idx).forEach(us => {
-        let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } : us);
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } : us);
         uiSchemasFirst.push(mergeUiSchemaToArray(uiSchema));
     });
     uiSchemas.slice(idx + 1).forEach(us => {
-        let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } : us);
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } : us);
         uiSchemasLast.push(mergeUiSchemaToArray(uiSchema));
     });
     if (curSchema.type === types[0] && curSchema.properties) {
         Object.keys(curSchema.properties).forEach(us => {
-            let uiSchema = initUiSchema(parent, schemaPath, { key: us });
+            let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, { key: us });
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
     }
     if (curSchema.type === types[1] && curSchema.items) {
-        let uiSchema = initUiSchema(parent, schemaPath, {
-            key: Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(curSchema.schemaPath || "").join("/")
+        console.log(curSchema);
+        const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
+            key: "-"
         });
         pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
     }
@@ -655,7 +667,9 @@ class MergeLib {
         }
         const curSchema = __WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].get(__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].get(keyPath));
         if (curSchema.$id) {
-            curSchema.$ref = curSchema.$id;
+            if (!curSchema.$ref) {
+                curSchema.$ref = curSchema.$id;
+            }
             curSchema.$id = undefined;
             delete curSchema.$id;
         }

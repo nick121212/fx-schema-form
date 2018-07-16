@@ -10,9 +10,9 @@ export interface ShowHideHocOutSettings {
     condition?: ConditionHocSettings;
 }
 export declare const name = "show";
-export declare const hoc: (hocFactory: BaseFactory<any>) => (settings?: ShowHideHocOutSettings) => any;
+export declare const hoc: (hocFactory: BaseFactory<any>) => (_settings?: ShowHideHocOutSettings) => any;
 declare const _default: {
     name: string;
-    hoc: (hocFactory: BaseFactory<any>) => (settings?: ShowHideHocOutSettings) => any;
+    hoc: (hocFactory: BaseFactory<any>) => (_settings?: ShowHideHocOutSettings) => any;
 };
 export default _default;

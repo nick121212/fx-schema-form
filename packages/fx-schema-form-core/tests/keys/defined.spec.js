@@ -7,6 +7,7 @@ import Ajv from "ajv";
 import {
     schemaKeyWordFactory,
     schemaKeysFactory,
+    schemaFieldFactory,
     ResolveLib
 } from "../../dist/index";
 
@@ -38,12 +39,9 @@ describe("key word of definitions", () => {
     });
 
     it("使用definitions关键字", () => {
-        let schema = schemaKeyWordFactory.get("definitions")(ajv.getSchema("test").schema, ajv);
+        let schema = schemaKeyWordFactory.get("definitions")("", ajv.getSchema("test").schema, ajv);
 
         expect(schema).to.be.a("object");
-        // expect(schema.anyOf.length).to.equal(2);
-        // expect(schema.anyOf[0].$ref).to.equal("test2#");
-        // expect(schema.anyOf[1].$ref).to.equal("test1#");
         expect(schemaKeysFactory.has("test/definitions/dt")).to.eq(true);
         expect(schemaKeysFactory.get("test/definitions/dt")).to.eq("test#/definitions/dt");
     });

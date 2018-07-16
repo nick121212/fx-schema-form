@@ -35,7 +35,7 @@ const getCurrentSchemaKey = (parent, schemaPath, uiSchema) => {
     if (parent && getSchemaId(parent.key) === $id) {
         return getUiSchemaKeyRecursion(uiSchemaKeys, parent.key.split("/"));
     }
-    return getUiSchemaKeyRecursion(uiSchemaKeys, [$id]);
+    return getUiSchemaKeyRecursion(uiSchemaKeys, getDataKeys(schemaPath, true));
 };
 const mergeUiSchemaToArray = (uiSchema) => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
@@ -80,22 +80,22 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
         return uiSchemasFirst;
     }
     uiSchemas.slice(0, idx).forEach((us) => {
-        let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } : us);
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } : us);
         uiSchemasFirst.push(mergeUiSchemaToArray(uiSchema));
     });
     uiSchemas.slice(idx + 1).forEach((us) => {
-        let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } : us);
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } : us);
         uiSchemasLast.push(mergeUiSchemaToArray(uiSchema));
     });
     if (curSchema.type === types[0] && curSchema.properties) {
         Object.keys(curSchema.properties).forEach((us) => {
-            let uiSchema = initUiSchema(parent, schemaPath, { key: us });
+            let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, { key: us });
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
     }
     if (curSchema.type === types[1] && curSchema.items) {
         let uiSchema = initUiSchema(parent, schemaPath, {
-            key: getDataKeys(curSchema.schemaPath || "").join("/")
+            key: getDataKeys(curSchema.schemaPath || "", false).join("/")
         });
         pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
     }
@@ -123,7 +123,9 @@ export default class MergeLib {
         }
         const curSchema = schemaFieldFactory.get(schemaKeysFactory.get(keyPath));
         if (curSchema.$id) {
-            curSchema.$ref = curSchema.$id;
+            if (!curSchema.$ref) {
+                curSchema.$ref = curSchema.$id;
+            }
             curSchema.$id = undefined;
             delete curSchema.$id;
         }

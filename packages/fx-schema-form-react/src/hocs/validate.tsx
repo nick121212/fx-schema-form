@@ -31,7 +31,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
         return (Component: any): RC<DefaultProps, any> => {
             @(compose(
                 hocFactory.get("data")({
-                    root: true
+                    root: settings.root
                 }),
                 withHandlers<any, any>({
                     /**
