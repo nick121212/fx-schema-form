@@ -1,7 +1,9 @@
 {
   "lerna": "2.0.0-rc.5",
   "packages": [
+    "packages/fx-schema-form-core",
+    "packages/fx-schema-form-extension",
     "packages/fx-schema-form-react"
   ],
-  "version": "3.0.96"
+  "version": "3.0.97"
 }
