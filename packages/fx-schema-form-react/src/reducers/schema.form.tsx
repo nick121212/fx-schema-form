@@ -13,7 +13,7 @@ export type ASN = Array<string | number> | string[];
 export interface SchemaFormActions {
     [index: string]: SimpleActionCreator<any, any>;
     removeForm: SimpleActionCreator<ASN>;
-    createForm: SimpleActionCreator<{ key: string, data: any }>;
+    createForm: SimpleActionCreator<{ key: string, data: any, keepData?: boolean }>;
     updateItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any, meta?: any }>;
     updateItemMeta: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta: any, noChange?: boolean; }>;
     addItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, data: any }>;
@@ -70,7 +70,7 @@ export class SchemaFormReducer<T> implements FxReducer {
      * 创建一个表单
      */
     private createForm: SimpleActionCreator<{ key: string, data: any }>
-        = createAction<{ key: string, data: any }>(isProd() ? "" : "创建一个表单数据");
+        = createAction<{ key: string, data: any, keepData?: boolean }>(isProd() ? "" : "创建一个表单数据");
     /**
      * 更新一个表单数据
      */
@@ -225,15 +225,20 @@ export class SchemaFormReducer<T> implements FxReducer {
      * @param state   当前的state
      * @param param1  参数值，key 和 data
      */
-    private createFormHandle(state: Map<string, any>, { key, data }: any): Map<string, any> {
+    private createFormHandle(state: Map<string, any>, { key, data, keepData }: any): Map<string, any> {
+        let originData = data;
+
         if (state.has(key)) {
+            if (keepData) {
+                originData = state.getIn([key, "data"]);
+            }
             state = state.remove(key);
         }
 
         const meta = new TreeMap(key, fromJS({}));
         const stateData = Map<string, any>({
             meta: meta,
-            data: fromJS(data)
+            data: fromJS(originData)
         });
 
         return state.set(key, stateData);

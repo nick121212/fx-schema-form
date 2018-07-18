@@ -27,6 +27,7 @@ export interface SchemaFormProps extends SchemaFormHocOutProps {
     formKey?: string;
     initData?: any;
     shouldResetForm?: boolean;
+    keepData?: boolean;
 }
 
 export interface SchemaFormHocOutProps {
@@ -190,7 +191,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 },
                 resetForm: (props: SchemaFormProps & DefaultProps & UtilsHocOutProps) => {
                     return async () => {
-                        const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
+                        const { formKey, shouldResetForm, keepData, ajv, getDefaultData, initData = {}, schemaId } = props;
 
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
@@ -199,6 +200,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
+                                    keepData,
                                     data: await getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }

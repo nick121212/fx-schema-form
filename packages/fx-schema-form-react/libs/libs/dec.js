@@ -146,13 +146,14 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 },
                 resetForm: (props) => {
                     return () => __awaiter(this, void 0, void 0, function* () {
-                        const { formKey, shouldResetForm, reducerKey, ajv, getDefaultData, initData = {}, schemaId } = props;
+                        const { formKey, shouldResetForm, keepData, ajv, getDefaultData, initData = {}, schemaId } = props;
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
                             let schema = ajv.getSchema(schemaId).schema;
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
+                                    keepData,
                                     data: yield getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }

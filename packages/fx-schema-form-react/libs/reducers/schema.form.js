@@ -111,14 +111,18 @@ export class SchemaFormReducer {
         }
         return state;
     }
-    createFormHandle(state, { key, data }) {
+    createFormHandle(state, { key, data, keepData }) {
+        let originData = data;
         if (state.has(key)) {
+            if (keepData) {
+                originData = state.getIn([key, "data"]);
+            }
             state = state.remove(key);
         }
         const meta = new TreeMap(key, fromJS({}));
         const stateData = Map({
             meta: meta,
-            data: fromJS(data)
+            data: fromJS(originData)
         });
         return state.set(key, stateData);
     }

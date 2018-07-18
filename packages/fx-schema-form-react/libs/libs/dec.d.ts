@@ -14,6 +14,7 @@ export interface SchemaFormProps extends SchemaFormHocOutProps {
     formKey?: string;
     initData?: any;
     shouldResetForm?: boolean;
+    keepData?: boolean;
 }
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
