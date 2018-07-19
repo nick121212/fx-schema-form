@@ -9,8 +9,8 @@ export interface ConditionHocOutProps {
 }
 export interface ConditionPath {
     path: string;
-    meta: boolean;
-    metaKey: string;
+    meta?: boolean;
+    metaKey?: string;
     jsonata?: string;
 }
 export interface ConditionHocSettings {

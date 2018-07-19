@@ -15,7 +15,9 @@ export class AntdFormItemTemp extends PureComponent {
             props.validateStatus = "validating";
             hasFeedback = true;
         }
-        return (React.createElement(Form.Item, Object.assign({ key: (uiSchema.keys || []).join() + tempKey + isValid, required: uiSchema.isRequired, label: getTitle(this.props), extra: uiSchema.description, hasFeedback: dirty && hasFeedback, help: isValid ? "" : errorText }, props, tempOptions.options), children));
+        return (React.createElement(Form.Item, Object.assign({ key: (uiSchema.keys || []).join() + tempKey + isValid, required: uiSchema.isRequired, label: tempOptions.showTitle === false ? getTitle(this.props) : (React.createElement("span", null,
+                initArrayComponent ? initArrayComponent(this.props) : null,
+                getTitle(this.props))), extra: uiSchema.description, hasFeedback: dirty && hasFeedback, help: isValid ? "" : errorText }, props, tempOptions.options), children));
     }
 }
 //# sourceMappingURL=formitem.js.map

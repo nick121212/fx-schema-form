@@ -32,7 +32,7 @@ export interface SchemaFormProps extends SchemaFormHocOutProps {
 
 export interface SchemaFormHocOutProps {
     validateAll?: ($async?: boolean) => Promise<any>;
-    resetForm?: () => Promise<void>;
+    resetForm?: (keepData?: boolean) => Promise<void>;
 }
 
 export const name = "schemaFormDec";
@@ -43,6 +43,7 @@ export const name = "schemaFormDec";
  */
 export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKeys: [] }) => {
     return (Component: any): RC<SchemaFormProps & DefaultProps, any> => {
+        // const keep
         @(compose(
             hocFactory.get("utils")(),
             // 绑定数据
@@ -190,8 +191,8 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                     };
                 },
                 resetForm: (props: SchemaFormProps & DefaultProps & UtilsHocOutProps) => {
-                    return async () => {
-                        const { formKey, shouldResetForm, keepData, ajv, getDefaultData, initData = {}, schemaId } = props;
+                    return async (keepData?: boolean) => {
+                        const { formKey, shouldResetForm, keepData: pKeepData, ajv, getDefaultData, initData = {}, schemaId } = props;
 
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
@@ -200,7 +201,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    keepData,
+                                    keepData: typeof keepData === "undefined" ? pKeepData : keepData,
                                     data: await getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }

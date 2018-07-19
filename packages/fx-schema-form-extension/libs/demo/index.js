@@ -10,6 +10,7 @@ import "antd/dist/antd.css";
 import "react-perf-tool/lib/styles.css";
 import "../";
 import { RouterComponent } from "./router";
+import "json-schema-editor-visual/dist/main.css";
 let store = createStore(combineReducers({
     "schemaForm": schemaFormReact.reducerFactory.get("schemaForm").reducer
 }), Immutable.fromJS({}));

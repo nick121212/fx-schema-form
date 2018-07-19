@@ -5,6 +5,7 @@ import { DesignForm, children } from "./forms/design";
 import { NormalForm } from "./forms/normal";
 import { OneOfForm } from "./forms/oneof";
 import { TreeForm } from "./forms/tree";
+import { default as EditComponent } from "./forms/edit";
 import { curAjv } from "./init";
 export class RouterComponent extends React.Component {
     render() {
@@ -14,7 +15,8 @@ export class RouterComponent extends React.Component {
                     React.createElement(Link, { className: "link dim white dib mr3", to: "/form/design" }, "\u6240\u89C1\u5373\u6240\u5F97"),
                     React.createElement(Link, { className: "link dim white dib mr3", to: "/form/normal" }, "\u8868\u5355\u6A21\u5F0F"),
                     React.createElement(Link, { className: "link dim white dib mr3", to: "/form/oneof", title: "OneOf" }, "OneOf\u5173\u952E\u5B57"),
-                    React.createElement(Link, { className: "link dim white dib", to: "/form/tree", title: "Tree" }, "\u4E8C\u53C9\u6811"),
+                    React.createElement(Link, { className: "link dim white dib mr3", to: "/form/tree", title: "Tree" }, "\u4E8C\u53C9\u6811"),
+                    React.createElement(Link, { className: "link dim white dib", to: "/form/edit", title: "Tree" }, "\u53EF\u89C6\u5316"),
                     React.createElement("a", { className: "dib fr", href: "https://github.com/nick121212/fx-schema-form" }, "GITHUB"))),
             React.createElement("div", { className: "ma2" },
                 React.createElement(Route, { path: "/form/design", component: () => {
@@ -32,6 +34,9 @@ export class RouterComponent extends React.Component {
                     } }),
                 React.createElement(Route, { path: "/form/tree", component: () => {
                         return React.createElement(TreeForm, { ajv: curAjv, schemaId: "dnd-tree", reducerKey: "schemaForm", formKey: "treeForm", initData: {} });
+                    } }),
+                React.createElement(Route, { path: "/form/edit", component: () => {
+                        return React.createElement(EditComponent, null);
                     } })),
             React.createElement(DatePicker, { showTime: { format: "HH:mm" }, format: "YYYY-MM-DD HH:mm" }));
     }

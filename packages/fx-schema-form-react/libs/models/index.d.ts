@@ -23,7 +23,7 @@ export interface FxUiSchema extends UiSchema {
     hocs?: any[];
     onValueChanged?: <T>(props: DefaultProps, data: T) => void;
     defaultData?: any;
-    format: string;
+    format?: string;
 }
 export declare type NsFactory = SchemaFormNs<RC<any, any>, RC<any, any>, RC<any, any>>;
 export declare const schemaFormTypes: {

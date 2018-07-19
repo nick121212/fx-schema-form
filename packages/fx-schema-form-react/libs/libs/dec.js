@@ -145,15 +145,15 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                     });
                 },
                 resetForm: (props) => {
-                    return () => __awaiter(this, void 0, void 0, function* () {
-                        const { formKey, shouldResetForm, keepData, ajv, getDefaultData, initData = {}, schemaId } = props;
+                    return (keepData) => __awaiter(this, void 0, void 0, function* () {
+                        const { formKey, shouldResetForm, keepData: pKeepData, ajv, getDefaultData, initData = {}, schemaId } = props;
                         if (formKey && shouldResetForm !== false) {
                             let { createForm } = props.getActions(props);
                             let schema = ajv.getSchema(schemaId).schema;
                             if (createForm && schema) {
                                 createForm({
                                     key: formKey,
-                                    keepData,
+                                    keepData: typeof keepData === "undefined" ? pKeepData : keepData,
                                     data: yield getDefaultData(ajv, schema, initData, {}, true)
                                 });
                             }

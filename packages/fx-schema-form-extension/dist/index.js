@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d081de5c7270ee1f9b58"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "59b6b70bf6bf48099809"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -24263,7 +24263,11 @@ var innerHoc = exports.innerHoc = function innerHoc(hocFactory) {
                             paths.forEach(function (path) {
                                 var pathKeys = getPathKeys(keys, path.path, schemaId);
                                 if (path.meta) {
-                                    funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                                    if (!path.metaKey) {
+                                        console.warn("没有配置metaKkey");
+                                    } else {
+                                        funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                                    }
                                 } else {
                                     funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));
                                 }

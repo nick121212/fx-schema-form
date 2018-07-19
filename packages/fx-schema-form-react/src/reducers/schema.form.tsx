@@ -228,7 +228,9 @@ export class SchemaFormReducer<T> implements FxReducer {
     private createFormHandle(state: Map<string, any>, { key, data, keepData }: any): Map<string, any> {
         let originData = data;
 
+        // 如果存在key
         if (state.has(key)) {
+            // 如果要保存数据
             if (keepData) {
                 originData = state.getIn([key, "data"]);
             }

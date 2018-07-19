@@ -32,12 +32,12 @@ export interface ConditionPath {
     /**
      * 是否从meta中获取数据
      */
-    meta: boolean;
+    meta?: boolean;
     /**
      * 需要获取的meta的字段
      * 例如 isLoading
      */
-    metaKey: string;
+    metaKey?: string;
     /**
      * 数据的简单处理，（暂时没用到）
      */
@@ -145,7 +145,11 @@ export const innerHoc = (hocFactory: BaseFactory<any>) => {
                             let pathKeys: Array<string | number> = getPathKeys(keys as string[], path.path, schemaId);
 
                             if (path.meta) {
-                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[], path.metaKey));
+                                if (!path.metaKey) {
+                                    console.warn("没有配置metaKkey");
+                                } else {
+                                    funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[], path.metaKey));
+                                }
                             } else {
                                 funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys as string[]));
                             }

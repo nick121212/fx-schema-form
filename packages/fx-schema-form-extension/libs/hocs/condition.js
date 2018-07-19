@@ -45,7 +45,12 @@ export const innerHoc = (hocFactory) => {
                         paths.forEach((path) => {
                             let pathKeys = getPathKeys(keys, path.path, schemaId);
                             if (path.meta) {
-                                funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                                if (!path.metaKey) {
+                                    console.warn("没有配置metaKkey");
+                                }
+                                else {
+                                    funcs.push(getFormItemMeta(dataHocOptions.rootReducerKey, parentKeys, pathKeys, path.metaKey));
+                                }
                             }
                             else {
                                 funcs.push(getFormItemData(dataHocOptions.rootReducerKey, parentKeys, pathKeys));

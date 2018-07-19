@@ -183,15 +183,15 @@ export const globalOptions = Immutable.fromJS({
                     metaKeys: ["isLoading", "errorText", "isValid", "dirty"]
                 }), immutableRenderDecorator],
             options: {
-                hasFeedback: true,
+                className: "ml3 mr3 flex w-auto",
                 labelCol: {
                     xs: { span: 24 },
-                    sm: { span: 8 },
+                    sm: { span: 5 },
                 },
                 wrapperCol: {
                     xs: { span: 24 },
-                    sm: { span: 16 },
-                },
+                    sm: { span: 12 },
+                }
             }
         }
     },

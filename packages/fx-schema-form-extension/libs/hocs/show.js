@@ -1,9 +1,7 @@
 import React from "react";
-import schemaFormReact from "fx-schema-form-react";
-const { schemaFormTypes } = schemaFormReact;
 export const name = "show";
 export const hoc = (hocFactory) => {
-    return (settings = {}) => {
+    return (_settings = {}) => {
         const innerHoc = (Component) => {
             class ComponentHoc extends React.PureComponent {
                 render() {
