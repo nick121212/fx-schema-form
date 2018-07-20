@@ -5,7 +5,6 @@ import { BaseFactory } from "fx-schema-form-core";
 import { DefaultProps } from "fx-schema-form-react/libs/components";
 import { UtilsHocOutProps } from "fx-schema-form-react/libs/hocs/utils";
 import { RC } from "fx-schema-form-react/libs/models";
-import schemaFormReact from "fx-schema-form-react";
 
 import { ConditionHocOutProps, ConditionHocSettings } from "./condition";
 
