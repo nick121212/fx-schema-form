@@ -1,9 +1,11 @@
+import { ErrorObject } from "ajv";
 import { DefaultProps } from "../components";
 import { RC } from "../models";
-import { TreeMap } from "./tree";
+import { TreeMap, Tsn } from "./tree";
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
     parentKeys: string[];
+    errorText?: (err: ErrorObject, props: DefaultProps, keys: Tsn[]) => string;
 }
 export interface SchemaFormProps extends SchemaFormHocOutProps {
     root?: TreeMap;

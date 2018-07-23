@@ -19,6 +19,7 @@ import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
+import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { ValidationError } from "ajv";
 import { schemaFormTypes } from "../models";
 import { hocFactory, errorFactory } from "../factory";
@@ -38,7 +39,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
             }
             render() {
                 const { getRequiredKeys, getOptions, schemaId } = this.props, options = getOptions(this.props, schemaFormTypes.hoc, name, fromJS(settings || {})), extraProps = getRequiredKeys(this.props, options.hocIncludeKeys, options.hocExcludeKeys);
-                return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: settings.parentKeys, schemaId: schemaId }, extraProps)));
+                return (React.createElement(Component, Object.assign({ validateAll: this._validateAll, parentKeys: options.parentKeys, schemaId: schemaId }, extraProps)));
             }
         };
         SchemaFormComponentHoc = __decorate([
@@ -53,7 +54,9 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                 };
             }), withHandlers({
                 validateAll: (props) => {
-                    let { updateItemMeta } = props.getActions(props), timeId;
+                    const { updateItemMeta } = props.getActions(props);
+                    const options = props.getOptions(props, schemaFormTypes.hoc, name, fromJS(settings));
+                    let timeId;
                     return (async) => __awaiter(this, void 0, void 0, function* () {
                         let root = props.root, curAjv = props.ajv, dataRaw = props.data, validate = props.ajv.getSchema(props.schemaId), $validateBeforeData = fromJS({
                             dirty: true,
@@ -75,7 +78,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                             }, true);
                             timeId = setTimeout(() => {
                                 updateItemMeta({
-                                    parentKeys: settings.parentKeys,
+                                    parentKeys: options.parentKeys,
                                     keys: [],
                                     meta: root.value
                                 });
@@ -94,7 +97,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 isValid: true
                             });
                             updateItemMeta({
-                                parentKeys: settings.parentKeys,
+                                parentKeys: options.parentKeys,
                                 keys: [],
                                 meta: root.value
                             });
@@ -107,15 +110,21 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 };
                             }
                             e.errors.forEach((element) => {
-                                let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
+                                const dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
                                 let childNode = root.containPath(dataKeys);
                                 if (!childNode) {
                                     childNode = root.addChild(dataKeys, fromJS({}));
                                 }
                                 if (childNode) {
+                                    let errorText = "";
+                                    if (options.errorText) {
+                                        errorText = options.errorText(element, props, dataKeys);
+                                    }
                                     childNode.value = childNode.value.merge($validateAfterData).merge({
                                         isValid: false,
-                                        errorText: errorFactory.get("default")(element, dataKeys)
+                                        errorText: errorText || errorFactory.get("single")([element], Object.assign({}, props, {
+                                            uiSchema: schemaFieldFactory.get(schemaKeysFactory.get(dataKeys.join("/")))
+                                        }), dataKeys)
                                     });
                                 }
                             });
@@ -133,7 +142,7 @@ export default (settings = { rootReducerKey: [], parentKeys: [] }) => {
                                 return node.value;
                             }, true);
                             updateItemMeta({
-                                parentKeys: settings.parentKeys,
+                                parentKeys: options.parentKeys,
                                 keys: [],
                                 meta: root.value
                             });

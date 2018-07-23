@@ -3,18 +3,20 @@ import React, { PureComponent } from "react";
 import { compose, withHandlers } from "recompose";
 import { connect } from "react-redux";
 import { fromJS, Map, List } from "immutable";
+import { schemaKeysFactory, schemaFieldFactory } from "fx-schema-form-core";
 import { ErrorObject, ValidationError } from "ajv";
 
 import { DefaultProps } from "../components";
 import { RC, schemaFormTypes } from "../models";
 import { hocFactory, errorFactory } from "../factory";
-import { TreeMap } from "./tree";
+import { TreeMap, Tsn } from "./tree";
 import { UtilsHocOutProps } from "../hocs/utils";
 import { d, m } from "../reducers/reducer";
 
 export interface SchemaFormHocSettings {
     rootReducerKey: string[];
     parentKeys: string[];
+    errorText?: (err: ErrorObject, props: DefaultProps, keys: Tsn[]) => string;
 }
 
 export interface SchemaFormProps extends SchemaFormHocOutProps {
@@ -66,7 +68,9 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                  * 验证所有的字段
                  */
                 validateAll: (props: SchemaFormProps & DefaultProps & UtilsHocOutProps) => {
-                    let { updateItemMeta } = props.getActions(props), timeId: any;
+                    const { updateItemMeta } = props.getActions(props);
+                    const options = props.getOptions(props, schemaFormTypes.hoc, name, fromJS(settings));
+                    let timeId: any;
 
                     /**
                      * 验证所有字段
@@ -107,7 +111,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             // 验收更新meta数据
                             timeId = setTimeout(() => {
                                 updateItemMeta({
-                                    parentKeys: settings.parentKeys,
+                                    parentKeys: options.parentKeys,
                                     keys: [],
                                     meta: root.value
                                 });
@@ -133,7 +137,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                             // 提交meta数据
                             updateItemMeta({
-                                parentKeys: settings.parentKeys,
+                                parentKeys: options.parentKeys,
                                 keys: [],
                                 meta: root.value
                             });
@@ -148,7 +152,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                             // 处理错误
                             e.errors.forEach((element: ErrorObject) => {
-                                let dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
+                                const dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
                                 let childNode = root.containPath(dataKeys);
 
                                 if (!childNode) {
@@ -156,9 +160,17 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 }
 
                                 if (childNode) {
+                                    let errorText = "";
+
+                                    if (options.errorText) {
+                                        errorText = options.errorText(element, props, dataKeys);
+                                    }
+
                                     childNode.value = childNode.value.merge($validateAfterData).merge({
                                         isValid: false,
-                                        errorText: errorFactory.get("default")(element, dataKeys)
+                                        errorText: errorText || errorFactory.get("single")([element], Object.assign({}, props, {
+                                            uiSchema: schemaFieldFactory.get(schemaKeysFactory.get(dataKeys.join("/")))
+                                        }), dataKeys)
                                     });
                                 }
                             });
@@ -178,7 +190,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                             }, true);
 
                             updateItemMeta({
-                                parentKeys: settings.parentKeys,
+                                parentKeys: options.parentKeys,
                                 keys: [],
                                 meta: root.value
                             });
@@ -234,7 +246,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                 return (
                     <Component
                         validateAll={this._validateAll}
-                        parentKeys={settings.parentKeys}
+                        parentKeys={options.parentKeys}
                         schemaId={schemaId}
                         {...extraProps} />
                 );

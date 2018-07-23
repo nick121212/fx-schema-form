@@ -15,6 +15,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { schemaFieldFactory } from "fx-schema-form-core";
+import { schemaFormTypes } from "../models";
+import { fromJS } from "immutable";
+import { errorFactory } from "../factory";
 export const name = "validate";
 export const hoc = (hocFactory) => {
     return (settings = {}) => {
@@ -31,8 +34,9 @@ export const hoc = (hocFactory) => {
                     validate: (propsCur) => {
                         return (props, data, meta = {}) => __awaiter(this, void 0, void 0, function* () {
                             const result = { dirty: true, isValid: false, isLoading: false };
-                            const { uiSchema, parentKeys, ajv, getTitle } = props;
+                            const { uiSchema, parentKeys, ajv, getTitle, getOptions } = props;
                             const schema = Object.assign({}, uiSchema);
+                            const options = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings));
                             const timeId = setTimeout(() => {
                                 propsCur.getActions(propsCur).updateItemMeta({
                                     parentKeys: parentKeys,
@@ -67,10 +71,12 @@ export const hoc = (hocFactory) => {
                                 }
                             }
                             catch (err) {
-                                result.errorText = err.errors ?
-                                    ajv.errorsText(err.errors, {
-                                        dataVar: getTitle(props).toString()
-                                    }) : err.message;
+                                if (options.errorsText) {
+                                    result.errorText = options.errorsText(err.errors, props);
+                                }
+                                else {
+                                    result.errorText = errorFactory.get("validate")(err.errors, props, []);
+                                }
                             }
                             finally {
                                 clearTimeout(timeId);

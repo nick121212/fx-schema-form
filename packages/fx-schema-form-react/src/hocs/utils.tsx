@@ -206,7 +206,7 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                  * @param extraSettings 额外的配置参数
                  */
                 private getTitle({ uiSchema, arrayIndex }: DefaultProps, ...extraSettings: Immutable.Map<string, any>[]): string {
-                    let { title, keys } = uiSchema as FxUiSchema;
+                    let { title = undefined, keys = [] } = uiSchema as FxUiSchema || {};
 
                     if (!title && extraSettings && extraSettings.length) {
                         extraSettings.forEach((sets: Immutable.Map<string, any>) => {

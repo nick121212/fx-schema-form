@@ -9,7 +9,11 @@ hocs.forEach((hoc) => {
     hocFactory.add(hoc.name, hoc.hoc(hocFactory));
 });
 reducerFactory.add("schemaForm", schemaFormReducer);
-errorFactory.add("default", (element, dataKeys) => {
-    return dataKeys.pop() + " " + element.message;
+errorFactory.add("single", (errs, props, dataKeys) => {
+    const { ajv, getTitle } = props;
+    return ajv.errorsText(errs, {
+        dataVar: getTitle(props).toString()
+    });
 });
+errorFactory.add("validate", errorFactory.get("single"));
 //# sourceMappingURL=factory.js.map

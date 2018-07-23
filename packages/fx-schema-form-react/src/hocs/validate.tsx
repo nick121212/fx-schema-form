@@ -1,4 +1,5 @@
 
+import { ErrorObject } from "ajv";
 import React, { PureComponent } from "react";
 import { withHandlers, compose } from "recompose";
 import { BaseFactory, schemaFieldFactory } from "fx-schema-form-core";
@@ -6,7 +7,9 @@ import { Action } from "redux-act";
 
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
-import { RC } from "../models";
+import { RC, schemaFormTypes } from "../models";
+import { fromJS } from "immutable";
+import { errorFactory } from "../factory";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
@@ -18,6 +21,12 @@ export interface ValidateHocOutProps {
     combineActions: (...actions: Action<any>[]) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
+
+export interface ValidateHocSetting {
+    root?: boolean;
+    errorsText?: (errors: ErrorObject[], props: DefaultProps) => string;
+}
+
 export const name = "validate";
 
 /**
@@ -27,7 +36,7 @@ export const name = "validate";
  * 加入属性
  */
 export const hoc = (hocFactory: BaseFactory<any>) => {
-    return (settings: any = {}) => {
+    return (settings: ValidateHocSetting = {}) => {
         return (Component: any): RC<DefaultProps, any> => {
             @(compose(
                 hocFactory.get("data")({
@@ -42,8 +51,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     validate: (propsCur: DefaultProps & UtilsHocOutProps) => {
                         return async (props: DefaultProps & UtilsHocOutProps, data: any, meta: any = {}) => {
                             const result: any = { dirty: true, isValid: false, isLoading: false };
-                            const { uiSchema, parentKeys, ajv, getTitle } = props;
+                            const { uiSchema, parentKeys, ajv, getTitle, getOptions } = props;
                             const schema = Object.assign({}, uiSchema);
+                            const options = getOptions(props, schemaFormTypes.hoc, name, fromJS(settings));
                             const timeId = setTimeout(() => {
                                 propsCur.getActions(propsCur).updateItemMeta({
                                     parentKeys: parentKeys,
@@ -87,10 +97,15 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                                 }
                             } catch (err) {
                                 // 处理错误消息
-                                result.errorText =  err.errors ?
-                                    ajv.errorsText(err.errors, {
-                                        dataVar: getTitle(props).toString()
-                                    }) : err.message;
+                                if (options.errorsText) {
+                                    result.errorText = options.errorsText(err.errors, props);
+                                } else {
+                                    result.errorText = errorFactory.get("validate")(err.errors, props, []);
+                                    //  err.errors ?
+                                    //     ajv.errorsText(err.errors, {
+                                    //         dataVar: getTitle(props).toString()
+                                    //     }) : err.message;
+                                }
                             }
                             finally {
                                 clearTimeout(timeId);

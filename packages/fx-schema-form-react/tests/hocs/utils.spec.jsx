@@ -17,7 +17,7 @@ describe("utils的hoc", () => {
         merge = new MergeLib(curAjv, "design", null, ["*"]);
         App = hocFactory.get("utils")()(AppCom);
         roots = merge.mergeUiSchemaList.map((uiSchema) => {
-            let m = mount(<App schemaId={"design"} globalOptions={gloabelOptions} uiSchema={uiSchema} ajv={curAjv} />);
+            let m = mount(<App schemaId={ "design" } globalOptions={ gloabelOptions } uiSchema={ uiSchema } ajv={ curAjv } />);
 
             return m.find(AppCom);
         });

@@ -24,21 +24,24 @@ describe("validate的hoc", () => {
     it("测试validate方法;", () => {
         let m = mount(
             <Provider store={store}>
-                <App schemaId={"design"} ajv={curAjv} globalOptions={gloabelOptions} parentKeys={["test"]} schemaId="dnd-oneof" reducerKey="schemaForm" formKey="test" uiSchema={merge.mergeUiSchemaList[1]} />
+                <App schemaId={"design"} ajv={curAjv} globalOptions={gloabelOptions} parentKeys={["test"]} schemaId="dnd-oneof" reducerKey="schemaForm" formKey="test" uiSchema={merge.mergeUiSchemaList[2]} />
             </Provider>
         );
         m = m.find(AppCom);
 
-        return m.prop("validate")(m.props(), 4).then((d) => {
-            expect(d.isValid).to.eq(false);
-        });
+        // return m.prop("validate")(m.props(), 4).then((d) => {
+        //     expect(d.isValid).to.eq(false);
+        // });
 
         return Promise.all([
-            m.prop("validate")(m.props(), 4).then((d) => {
+            m.prop("validate")(m.props(), "4").then((d) => {
                 expect(d.isValid).to.eq(false);
             }),
-            m.prop("validate")(m.props(), 100).then((d) => {
+            m.prop("validate")(m.props(), 4).then((d) => {
                 expect(d.isValid).to.eq(true);
+            }),
+            m.prop("validate")(m.props(), 100).then((d) => {
+                expect(d.isValid).to.eq(false);
             })
         ]);
     });

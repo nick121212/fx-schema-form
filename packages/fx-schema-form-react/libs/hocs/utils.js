@@ -107,7 +107,7 @@ export const hoc = (hocFactory) => {
                     return opts.toJS();
                 }
                 getTitle({ uiSchema, arrayIndex }, ...extraSettings) {
-                    let { title, keys } = uiSchema;
+                    let { title = undefined, keys = [] } = uiSchema || {};
                     if (!title && extraSettings && extraSettings.length) {
                         extraSettings.forEach((sets) => {
                             if (sets && !title && sets.get("title")) {
