@@ -1,4 +1,4 @@
-import { Iterable, Map, OrderedMap, List, OrderedSet, Set, Stack } from "immutable";
+import { Iterable, Map, OrderedMap, List, OrderedSet, Set, Stack, fromJS } from "immutable";
 
 function doSetOp(param1: any, param2: any, op: string) {
     const type = param1.constructor.name;
@@ -13,6 +13,14 @@ function doSetOp(param1: any, param2: any, op: string) {
 function customMerge(param1: any, param2: any, mergeFnc: any) {
     if (typeof mergeFnc === "function") {
         return mergeFnc(param1, param2);
+    }
+
+    if (List.isList(param1)) {
+        return param2;
+    }
+
+    if (Map.isMap(param1)) {
+        return mergeDeep(param1, param2, { "*": mergeFnc });
     }
 
     switch (mergeFnc) {
@@ -41,7 +49,7 @@ function customMerge(param1: any, param2: any, mergeFnc: any) {
     }
 }
 
-function mergeDeep(param1: any, param2: any, schema?: any) {
+function mergeDeep(param1: any, param2: any, schema?: any): any {
     // there"s no schema defined => native merge or override
     if (!schema || (typeof schema === "object" && Object.keys(schema).length === 0)) {
         return Iterable.isIterable(param1) && !Stack.isStack(param1) ? param1.mergeDeep(param2) : param2;
@@ -60,7 +68,7 @@ function mergeDeep(param1: any, param2: any, schema?: any) {
     }
 
     if (!Iterable.isIterable(param1) || !Iterable.isIterable(param2)) {
-        throw new Error("Only immutable iterables can be merged using merge schema");
+        return param1 || param2 || fromJS({});
     }
 
     if (Set.isSet(param1) || Set.isSet(param2) || Stack.isStack(param1) || Stack.isStack(param2)) {
@@ -79,14 +87,6 @@ function mergeDeep(param1: any, param2: any, schema?: any) {
     } else {
         throw new Error("Unsupported type");
     }
-
-    // switch (immutableType) {
-    //     case "List": merged = List([]); break;
-    //     case "Map": merged = Map({}); break;
-    //     case "OrderedMap": merged = OrderedMap({}); break;
-    //     default:
-    //         throw new Error("Unsupported type");
-    // }
 
     param1.forEach((value: any, key: string) => {
         if (param2.has(key)) {

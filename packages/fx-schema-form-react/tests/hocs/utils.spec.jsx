@@ -7,8 +7,8 @@ import { MergeLib } from "fx-schema-form-core";
 import {
     hocFactory
 } from "../../dist";
-import { schema, gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
-import { shallow, render, mount } from 'enzyme';
+import { gloabelOptions, curAjv, shallowRender, AppCom } from "../data"
+import { mount } from 'enzyme';
 
 describe("utils的hoc", () => {
     let App, merge, roots;
@@ -47,7 +47,7 @@ describe("utils的hoc", () => {
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card").tempHocs).to.be.a("array");
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card").a).to.eq(1);
         expect(roots[0].props().getOptions(roots[0].props(), "temp", "card", { a: 2 }, { a: 3 }).a).to.eq(3);
-        expect(roots[0].props().getOptions(roots[0].props(), "temp", "formitem", { a: 2 }, { a: 3 }).options.labelCol).to.eq(null);
+        expect(roots[0].props().getOptions(roots[0].props(), "temp", "formitem", { a: 2 }, { a: 3 }).options.labelCol).to.not.eq(null);
 
     });
 

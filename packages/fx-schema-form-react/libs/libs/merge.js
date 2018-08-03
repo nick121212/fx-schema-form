@@ -1,4 +1,4 @@
-import { Iterable, Map, OrderedMap, List, OrderedSet, Set, Stack } from "immutable";
+import { Iterable, Map, OrderedMap, List, OrderedSet, Set, Stack, fromJS } from "immutable";
 function doSetOp(param1, param2, op) {
     const type = param1.constructor.name;
     if (Set.isSet(param1) || OrderedSet.isOrderedSet(param1)) {
@@ -9,6 +9,12 @@ function doSetOp(param1, param2, op) {
 function customMerge(param1, param2, mergeFnc) {
     if (typeof mergeFnc === "function") {
         return mergeFnc(param1, param2);
+    }
+    if (List.isList(param1)) {
+        return param2;
+    }
+    if (Map.isMap(param1)) {
+        return mergeDeep(param1, param2, { "*": mergeFnc });
     }
     switch (mergeFnc) {
         case "replace":
@@ -47,7 +53,7 @@ function mergeDeep(param1, param2, schema) {
         throw new Error("Invalid schema");
     }
     if (!Iterable.isIterable(param1) || !Iterable.isIterable(param2)) {
-        throw new Error("Only immutable iterables can be merged using merge schema");
+        return param1 || param2 || fromJS({});
     }
     if (Set.isSet(param1) || Set.isSet(param2) || Stack.isStack(param1) || Stack.isStack(param2)) {
         throw new Error("Sets and Stacks can't be merged with schema");
