@@ -83,7 +83,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 const getDataKeys = (schemaKey, keepFirst = false) => {
-    let removeNextKey = false;
     let keys = schemaKey.split("/").map((key, index) => {
         const regexp = /#$/g;
         if (index === 0 && regexp.test(key)) {
@@ -482,10 +481,13 @@ const pro = "properties";
                 }
                 return;
             }
-            const { properties } = schema;
+            const { properties, required = [] } = schema;
             if (!properties || !properties[key]) {
                 return;
             }
+            Object.assign(properties[key], {
+                isRequired: required.indexOf(key) >= 0
+            });
             const propertySchemaResolve = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, properties[key], [schemaKey, pro, key].join("/")),
                   keys = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["b" /* getDataKeys */])([schemaKey, pro, key].join("/"));
             Object.assign(propertySchemaResolve.mergeSchema, {
@@ -589,10 +591,13 @@ const mergeUiSchemaToArray = uiSchema => {
 };
 const initUiSchema = (parent, schemaPath, uiSchema) => {
     let parentKeys = getParentSchemaKeys(parent),
-        keys;
+        key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
+        keys,
+        isRequired = false;
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
     return Object.assign({}, uiSchema, {
-        key: getCurrentSchemaKey(parent, schemaPath, uiSchema),
+        key,
+        isRequired,
         keys
     });
 };
@@ -632,12 +637,14 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
     });
     if (curSchema.type === types[0] && curSchema.properties) {
         Object.keys(curSchema.properties).forEach(us => {
-            let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, { key: us });
+            const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
+                key: us,
+                isRequired: curSchema.required ? curSchema.required.indexOf(us) >= 0 : false
+            });
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
     }
     if (curSchema.type === types[1] && curSchema.items) {
-        console.log(curSchema);
         const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
             key: "-"
         });

@@ -123,12 +123,20 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
  */
 const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {
     let parentKeys = getParentSchemaKeys(parent),
-        keys;
+        key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
+        keys, isRequired = false;
 
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
 
+    // if (parent.type === "object" && parent.required) {
+    //     const keys1 = keys.concat([]);
+
+    //     isRequired = parent.required.indexOf((keys1.pop() || "").toString()) >= 0;
+    // }
+
     return Object.assign({}, uiSchema, {
-        key: getCurrentSchemaKey(parent, schemaPath, uiSchema),
+        key,
+        isRequired,
         keys
     });
 };
@@ -207,7 +215,10 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
     // 如果是object类型，遍历properties属性，与之前的数据去重后添加到数组
     if (curSchema.type === types[0] && curSchema.properties) {
         Object.keys(curSchema.properties).forEach((us: string) => {
-            let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, { key: us } as UiSchema);
+            const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
+                key: us,
+                isRequired: curSchema.required ? curSchema.required.indexOf(us) >= 0 : false
+            } as UiSchema);
 
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
@@ -215,7 +226,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 如果是数组，获取下一级的key，然后做对比处理
     if (curSchema.type === types[1] && curSchema.items) {
-        console.log(curSchema);
+        // console.log(curSchema);
         const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
             key: "-"
         });

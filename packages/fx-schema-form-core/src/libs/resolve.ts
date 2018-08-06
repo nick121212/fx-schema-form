@@ -16,7 +16,7 @@ import { warn } from "../utils";
 * @param {Boolean}  keepFirst 是否需要保留第一个
 */
 export const getDataKeys = (schemaKey: string, keepFirst = false): string[] => {
-    let removeNextKey = false;
+    // let removeNextKey = false;
     let keys = schemaKey.split("/").map((key: string, index: number) => {
         const regexp = /#$/g;
 

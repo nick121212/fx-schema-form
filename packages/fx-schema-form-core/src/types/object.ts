@@ -26,11 +26,15 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
                 return;
             }
 
-            const { properties } = schema;
+            const { properties, required = [] } = schema;
 
             if (!properties || !properties[key]) {
                 return;
             }
+
+            Object.assign(properties[key], {
+                isRequired: required.indexOf(key) >= 0
+            });
 
             const propertySchemaResolve = new ResolveLib(ajv, properties[key] as JSONSchema6, [schemaKey, pro, key].join("/")),
                 keys: string[] = getDataKeys([schemaKey, pro, key].join("/"));

@@ -49,13 +49,13 @@ describe("测试ResolveLib类", () => {
         expect(getDataKeys("test#/properties/names/items").join()).to.equal(["names", "-"].join());
     });
 
-    it("nick", () => {
+    it("测试isRequired", () => {
         let schema = {
             type: "object",
             $id: "dnd-oneof",
             title: "oneof测试schema",
             default: {},
-            required: ["value"],
+            required: ["type"],
             properties: {
                 type: {
                     type: "number",
@@ -98,6 +98,10 @@ describe("测试ResolveLib类", () => {
         };
 
         new ResolveLib(ajv, schema);
+
+        expect(schemaFieldFactory.get("dnd-oneof#/properties/type").isRequired).to.eq(true);
+        expect(schemaFieldFactory.get("dnd-oneof#/properties/value").isRequired).to.eq(false);
+
     });
 
 });
