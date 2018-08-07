@@ -549,7 +549,6 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
         let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].has(keysStr)) {
             if (true) {
-                console.log(__WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */], __WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */]);
                 Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* warn */])(`${keysStr} did not found.`);
             }
             return "";

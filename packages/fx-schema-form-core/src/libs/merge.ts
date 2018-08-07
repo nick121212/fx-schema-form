@@ -33,7 +33,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
 
         if (!schemaKeysFactory.has(keysStr)) {
             if (__DEV__) {
-                console.log(schemaFieldFactory, schemaKeysFactory);
+                // console.log(schemaFieldFactory, schemaKeysFactory);
                 warn(`${keysStr} did not found.`);
             }
 
