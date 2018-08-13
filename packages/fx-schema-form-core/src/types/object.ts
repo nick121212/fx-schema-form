@@ -15,8 +15,10 @@ const pro = "properties";
  * @return {JSONSchema6}           返回处理过后的schema
  */
 export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
-    if (schema.properties && !schema.$ref) {
-        Object.keys(schema.properties).forEach((key: string) => {
+    const { properties, required = [], $ref } = schema;
+
+    if (properties && !$ref) {
+        Object.keys(properties).forEach((key: string) => {
 
             if ([pro, "items"].indexOf(key) >= 0) {
                 if (__DEV__) {
@@ -26,11 +28,11 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
                 return;
             }
 
-            const { properties, required = [] } = schema;
-
             if (!properties || !properties[key]) {
                 return;
             }
+
+            // console.log(required, key, required.indexOf(key));
 
             Object.assign(properties[key], {
                 isRequired: required.indexOf(key) >= 0

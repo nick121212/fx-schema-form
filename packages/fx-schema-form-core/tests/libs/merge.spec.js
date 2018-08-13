@@ -193,10 +193,12 @@ describe("测试MergeLib类", () => {
     });
 
     it("实例化MergeLib，测试没有key的uiSchema", () => {
-        let merge = new MergeLib(ajv, "design", null, ["appType"]);
-        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
-            merge.mergeUiSchemaList[0], [{
-                key: ""
-            }]);
+        let merge = new MergeLib(ajv, "design1", null, ["name"]);
+        // let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
+        //     merge.mergeUiSchemaList[0], [{
+        //         key: ""
+        //     }]);
+
+        console.log(merge);
     });
 });

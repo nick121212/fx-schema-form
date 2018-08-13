@@ -473,15 +473,15 @@ const itemsName = "items";
 
 const pro = "properties";
 /* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
-    if (schema.properties && !schema.$ref) {
-        Object.keys(schema.properties).forEach(key => {
+    const { properties, required = [], $ref } = schema;
+    if (properties && !$ref) {
+        Object.keys(properties).forEach(key => {
             if ([pro, "items"].indexOf(key) >= 0) {
                 if (true) {
                     Object(__WEBPACK_IMPORTED_MODULE_1__utils__["b" /* warn */])(`${key}can not be key words.`);
                 }
                 return;
             }
-            const { properties, required = [] } = schema;
             if (!properties || !properties[key]) {
                 return;
             }
@@ -594,9 +594,8 @@ const initUiSchema = (parent, schemaPath, uiSchema) => {
         keys,
         isRequired = false;
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
-    return Object.assign({}, uiSchema, {
+    return Object.assign({ isRequired }, uiSchema, {
         key,
-        isRequired,
         keys
     });
 };

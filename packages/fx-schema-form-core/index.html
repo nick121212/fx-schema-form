@@ -205,11 +205,11 @@
         let merge2 = new SFC.MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], [
             "*"
         ]);
-        // let merge3 = new SFC.MergeLib(ajv, merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], [
-        //     "*"
-        // ]);
+        let merge3 = new SFC.MergeLib(ajv, merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], [
+            "*"
+        ]);
 
-        console.log(merge.mergeUiSchemaList, merge2.mergeUiSchemaList);
+        console.log(merge3.mergeUiSchemaList);
     </script>
 </body>
 

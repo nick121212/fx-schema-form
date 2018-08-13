@@ -134,9 +134,8 @@ const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema):
     //     isRequired = parent.required.indexOf((keys1.pop() || "").toString()) >= 0;
     // }
 
-    return Object.assign({}, uiSchema, {
+    return Object.assign({ isRequired }, uiSchema, {
         key,
-        isRequired,
         keys
     });
 };
