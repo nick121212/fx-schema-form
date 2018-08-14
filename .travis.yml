@@ -15,5 +15,6 @@ notifications:
   email:
     recipients:
       - nick121212@126.com
+      - wen.qin@weimob.com
     on_success: change
     on_failure: always.
