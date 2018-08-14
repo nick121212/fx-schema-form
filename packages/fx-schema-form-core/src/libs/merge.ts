@@ -116,9 +116,9 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
  * 初始化uiSchema
  * 如果是字符串；用$id合并之后，获取schema
  * 如果是【UiSchema】；合并key之后，获取schema
- * @param {UiSchema} parent      父亲schema
- * @param {string}   schemaPath  schema的路径
- * @param {UiSchema} uiSchema    uiSchma
+ * @param  {UiSchema} parent      父亲schema
+ * @param  {string}   schemaPath  schema的路径
+ * @param  {UiSchema} uiSchema    uiSchma
  * @return {UiSchema}            返回uiSchema
  */
 const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {

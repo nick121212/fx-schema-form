@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { isProd } from "../utils";
+import { isProd } from "../libs/utils";
 export const name = "field";
 export const hoc = (hocFactory) => {
     return () => {

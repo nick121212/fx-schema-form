@@ -3,7 +3,7 @@ import { List, Map, fromJS } from "immutable";
 import { d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
-import { isProd } from "../utils";
+import { isProd } from "../libs/utils";
 const resolveKeys = (state, keys) => {
     if (state.hasIn(keys)) {
         return state;

@@ -7,7 +7,6 @@ export interface NormalFieldProps extends DefaultProps, UtilsHocOutProps, FieldH
 }
 export declare const name = "normal";
 export declare class NormalField extends PureComponent<NormalFieldProps> {
-    constructor(props: NormalFieldProps, context: any);
     render(): JSX.Element | null;
 }
 declare const _default: {

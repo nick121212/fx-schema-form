@@ -3,24 +3,12 @@ import { compose } from "recompose";
 
 import { DefaultProps } from "../components";
 import { FxUiSchema, schemaFormTypes } from "../models";
-
 import { SchemaForm } from "../components/form";
-// import { hocFactory } from "../factory";
 import { UtilsHocOutProps } from "../hocs/utils";
+import { ArrayFieldComponent } from "./arrayfield";
 
 export interface ArrayFieldProps extends DefaultProps, UtilsHocOutProps {
 
-}
-
-let arrayFieldStyle = {
-    width: "100%",
-    height: "100%"
-};
-
-class ArrayFieldComponent extends React.PureComponent {
-    public render() {
-        return <div style={arrayFieldStyle}>{this.props.children}</div>;
-    }
 }
 
 export const name = "array";
@@ -110,15 +98,6 @@ export class ArrayField extends PureComponent<ArrayFieldProps, any> {
         for (let i = 0; i < +formItemData; i++) {
             child.push(this.renderItem(i));
         }
-
-        // 如果需要对schemaform对hoc包装
-        // if (options.formHocs && options.formHocs.constructor === Array) {
-        //     SchemaFormWithHoc = compose(...options.formHocs)(({ children }) => {
-        //         return <div style={arrayFieldStyle}>{children}</div>;
-        //     });
-
-        //     return <SchemaFormWithHoc {...this.props} children={child} />;
-        // }
 
         return <SchemaFormWithHoc children={child} {...extraProps} />;
     }

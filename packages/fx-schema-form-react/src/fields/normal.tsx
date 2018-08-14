@@ -17,11 +17,6 @@ export const name = "normal";
  * 这里直接渲染[fieldHoc]中结算得出的WidgetComponent
  */
 export class NormalField extends PureComponent<NormalFieldProps> {
-
-    constructor(props: NormalFieldProps, context: any) {
-        super(props, context);
-    }
-
     public render(): JSX.Element | null {
         const { WidgetComponent, FieldComponent, formItemMeta, formItemData, ...extraProps } = this.props,
             fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name),

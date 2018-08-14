@@ -6,7 +6,7 @@ import { Store } from "redux";
 import { FxReducer, d, m } from "./reducer";
 import { TreeMap } from "../libs/tree";
 import merge from "../libs/merge";
-import { isProd } from "../utils";
+import { isProd } from "../libs/utils";
 
 export type ASN = Array<string | number> | string[];
 

@@ -6,7 +6,7 @@ import { ThemeHocOutProps } from "./theme";
 import { UtilsHocOutProps } from "./utils";
 import { DefaultProps } from "../components";
 import { RC } from "../models";
-import { isProd } from "../utils";
+import { isProd } from "../libs/utils";
 
 export interface FieldHocOutProps {
     FieldComponent: RC<any, any>;

@@ -2,15 +2,7 @@ import React, { PureComponent } from "react";
 import { compose } from "recompose";
 import { schemaFormTypes } from "../models";
 import { SchemaForm } from "../components/form";
-let arrayFieldStyle = {
-    width: "100%",
-    height: "100%"
-};
-class ArrayFieldComponent extends React.PureComponent {
-    render() {
-        return React.createElement("div", { style: arrayFieldStyle }, this.props.children);
-    }
-}
+import { ArrayFieldComponent } from "./arrayfield";
 export const name = "array";
 export class ArrayField extends PureComponent {
     constructor(props) {

@@ -12,9 +12,6 @@ import { compose } from "recompose";
 import { schemaFormTypes } from "../models";
 export const name = "normal";
 export class NormalField extends PureComponent {
-    constructor(props, context) {
-        super(props, context);
-    }
     render() {
         const _a = this.props, { WidgetComponent, FieldComponent, formItemMeta, formItemData } = _a, extraProps = __rest(_a, ["WidgetComponent", "FieldComponent", "formItemMeta", "formItemData"]), fieldOptions = extraProps.getOptions(this.props, schemaFormTypes.field, name), { keys } = extraProps.uiSchema;
         let WidgetComponentWithHoc = WidgetComponent;

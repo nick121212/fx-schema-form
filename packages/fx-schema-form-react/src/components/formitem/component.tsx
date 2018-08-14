@@ -6,7 +6,7 @@ import { DefaultProps } from "../default.props";
 import { hoc } from "./container";
 import { FieldHocOutProps } from "../../hocs/field";
 import { UtilsHocOutProps } from "../../hocs/utils";
-import { isProd } from "../../utils";
+import { isProd } from "../../libs/utils";
 
 export interface Props extends DefaultProps {
 

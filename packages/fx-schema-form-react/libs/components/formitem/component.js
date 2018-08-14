@@ -16,7 +16,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 import React, { PureComponent } from "react";
 import { compose } from "redux";
 import { hoc } from "./container";
-import { isProd } from "../../utils";
+import { isProd } from "../../libs/utils";
 let SchemaFormItem = class SchemaFormItem extends PureComponent {
     render() {
         const _a = this.props, { FieldComponent, uiSchema } = _a, extraProps = __rest(_a, ["FieldComponent", "uiSchema"]);
