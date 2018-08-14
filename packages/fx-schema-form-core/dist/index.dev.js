@@ -544,16 +544,16 @@ const pro = "properties";
 const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
     let parentKeysWithDef = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(parentSchemaPath, true);
     while (uiSchemaKeys.length) {
-        let key = uiSchemaKeys.shift() || "";
+        const key = uiSchemaKeys.shift() || "";
         parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
-        let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
+        const keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].has(keysStr)) {
             if (true) {
                 Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* warn */])(`${keysStr} did not found.`);
             }
             return "";
         }
-        let schema = __WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].get(__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].get(keysStr));
+        const schema = __WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].get(__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].get(keysStr));
         if (schema.$ref) {
             parentKeysWithDef = Object(__WEBPACK_IMPORTED_MODULE_2__resolve__["b" /* getDataKeys */])(schema.$ref, true);
         } else {
@@ -592,9 +592,17 @@ const initUiSchema = (parent, schemaPath, uiSchema) => {
     let parentKeys = getParentSchemaKeys(parent),
         key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
         keys,
-        isRequired = false;
+        isRequired = false,
+        originSchema = {},
+        schemaKey;
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
-    return Object.assign({ isRequired }, uiSchema, {
+    if (__WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].has(key)) {
+        schemaKey = __WEBPACK_IMPORTED_MODULE_1__factory__["d" /* schemaKeysFactory */].get(key);
+        if (__WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].has(schemaKey)) {
+            originSchema = __WEBPACK_IMPORTED_MODULE_1__factory__["b" /* schemaFieldFactory */].get(schemaKey);
+        }
+    }
+    return Object.assign({ isRequired }, originSchema, uiSchema, {
         key,
         keys
     });

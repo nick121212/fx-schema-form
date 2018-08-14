@@ -14,173 +14,35 @@
 <body>
     <script>
         var jsonschema = {
-            "$schema": "http://json-schema.org/draft-06/schema#",
-            "$ref": "#/definitions/Pokedex",
-            "$id": "testdef",
-            "definitions": {
-                "Pokedex": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "pokemon": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Pokemon"
-                            }
-                        }
-                    },
-                    "required": [
-                        "pokemon"
-                    ],
-                    "title": "Pokedex"
+            "type": "object",
+            $id: "design",
+            "properties": {
+                "name": {
+                    "type": "integer"
                 },
-                "Pokemon": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "id": {
-                            "type": "integer"
-                        },
-                        "num": {
-                            "type": "string"
-                        },
-                        "name": {
-                            "type": "string"
-                        },
-                        "img": {
-                            "type": "string"
-                        },
-                        "type": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "height": {
-                            "type": "string"
-                        },
-                        "weight": {
-                            "type": "string"
-                        },
-                        "candy": {
-                            "type": "string"
-                        },
-                        "candy_count": {
-                            "type": "integer"
-                        },
-                        "egg": {
-                            "$ref": "#/definitions/Egg"
-                        },
-                        "spawn_chance": {
-                            "type": "number"
-                        },
-                        "avg_spawns": {
-                            "type": "number"
-                        },
-                        "spawn_time": {
-                            "type": "string"
-                        },
-                        "multipliers": {
-                            "anyOf": [{
-                                    "type": "array",
-                                    "items": {
-                                        "type": "number"
-                                    }
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "weaknesses": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Weakness"
-                            }
-                        },
-                        "next_evolution": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Evolution"
-                            }
-                        },
-                        "prev_evolution": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Evolution"
-                            }
-                        }
-                    },
-                    "required": [
-                        "avg_spawns",
-                        "candy",
-                        "egg",
-                        "height",
-                        "id",
-                        "img",
-                        "multipliers",
-                        "name",
-                        "num",
-                        "spawn_chance",
-                        "spawn_time",
-                        "type",
-                        "weaknesses",
-                        "weight"
-                    ],
-                    "title": "Pokemon"
+                "num": {
+                    "type": "string"
                 },
-                "Evolution": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "num": {
-                            "type": "string"
-                        },
-                        "name": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "name",
-                        "num"
-                    ],
-                    "title": "Evolution"
+                "candy": {
+                    "type": "string"
                 },
-                "Egg": {
-                    "type": "string",
-                    "enum": [
-                        "2 km",
-                        "Not in Eggs",
-                        "5 km",
-                        "10 km",
-                        "Omanyte Candy"
-                    ],
-                    "title": "Egg"
+                "candy_count": {
+                    "type": "integer"
                 },
-                "Weakness": {
-                    "type": "string",
-                    "enum": [
-                        "Fire",
-                        "Ice",
-                        "Flying",
-                        "Psychic",
-                        "Water",
-                        "Ground",
-                        "Rock",
-                        "Electric",
-                        "Grass",
-                        "Fighting",
-                        "Poison",
-                        "Bug",
-                        "Fairy",
-                        "Ghost",
-                        "Dark",
-                        "Steel",
-                        "Dragon"
-                    ],
-                    "title": "Weakness"
+                "spawn_chance": {
+                    "type": "number"
+                },
+                "avg_spawns": {
+                    "type": "number"
+                },
+                "spawn_time": {
+                    "type": "string"
                 }
-            }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "Pokemon"
         }
         var ajv = new Ajv({
             extendRefs: true,
@@ -201,15 +63,11 @@
             }
         })];
 
-        let merge = new SFC.MergeLib(ajv, "testdef", null, ["*"]);
-        let merge2 = new SFC.MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], [
-            "*"
-        ]);
-        let merge3 = new SFC.MergeLib(ajv, merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], [
-            "*"
-        ]);
+        let merge = new SFC.MergeLib(ajv, "design", null, [{
+            key: "name"
+        }]);
 
-        console.log(merge3.mergeUiSchemaList);
+        console.log(merge.mergeUiSchemaList);
     </script>
 </body>
 

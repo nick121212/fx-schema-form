@@ -5,16 +5,16 @@ import { warn } from "../utils";
 const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
     let parentKeysWithDef = getDataKeys(parentSchemaPath, true);
     while (uiSchemaKeys.length) {
-        let key = uiSchemaKeys.shift() || "";
+        const key = uiSchemaKeys.shift() || "";
         parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
-        let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
+        const keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!schemaKeysFactory.has(keysStr)) {
             if (__DEV__) {
                 warn(`${keysStr} did not found.`);
             }
             return "";
         }
-        let schema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
+        const schema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
         if (schema.$ref) {
             parentKeysWithDef = getDataKeys(schema.$ref, true);
         }
@@ -51,9 +51,15 @@ const mergeUiSchemaToArray = (uiSchema) => {
     return Object.assign({}, schema, uiSchema);
 };
 const initUiSchema = (parent, schemaPath, uiSchema) => {
-    let parentKeys = getParentSchemaKeys(parent), key = getCurrentSchemaKey(parent, schemaPath, uiSchema), keys, isRequired = false;
+    let parentKeys = getParentSchemaKeys(parent), key = getCurrentSchemaKey(parent, schemaPath, uiSchema), keys, isRequired = false, originSchema = {}, schemaKey;
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
-    return Object.assign({ isRequired }, uiSchema, {
+    if (schemaKeysFactory.has(key)) {
+        schemaKey = schemaKeysFactory.get(key);
+        if (schemaFieldFactory.has(schemaKey)) {
+            originSchema = schemaFieldFactory.get(schemaKey);
+        }
+    }
+    return Object.assign({ isRequired }, originSchema, uiSchema, {
         key,
         keys
     });

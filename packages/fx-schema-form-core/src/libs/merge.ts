@@ -121,7 +121,7 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
 const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {
     let parentKeys = getParentSchemaKeys(parent),
         key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
-        keys, isRequired = false;
+        keys, isRequired = false, originSchema: FxJsonSchema = {}, schemaKey;
 
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
 
@@ -131,7 +131,15 @@ const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema):
     //     isRequired = parent.required.indexOf((keys1.pop() || "").toString()) >= 0;
     // }
 
-    return Object.assign({ isRequired }, uiSchema, {
+    if (schemaKeysFactory.has(key)) {
+        schemaKey = schemaKeysFactory.get(key);
+        if (schemaFieldFactory.has(schemaKey)) {
+            originSchema = schemaFieldFactory.get(schemaKey);
+            // isRequired = originSchema.isRequired;
+        }
+    }
+
+    return Object.assign({ isRequired }, originSchema, uiSchema, {
         key,
         keys
     });
