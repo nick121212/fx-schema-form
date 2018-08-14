@@ -36,16 +36,18 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
         return (Component: any): RC<DefaultProps, any> => {
             class ComponentHoc extends PureComponent<UtilsHocOutProps, any> {
                 public render(): JSX.Element {
-                    return <Component
-                        getTitle={getTitle}
-                        getPathKeys={getPathKeys}
-                        getOptions={getOptions}
-                        normalizeDataPath={normalizeDataPath}
-                        getRequiredKeys={getRequiredKeys}
-                        getDefaultData={getDefaultData}
-                        getActions={getActions}
-                        getPathProps={getPathProps}
-                        {...this.props} />;
+                    return (
+                        <Component
+                            getTitle={getTitle}
+                            getPathKeys={getPathKeys}
+                            getOptions={getOptions}
+                            normalizeDataPath={normalizeDataPath}
+                            getRequiredKeys={getRequiredKeys}
+                            getDefaultData={getDefaultData}
+                            getActions={getActions}
+                            getPathProps={getPathProps}
+                            {...this.props} />
+                    );
                 }
             }
 
