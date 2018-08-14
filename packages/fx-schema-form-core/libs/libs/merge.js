@@ -2,26 +2,27 @@ import { uiSchemaSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { getDataKeys, getSchemaId } from "./resolve";
 import { warn } from "../utils";
-const getUiSchemaKeyRecursion = (uiSchemaKeys, parentKeys) => {
+const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
+    let parentKeysWithDef = getDataKeys(parentSchemaPath, true);
     while (uiSchemaKeys.length) {
         let key = uiSchemaKeys.shift() || "";
-        let keys = key ? parentKeys.concat([key]) : parentKeys;
-        let keysStr = keys.join("/").replace(/\/$/, "");
+        parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
+        let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!schemaKeysFactory.has(keysStr)) {
             if (__DEV__) {
-                warn(`${keys.join("/")} did not found.`);
+                warn(`${keysStr} did not found.`);
             }
             return "";
         }
         let schema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
         if (schema.$ref) {
-            parentKeys = getDataKeys(schema.$ref, true);
+            parentKeysWithDef = getDataKeys(schema.$ref, true);
         }
         else {
-            parentKeys = keys;
+            parentKeysWithDef = parentKeysWithDef;
         }
     }
-    return parentKeys.join("/");
+    return parentKeysWithDef.join("/");
 };
 const getParentSchemaKeys = (parent) => {
     if (parent && parent.keys) {
@@ -33,13 +34,14 @@ const getCurrentSchemaKey = (parent, schemaPath, uiSchema) => {
     const $id = getSchemaId(schemaPath);
     let uiSchemaKeys = uiSchema.key.split("/");
     if (parent && getSchemaId(parent.key) === $id) {
-        return getUiSchemaKeyRecursion(uiSchemaKeys, parent.key.split("/"));
+        return getUiSchemaKeyRecursion(uiSchemaKeys, parent.schemaPath || "");
     }
-    return getUiSchemaKeyRecursion(uiSchemaKeys, getDataKeys(schemaPath, true));
+    return getUiSchemaKeyRecursion(uiSchemaKeys, schemaPath);
 };
 const mergeUiSchemaToArray = (uiSchema) => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
         if (__DEV__) {
+            console.log(schemaKeysFactory);
             warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
         return uiSchema;
@@ -49,10 +51,10 @@ const mergeUiSchemaToArray = (uiSchema) => {
     return Object.assign({}, schema, uiSchema);
 };
 const initUiSchema = (parent, schemaPath, uiSchema) => {
-    let parentKeys = getParentSchemaKeys(parent), keys;
+    let parentKeys = getParentSchemaKeys(parent), key = getCurrentSchemaKey(parent, schemaPath, uiSchema), keys, isRequired = false;
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
-    return Object.assign({}, uiSchema, {
-        key: getCurrentSchemaKey(parent, schemaPath, uiSchema),
+    return Object.assign({ isRequired }, uiSchema, {
+        key,
         keys
     });
 };
@@ -89,13 +91,16 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
     });
     if (curSchema.type === types[0] && curSchema.properties) {
         Object.keys(curSchema.properties).forEach((us) => {
-            let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, { key: us });
+            const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
+                key: us,
+                isRequired: curSchema.required ? curSchema.required.indexOf(us) >= 0 : false
+            });
             pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
         });
     }
     if (curSchema.type === types[1] && curSchema.items) {
-        let uiSchema = initUiSchema(parent, schemaPath, {
-            key: getDataKeys(curSchema.schemaPath || "", false).join("/")
+        const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
+            key: "-"
         });
         pushMergeResult(uiSchemasFirst, uiSchemasLast, uiSchema);
     }

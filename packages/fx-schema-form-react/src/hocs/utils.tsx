@@ -1,5 +1,3 @@
-
-
 import React, { PureComponent } from "react";
 import { BaseFactory } from "fx-schema-form-core";
 import Immutable from "immutable";

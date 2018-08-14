@@ -1,20 +1,11 @@
 import { schemaTypeFactory } from "../factory";
 import { warn } from "../utils";
 export const getDataKeys = (schemaKey, keepFirst = false) => {
-    let removeNextKey = false;
     let keys = schemaKey.split("/").map((key, index) => {
         const regexp = /#$/g;
         if (index === 0 && regexp.test(key)) {
             regexp.lastIndex = 0;
             return keepFirst ? key.replace(regexp, "") : null;
-        }
-        if (removeNextKey) {
-            removeNextKey = false;
-            return null;
-        }
-        if (key === "definitions") {
-            removeNextKey = true;
-            return null;
         }
         if (key === "properties") {
             return null;
