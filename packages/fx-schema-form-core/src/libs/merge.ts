@@ -22,14 +22,11 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
     let parentKeysWithDef = getDataKeys(parentSchemaPath, true);
 
     while (uiSchemaKeys.length) {
-        let key: string = uiSchemaKeys.shift() || "";
+        const key: string = uiSchemaKeys.shift() || "";
 
         parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
-        // let parentKeysWithOutDef = getDataKeysWithDefinitions(parentSchemaPath, true).concat(key ? [key] : []);
-        // let keys: string[] = key ? parentKeys.concat([key]) : parentKeys;
-        let keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
 
-        // console.log("----------------", keysStr, uiSchemaKeys, parentKeys);
+        const keysStr: string = parentKeysWithDef.join("/").replace(/\/$/, "");
 
         if (!schemaKeysFactory.has(keysStr)) {
             if (__DEV__) {
@@ -40,7 +37,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
             return "";
         }
 
-        let schema: FxJsonSchema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
+        const schema: FxJsonSchema = schemaFieldFactory.get(schemaKeysFactory.get(keysStr));
 
         if (schema.$ref) {
             parentKeysWithDef = getDataKeys(schema.$ref, true);
@@ -143,9 +140,10 @@ const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema):
 /**
  * 合并后的数据添加到数组中去
  * 这里因为可以使用*,所有拆成了前面和后面以及*三个部分
- * @param {UiSchema[]} uiSchemasFirst 前面部分
- * @param {UiSchema[]} uiSchemasLast  后面部分
- * @param {UiSchema}   uiSchema       需要处理的uiSchema
+ * @param  {UiSchema[]} uiSchemasFirst 前面部分
+ * @param  {UiSchema[]} uiSchemasLast  后面部分
+ * @param  {UiSchema}   uiSchema       需要处理的uiSchema
+ * @return {Void}
  */
 const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], uiSchema: UiSchema): void => {
     if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
@@ -172,7 +170,8 @@ const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], 
  */
 const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<UiSchema | string>, curSchema: FxJsonSchema): UiSchema[] => {
     let idx: number = uiSchemas.indexOf("*"),
-        uiSchemasFirst: UiSchema[] = [], uiSchemasLast: UiSchema[] = [],
+        uiSchemasFirst: UiSchema[] = [],
+        uiSchemasLast: UiSchema[] = [],
         types = ["object", "array"];
 
     // 如果存在多个*，则报错
@@ -203,6 +202,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
         uiSchemasFirst.push(mergeUiSchemaToArray(uiSchema));
     });
+
     // 处理*之后的数据
     uiSchemas.slice(idx + 1).forEach((us: string | UiSchema) => {
         let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath,
@@ -225,7 +225,6 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 如果是数组，获取下一级的key，然后做对比处理
     if (curSchema.type === types[1] && curSchema.items) {
-        // console.log(curSchema);
         const uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, {
             key: "-"
         });
@@ -276,6 +275,7 @@ export default class MergeLib {
         // 获取schemaPath对应的schemaId
         let keyPath: string = getDataKeys(schemaPath, true).join("/");
 
+        // 如果keyPath还没有解析，则报错
         if (!schemaKeysFactory.has(keyPath)) {
             if (__DEV__) {
                 warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
@@ -284,8 +284,10 @@ export default class MergeLib {
             return;
         }
 
+        // 获取当前的schemaField
         const curSchema = schemaFieldFactory.get(schemaKeysFactory.get(keyPath));
 
+        // 去掉$id这个字段
         if (curSchema.$id) {
             if (!curSchema.$ref) {
                 curSchema.$ref = curSchema.$id;
@@ -293,6 +295,8 @@ export default class MergeLib {
             curSchema.$id = undefined;
             delete curSchema.$id;
         }
+
+        // 合并schema
         this.mergeUiSchemaList = initMergeSchema(parent, schemaPath, uiSchemas, curSchema);
     }
 }
