@@ -129,7 +129,7 @@ export const getRequiredKeys = (props: { [key: string]: any }, includeKeys: stri
  * @param field         field的名称
  * @param extraSettings 其余的设置项
  */
-export const getOptions = ({ uiSchema = {}, globalOptions }: DefaultProps,
+export const getOptions = ({ uiSchema = { key: "" }, globalOptions }: DefaultProps,
     category: string,
     field: string,
     ...extraSettings: Map<string, any>[]): { [key: string]: any } => {

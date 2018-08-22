@@ -10,14 +10,17 @@ import { DefaultProps } from "../components";
 import { RC, schemaFormTypes } from "../models";
 import { fromJS } from "immutable";
 import { errorFactory } from "../factory";
+import { ASN } from "../reducers/schema.form";
 
 export interface ValidateHocOutProps {
     updateItemData: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMeta: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemData: (props: DefaultProps, meta?: any) => void;
+    removeMetaKeys: (props: DefaultProps, removeMetaKeys?: ASN[]) => void;
     updateItemDataRaw: (props: DefaultProps, data: any, meta?: any) => void;
     updateItemMetaRaw: (props: DefaultProps, data: any, meta?: any, noChange?: boolean) => Promise<void>;
     removeItemDataRaw: (props: DefaultProps, meta?: any) => void;
+    removeMetaKeysRaw: (props: DefaultProps, removeMetaKeys?: ASN[]) => void;
     combineActions: (...actions: Action<any>[]) => void;
     validate: (props: DefaultProps, data: any, meta?: any) => Promise<any>;
 }
@@ -166,6 +169,20 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                         };
                     },
                     /**
+                    * 删除一个元素meta中的部分键值
+                    */
+                    removeMetaKeys: (propsCur: DefaultProps & UtilsHocOutProps) => {
+                        return (raw: boolean, { parentKeys, uiSchema }: DefaultProps, removeMetaKeys: ASN[]) => {
+                            const { keys = [] } = uiSchema || {};
+
+                            return propsCur.getActions(propsCur, raw).removeMetaKeys({
+                                parentKeys,
+                                keys,
+                                removeMetaKeys
+                            });
+                        };
+                    },
+                    /**
                      * 合并多个action
                      */
                     combineActions: (propsCur: DefaultProps & UtilsHocOutProps) => {
@@ -192,6 +209,9 @@ export const hoc = (hocFactory: BaseFactory<any>) => {
                     },
                     removeItemDataRaw: (propsCur: DefaultProps & ValidateHocOutProps) => {
                         return propsCur.removeItemData.bind(null, true);
+                    },
+                    removeMetaKeysRaw: (propsCur: DefaultProps & ValidateHocOutProps) => {
+                        return propsCur.removeMetaKeys.bind(null, true);
                     }
                 })) as any)
             class ArrayComponentHoc extends PureComponent<DefaultProps, any> {

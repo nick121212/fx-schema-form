@@ -6,7 +6,7 @@ export const hoc = (hocFactory) => {
         return (Component) => {
             class ComponentHoc extends PureComponent {
                 render() {
-                    return React.createElement(Component, Object.assign({ getTitle: getTitle, getPathKeys: getPathKeys, getOptions: getOptions, normalizeDataPath: normalizeDataPath, getRequiredKeys: getRequiredKeys, getDefaultData: getDefaultData, getActions: getActions, getPathProps: getPathProps }, this.props));
+                    return (React.createElement(Component, Object.assign({ getTitle: getTitle, getPathKeys: getPathKeys, getOptions: getOptions, normalizeDataPath: normalizeDataPath, getRequiredKeys: getRequiredKeys, getDefaultData: getDefaultData, getActions: getActions, getPathProps: getPathProps }, this.props)));
                 }
             }
             return ComponentHoc;

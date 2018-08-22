@@ -9,7 +9,10 @@ const { SchemaForm, schemaFormDec } = schemaFormReact;
 
 @(schemaFormDec({
     rootReducerKey: ["schemaForm"],
-    parentKeys: ["normalForm"]
+    parentKeys: ["normalForm"],
+    initData: {
+
+    }
 }) as any)
 export class NormalForm extends React.PureComponent<any> {
     public render() {

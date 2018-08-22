@@ -21,6 +21,7 @@ export interface SchemaFormActions {
     moveToItem: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, curIndex: number, toIndex: number }>;
     removeItemData: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, meta?: boolean }>;
     combineActions: SimpleActionCreator<Action<any, any>[]>;
+    removeMetaKeys: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, removeMetaKeys: Array<ASN> }>;
 }
 
 /**
@@ -106,9 +107,17 @@ export class SchemaFormReducer<T> implements FxReducer {
      */
     private combineActions: SimpleActionCreator<Action<any, any>[]>
         = createAction<Action<any, any>[]>(isProd() ? "" : "合并多个action");
-
+    /**
+     * 清除一个form的数据
+     */
     private removeForm: SimpleActionCreator<ASN>
         = createAction<ASN>(isProd() ? "" : "清除一个form的数据");
+
+    /**
+     * 删除meta中的key值
+     */
+    private removeMetaKeys: SimpleActionCreator<{ parentKeys: ASN, keys: ASN, removeMetaKeys: Array<ASN> }>
+        = createAction<{ parentKeys: ASN, keys: ASN, removeMetaKeys: Array<ASN> }>(isProd() ? "" : "删除meta中的key值");
 
     /**
      * 构造
@@ -128,7 +137,8 @@ export class SchemaFormReducer<T> implements FxReducer {
             moveToItem: this.moveToItem,
             removeItemData: this.removeItemData,
             combineActions: this.combineActions,
-            removeForm: this.removeForm
+            removeForm: this.removeForm,
+            removeMetaKeys: this.removeMetaKeys
         };
     }
 
@@ -161,7 +171,8 @@ export class SchemaFormReducer<T> implements FxReducer {
             [this.moveToItem as any]: this.moveItemHandle.bind(this),
             [this.removeItemData as any]: this.removeItemDataMetaHandle.bind(this),
             [this.combineActions as any]: this.combineActionsHandle.bind(this),
-            [this.removeForm as any]: this.removeFormHandle.bind(this)
+            [this.removeForm as any]: this.removeFormHandle.bind(this),
+            [this.removeMetaKeys as any]: this.removeMetaKeysHandle.bind(this),
         }, this.initialState);
     }
 
@@ -175,6 +186,28 @@ export class SchemaFormReducer<T> implements FxReducer {
 
         if (state.hasIn(dataKeys)) {
             return state.removeIn(dataKeys);
+        }
+
+        return state;
+    }
+
+    /**
+     * 删除指定的meta中的字段
+     * @param state    state
+     * @param data     参数
+     */
+    private removeMetaKeysHandle(state: Map<string, any>, { parentKeys, keys, removeMetaKeys }
+        : { parentKeys: ASN, keys: ASN, removeMetaKeys: Array<ASN> }) {
+        let metaKeys: ASN = [...parentKeys, m];
+        let rootNode: TreeMap = state.getIn(metaKeys);
+        let childNode: TreeMap | null = rootNode.containPath(keys);
+
+        if (childNode && childNode.value && removeMetaKeys && removeMetaKeys.length) {
+            removeMetaKeys.forEach((rKeys: ASN) => {
+                if (childNode && childNode.value.hasIn(rKeys)) {
+                    childNode.value = childNode.value.removeIn(rKeys);
+                }
+            });
         }
 
         return state;
@@ -335,8 +368,7 @@ export class SchemaFormReducer<T> implements FxReducer {
             metaKeys: ASN = parentKeys.concat([m]),
             rootNode: TreeMap = state.getIn(metaKeys),
             offset = (toIndex > curIndex && false ? 1 : 0);
-        let oldFormItemData: List<any> = state.getIn(dataKeys),
-            formItemData: List<any> = state.getIn(dataKeys),
+        let formItemData: List<any> = state.getIn(dataKeys),
             childNode: TreeMap | null = rootNode.containPath(keys.concat([curIndex])),
             childNodeTo: TreeMap | null = rootNode.containPath(keys.concat([toIndex]));
 

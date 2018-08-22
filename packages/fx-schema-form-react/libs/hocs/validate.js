@@ -120,6 +120,16 @@ export const hoc = (hocFactory) => {
                             });
                         };
                     },
+                    removeMetaKeys: (propsCur) => {
+                        return (raw, { parentKeys, uiSchema }, removeMetaKeys) => {
+                            const { keys = [] } = uiSchema || {};
+                            return propsCur.getActions(propsCur, raw).removeMetaKeys({
+                                parentKeys,
+                                keys,
+                                removeMetaKeys
+                            });
+                        };
+                    },
                     combineActions: (propsCur) => {
                         return (...actions) => {
                             return propsCur.getActions(propsCur).combineActions(actions);
@@ -143,6 +153,9 @@ export const hoc = (hocFactory) => {
                     },
                     removeItemDataRaw: (propsCur) => {
                         return propsCur.removeItemData.bind(null, true);
+                    },
+                    removeMetaKeysRaw: (propsCur) => {
+                        return propsCur.removeMetaKeys.bind(null, true);
                     }
                 }))
             ], ArrayComponentHoc);
