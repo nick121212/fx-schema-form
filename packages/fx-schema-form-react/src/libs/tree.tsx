@@ -15,7 +15,7 @@ export class TreeMap {
      * @param value  当前节点的值
      * @param parent 当前节点的父亲节点
      */
-    constructor(private key: string, public value: any, private parent?: TreeMap) { }
+    constructor(private key: string, public value: any, public readonly parent?: TreeMap) { }
 
     /**
      * 添加一个孩子元素
