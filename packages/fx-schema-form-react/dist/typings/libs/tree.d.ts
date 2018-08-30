@@ -2,7 +2,7 @@ export declare type Tsn = string | number;
 export declare class TreeMap {
     private key;
     value: any;
-    private parent;
+    readonly parent: TreeMap | undefined;
     children: TreeMap[];
     constructor(key: string, value: any, parent?: TreeMap | undefined);
     addChild(keys: Array<Tsn>, value?: any): TreeMap | null;

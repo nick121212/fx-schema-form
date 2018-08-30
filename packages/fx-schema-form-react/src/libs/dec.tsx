@@ -39,40 +39,6 @@ export interface SchemaFormHocOutProps {
 
 export const name = "schemaFormDec";
 
-const getError = (childNode: TreeMap, dataKeys: Tsn[], options: any, element: any, props: any, $validateAfterData: any) => {
-    let errorText = "";
-    const parentDataKeys = dataKeys.slice(0, -1);
-    const uiSchema = schemaFieldFactory.get(schemaKeysFactory.get(dataKeys.join("/")));
-    const uiSchemaFormParent = schemaFieldFactory.get(schemaKeysFactory.get(parentDataKeys.join("/")));
-
-    if (options.errorText) {
-        errorText = options.errorText(element, props, dataKeys);
-    }
-
-    // 计算错误信息
-    errorText = errorText || errorFactory.get("single")([element], Object.assign({}, props, {
-        uiSchema
-    }), dataKeys);
-
-    // 如果父亲的uiSchema的catchChild是true，则把子元素的错误复制给父元素
-    if (uiSchemaFormParent.catchChild === true && childNode.parent) {
-        if (!childNode.parent.value) {
-            childNode.parent.value = fromJS({});
-        }
-        childNode.parent.value = childNode.parent.value.merge($validateAfterData).merge({
-            isValid: false,
-            errorText
-        });
-    }
-
-    childNode.value = childNode.value.merge($validateAfterData).merge({
-        isValid: false,
-        errorText
-    });
-
-    return uiSchema;
-}
-
 /**
  * 提供全部验证等功能
  * @param Component 需要包装的组件
@@ -114,7 +80,7 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                         let root = props.root as TreeMap,
                             curAjv = props.ajv,
                             dataRaw = props.data,
-                            validate = curAjv.getSchema(props.schemaId),
+                            validate = props.ajv.getSchema(props.schemaId),
                             $validateBeforeData = fromJS({
                                 dirty: true,
                                 isValid: true,
@@ -186,7 +152,11 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
 
                             // 处理错误
                             e.errors.forEach((element: ErrorObject) => {
-                                const dataKeys = root.getCurrentKeys().concat(normalizeDataPath(props.schemaId, element.dataPath));
+                                const schemaFormKeys = normalizeDataPath(props.schemaId, element.dataPath);
+                                const dataKeys = root.getCurrentKeys().concat(schemaFormKeys);
+                                const uiSchemaForParent: any = schemaFieldFactory.get(
+                                    schemaKeysFactory.get(schemaFormKeys.slice(0, -1).concat([props.schemaId]).join("/"))
+                                );
                                 let childNode = root.containPath(dataKeys);
 
                                 if (!childNode) {
@@ -194,27 +164,33 @@ export default (settings: SchemaFormHocSettings = { rootReducerKey: [], parentKe
                                 }
 
                                 if (childNode) {
-                                    getError(childNode, dataKeys, options, element, props, $validateAfterData);
+                                    let errorText = "";
 
-                                    if (childNode.parent) {
-                                        getError(childNode.parent, dataKeys, options, element, props, $validateAfterData);
+                                    if (options.errorText) {
+                                        errorText = options.errorText(element, props, dataKeys);
+                                    }
+
+                                    errorText = errorText || errorFactory.get("single")([element], Object.assign({}, props, {
+                                        uiSchema: schemaFieldFactory.get(schemaKeysFactory.get(dataKeys.join("/")))
+                                    }), dataKeys);
+
+                                    childNode.value = childNode.value.merge($validateAfterData).merge({
+                                        isValid: false,
+                                        errorText
+                                    });
+
+                                    // 把子层的错误抛出到父层
+                                    if (uiSchemaForParent && childNode.parent && uiSchemaForParent.catchChild) {
+                                        if (!childNode.parent.value) {
+                                            childNode.parent.value = fromJS({});
+                                        }
+
+                                        childNode.parent.value = childNode.parent.value.merge($validateAfterData).merge({
+                                            isValid: false,
+                                            errorText
+                                        });
                                     }
                                 }
-
-                                // if (childNode) {
-                                //     let errorText = "";
-
-                                //     if (options.errorText) {
-                                //         errorText = options.errorText(element, props, dataKeys);
-                                //     }
-
-                                //     childNode.value = childNode.value.merge($validateAfterData).merge({
-                                //         isValid: false,
-                                //         errorText: errorText || errorFactory.get("single")([element], Object.assign({}, props, {
-                                //             uiSchema: schemaFieldFactory.get(schemaKeysFactory.get(dataKeys.join("/")))
-                                //         }), dataKeys)
-                                //     });
-                                // }
                             });
 
                             root.value = root.value.merge({

@@ -46,6 +46,11 @@ export interface SchemaFormActions {
         meta?: boolean;
     }>;
     combineActions: SimpleActionCreator<Action<any, any>[]>;
+    removeMetaKeys: SimpleActionCreator<{
+        parentKeys: ASN;
+        keys: ASN;
+        removeMetaKeys: Array<ASN>;
+    }>;
 }
 export declare class SchemaFormReducer<T> implements FxReducer {
     private initialState;
@@ -58,11 +63,13 @@ export declare class SchemaFormReducer<T> implements FxReducer {
     private removeItemData;
     private combineActions;
     private removeForm;
+    private removeMetaKeys;
     constructor(initialState: any);
     readonly actions: SchemaFormActions;
     init(store: Store<Map<string, any>>): void;
     readonly reducer: Reducer<any>;
     private removeFormHandle(state, parentKeys);
+    private removeMetaKeysHandle(state, {parentKeys, keys, removeMetaKeys});
     private combineActionsHandle(state, actions);
     private removeItemDataMetaHandle(state, {parentKeys, keys, meta});
     private createFormHandle(state, {key, data, keepData});

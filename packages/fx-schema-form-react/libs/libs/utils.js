@@ -75,7 +75,7 @@ export const getRequiredKeys = (props, includeKeys = [], excludeKeys = []) => {
     }
     return extraProps;
 };
-export const getOptions = ({ uiSchema = {}, globalOptions }, category, field, ...extraSettings) => {
+export const getOptions = ({ uiSchema = { key: "" }, globalOptions }, category, field, ...extraSettings) => {
     let { options, type = "" } = uiSchema, optionsArray = [], getLocalOptions = (o, ks) => {
         if (o) {
             if (!Map.isMap(o)) {
