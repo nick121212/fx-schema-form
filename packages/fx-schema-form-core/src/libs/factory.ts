@@ -14,14 +14,14 @@ export class BaseFactory<T> {
      * @param  {boolean} override   是否覆盖
      * @return {void | boolean}     是否添加成功
      */
-    public add(name: string, intance: T, override = false): boolean {
+    public add(name: string, intance: T, override = false): BaseFactory<T> {
         if (hasOwnProperty.call(this.pi, name) || !override && this.has(name)) {
-            return false;
+            return this;
         }
 
         this.i[name] = intance;
 
-        return true;
+        return this;
     }
 
     /**
@@ -59,6 +59,7 @@ export class BaseFactory<T> {
             this.pi[key] = true;
         }
     }
+
     /**
      * 解锁实例
      * @param key key

@@ -41,9 +41,10 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
 
         if (schema.$ref) {
             parentKeysWithDef = getDataKeys(schema.$ref, true);
-        } else {
-            parentKeysWithDef = parentKeysWithDef;
         }
+        // else {
+        //     parentKeysWithDef = parentKeysWithDef;
+        // }
     }
 
     return parentKeysWithDef.join("/");
@@ -103,8 +104,8 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
         return uiSchema;
     }
 
-    let schemaKey: string = schemaKeysFactory.get(uiSchema.key);
-    let schema = schemaFieldFactory.get(schemaKey);
+    const schemaKey: string = schemaKeysFactory.get(uiSchema.key);
+    const schema = schemaFieldFactory.get(schemaKey);
 
     return Object.assign({}, schema, uiSchema);
 };
@@ -276,9 +277,9 @@ export default class MergeLib {
 
         uiSchemas = uiSchemas || ["*"];
 
-        if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
-            throw ajv.errors;
-        }
+        // if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
+        //     throw ajv.errors;
+        // }
 
         // 获取schemaPath对应的schemaId
         let keyPath: string = getDataKeys(schemaPath, true).join("/");

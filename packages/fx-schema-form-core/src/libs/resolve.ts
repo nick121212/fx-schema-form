@@ -106,7 +106,6 @@ export default class ResolveLib {
         if (!$id && !schema.$ref) {
             if (__DEV__) {
                 // throw new Error(`id is required.`);
-                console.log(schema);
                 warn("id is required");
             }
             return schema;
@@ -119,7 +118,6 @@ export default class ResolveLib {
 
         // 把schema加入到ajv
         if ($id && !ajv.getSchema($id)) {
-            // console.log("add Schema", schema);
             ajv.addSchema(schema);
         }
 
@@ -152,7 +150,7 @@ export default class ResolveLib {
             return;
         }
 
-        let type: string = schema.type.toString();
+        const type: string = schema.type.toString();
 
         // 这里调用相对应的type的方法，来解析schema
         if (schemaTypeFactory.has(type)) {
