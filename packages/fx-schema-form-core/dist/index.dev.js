@@ -174,10 +174,10 @@ const warn = message => {
 };
 /* harmony export (immutable) */ __webpack_exports__["e"] = warn;
 
-const isProd = () => {
+const isProd = (() => {
     const { NODE_ENV } = Object({"NODE_ENV":"dev"});
     return typeof NODE_ENV !== "undefined" && NODE_ENV === `"production"`;
-};
+})();
 /* harmony export (immutable) */ __webpack_exports__["d"] = isProd;
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;

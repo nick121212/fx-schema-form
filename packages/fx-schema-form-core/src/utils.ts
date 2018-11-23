@@ -11,11 +11,11 @@ export const warn = (message: string) => {
 /**
  * 判断是否是生产环境
  */
-export const isProd = () => {
+export const isProd = (() => {
   const { NODE_ENV } = process.env;
 
   return typeof NODE_ENV !== "undefined" && NODE_ENV === `"production"`;
-};
+})();
 
 /**
  * 暴露hasOwnProperty方法

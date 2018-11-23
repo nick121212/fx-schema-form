@@ -1,5 +1,5 @@
 export declare const warn: (message: string) => never;
-export declare const isProd: () => boolean;
+export declare const isProd: boolean;
 export declare const hasOwnProperty: {
     (v: string): boolean;
     (v: PropertyKey): boolean;
