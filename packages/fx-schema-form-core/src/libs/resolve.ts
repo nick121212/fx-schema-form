@@ -2,7 +2,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { schemaTypeFactory } from "../factory";
-import { warn } from "../utils";
+import { warn, isProd } from "../utils";
 
 /**
 * 解析path成成数据的路径
@@ -11,7 +11,7 @@ import { warn } from "../utils";
 * 2. 第一个字符去掉末尾的【 # 】
 * @example design#/properties/appType => ["appType']
 * @example design#/properties/appType/type => ["appType','type']
-* @example design#/properties/appType/items/properties/type => ["appType', '-','type']
+* @example design#/properties/appType/items/properties/type => ["appType', '-', 'type']
 * @param {String}   schemaKey schema的path
 * @param {Boolean}  keepFirst 是否需要保留第一个
 */
@@ -58,7 +58,7 @@ export const getSchemaId = (schemaKey: string): string => {
     const regexp = /#$/g;
 
     if (!keys.length) {
-        if (__DEV__) {
+        if (!isProd) {
             warn(`${schemaKey} not a valid schemaPath.`);
             // throw new Error(`${schemaKey} not a valid schemaPath.`);
         }
@@ -104,7 +104,7 @@ export default class ResolveLib {
 
         // 如果没有$id, 同时没有$ref的情况下直接报错
         if (!$id && !schema.$ref) {
-            if (__DEV__) {
+            if (!isProd) {
                 // throw new Error(`id is required.`);
                 warn("id is required");
             }
@@ -143,7 +143,7 @@ export default class ResolveLib {
 
         // 这里只解析type为字符串的结构，不支持数组类型的type
         if (schema.type.constructor !== String) {
-            if (__DEV__) {
+            if (!isProd) {
                 warn(`schema type[${schema.type}] can only be string.`);
                 // throw new Error(`schema type[${schema.type}] can only be string.`);
             }

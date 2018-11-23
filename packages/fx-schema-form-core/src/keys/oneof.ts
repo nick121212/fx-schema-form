@@ -3,6 +3,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib } from "../libs/resolve";
+import {isArray} from "../utils";
 // import MergeLib from "../libs/merge";
 
 /**
@@ -19,9 +20,9 @@ export default ($id: string, schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
         return schema;
     }
 
-    let oneOf = schema.oneOf;
+    const oneOf = schema.oneOf;
 
-    if (oneOf && oneOf.constructor === Array) {
+    if (oneOf && isArray(oneOf)) {
         schema.oneOf = oneOf.map((schemaOfOne: JSONSchema6) => {
             let { mergeSchema } = new ResolveLib(ajv, schemaOfOne);
 

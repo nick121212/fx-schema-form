@@ -2,7 +2,7 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib, getDataKeys } from "../libs/resolve";
-import { warn } from "../utils";
+import { warn, isProd } from "../utils";
 
 const pro = "properties";
 
@@ -21,7 +21,7 @@ export default (schema: JSONSchema6, schemaKey: string, ajv: Ajv) => {
         Object.keys(properties).forEach((key: string) => {
 
             if ([pro, "items"].indexOf(key) >= 0) {
-                if (__DEV__) {
+                if (!isProd) {
                     warn(`${key}can not be key words.`);
                     // throw new Error(`${key}can not be key words.`);
                 }

@@ -5,7 +5,7 @@ import { uiSchemaSchema, UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { getDataKeys, getSchemaId } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
-import { warn } from "../utils";
+import { warn, isProd } from "../utils";
 
 /**
 * 根据给出的parentKeys和uiSchemaKeys来获取uiSchema的key
@@ -29,7 +29,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
         const keysStr: string = parentKeysWithDef.join("/").replace(/\/$/, "");
 
         if (!schemaKeysFactory.has(keysStr)) {
-            if (__DEV__) {
+            if (!isProd) {
                 // console.log(schemaFieldFactory, schemaKeysFactory);
                 warn(`${keysStr} did not found.`);
             }
@@ -96,7 +96,7 @@ const getCurrentSchemaKey = (parent: UiSchema, schemaPath: string, uiSchema: UiS
  */
 const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
     if (!schemaKeysFactory.has(uiSchema.key)) {
-        if (__DEV__) {
+        if (!isProd) {
             console.log(schemaKeysFactory);
             warn(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
@@ -185,7 +185,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 如果存在多个*，则报错
     if (uiSchemas.lastIndexOf("*") !== idx) {
-        if (__DEV__) {
+        if (!isProd) {
             // throw new Error("uiSchema can only has one *.");
             warn("uiSchema can only has one *.");
         }
@@ -286,7 +286,7 @@ export default class MergeLib {
 
         // 如果keyPath还没有解析，则报错
         if (!schemaKeysFactory.has(keyPath)) {
-            if (__DEV__) {
+            if (!isProd) {
                 warn(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
 

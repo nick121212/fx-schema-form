@@ -3,7 +3,6 @@ import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { default as ResolveLib } from "../libs/resolve";
-// import MergeLib from "../libs/merge";
 
 /**
  * 解析schema中的关键字 definitions
@@ -21,19 +20,17 @@ export default ($id: string, schema: JSONSchema6, ajv: Ajv): JSONSchema6 => {
 
     const definitions = schema.definitions;
 
-    if (definitions) {
-        for (const key in definitions) {
-            if (definitions.hasOwnProperty(key)) {
-                const element: JSONSchema6 | boolean = definitions[key];
+    if (!definitions) {
+        return schema;
+    }
 
-                if (element !== false && element !== true) {
-                    // tslint:disable-next-line:no-unused-expression
-                    new ResolveLib(ajv, element, `${schema.$id}#/definitions/${key}`);
+    for (const key in definitions) {
+        if (definitions.hasOwnProperty(key)) {
+            const element: JSONSchema6 | boolean = definitions[key];
 
-                    // console.log("-----------------------", `${schema.$id}#/${key}`);
-                    // tslint:disable-next-line:no-unused-expression
-                    // new ResolveLib(ajv, element, `${schema.$id}#/${key}`);
-                }
+            if (element !== false && element !== true) {
+                // tslint:disable-next-line:no-unused-expression
+                new ResolveLib(ajv, element, `${schema.$id}#/definitions/${key}`);
             }
         }
     }

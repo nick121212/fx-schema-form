@@ -198,7 +198,5 @@ describe("测试MergeLib类", () => {
         //     merge.mergeUiSchemaList[0], [{
         //         key: ""
         //     }]);
-
-        console.log(merge);
     });
 });

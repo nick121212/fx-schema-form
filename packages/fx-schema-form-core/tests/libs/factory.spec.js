@@ -58,9 +58,9 @@ describe("测试Factory类", () => {
     });
 
     it("Factory测试add,has,get功能", () => {
-        expect(schemaFieldFactory.add("1", {})).to.equal(true);
-        expect(schemaFieldFactory.add("1", {}, true)).to.equal(true);
-        expect(schemaFieldFactory.add("1", {})).to.equal(false);
+        expect(schemaFieldFactory.add("1", {})).to.equal(schemaFieldFactory);
+        expect(schemaFieldFactory.add("1", {}, true)).to.equal(schemaFieldFactory);
+        expect(schemaFieldFactory.add("1", {})).to.equal(schemaFieldFactory);
 
         expect(schemaFieldFactory.has("1")).to.equal(true);
         expect(schemaFieldFactory.has("2")).to.equal(false);
@@ -76,9 +76,9 @@ describe("测试Factory类", () => {
         schemaFieldFactory.add("3");
         schemaFieldFactory.lock("3");
 
-        expect(schemaFieldFactory.add("3", true, true)).to.equal(false);
+        expect(schemaFieldFactory.add("3", true, true)).to.equal(schemaFieldFactory);
         schemaFieldFactory.unLock("3");
-        expect(schemaFieldFactory.add("3", {}, true)).to.equal(true);
+        expect(schemaFieldFactory.add("3", {}, true)).to.equal(schemaFieldFactory);
     });
 
     it("Factory测试clear,forEach功能", () => {

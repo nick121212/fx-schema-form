@@ -3,7 +3,7 @@ export declare class BaseFactory<T> {
         [id: string]: T;
     };
     private pi;
-    add(name: string, intance: T, override?: boolean): boolean;
+    add(name: string, intance: T, override?: boolean): BaseFactory<T>;
     has(key: string): boolean;
     get(key: string): T;
     lock(key: string): void;

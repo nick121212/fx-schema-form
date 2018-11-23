@@ -2,8 +2,8 @@ import { Ajv, ValidateFunction } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { getDataKeys, getSchemaId } from "../libs/resolve";
-import { warn } from "../utils";
-import { schemaFieldFactory, schemaKeysFactory } from "../factory";
+import { warn, isProd } from "../utils";
+// import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 
 /**
  * 解析schema中的关键字 ref
@@ -39,7 +39,7 @@ export default ($id: string, schema: JSONSchema6, ajv: Ajv) => {
             return schemaAjv;
         }
 
-        if (__DEV__) {
+        if (!isProd) {
             // console.log($id, schema, getSchemaId("$id"));
             warn(`${schema.$ref} not exist.`);
         }
