@@ -2,5 +2,6 @@
 .history
 node_modules
 /packages/**/package-lock.json
+/packages/**/node_modules
 package-lock.json
 lerna-debug.log
