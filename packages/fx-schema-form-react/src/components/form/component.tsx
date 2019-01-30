@@ -19,7 +19,7 @@ export class SchemaForm extends PureComponent<Props, any> {
     public render() {
         const { schemaId, mergeSchemaList, arrayLevel, RootComponent, children, ...extraProps } = this.props;
         const formItemList = mergeSchemaList ? mergeSchemaList.map((uiScehma: FxUiSchema, idx: number) => {
-            let arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
+            const arrayLevelCopy = arrayLevel ? arrayLevel.concat([]) : [];
 
             return <SchemaFormItem
                 key={idx}
@@ -30,11 +30,18 @@ export class SchemaForm extends PureComponent<Props, any> {
             />;
         }) : [];
 
+
+        // TODO 这里使用组件来承接formItemList和children
+        // <RootComponent formItemList={formItemList}>
+        //     {children}
+        // </RootComponent>
         if (RootComponent) {
-            return <RootComponent >
-                {formItemList}
-                {children}
-            </RootComponent>;
+            return (
+                <RootComponent>
+                    {formItemList}
+                    {children}
+                </RootComponent>
+            );
         }
 
         return (
