@@ -1,7 +1,4 @@
-import { Ajv } from "ajv";
-// import { JSONSchema6 } from "json-schema";
-
-import { uiSchemaSchema, UiSchema } from "../models/uischema";
+import { UiSchema } from "../models/uischema";
 import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 import { getDataKeys, getSchemaId } from "./resolve";
 import { FxJsonSchema } from "../models/jsonschema";
@@ -24,7 +21,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
     while (uiSchemaKeys.length) {
         const key: string = uiSchemaKeys.shift() || "";
 
-        parentKeysWithDef = parentKeysWithDef.concat(key ? [key] : []);
+        parentKeysWithDef = parentKeysWithDef.concat(key ? [ key ] : []);
 
         const keysStr: string = parentKeysWithDef.join("/").replace(/\/$/, "");
 
@@ -122,7 +119,10 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
 const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {
     let parentKeys = getParentSchemaKeys(parent),
         key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
-        keys, isRequired = false, originSchema: FxJsonSchema = {}, schemaKey;
+        keys,
+        isRequired = false,
+        originSchema: FxJsonSchema = {},
+        schemaKey;
 
     keys = parentKeys.concat(uiSchema.key ? uiSchema.key.split("/") : []);
 
@@ -155,9 +155,11 @@ const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema):
  * @return {Void}
  */
 const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], uiSchema: UiSchema): void => {
-    if (!uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
-        return val.key === uiSchema.key;
-    }).length) {
+    if (
+        !uiSchemasFirst.concat(uiSchemasLast).filter((val: UiSchema) => {
+            return val.key === uiSchema.key;
+        }).length
+    ) {
         uiSchema = mergeUiSchemaToArray(uiSchema);
         uiSchemasFirst.push(uiSchema);
     }
@@ -181,7 +183,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
     let idx: number = uiSchemas.indexOf("*"),
         uiSchemasFirst: UiSchema[] = [],
         uiSchemasLast: UiSchema[] = [],
-        types = ["object", "array"];
+        types = [ "object", "array" ];
 
     // 如果存在多个*，则报错
     if (uiSchemas.lastIndexOf("*") !== idx) {
@@ -196,7 +198,7 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
     // 不存在*号的情况
     if (idx < 0) {
         uiSchemas.slice(idx + 1).map((us: string | UiSchema) => {
-            let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
+            let uiSchema = initUiSchema(parent, schemaPath, us.constructor === String ? { key: us } as UiSchema : us as UiSchema);
 
             uiSchemasFirst.push(mergeUiSchemaToArray(uiSchema));
         });
@@ -206,16 +208,14 @@ const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<
 
     // 处理*之前的数据
     uiSchemas.slice(0, idx).forEach((us: string | UiSchema) => {
-        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath,
-            us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } as UiSchema : us as UiSchema);
 
         uiSchemasFirst.push(mergeUiSchemaToArray(uiSchema));
     });
 
     // 处理*之后的数据
     uiSchemas.slice(idx + 1).forEach((us: string | UiSchema) => {
-        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath,
-            us.constructor === String ? { key: us } as UiSchema : (us as UiSchema));
+        let uiSchema = initUiSchema(parent, curSchema.schemaPath || schemaPath, us.constructor === String ? { key: us } as UiSchema : us as UiSchema);
 
         uiSchemasLast.push(mergeUiSchemaToArray(uiSchema));
     });
@@ -268,18 +268,12 @@ export default class MergeLib {
      * 1. 验证uiSchema的正确性
      * 2. 处理uiSchema中带*号的数据
      * 3. 返回合并后的数据
-     * @param {Ajv}                       ajv         当前的ajv实例
      * @param {string}                    $id         schema的$id
      * @param {UiSchema}                  parent      父亲的schema
      * @param {Array<UiSchema | string>}  uiSchemas   uiSchema
      */
-    constructor(ajv: Ajv, schemaPath: string, parent: UiSchema, uiSchemas?: Array<UiSchema | string>) {
-
-        uiSchemas = uiSchemas || ["*"];
-
-        // if (!ajv.validate(uiSchemaSchema, uiSchemas)) {
-        //     throw ajv.errors;
-        // }
+    constructor(schemaPath: string, parent: UiSchema, uiSchemas?: Array<UiSchema | string>) {
+        uiSchemas = uiSchemas || [ "*" ];
 
         // 获取schemaPath对应的schemaId
         let keyPath: string = getDataKeys(schemaPath, true).join("/");

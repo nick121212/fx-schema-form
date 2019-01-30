@@ -1,49 +1,40 @@
-import {
-    assert,
-    expect
-} from "chai";
+import { assert, expect } from "chai";
 import Ajv from "ajv";
 
-import {
-    schemaTypeFactory,
-    schemaFieldFactory,
-    schemaKeysFactory,
-    ResolveLib
-} from "../../dist/index.dev";
+import { schemaTypeFactory, schemaFieldFactory, schemaKeysFactory, ResolveLib } from "../../dist/index.dev";
 
 describe("普通类型的解析", () => {
-    let ajv, schema;
+    let schema, test;
 
     before(() => {
-        ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
-        new ResolveLib(ajv, {
+        new ResolveLib({
             $id: "test1",
             type: "number",
             title: "测试的schema"
         });
 
-        new ResolveLib(ajv, {
+        new ResolveLib({
             $id: "test2",
             type: "string",
             title: "测试的schema"
         });
 
-        new ResolveLib(ajv, {
+        test = new ResolveLib({
             $id: "test",
             title: "测试oneof的schema",
-            oneOf: [{
-                $ref: "test2#"
-            }, {
-                $ref: "test1#"
-            }]
+            oneOf: [
+                {
+                    $ref: "test2#"
+                },
+                {
+                    $ref: "test1#"
+                }
+            ]
         });
 
-        schema = schemaTypeFactory.get("undefined")(ajv.getSchema("test").schema, "test#", ajv);
+        schema = schemaTypeFactory.get("undefined")(test.mergeSchema, "test#");
     });
 
     it("oneOf中的schema被替换成了正确的schema;数量为2；$ids = [test2,test1]", () => {
@@ -64,5 +55,4 @@ describe("普通类型的解析", () => {
         expect(schemaKeysFactory.get("test1")).to.equal("test1#");
         expect(schemaKeysFactory.get("test2")).to.equal("test2#");
     });
-
 });

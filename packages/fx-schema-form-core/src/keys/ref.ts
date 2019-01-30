@@ -1,9 +1,8 @@
-import { Ajv, ValidateFunction } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { getDataKeys, getSchemaId } from "../libs/resolve";
 import { warn, isProd } from "../utils";
-// import { schemaFieldFactory, schemaKeysFactory } from "../factory";
+import { schemaFieldFactory, schemaKeysFactory } from "../factory";
 
 /**
  * 解析schema中的关键字 ref
@@ -11,37 +10,42 @@ import { warn, isProd } from "../utils";
  * 如果ajv中发现了schema，则添加$ref和refKeys，返回schema
  * @param  {string}      $id    当前的schema的ID
  * @param  {JSONSchema6} schema 当前的schema
- * @param  {Ajv}         ajv    ajv实例
  * @return {JSONSchema6}        处理过后的schema
  */
-export default ($id: string, schema: JSONSchema6, ajv: Ajv) => {
+export default ($id: string, schema: JSONSchema6) => {
     if (schema && schema.$ref) {
         const schemaId = getSchemaId(schema.$ref);
+        let refName = schema.$ref;
 
         if (schema.$id) {
-            schema.$ref = schema.$id + schema.$ref;
+            refName = schema.$id + schema.$ref;
         } else if (!schemaId) {
-            schema.$ref = getSchemaId($id) + schema.$ref;
+            refName = getSchemaId($id) + schema.$ref;
+        }
+        schema.$ref = refName;
+
+        if (!schemaFieldFactory.has(refName)) {
+            // throw new Error(`不存在Key为[${refName}]的schema!`);
+            schemaFieldFactory.add(refName, {});
         }
 
-        const validate: ValidateFunction = ajv.getSchema(schema.$ref);
+        const refSchema = schemaFieldFactory.get(refName);
 
-        if (validate && validate.schema) {
-            let schemaAjv = Object.assign({}, validate.schema) as JSONSchema6;
+        if (refSchema) {
+            let schemaAjv = Object.assign({}, refSchema) as JSONSchema6;
 
-            schemaAjv.$ref = schema.$ref;
+            schemaAjv.$ref = refName;
             delete schemaAjv.$id;
 
             Object.assign(schemaAjv, {
-                refKeys: getDataKeys(schema.$ref)
+                refKeys: getDataKeys(refName)
             });
 
             return schemaAjv;
         }
 
         if (!isProd) {
-            // console.log($id, schema, getSchemaId("$id"));
-            warn(`${schema.$ref} not exist.`);
+            warn(`${refName} not exist.`);
         }
     }
 

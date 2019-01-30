@@ -1,27 +1,14 @@
-import {
-    assert,
-    expect
-} from "chai";
-import Ajv from "ajv";
+import { assert, expect } from "chai";
 
-import {
-    schemaTypeFactory,
-    schemaFieldFactory,
-    schemaKeysFactory,
-    ResolveLib
-} from "../../dist/index.dev";
+import { schemaTypeFactory, schemaFieldFactory, schemaKeysFactory, ResolveLib } from "../../dist/index.dev";
 
 describe("数组类型的解析", () => {
-    let ajv, schema;
+    let schema, test;
 
     before(() => {
-        ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
-        new ResolveLib(ajv, {
+        test = new ResolveLib({
             $id: "test",
             title: "测试oneof的schema",
             type: "array",
@@ -30,7 +17,7 @@ describe("数组类型的解析", () => {
             }
         });
 
-        schema = schemaTypeFactory.get("array")(ajv.getSchema("test").schema, "test#", ajv);
+        schema = schemaTypeFactory.get("array")(test.mergeSchema, "test#");
     });
 
     it("测试数组的类型转换", () => {
@@ -38,7 +25,7 @@ describe("数组类型的解析", () => {
         expect(schema.items).to.be.a("object");
         expect(schema.items.type).to.be.a("string");
         expect(schema.items.type).to.equal("string");
-        expect(schema.items.keys.join()).to.equal(["-"].join());
+        expect(schema.items.keys.join()).to.equal([ "-" ].join());
     });
 
     it("验证schemaFieldFactory中的key是否正确", () => {
@@ -50,5 +37,4 @@ describe("数组类型的解析", () => {
         expect(schemaKeysFactory.get("test")).to.equal("test#");
         expect(schemaKeysFactory.get("test/-")).to.equal("test#/items");
     });
-
 });

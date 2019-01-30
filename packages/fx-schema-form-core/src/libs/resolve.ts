@@ -1,4 +1,3 @@
-import { Ajv } from "ajv";
 import { JSONSchema6 } from "json-schema";
 
 import { schemaTypeFactory } from "../factory";
@@ -82,10 +81,10 @@ export default class ResolveLib {
      * @param {schema}  schema 当前的schema
      * @param {String}  $id    schema的id
      */
-    constructor(private ajv: Ajv, schema: JSONSchema6, readonly $id = "") {
+    constructor(schema: JSONSchema6, readonly $id = "") {
         // 验证schema的完整性
         if (!$id) {
-            this.initSchema(ajv, schema);
+            this.initSchema(schema);
         }
         // 生成map
         this.compileSchema(schema, $id || schema.$ref || "");
@@ -99,7 +98,7 @@ export default class ResolveLib {
      * @param {Ajv}          ajv     ajv的实例
      * @param {JSONSchema6}  schema  schema
      */
-    private initSchema(ajv: Ajv, schema: JSONSchema6): JSONSchema6 {
+    private initSchema(schema: JSONSchema6): JSONSchema6 {
         let $id: string | undefined = schema.$id;
 
         // 如果没有$id, 同时没有$ref的情况下直接报错
@@ -111,15 +110,15 @@ export default class ResolveLib {
             return schema;
         }
 
-        // 验证schema的正确性
-        if (!ajv.validateSchema(schema)) {
-            throw ajv.errors;
-        }
+        // // 验证schema的正确性
+        // if (!ajv.validateSchema(schema)) {
+        //     throw ajv.errors;
+        // }
 
-        // 把schema加入到ajv
-        if ($id && !ajv.getSchema($id)) {
-            ajv.addSchema(schema);
-        }
+        // // 把schema加入到ajv
+        // if ($id && !ajv.getSchema($id)) {
+        //     ajv.addSchema(schema);
+        // }
 
         return schema;
     }
@@ -132,7 +131,7 @@ export default class ResolveLib {
      * @param {String}      $id     id
      */
     private compileSchema(schema: JSONSchema6, $id: string): void {
-        schema = schemaTypeFactory.get("undefined")(schema, $id || ((schema.$id || "") + "#"), this.ajv);
+        schema = schemaTypeFactory.get("undefined")(schema, $id || (schema.$id || "") + "#");
 
         this.mergeSchema = schema;
 
@@ -154,8 +153,7 @@ export default class ResolveLib {
 
         // 这里调用相对应的type的方法，来解析schema
         if (schemaTypeFactory.has(type)) {
-            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || ((schema.$id || "") + "#"), this.ajv);
+            this.mergeSchema = schemaTypeFactory.get(type)(schema, $id || (schema.$id || "") + "#");
         }
     }
 }
-

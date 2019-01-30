@@ -1,202 +1,188 @@
-import {
-    assert,
-    expect
-} from "chai";
-import Ajv from "ajv";
-
-import {
-    schemaTypeFactory,
-    schemaFieldFactory,
-    schemaKeysFactory,
-    ResolveLib,
-    MergeLib
-} from "../../dist/index.dev";
+import { assert, expect } from "chai";
+import { schemaTypeFactory, schemaFieldFactory, schemaKeysFactory, ResolveLib, MergeLib } from "../../dist/index.dev";
 
 describe("测试MergeLib类", () => {
-    let ajv;
-
     before(() => {
-        ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
 
-        let b = [new ResolveLib(ajv, {
-            type: "string",
-            $id: "simpleString"
-        }), new ResolveLib(ajv, {
-            type: "object",
-            $id: "design1",
-            required: ["name", "dsModelIds"],
-            properties: {
-                name: {
-                    type: "string",
-                    title: "面板名称"
+        let b = [
+            new ResolveLib({
+                type: "string",
+                $id: "simpleString"
+            }),
+            new ResolveLib({
+                type: "object",
+                $id: "design1",
+                required: [ "name", "dsModelIds" ],
+                properties: {
+                    name: {
+                        type: "string",
+                        title: "面板名称"
+                    }
                 }
-            }
-        }), new ResolveLib(ajv, {
-            type: "object",
-            $id: "design2",
-            required: ["name", "dsModelIds"],
-            properties: {
-                name: {
-                    "$ref": "design1#/properties/name"
+            }),
+            new ResolveLib({
+                type: "object",
+                $id: "design2",
+                required: [ "name", "dsModelIds" ],
+                properties: {
+                    name: {
+                        $ref: "design1#/properties/name"
+                    }
                 }
-            }
-        }), new ResolveLib(ajv, {
-            type: "object",
-            $id: "design",
-            required: ["name", "dsModelIds"],
-            properties: {
-                name: {
-                    "$ref": "design2#/properties/name"
-                },
-                description: {
-                    type: "string",
-                    title: "面板详情"
-                },
-                appType: {
-                    oneOf: [{
-                        title: "应用类型",
-                        $ref: "design-object#"
-                    }, {
-                        $ref: "design-string#",
-                        title: "应用类型"
-                    }]
-                },
-                dsModelIds: {
-                    type: "array",
-                    items: {
-                        type: "object",
-                        properties: {
-                            name: {
-                                type: "string"
+            }),
+            new ResolveLib({
+                type: "object",
+                $id: "design",
+                required: [ "name", "dsModelIds" ],
+                properties: {
+                    name: {
+                        $ref: "design2#/properties/name"
+                    },
+                    description: {
+                        type: "string",
+                        title: "面板详情"
+                    },
+                    appType: {
+                        oneOf: [
+                            {
+                                title: "应用类型",
+                                $ref: "design-object#"
+                            },
+                            {
+                                $ref: "design-string#",
+                                title: "应用类型"
+                            }
+                        ]
+                    },
+                    dsModelIds: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                name: {
+                                    type: "string"
+                                }
                             }
                         }
-                    }
-                },
-                dsModelData: {
-                    type: "object",
-                    properties: {
-                        data: {
-                            type: "object"
-                        },
-                        ids: {
-                            type: "object"
-                        }
-                    }
-                },
-                infoOptions: {
-                    type: "array",
-                    items: {
+                    },
+                    dsModelData: {
                         type: "object",
                         properties: {
-                            label: {
-                                type: "string"
-                            },
                             data: {
-                                oneOf: [{
-                                    $id: "design-object",
-                                    type: "object",
-                                    properties: {
-                                        name: {
-                                            type: "string"
+                                type: "object"
+                            },
+                            ids: {
+                                type: "object"
+                            }
+                        }
+                    },
+                    infoOptions: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                label: {
+                                    type: "string"
+                                },
+                                data: {
+                                    oneOf: [
+                                        {
+                                            $id: "design-object",
+                                            type: "object",
+                                            properties: {
+                                                name: {
+                                                    type: "string"
+                                                },
+                                                password: {
+                                                    type: "string"
+                                                }
+                                            }
                                         },
-                                        password: {
+                                        {
+                                            $id: "design-string",
                                             type: "string"
                                         }
-                                    }
-                                }, {
-                                    $id: "design-string",
-                                    type: "string"
-                                }]
-                            },
-                            infoOptions: {
-                                $ref: "design#/properties/infoOptions"
+                                    ]
+                                },
+                                infoOptions: {
+                                    $ref: "design#/properties/infoOptions"
+                                }
                             }
                         }
                     }
                 }
-            }
-        })];
+            })
+        ];
     });
 
     it("实例化MergeLib，返回正确的uiSchema", () => {
-        let merge = new MergeLib(ajv, "design", null, ["*"]);
+        let merge = new MergeLib("design", null, [ "*" ]);
 
         expect(merge.mergeUiSchemaList).to.be.a("array");
         expect(merge.mergeUiSchemaList.length).to.equal(6);
 
-        merge = new MergeLib(ajv, "design", null, ["name", "dsModelIds"]);
+        merge = new MergeLib("design", null, [ "name", "dsModelIds" ]);
 
         expect(merge.mergeUiSchemaList.length).to.equal(2);
-        // expect(merge.mergeUiSchemaList[0].key).to.equal("design/name");
-        expect(merge.mergeUiSchemaList[0].keys.join()).to.equal(["name"].join());
-
+        expect(merge.mergeUiSchemaList[0].keys.join()).to.equal([ "name" ].join());
     });
 
     it("实例化MergeLib，填写错误的schemaPath=design1，返回错误：'design1 not exist or design1 did not resolve yet.'", () => {
         assert.throw(() => {
-            let merge = new MergeLib(ajv, "design1", [], ["*"]);
+            let merge = new MergeLib("design1", [], [ "*" ]);
         });
     });
 
     it("实例化MergeLib，测试uiSchema的数据合并", () => {
-        let merge = new MergeLib(ajv, "design", null, ["name", {
-            key: "dsModelIds",
-            title: "测试Title"
-        }]);
+        let merge = new MergeLib("design", null, [
+            "name",
+            {
+                key: "dsModelIds",
+                title: "测试Title"
+            }
+        ]);
 
         expect(merge.mergeUiSchemaList[1].title).to.equal("测试Title");
     });
 
     it("实例化MergeLib，schema取一个数组字段", () => {
-        let merge = new MergeLib(ajv, "design", null, ["dsModelIds/-"]);
-        let merge1 = new MergeLib(ajv, "design", null, ["*"]);
-        let merge2 = new MergeLib(ajv, "design", null, ["dsModelIds/-/name"]);
+        let merge = new MergeLib("design", null, [ "dsModelIds/-" ]);
+        let merge1 = new MergeLib("design", null, [ "*" ]);
+        let merge2 = new MergeLib("design", null, [ "dsModelIds/-/name" ]);
 
-        expect(merge.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-'].join());
-        expect(merge2.mergeUiSchemaList[0].keys.join()).to.equal(['dsModelIds', '-', 'name'].join());
+        expect(merge.mergeUiSchemaList[0].keys.join()).to.equal([ "dsModelIds", "-" ].join());
+        expect(merge2.mergeUiSchemaList[0].keys.join()).to.equal([ "dsModelIds", "-", "name" ].join());
     });
 
     it("实例化MergeLib，测试type为string", () => {
-        let merge = new MergeLib(ajv, "simpleString", null, ["/"]);
+        let merge = new MergeLib("simpleString", null, [ "/" ]);
 
         expect(merge.mergeUiSchemaList.length).to.equal(1);
-        expect(merge.mergeUiSchemaList[0].keys.join('')).to.equal("");
+        expect(merge.mergeUiSchemaList[0].keys.join("")).to.equal("");
         // console.log(merge);
     });
 
     it("实例化MergeLib，测试无限级数组", () => {
-        let merge = new MergeLib(ajv, "design", null, ["infoOptions/-"]);
-        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions"]);
-        let merge2 = new MergeLib(ajv, merge1.mergeUiSchemaList[0].schemaPath, merge1.mergeUiSchemaList[0], ["-"]);
-        let merge3 = new MergeLib(ajv, merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], ["*"]);
-        let merge4 = new MergeLib(ajv, merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], ["infoOptions/-/label"]);
+        let merge = new MergeLib("design", null, [ "infoOptions/-" ]);
+        let merge1 = new MergeLib(merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], [ "infoOptions" ]);
+        let merge2 = new MergeLib(merge1.mergeUiSchemaList[0].schemaPath, merge1.mergeUiSchemaList[0], [ "-" ]);
+        let merge3 = new MergeLib(merge2.mergeUiSchemaList[0].schemaPath, merge2.mergeUiSchemaList[0], [ "*" ]);
+        let merge4 = new MergeLib(merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], [ "infoOptions/-/label" ]);
 
         expect(merge3.mergeUiSchemaList.length).to.equal(3);
-        expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "label"].join());
-        expect(merge3.mergeUiSchemaList[1].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "data"].join());
-        expect(merge3.mergeUiSchemaList[2].keys.join()).to.equal(["infoOptions", "-", "infoOptions", "-", "infoOptions"].join());
+        expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal([ "infoOptions", "-", "infoOptions", "-", "label" ].join());
+        expect(merge3.mergeUiSchemaList[1].keys.join()).to.equal([ "infoOptions", "-", "infoOptions", "-", "data" ].join());
+        expect(merge3.mergeUiSchemaList[2].keys.join()).to.equal([ "infoOptions", "-", "infoOptions", "-", "infoOptions" ].join());
         expect(merge3.mergeUiSchemaList[0].keys.join()).to.equal(merge4.mergeUiSchemaList[0].keys.join());
     });
 
     it("实例化MergeLib，测试oneOf的合并", () => {
-        let merge = new MergeLib(ajv, "design", null, ["appType"]);
-        let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
-            merge.mergeUiSchemaList[0], ["name", "password"]);
+        let merge = new MergeLib("design", null, [ "appType" ]);
+        let merge1 = new MergeLib(merge.mergeUiSchemaList[0].oneOf[0].$ref, merge.mergeUiSchemaList[0], [ "name", "password" ]);
 
         expect(merge1.mergeUiSchemaList.length).to.equal(2);
-        expect(merge1.mergeUiSchemaList[0].keys.join()).to.equal(["appType", "name"].join());
-    });
-
-    it("实例化MergeLib，测试没有key的uiSchema", () => {
-        let merge = new MergeLib(ajv, "design1", null, ["name"]);
-        // let merge1 = new MergeLib(ajv, merge.mergeUiSchemaList[0].oneOf[0].$ref,
-        //     merge.mergeUiSchemaList[0], [{
-        //         key: ""
-        //     }]);
+        expect(merge1.mergeUiSchemaList[0].keys.join()).to.equal([ "appType", "name" ].join());
     });
 });

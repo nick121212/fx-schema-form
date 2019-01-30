@@ -117,16 +117,15 @@ const getSchemaId = schemaKey => {
 /* harmony export (immutable) */ __webpack_exports__["c"] = getSchemaId;
 
 class ResolveLib {
-    constructor(ajv, schema, $id = "") {
-        this.ajv = ajv;
+    constructor(schema, $id = "") {
         this.$id = $id;
         this.mergeSchema = {};
         if (!$id) {
-            this.initSchema(ajv, schema);
+            this.initSchema(schema);
         }
         this.compileSchema(schema, $id || schema.$ref || "");
     }
-    initSchema(ajv, schema) {
+    initSchema(schema) {
         let $id = schema.$id;
         if (!$id && !schema.$ref) {
             if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
@@ -134,16 +133,10 @@ class ResolveLib {
             }
             return schema;
         }
-        if (!ajv.validateSchema(schema)) {
-            throw ajv.errors;
-        }
-        if ($id && !ajv.getSchema($id)) {
-            ajv.addSchema(schema);
-        }
         return schema;
     }
     compileSchema(schema, $id) {
-        schema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get("undefined")(schema, $id || (schema.$id || "") + "#", this.ajv);
+        schema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get("undefined")(schema, $id || (schema.$id || "") + "#");
         this.mergeSchema = schema;
         if (!schema.type || schema.$ref) {
             return;
@@ -156,7 +149,7 @@ class ResolveLib {
         }
         const type = schema.type.toString();
         if (__WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].has(type)) {
-            this.mergeSchema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get(type)(schema, $id || (schema.$id || "") + "#", this.ajv);
+            this.mergeSchema = __WEBPACK_IMPORTED_MODULE_0__factory__["e" /* schemaTypeFactory */].get(type)(schema, $id || (schema.$id || "") + "#");
         }
     }
 }
@@ -168,17 +161,19 @@ class ResolveLib {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const warn = message => {
-    console.error(message);
-    throw new Error(message);
-};
-/* harmony export (immutable) */ __webpack_exports__["e"] = warn;
-
 const isProd = (() => {
     const { NODE_ENV } = Object({"NODE_ENV":"dev"});
     return typeof NODE_ENV !== "undefined" && NODE_ENV === `"production"`;
 })();
 /* harmony export (immutable) */ __webpack_exports__["d"] = isProd;
+
+const warn = message => {
+    if (!isProd) {
+        console.error(message);
+    }
+    throw new Error(message);
+};
+/* harmony export (immutable) */ __webpack_exports__["e"] = warn;
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 /* harmony export (immutable) */ __webpack_exports__["a"] = hasOwnProperty;
@@ -253,9 +248,11 @@ const schemaTypeFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /*
 const schemaKeysFactory = new __WEBPACK_IMPORTED_MODULE_0__libs_factory__["a" /* BaseFactory */]();
 /* harmony export (immutable) */ __webpack_exports__["d"] = schemaKeysFactory;
 
-const convertKeys = ($id, schema, ajv) => {
+const convertKeys = ($id, schema) => {
     schemaKeyWordFactory.forEach((key, val) => {
-        schema = val($id, schema, ajv);
+        if (schema) {
+            schema = val($id, schema);
+        }
     });
     return schema;
 };
@@ -351,7 +348,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("definitions", __WEBPACK_IMPORTED_MODULE_0__keys_index__["b" /* definitions */]).add("ref", __WEBPACK_IMPORTED_MODULE_0__keys_index__["d" /* ref */]).add("oneof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["c" /* oneof */]).add("anyof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["a" /* anyof */]);
+__WEBPACK_IMPORTED_MODULE_3__factory__["c" /* schemaKeyWordFactory */].add("definitions", __WEBPACK_IMPORTED_MODULE_0__keys_index__["b" /* definitions */]).add("oneof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["c" /* oneof */]).add("anyof", __WEBPACK_IMPORTED_MODULE_0__keys_index__["a" /* anyof */]).add("ref", __WEBPACK_IMPORTED_MODULE_0__keys_index__["d" /* ref */]);
 __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array", __WEBPACK_IMPORTED_MODULE_1__types_index__["a" /* array */]).add("string", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("undefined", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("number", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("null", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("any", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("integer", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("boolean", __WEBPACK_IMPORTED_MODULE_1__types_index__["b" /* none */]).add("object", __WEBPACK_IMPORTED_MODULE_1__types_index__["c" /* object */]);
 
 
@@ -380,28 +377,35 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__factory__ = __webpack_require__(2);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
+
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema) => {
     if (schema && schema.$ref) {
         const schemaId = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])(schema.$ref);
+        let refName = schema.$ref;
         if (schema.$id) {
-            schema.$ref = schema.$id + schema.$ref;
+            refName = schema.$id + schema.$ref;
         } else if (!schemaId) {
-            schema.$ref = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id) + schema.$ref;
+            refName = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id) + schema.$ref;
         }
-        const validate = ajv.getSchema(schema.$ref);
-        if (validate && validate.schema) {
-            let schemaAjv = Object.assign({}, validate.schema);
-            schemaAjv.$ref = schema.$ref;
+        schema.$ref = refName;
+        if (!__WEBPACK_IMPORTED_MODULE_2__factory__["b" /* schemaFieldFactory */].has(refName)) {
+            __WEBPACK_IMPORTED_MODULE_2__factory__["b" /* schemaFieldFactory */].add(refName, {});
+        }
+        const refSchema = __WEBPACK_IMPORTED_MODULE_2__factory__["b" /* schemaFieldFactory */].get(refName);
+        if (refSchema) {
+            let schemaAjv = Object.assign({}, refSchema);
+            schemaAjv.$ref = refName;
             delete schemaAjv.$id;
             Object.assign(schemaAjv, {
-                refKeys: Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["b" /* getDataKeys */])(schema.$ref)
+                refKeys: Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["b" /* getDataKeys */])(refName)
             });
             return schemaAjv;
         }
         if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`${schema.$ref} not exist.`);
+            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`${refName} not exist.`);
         }
     }
     return schema;
@@ -416,14 +420,11 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
-    if (!schema) {
-        return schema;
-    }
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema) => {
     const oneOf = schema.oneOf;
     if (oneOf && Object(__WEBPACK_IMPORTED_MODULE_1__utils__["b" /* isArray */])(oneOf)) {
         schema.oneOf = oneOf.map(schemaOfOne => {
-            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne);
+            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](schemaOfOne);
             return mergeSchema;
         });
     }
@@ -437,14 +438,11 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
-/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
-    if (!schema) {
-        return schema;
-    }
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema) => {
     let anyOf = schema.anyOf;
     if (anyOf && anyOf.constructor === Array) {
         schema.anyOf = anyOf.map((schemaOfOne, index) => {
-            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, schemaOfOne, schema.$id || Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])(schema.$ref || "") ? undefined : Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id));
+            let { mergeSchema } = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](schemaOfOne, schema.$id || Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])(schema.$ref || "") ? undefined : Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["c" /* getSchemaId */])($id));
             return mergeSchema;
         });
     }
@@ -458,10 +456,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
-/* harmony default export */ __webpack_exports__["a"] = (($id, schema, ajv) => {
-    if (!schema) {
-        return schema;
-    }
+/* harmony default export */ __webpack_exports__["a"] = (($id, schema) => {
     const definitions = schema.definitions;
     if (!definitions) {
         return schema;
@@ -470,7 +465,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
         if (definitions.hasOwnProperty(key)) {
             const element = definitions[key];
             if (element !== false && element !== true) {
-                new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, element, `${schema.$id}#/definitions/${key}`);
+                new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](element, `${schema.$id}#/definitions/${key}`);
             }
         }
     }
@@ -500,10 +495,10 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__libs_resolve__ = __webpack_require__(0);
 
 const itemsName = "items";
-/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey) => {
     let { items } = schema;
     if (items) {
-        const propertySchemaResolve = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, items, [schemaKey, itemsName].join("/")),
+        const propertySchemaResolve = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](items, [schemaKey, itemsName].join("/")),
               keys = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["b" /* getDataKeys */])([schemaKey, itemsName].join("/"));
         Object.assign(propertySchemaResolve.mergeSchema, {
             keys
@@ -522,7 +517,7 @@ const itemsName = "items";
 
 
 const pro = "properties";
-/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey) => {
     const { properties, required = [], $ref } = schema;
     if (properties && !$ref) {
         Object.keys(properties).forEach(key => {
@@ -538,7 +533,7 @@ const pro = "properties";
             Object.assign(properties[key], {
                 isRequired: required.indexOf(key) >= 0
             });
-            const propertySchemaResolve = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](ajv, properties[key], [schemaKey, pro, key].join("/")),
+            const propertySchemaResolve = new __WEBPACK_IMPORTED_MODULE_0__libs_resolve__["a" /* default */](properties[key], [schemaKey, pro, key].join("/")),
                   keys = Object(__WEBPACK_IMPORTED_MODULE_0__libs_resolve__["b" /* getDataKeys */])([schemaKey, pro, key].join("/"));
             Object.assign(propertySchemaResolve.mergeSchema, {
                 keys
@@ -557,11 +552,17 @@ const pro = "properties";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_resolve__ = __webpack_require__(0);
 
 
-/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey, ajv) => {
+/* harmony default export */ __webpack_exports__["a"] = ((schema, schemaKey) => {
     let keys = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["b" /* getDataKeys */])(schemaKey, false),
         $id = Object(__WEBPACK_IMPORTED_MODULE_1__libs_resolve__["c" /* getSchemaId */])(schemaKey),
-        currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schemaKey, schema, ajv);
-    if (__WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].has(schemaKey)) {
+        currentSchema = Object(__WEBPACK_IMPORTED_MODULE_0__factory__["a" /* convertKeys */])(schemaKey, schema),
+        alreadyHasEmptySchema = false,
+        emptySchema = {};
+    alreadyHasEmptySchema = __WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].has(schemaKey);
+    if (alreadyHasEmptySchema) {
+        emptySchema = __WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].get(schemaKey);
+    }
+    if (alreadyHasEmptySchema && emptySchema.schemaPath) {
         return currentSchema || schema;
     }
     if (!$id) {
@@ -570,7 +571,7 @@ const pro = "properties";
     if (schema.$id && schema.$ref) {
         __WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */].add(schema.$id, schema.$ref);
     }
-    __WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].add(schemaKey, Object.assign({}, currentSchema || schema, {
+    __WEBPACK_IMPORTED_MODULE_0__factory__["b" /* schemaFieldFactory */].add(schemaKey, Object.assign(emptySchema, currentSchema || schema, {
         keys,
         schemaPath: schemaKey
     }));
@@ -711,7 +712,7 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
     return uiSchemasFirst.concat(uiSchemasLast);
 };
 class MergeLib {
-    constructor(ajv, schemaPath, parent, uiSchemas) {
+    constructor(schemaPath, parent, uiSchemas) {
         this.mergeUiSchemaList = [];
         uiSchemas = uiSchemas || ["*"];
         let keyPath = Object(__WEBPACK_IMPORTED_MODULE_1__resolve__["b" /* getDataKeys */])(schemaPath, true).join("/");

@@ -1,27 +1,13 @@
-import {
-    assert,
-    expect
-} from "chai";
-import Ajv from "ajv";
-
-import {
-    schemaTypeFactory,
-    schemaFieldFactory,
-    schemaKeysFactory,
-    ResolveLib
-} from "../../dist/index.dev";
+import { assert, expect } from "chai";
+import { schemaTypeFactory, schemaFieldFactory, schemaKeysFactory, ResolveLib } from "../../dist/index.dev";
 
 describe("对象类型的解析", () => {
-    let ajv, schema;
+    let schema, test;
 
     before(() => {
-        ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
-        new ResolveLib(ajv, {
+        test = new ResolveLib({
             $id: "test",
             title: "测试的schema",
             type: "array",
@@ -38,7 +24,7 @@ describe("对象类型的解析", () => {
             }
         });
 
-        schema = schemaTypeFactory.get("object")(ajv.getSchema("test").schema, "test#", ajv);
+        schema = schemaTypeFactory.get("object")(test.mergeSchema, "test#");
     });
 
     it("测试对象的类型转换后的结果，", () => {
@@ -62,5 +48,4 @@ describe("对象类型的解析", () => {
         expect(schemaKeysFactory.get("test/password")).to.equal("test#/properties/password");
         expect(schemaKeysFactory.get("test/remember")).to.equal("test#/properties/remember");
     });
-
 });

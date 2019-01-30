@@ -1,48 +1,38 @@
-import {
-    assert,
-    expect
-} from "chai";
+import { assert, expect } from "chai";
 import Ajv from "ajv";
 
-import {
-    schemaTypeFactory,
-    schemaFieldFactory,
-    schemaKeysFactory,
-    ResolveLib
-} from "../../dist/index.dev";
+import { schemaTypeFactory, schemaFieldFactory, schemaKeysFactory, ResolveLib } from "../../dist/index.dev";
 
 describe("测试Factory类", () => {
     let ajv;
 
     before(() => {
-        ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
-
         schemaFieldFactory.clear();
         schemaKeysFactory.clear();
 
-        new ResolveLib(ajv, {
+        new ResolveLib({
             $id: "test1",
             type: "number",
             title: "测试的schema"
         });
 
-        new ResolveLib(ajv, {
+        new ResolveLib({
             $id: "test2",
             type: "string",
             title: "测试的schema"
         });
 
-        new ResolveLib(ajv, {
+        new ResolveLib({
             $id: "test",
             title: "测试oneof的schema",
-            oneOf: [{
-                $ref: "test2#"
-            }, {
-                $ref: "test1#"
-            }]
+            oneOf: [
+                {
+                    $ref: "test2#"
+                },
+                {
+                    $ref: "test1#"
+                }
+            ]
         });
     });
 
@@ -93,7 +83,7 @@ describe("测试Factory类", () => {
         });
 
         expect(loopCount).to.equal(3);
-        
+
         schemaFieldFactory.clear();
         loopCount = 0;
         schemaFieldFactory.forEach((k, v) => {
@@ -101,5 +91,4 @@ describe("测试Factory类", () => {
         });
         expect(loopCount).to.equal(0);
     });
-
 });

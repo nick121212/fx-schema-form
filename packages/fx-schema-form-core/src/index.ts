@@ -9,9 +9,9 @@ export { default as MergeLib } from "./libs/merge";
 export { TreeMap } from "./libs/tree";
 
 schemaKeyWordFactory.add("definitions", definitions)
-                    .add("ref", ref)
                     .add("oneof", oneof)
-                    .add("anyof", anyof);
+                    .add("anyof", anyof)
+                    .add("ref", ref);
 
 schemaTypeFactory.add("array", array)
                 .add("string", none)
