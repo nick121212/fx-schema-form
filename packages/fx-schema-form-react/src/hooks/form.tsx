@@ -22,6 +22,18 @@ const jsonDiffPatch: jsondiffpatch.DiffPatcher = (jsondiffpatch as any).create({
     cloneDiffValues: false
 });
 
+/**
+ * SchemaForm的hook实现
+ * @param    {String}                              key                 form的唯一key
+ * @param    {JSONSchema6}                         schema              json-schema
+ * @param    {T}                                   initialValue        初始值
+ * @param    {(d: T, delta: any)=>void}            onFormDataChanged   值更改的回调函数
+ * @returns
+ * {
+ *     formData: T                 当前的form的数据
+ *     setFormData: (d: T)=>void   更改form的数据的函数
+ * }
+ */
 // tslint:disable-next-line:max-line-length
 export function useSchemaForm<T extends ISchemaFormData<any>>(key: string, schema: JSONSchema6, initialValue?: T, onFormDataChanged?: (data: T, delta: any) => void) {
     const [ oldFormData, setOldFormData ] = useSetState<T>({ ...initialValue } as any);
@@ -58,7 +70,6 @@ export function useSchemaForm<T extends ISchemaFormData<any>>(key: string, schem
 
     return {
         formData,
-        setFormData,
-        resolve
+        setFormData
     };
 }
