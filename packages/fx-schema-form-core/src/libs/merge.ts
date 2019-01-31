@@ -51,7 +51,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys: string[], parentSchemaPath: strin
   * @param  {UiSchema}               parent 父亲schema
   * @return {Array<string | number>}
   */
-const getParentSchemaKeys = (parent: UiSchema): Array<string | number> => {
+const getParentSchemaKeys = (parent?: UiSchema): Array<string | number> => {
     if (parent && parent.keys) {
         return parent.keys;
     }
@@ -68,7 +68,7 @@ const getParentSchemaKeys = (parent: UiSchema): Array<string | number> => {
  * @param  {UiSchema} uiSchema    uiSchma
  * @return {String}               返回的key
  */
-const getCurrentSchemaKey = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): string => {
+const getCurrentSchemaKey = (parent: UiSchema | undefined, schemaPath: string, uiSchema: UiSchema): string => {
     const $id = getSchemaId(schemaPath);
     let uiSchemaKeys = uiSchema.key.split("/");
 
@@ -116,7 +116,7 @@ const mergeUiSchemaToArray = (uiSchema: UiSchema): UiSchema => {
  * @param  {UiSchema} uiSchema    uiSchma
  * @return {UiSchema}            返回uiSchema
  */
-const initUiSchema = (parent: UiSchema, schemaPath: string, uiSchema: UiSchema): UiSchema => {
+const initUiSchema = (parent: UiSchema | undefined, schemaPath: string, uiSchema: UiSchema): UiSchema => {
     let parentKeys = getParentSchemaKeys(parent),
         key = getCurrentSchemaKey(parent, schemaPath, uiSchema),
         keys,
@@ -179,7 +179,8 @@ const pushMergeResult = (uiSchemasFirst: UiSchema[], uiSchemasLast: UiSchema[], 
  * @param  {FxJsonSchema}                curSchema   当前的Schema
  * @return {UiSchema[]}                              合并后的uiSchemas
  */
-const initMergeSchema = (parent: UiSchema, schemaPath: string, uiSchemas: Array<UiSchema | string>, curSchema: FxJsonSchema): UiSchema[] => {
+// tslint:disable-next-line:max-line-length
+const initMergeSchema = (parent: UiSchema | undefined, schemaPath: string, uiSchemas: Array<UiSchema | string>, curSchema: FxJsonSchema): UiSchema[] => {
     let idx: number = uiSchemas.indexOf("*"),
         uiSchemasFirst: UiSchema[] = [],
         uiSchemasLast: UiSchema[] = [],
@@ -272,7 +273,7 @@ export default class MergeLib {
      * @param {UiSchema}                  parent      父亲的schema
      * @param {Array<UiSchema | string>}  uiSchemas   uiSchema
      */
-    constructor(schemaPath: string, parent: UiSchema, uiSchemas?: Array<UiSchema | string>) {
+    constructor(schemaPath: string, parent?: UiSchema, uiSchemas?: Array<UiSchema | string>) {
         uiSchemas = uiSchemas || [ "*" ];
 
         // 获取schemaPath对应的schemaId

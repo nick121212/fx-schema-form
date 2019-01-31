@@ -29,12 +29,13 @@ export const hasOwnProperty = Object.prototype.hasOwnProperty;
  */
 export const toString = Object.prototype.toString;
 
-function typeOf(value: any) {
+export function typeOf(value: any) {
     if (null === value) {
         return "null";
     }
 
     let type = typeof value;
+
     if ("undefined" === type || "string" === type) {
         return type;
     }

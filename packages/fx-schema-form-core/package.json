@@ -12,7 +12,7 @@
     "dist": "NODE_ENV=production webpack;",
     "dev": "NODE_ENV=dev webpack",
     "start": "NODE_ENV=dev webpack -w",
-    "build": "npm run dist;npm run dev;",
+    "build": "npm run dist;npm run dev;npm run dist;",
     "libs": "rm -rf libs;tsc --outDir libs -d",
     "watch": "rm -rf libs;tsc --outDir libs -d -w",
     "test": "mocha ./tests/**/*.spec.js --require babel-register"

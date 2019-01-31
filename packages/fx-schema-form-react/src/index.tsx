@@ -1,53 +1,73 @@
 import React from "react";
-import { BaseFactory } from "fx-schema-form-core";
+import { Input } from "antd";
+import ReactDOM from "react-dom";
+import { JSONSchema6 } from "json-schema";
 
-import { reducerFactory, hocFactory, themeFactory } from "./factory";
-import { SchemaForm, DefaultProps, SchemaFormItem } from "./components";
-import { RC,  schemaFormTypes, SchemaFormNs } from "./models";
+import { useSchemaForm } from "./hooks/form";
+import { useSchemaFormItem } from "./hooks/formitem";
 
-import fields from "./fields";
-import { TreeMap } from "./libs/tree";
-import {  default as schemaFormDec, name as schemaFormDecName, SchemaFormHocSettings, SchemaFormProps } from "./libs/dec";
-import merge from "./libs/merge";
-import { FxReducer } from "./reducers/reducer";
-
-/**
- * 默认样式配置
- * 每个样式包含temp，field和widget三个factory
- */
-const defaultTheme = {
-    tempFactory: new BaseFactory<RC<DefaultProps, any>>(),
-    fieldFactory: new BaseFactory<RC<DefaultProps, any>>(),
-    widgetFactory: new BaseFactory<RC<DefaultProps, any>>()
-};
-
-// const a :SchemaFormProps;
-
-/**
- * 添加默认的fields
- */
-fields.forEach((field: any) => {
-    for (const key in field) {
-        if (field.hasOwnProperty(key)) {
-            defaultTheme.fieldFactory.add(key, field[key]);
+const testSchema: JSONSchema6 = {
+    type: "object",
+    $id: "test",
+    required: [ "name" ],
+    properties: {
+        author: {
+            type: "string"
+        },
+        version: {
+            type: "string"
+        },
+        name: {
+            type: "string"
+        },
+        list: {
+            type: "array",
+            items: {
+                type: "string"
+            }
         }
     }
-});
-
-themeFactory.add("default", defaultTheme as any);
-
-hocFactory.add(schemaFormDecName, schemaFormDec.bind(schemaFormDec, hocFactory));
-
-export default {
-    themeFactory,
-    defaultTheme,
-    schemaFormDec,
-    TreeMap,
-    reducerFactory,
-    SchemaForm,
-    hocFactory,
-    schemaFormTypes,
-    SchemaFormItem,
-    merge
 };
 
+function App() {
+    const { formData, setFormData } = useSchemaForm<any>(
+        "test",
+        testSchema,
+        {
+            name: "fx-schema-form",
+            version: "1.0.0",
+            author: "NICK"
+        },
+        (data: any, delta: any) => {
+            console.log("form Data has changed", data);
+            console.log("changed items", delta);
+        }
+    );
+    const author = useSchemaFormItem("test#/author", formData, setFormData);
+    const version = useSchemaFormItem("test#/version", formData, setFormData);
+    const name = useSchemaFormItem("test#/name", formData, setFormData);
+    const list = useSchemaFormItem("test#/list", formData, setFormData);
+
+    return (
+        <React.Fragment>
+            <span> Hello React </span>
+            <br />
+
+            <Input value={author.value} onChange={author.onChange} />
+            <Input value={version.value} onChange={version.onChange} />
+            <Input value={name.value} onChange={name.onChange} />
+
+            <fieldset>
+                <legend>{list.schema.title || list.schema.key}</legend>
+
+                {list.value ? (
+                    list.value.map(() => {
+                        return <Input value={name.value} onChange={name.onChange} />;
+                    })
+                ) : null}
+            </fieldset>
+        </React.Fragment>
+    );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));

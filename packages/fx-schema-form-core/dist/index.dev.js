@@ -108,7 +108,7 @@ const getSchemaId = schemaKey => {
     const regexp = /#$/g;
     if (!keys.length) {
         if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`${schemaKey} not a valid schemaPath.`);
+            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* warn */])(`${schemaKey} not a valid schemaPath.`);
         }
         return "";
     }
@@ -129,7 +129,7 @@ class ResolveLib {
         let $id = schema.$id;
         if (!$id && !schema.$ref) {
             if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-                Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])("id is required");
+                Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* warn */])("id is required");
             }
             return schema;
         }
@@ -143,7 +143,7 @@ class ResolveLib {
         }
         if (schema.type.constructor !== String) {
             if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-                Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`schema type[${schema.type}] can only be string.`);
+                Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* warn */])(`schema type[${schema.type}] can only be string.`);
             }
             return;
         }
@@ -161,6 +161,7 @@ class ResolveLib {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["e"] = typeOf;
 const isProd = (() => {
     const { NODE_ENV } = Object({"NODE_ENV":"dev"});
     return typeof NODE_ENV !== "undefined" && NODE_ENV === `"production"`;
@@ -173,7 +174,7 @@ const warn = message => {
     }
     throw new Error(message);
 };
-/* harmony export (immutable) */ __webpack_exports__["e"] = warn;
+/* harmony export (immutable) */ __webpack_exports__["f"] = warn;
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 /* harmony export (immutable) */ __webpack_exports__["a"] = hasOwnProperty;
@@ -336,11 +337,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MergeLib", function() { return __WEBPACK_IMPORTED_MODULE_5__libs_merge__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__libs_tree__ = __webpack_require__(15);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TreeMap", function() { return __WEBPACK_IMPORTED_MODULE_6__libs_tree__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils__ = __webpack_require__(1);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "typeOf", function() { return __WEBPACK_IMPORTED_MODULE_7__utils__["e"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "isArray", function() { return __WEBPACK_IMPORTED_MODULE_7__utils__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "isNumber", function() { return __WEBPACK_IMPORTED_MODULE_7__utils__["c"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BaseFactory", function() { return __WEBPACK_IMPORTED_MODULE_2__libs_factory__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "schemaKeysFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["d"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "schemaFieldFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "schemaKeyWordFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["c"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "schemaTypeFactory", function() { return __WEBPACK_IMPORTED_MODULE_3__factory__["e"]; });
+
 
 
 
@@ -405,7 +411,7 @@ __WEBPACK_IMPORTED_MODULE_3__factory__["e" /* schemaTypeFactory */].add("array",
             return schemaAjv;
         }
         if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`${refName} not exist.`);
+            Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* warn */])(`${refName} not exist.`);
         }
     }
     return schema;
@@ -523,7 +529,7 @@ const pro = "properties";
         Object.keys(properties).forEach(key => {
             if ([pro, "items"].indexOf(key) >= 0) {
                 if (!__WEBPACK_IMPORTED_MODULE_1__utils__["d" /* isProd */]) {
-                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__["e" /* warn */])(`${key}can not be key words.`);
+                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__["f" /* warn */])(`${key}can not be key words.`);
                 }
                 return;
             }
@@ -598,7 +604,7 @@ const getUiSchemaKeyRecursion = (uiSchemaKeys, parentSchemaPath) => {
         const keysStr = parentKeysWithDef.join("/").replace(/\/$/, "");
         if (!__WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */].has(keysStr)) {
             if (!__WEBPACK_IMPORTED_MODULE_2__utils__["d" /* isProd */]) {
-                Object(__WEBPACK_IMPORTED_MODULE_2__utils__["e" /* warn */])(`${keysStr} did not found.`);
+                Object(__WEBPACK_IMPORTED_MODULE_2__utils__["f" /* warn */])(`${keysStr} did not found.`);
             }
             return "";
         }
@@ -627,7 +633,7 @@ const mergeUiSchemaToArray = uiSchema => {
     if (!__WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */].has(uiSchema.key)) {
         if (!__WEBPACK_IMPORTED_MODULE_2__utils__["d" /* isProd */]) {
             console.log(__WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */]);
-            Object(__WEBPACK_IMPORTED_MODULE_2__utils__["e" /* warn */])(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
+            Object(__WEBPACK_IMPORTED_MODULE_2__utils__["f" /* warn */])(`${uiSchema.key} did not found. do you forget to resolve schema first.`);
         }
         return uiSchema;
     }
@@ -669,7 +675,7 @@ const initMergeSchema = (parent, schemaPath, uiSchemas, curSchema) => {
         types = ["object", "array"];
     if (uiSchemas.lastIndexOf("*") !== idx) {
         if (!__WEBPACK_IMPORTED_MODULE_2__utils__["d" /* isProd */]) {
-            Object(__WEBPACK_IMPORTED_MODULE_2__utils__["e" /* warn */])("uiSchema can only has one *.");
+            Object(__WEBPACK_IMPORTED_MODULE_2__utils__["f" /* warn */])("uiSchema can only has one *.");
         }
         return [];
     }
@@ -718,7 +724,7 @@ class MergeLib {
         let keyPath = Object(__WEBPACK_IMPORTED_MODULE_1__resolve__["b" /* getDataKeys */])(schemaPath, true).join("/");
         if (!__WEBPACK_IMPORTED_MODULE_0__factory__["d" /* schemaKeysFactory */].has(keyPath)) {
             if (!__WEBPACK_IMPORTED_MODULE_2__utils__["d" /* isProd */]) {
-                Object(__WEBPACK_IMPORTED_MODULE_2__utils__["e" /* warn */])(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
+                Object(__WEBPACK_IMPORTED_MODULE_2__utils__["f" /* warn */])(`${keyPath} not exist or ${keyPath} did not resolve yet.`);
             }
             return;
         }
