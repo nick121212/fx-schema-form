@@ -38,8 +38,6 @@ const jsonDiffPatch: jsondiffpatch.DiffPatcher = (jsondiffpatch as any).create({
 export function useSchemaForm<T extends ISchemaFormData<any>>(key: string, schema: JSONSchema6, initialValue?: T, onFormDataChanged?: (data: T, delta: any) => void) {
     const [ oldFormData, setOldFormData ] = useSetState<T>({ ...initialValue } as any);
     const [ formData, setFormData ] = useSetState<T>(initialValue);
-    const schemaFormData = useContext(SchemaFormContext);
-    let resolve: ResolveLib | null = null;
 
     if (!key) {
         throw new Error("key不能为空");
@@ -49,18 +47,22 @@ export function useSchemaForm<T extends ISchemaFormData<any>>(key: string, schem
         throw new Error("schema不能为空");
     }
 
-    resolve = new ResolveLib(schema as any);
-
+    // 解析json-schema
+    const resolve: ResolveLib = new ResolveLib(schema as any);
+    // 计算当前新老数据的差异
     const delta = jsonDiffPatch.diff(oldFormData, formData);
 
+    // 使用effect来处理数据的更改监听
     useEffect(
         () => {
             if (!delta) {
                 return;
             }
 
+            // 修改老数据，保持老数据和新数据同步
             setOldFormData(formData);
-            // schemaFormData[key] = formData as any;
+
+            // 触发回调函数
             if (onFormDataChanged) {
                 onFormDataChanged(formData, delta);
             }
