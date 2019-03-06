@@ -229,6 +229,20 @@ const isArray = n => {
 };
 /* harmony export (immutable) */ __webpack_exports__["b"] = isArray;
 
+const mergeKeys = (originKeys, indexList) => {
+    const arrayLevelCopy = [...indexList];
+    const keys = originKeys.reverse().map(key => {
+        if (key === "-") {
+            const index = arrayLevelCopy.pop();
+            return (typeof index === "undefined" ? "" : index).toString();
+        }
+        return key;
+    });
+    keys.reverse();
+    return keys;
+};
+/* unused harmony export mergeKeys */
+
 
 /***/ }),
 /* 2 */

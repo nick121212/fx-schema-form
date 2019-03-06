@@ -44,11 +44,7 @@
             ],
             "title": "Pokemon"
         }
-        var ajv = new Ajv({
-            extendRefs: true,
-            missingRefs: true
-        });
-        var b = [new SFC.ResolveLib(ajv, jsonschema), new SFC.ResolveLib(ajv, {
+        var b = [new SFC.ResolveLib(jsonschema), new SFC.ResolveLib({
             type: "object",
             $id: "design",
             required: [],
@@ -57,17 +53,22 @@
                     type: "array",
                     title: "面板详情",
                     items: {
-                        type: "string"
+                        type: "object",
+                        properties:{
+                            a:{type: "string"}
+                        }
                     }
                 }
             }
         })];
 
-        let merge = new SFC.MergeLib(ajv, "design", null, [{
-            key: "name"
+        let merge = new SFC.MergeLib("design", null, [{
+            key: "description"
         }]);
 
-        console.log(merge.mergeUiSchemaList);
+        console.log(merge.mergeUiSchemaList,new SFC.MergeLib(merge.mergeUiSchemaList[0].schemaPath, merge.mergeUiSchemaList[0], [{
+            key: "-"
+        }]));
     </script>
 </body>
 

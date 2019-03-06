@@ -1,70 +1,70 @@
-import React from "react";
-import { Input } from "antd";
+import React, { ChangeEvent, useEffect } from "react";
+import { Input, Button } from "antd";
 import ReactDOM from "react-dom";
-import { JSONSchema6 } from "json-schema";
+
+import { Delta } from "jsondiffpatch";
 
 import { useSchemaForm } from "./hooks/form";
-import { useSchemaFormItem } from "./hooks/formitem";
+import { testSchema } from "./test-schema";
 
-const testSchema: JSONSchema6 = {
-    type: "object",
-    $id: "test",
-    required: [ "name" ],
-    properties: {
-        author: {
-            type: "string"
-        },
-        version: {
-            type: "string"
-        },
-        name: {
-            type: "string"
-        },
-        list: {
-            type: "array",
-            items: {
-                type: "string"
-            }
-        }
-    }
+const initialData = {
+    name: "fx-schema-form",
+    version: "1.0.0",
+    author: "NICK",
+    listObj: [ { a: 0, b: 1 } ]
 };
 
 function App() {
-    const { formData, setFormData } = useSchemaForm<any>(
-        "test",
-        testSchema,
-        {
-            name: "fx-schema-form",
-            version: "1.0.0",
-            author: "NICK"
+    const { formItems } = useSchemaForm<any>("test", testSchema, initialData, (data: any, delta?: Delta) => {
+        console.log("form Data has changed", data, delta);
+    });
+    const author = formItems.get("test/author")();
+    const list = formItems.get("test/listObj")();
+    const listItemA = formItems.get("test/listObj/-/a");
+    const listItemB = formItems.get("test/listObj/-/b");
+
+    useEffect(
+        () => {
+            console.log("name or version changed");
         },
-        (data: any, delta: any) => {
-            console.log("form Data has changed", data);
-            console.log("changed items", delta);
-        }
+        [ author.value ]
     );
-    const author = useSchemaFormItem("test#/author", formData, setFormData);
-    const version = useSchemaFormItem("test#/version", formData, setFormData);
-    const name = useSchemaFormItem("test#/name", formData, setFormData);
-    const list = useSchemaFormItem("test#/list", formData, setFormData);
 
     return (
         <React.Fragment>
             <span> Hello React </span>
             <br />
-
-            <Input value={author.value} onChange={author.onChange} />
-            <Input value={version.value} onChange={version.onChange} />
-            <Input value={name.value} onChange={name.onChange} />
+            <Input {...author} />
 
             <fieldset>
-                <legend>{list.schema.title || list.schema.key}</legend>
+                <legend>
+                    list
+                    <button
+                        onClick={() => {
+                            list.addItem("1");
+                        }}>
+                        add
+                    </button>
+                </legend>
 
-                {list.value ? (
-                    list.value.map(() => {
-                        return <Input value={name.value} onChange={name.onChange} />;
-                    })
-                ) : null}
+                <div>
+                    {list.value ? (
+                        list.value.map((val: any, i: number) => {
+                            return (
+                                <React.Fragment key={i.toString()}>
+                                    <input {...listItemA([ i ])} />
+                                    <input {...listItemB([ i ])} />
+                                    <button
+                                        onClick={() => {
+                                            list.removeItem(i);
+                                        }}>
+                                        remove
+                                    </button>
+                                </React.Fragment>
+                            );
+                        })
+                    ) : null}
+                </div>
             </fieldset>
         </React.Fragment>
     );
